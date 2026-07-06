@@ -1,5 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
+  // ========================================================
   // Theme Toggle Mechanism
+  // ========================================================
   const themeToggle = document.getElementById('themeToggle');
   const themeIcon = document.getElementById('themeIcon');
   const htmlElement = document.documentElement;
@@ -26,14 +28,15 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  // ========================================================
   // Language Switch Simulation Logic
+  // ========================================================
   const languageSelect = document.getElementById('languageSelect');
   if (languageSelect) {
     languageSelect.addEventListener('change', (e) => {
       const selectedLang = e.target.value;
       console.log(`Simulating Language Shift to: ${selectedLang.toUpperCase()}`);
       
-      // Update cards showing translations
       const translatableTitles = document.querySelectorAll('[data-translate-title]');
       const translatableSummaries = document.querySelectorAll('[data-translate-summary]');
 
@@ -58,7 +61,6 @@ document.addEventListener('DOMContentLoaded', () => {
             badge.classList.add('d-none');
           } else {
             badge.classList.remove('d-none');
-            // Update badge text dynamically
             const origLangName = card.getAttribute('data-orig-lang-name');
             badge.innerHTML = `<i class="bi bi-exclamation-circle-fill"></i> Available in ${origLangName} only`;
           }
@@ -67,69 +69,99 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Handle dynamic login state sync in header across all static pages
+  // ========================================================
+  // Session State Sync (Desktop Sidebar & Mobile Header)
+  // ========================================================
   const currentUser = localStorage.getItem('currentUser');
-  const headerRight = document.querySelector('.app-header .header-container .d-flex.align-items-center.ms-auto');
-  
-  if (currentUser && headerRight) {
-    // Check if header is in Guest state (contains a login link button)
-    const hasLoginBtn = headerRight.querySelector('a[href*="login.html"]');
-    if (hasLoginBtn) {
-      // Determine root paths to adjust relative links correctly
-      const isSubFolder = window.location.pathname.includes('/pages/');
-      const writeUrl = `${isSubFolder ? '../owner/' : 'pages/owner/'}create-post.html`;
-      const myPostsUrl = `${isSubFolder ? '../owner/' : 'pages/owner/'}my-posts.html`;
-      const profileUrl = `${isSubFolder ? '../owner/' : 'pages/owner/'}profile.html`;
-      const pwdUrl = `${isSubFolder ? '../owner/' : 'pages/owner/'}change-password.html`;
-      const signOutUrl = `${isSubFolder ? '../guest/' : 'pages/guest/'}home.html`;
-      const avatarImg = "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=150&h=150";
+  const isSubFolder = window.location.pathname.includes('/pages/');
 
-      // Remove guest login/subscribe links
-      const guestLinks = headerRight.querySelectorAll('a[href*="login.html"], a[href*="register.html"]');
-      guestLinks.forEach(el => el.remove());
+  // Relative link paths based on directory depth
+  const writeUrl = `${isSubFolder ? '../owner/' : 'pages/owner/'}create-post.html`;
+  const myPostsUrl = `${isSubFolder ? '../owner/' : 'pages/owner/'}my-posts.html`;
+  const profileUrl = `${isSubFolder ? '../owner/' : 'pages/owner/'}profile.html`;
+  const pwdUrl = `${isSubFolder ? '../owner/' : 'pages/owner/'}change-password.html`;
+  const signOutUrl = `${isSubFolder ? '../guest/' : 'pages/guest/'}home.html`;
+  const avatarImg = "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=150&h=150";
 
-      // Create & insert Write button
-      const writeBtn = document.createElement('a');
-      writeBtn.className = 'btn btn-primary btn-sm fw-medium px-3 d-none d-sm-inline-flex align-items-center';
-      writeBtn.href = writeUrl;
-      writeBtn.innerHTML = '<i class="bi bi-pencil-square me-1.5"></i> Write';
-      headerRight.insertBefore(writeBtn, headerRight.firstChild);
-
-      // Create & insert User Dropdown
-      const dropdownDiv = document.createElement('div');
-      dropdownDiv.className = 'dropdown ms-2';
-      dropdownDiv.innerHTML = `
-        <button class="btn btn-link p-0 border-0 text-reset dropdown-toggle no-caret" type="button" data-bs-toggle="dropdown" aria-expanded="false" id="avatarDropdown"><img src="${avatarImg}" alt="User Avatar" class="rounded-circle" style="width: 34px; height: 34px; object-fit: cover;"></button>
-        <ul class="dropdown-menu dropdown-menu-end shadow-sm border border-light-subtle mt-2">
-          <li class="px-3 py-2 border-bottom">
-            <span class="d-block fw-bold text-main">${currentUser}</span>
-            <span class="text-muted d-block" style="font-size: 0.75rem;">Member</span>
-          </li>
-          <li><a class="dropdown-item py-2" href="${writeUrl}"><i class="bi bi-pencil-square me-2"></i> Create Post</a></li>
-          <li><a class="dropdown-item py-2" href="${myPostsUrl}"><i class="bi bi-journal-text me-2"></i> My Posts</a></li>
-          <li><a class="dropdown-item py-2" href="${profileUrl}"><i class="bi bi-person me-2"></i> Profile Settings</a></li>
-          <li><a class="dropdown-item py-2" href="${pwdUrl}"><i class="bi bi-shield-lock me-2"></i> Change Password</a></li>
-          <li><hr class="dropdown-divider my-1"></li>
-          <li><a class="dropdown-item py-2 text-danger" href="${signOutUrl}" id="globalSignOutBtn"><i class="bi bi-box-arrow-right me-2"></i> Sign Out</a></li>
-        </ul>
+  // A. MOBILE NAVBAR ADJUSTMENTS
+  const mobileHeaderRight = document.getElementById('mobileHeaderRight');
+  if (mobileHeaderRight) {
+    if (currentUser) {
+      mobileHeaderRight.innerHTML = `
+        <div class="dropdown">
+          <button class="btn btn-link p-0 border-0 text-reset dropdown-toggle no-caret" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <img src="${avatarImg}" alt="User Avatar" class="rounded-circle" style="width: 32px; height: 32px; object-fit: cover;">
+          </button>
+          <ul class="dropdown-menu dropdown-menu-end shadow-sm border border-light-subtle mt-2">
+            <li class="px-3 py-2 border-bottom">
+              <span class="d-block fw-bold text-main">${currentUser}</span>
+              <span class="text-muted d-block" style="font-size: 0.75rem;">Member</span>
+            </li>
+            <li><a class="dropdown-item py-2" href="${writeUrl}"><i class="bi bi-pencil-square me-2"></i> Create Post</a></li>
+            <li><a class="dropdown-item py-2" href="${myPostsUrl}"><i class="bi bi-journal-text me-2"></i> My Posts</a></li>
+            <li><a class="dropdown-item py-2" href="${profileUrl}"><i class="bi bi-person me-2"></i> Settings</a></li>
+            <li><hr class="dropdown-divider my-1"></li>
+            <li><a class="dropdown-item py-2 text-danger" href="${signOutUrl}" id="mobileSignOutLink"><i class="bi bi-box-arrow-right me-2"></i> Sign Out</a></li>
+          </ul>
+        </div>
       `;
-      
-      // Insert right before themeToggle
-      const themeToggleBtn = document.getElementById('themeToggle');
-      if (themeToggleBtn) {
-        headerRight.insertBefore(dropdownDiv, themeToggleBtn);
-      } else {
-        headerRight.appendChild(dropdownDiv);
-      }
-
-      // Attach sign out event
-      const signOutBtn = dropdownDiv.querySelector('#globalSignOutBtn');
-      if (signOutBtn) {
-        signOutBtn.addEventListener('click', () => {
+      const mobSignOut = mobileHeaderRight.querySelector('#mobileSignOutLink');
+      if (mobSignOut) {
+        mobSignOut.addEventListener('click', () => {
           localStorage.removeItem('currentUser');
           localStorage.removeItem('userRole');
         });
       }
+    }
+  }
+
+  // B. DESKTOP SIDEBAR ADJUSTMENTS
+  const leftSidebar = document.querySelector('.left-sidebar');
+  if (leftSidebar) {
+    const createBtn = leftSidebar.querySelector('.sidebar-create-btn');
+    const profileLink = leftSidebar.querySelector('.sidebar-nav-item[href*="profile.html"]');
+    const signOutBtn = leftSidebar.querySelector('#signOutBtn');
+    
+    // Sửa link dropdown More
+    const moreMenuDropdown = leftSidebar.querySelector('.dropdown-menu');
+    if (moreMenuDropdown) {
+      // Cập nhật lại đường dẫn cho menu More
+      const adminLink = moreMenuDropdown.querySelector('a[href*="dashboard.html"]');
+      if (adminLink) adminLink.href = `${isSubFolder ? '../admin/' : 'pages/admin/'}dashboard.html`;
+      
+      const pwdLink = moreMenuDropdown.querySelector('a[href*="change-password.html"]');
+      if (pwdLink) pwdLink.href = pwdUrl;
+    }
+
+    if (currentUser) {
+      // Người dùng đã đăng nhập: hiện nút Write & cập nhật link Profile
+      if (createBtn) {
+        createBtn.classList.remove('d-none');
+        createBtn.href = writeUrl;
+      }
+      if (profileLink) {
+        profileLink.classList.remove('d-none');
+        profileLink.href = profileUrl;
+        profileLink.innerHTML = `<i class="bi bi-person-fill"></i> ${currentUser}`;
+      }
+    } else {
+      // Người dùng là khách vãng lai: ẩn nút Write & đổi link Profile thành Log In
+      if (createBtn) {
+        createBtn.classList.add('d-none');
+      }
+      if (profileLink) {
+        profileLink.href = `${isSubFolder ? '../guest/' : 'pages/guest/'}login.html`;
+        profileLink.innerHTML = `<i class="bi bi-box-arrow-in-right"></i> Log In`;
+      }
+    }
+
+    // Attach sign-out handler to desktop logout item
+    if (signOutBtn) {
+      signOutBtn.addEventListener('click', (e) => {
+        localStorage.removeItem('currentUser');
+        localStorage.removeItem('userRole');
+        window.location.href = signOutUrl;
+      });
     }
   }
 });

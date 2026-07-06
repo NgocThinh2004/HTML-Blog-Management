@@ -3,11 +3,11 @@
   
   /* Substack Palette */
   --bg-body: #ffffff;
-  --bg-sidebar: #f9fafb; /* Off-white background for sidebars to comply with prompt */
+  --bg-sidebar: #ffffff; /* Matched to pure white for Substack sidebar layout */
   --bg-panel: #ffffff;
   --text-main: #1a1a1a;
   --text-muted: #666666;
-  --border-color: #e5e7eb; /* Thin Substack borders */
+  --border-color: #f2f2f2; /* Ultra thin, clean light border */
   
   --primary-color: #ff5a00; /* Signature Substack Orange */
   --primary-hover: #e04f00;
@@ -22,11 +22,11 @@
 [data-bs-theme="dark"] {
   /* Substack Dark Palette */
   --bg-body: #0f0f10;
-  --bg-sidebar: #151517;
+  --bg-sidebar: #0f0f10;
   --bg-panel: #0f0f10;
   --text-main: #f3f3f5;
   --text-muted: #a0a0a5;
-  --border-color: #262629;
+  --border-color: #1e1e20;
   
   --primary-color: #ff6c1f;
   --primary-hover: #ff813d;
