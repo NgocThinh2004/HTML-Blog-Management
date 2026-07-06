@@ -1,0 +1,36 @@
+:root {
+  --font-family-base: 'Inter', sans-serif;
+  
+  /* Substack Palette */
+  --bg-body: #ffffff;
+  --bg-sidebar: #f9fafb; /* Off-white background for sidebars to comply with prompt */
+  --bg-panel: #ffffff;
+  --text-main: #1a1a1a;
+  --text-muted: #666666;
+  --border-color: #e5e7eb; /* Thin Substack borders */
+  
+  --primary-color: #ff5a00; /* Signature Substack Orange */
+  --primary-hover: #e04f00;
+  
+  /* Substack Button Accent (Light orange background) */
+  --accent-button-bg: rgba(255, 90, 0, 0.08);
+  --accent-button-text: #ff5a00;
+  
+  --transition-speed: 0.15s;
+}
+
+[data-bs-theme="dark"] {
+  /* Substack Dark Palette */
+  --bg-body: #0f0f10;
+  --bg-sidebar: #151517;
+  --bg-panel: #0f0f10;
+  --text-main: #f3f3f5;
+  --text-muted: #a0a0a5;
+  --border-color: #262629;
+  
+  --primary-color: #ff6c1f;
+  --primary-hover: #ff813d;
+  
+  --accent-button-bg: rgba(255, 108, 31, 0.15);
+  --accent-button-text: #ff6c1f;
+}
