@@ -262,8 +262,9 @@
           <i class="bi  bi-feather fs-4 text-primary me-2"></i>
           <span class="fs-5 fw-bold text-main">MundiBlog</span>
         </a>
-        <div class="d-flex align-items-center ms-auto gap-2" id="mobileHeaderRight">
-          <a href="login.html" class="btn btn-primary btn-sm fw-medium px-3">Log in</a>
+        <div class="d-flex align-items-center ms-auto gap-2">
+          <!-- Auth Gate: Showing Login state by default -->
+          <a href="login.html" class="btn btn-primary btn-sm fw-medium px-3"><span data-i18n="login">Log in</span></a>
         </div>
       </div>
     </header>
@@ -282,69 +283,46 @@
             </a>
           </div>
           
-          <!-- Navigation menu items mapped to CSDL Features -->
+          <!-- Navigation menu -->
           <nav class="sidebar-nav">
-            <!-- 1. Home (Viewing feeds of categories/original text) -->
             <a href="home.html" class="sidebar-nav-item active">
-              <i class="bi bi-house-door-fill" style="color: var(--primary-color);"></i> Home
+              <i class="bi bi-house-door-fill"></i> <span data-i18n="home">Home</span>
             </a>
-            <!-- 2. Inbox (Handles replies of comments & notification triggers) -->
             <a href="#" class="sidebar-nav-item">
-              <i class="bi bi-inbox"></i> Inbox
+              <i class="bi bi-inbox"></i> <span data-i18n="inbox">Inbox</span>
             </a>
-            <!-- 3. Liked Posts (Maps to post_likes CSDL table) -->
             <a href="#" class="sidebar-nav-item">
-              <i class="bi bi-heart"></i> Liked Posts
+              <i class="bi bi-heart"></i> <span data-i18n="liked_posts">Liked Posts</span>
             </a>
-            <!-- 4. My Workspace (Maps to owner's posts table) -->
             <a href="../owner/my-posts.html" class="sidebar-nav-item">
-              <i class="bi bi-journal-text"></i> My Articles
+              <i class="bi bi-journal-text"></i> <span data-i18n="my_articles">My Articles</span>
             </a>
-            <!-- 5. About (Read-only static details page) -->
             <a href="about.html" class="sidebar-nav-item">
-              <i class="bi bi-info-circle"></i> About
+              <i class="bi bi-info-circle"></i> <span data-i18n="about">About</span>
             </a>
-            <!-- 6. Profile (Personal settings panel maps to user credentials) -->
-            <a href="../owner/profile.html" class="sidebar-nav-item" id="sidebarProfileLink">
-              <i class="bi bi-person"></i> Profile
+            <a href="../owner/profile.html" class="sidebar-nav-item">
+              <i class="bi bi-person"></i> <span data-i18n="profile">Profile</span>
             </a>
           </nav>
           
-          <!-- Signature Orange Create Button (Substack style) -->
-          <a href="../owner/create-post.html" class="sidebar-create-btn" id="sidebarCreateBtn">
-            Create <i class="bi bi-plus-lg"></i>
+          <a href="../owner/create-post.html" class="sidebar-create-btn">
+            <span data-i18n="create">Create</span> <i class="bi bi-plus-lg"></i>
           </a>
         </div>
         
-        <!-- Bottom Section: Language switcher, theme toggle, and plus menu -->
+        <!-- Bottom Section: Only More Dropdown (Clean Substack style) -->
         <div class="sidebar-footer-menu">
-          <!-- CONTROL ROW (Matches screenshot layout: Moon toggle left, EN dropdown right) -->
-          <div class="footer-control-row">
-            <!-- Theme Toggle -->
-            <button class="theme-circle-btn" id="themeToggle" title="Toggle Theme">
-              <i class="bi bi-moon" id="themeIcon"></i>
-            </button>
-            
-            <!-- Language Selector (Maps to languages database table) -->
-            <div class="lang-selector-group" id="languageSelectGroup">
-              <button class="lang-pill-btn active" data-value="en">EN</button>
-              <button class="lang-pill-btn" data-value="vi">VI</button>
-              <button class="lang-pill-btn" data-value="zh">ZH</button>
-            </div>
-          </div>
-          
-          <!-- Plus Menu (Placed at the very bottom) -->
           <div class="dropdown">
             <button class="btn btn-link text-decoration-none text-main d-flex align-items-center gap-2 p-1.5 w-100 border-0 text-start" type="button" data-bs-toggle="dropdown" aria-expanded="false">
               <i class="bi bi-list fs-5"></i>
-              <span class="fw-medium">More</span>
+              <span class="fw-medium" data-i18n="more">More</span>
             </button>
             <ul class="dropdown-menu shadow border-light-subtle">
-              <!-- Admin DB Mappings: Users, Categories, Languages -->
-              <li><a class="dropdown-item py-2" href="../admin/dashboard.html" id="adminPanelLink"><i class="bi bi-speedometer2 me-2"></i> Admin Panel</a></li>
-              <li><a class="dropdown-item py-2" href="../owner/change-password.html"><i class="bi bi-shield-lock me-2"></i> Security</a></li>
+              <li><a class="dropdown-item py-2" href="settings.html"><i class="bi bi-gear me-2"></i> <span data-i18n="settings">Settings</span></a></li>
+              <li><a class="dropdown-item py-2" href="../admin/dashboard.html" id="adminPanelLink"><i class="bi bi-speedometer2 me-2"></i> <span data-i18n="admin_panel">Admin Panel</span></a></li>
+              <li><a class="dropdown-item py-2" href="../owner/change-password.html"><i class="bi bi-shield-lock me-2"></i> <span data-i18n="security">Security</span></a></li>
               <li><hr class="dropdown-divider"></li>
-              <li><a class="dropdown-item py-2 text-danger" href="#" id="signOutBtn"><i class="bi bi-box-arrow-right me-2"></i> Sign Out</a></li>
+              <li><a class="dropdown-item py-2 text-danger" href="#" id="signOutBtn"><i class="bi bi-box-arrow-right me-2"></i> <span data-i18n="sign_out">Sign Out</span></a></li>
             </ul>
           </div>
         </div>
@@ -354,47 +332,245 @@
       <div class="center-feed">
         
         <!-- What do you have in mind? Quick draft input card -->
-        <div class="quick-draft-card" id="quickDraftCard">
+        <div class="quick-draft-card" id="quickDraftCard" onclick="window.location.href='../owner/create-post.html'">
           <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=100&h=100" alt="Avatar" class="quick-draft-avatar" id="quickDraftAvatar">
-          <div class="quick-draft-placeholder">What is on your mind?</div>
+          <div class="quick-draft-placeholder" data-i18n="what_on_mind">What is on your mind?</div>
         </div>
 
         <!-- Filter tabs aligning categories translations -->
         <div class="feed-filter-row">
           <div class="dropdown">
             <button class="feed-filter-btn" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-              For you <i class="bi bi-chevron-down"></i>
+              <span id="currentCategoryLabel" data-i18n="for_you">For you</span> <i class="bi bi-chevron-down"></i>
             </button>
             <ul class="dropdown-menu shadow border-light-subtle">
-              <li><a class="dropdown-item active" href="#">For you</a></li>
-              <li><a class="dropdown-item" href="#">Artificial Intelligence</a></li>
-              <li><a class="dropdown-item" href="#">Backend Engineering</a></li>
-              <li><a class="dropdown-item" href="#">Design</a></li>
+              <li><a class="dropdown-item active" href="#" onclick="selectCategory(event, 'all', 'for_you')"><span data-i18n="for_you">For you</span></a></li>
+              <li><a class="dropdown-item" href="#" onclick="selectCategory(event, 'Artificial Intelligence', 'cat_ai')"><span data-i18n="cat_ai">Artificial Intelligence</span></a></li>
+              <li><a class="dropdown-item" href="#" onclick="selectCategory(event, 'Backend Engineering', 'cat_backend')"><span data-i18n="cat_backend">Backend Engineering</span></a></li>
+              <li><a class="dropdown-item" href="#" onclick="selectCategory(event, 'Design', 'cat_design')"><span data-i18n="cat_design">Design</span></a></li>
             </ul>
           </div>
         </div>
 
-        <!-- Posts List Feed Container (Dynamic matching search filters) -->
+        <!-- Posts List Feed Container (Dynamic matching search filters & language filter) -->
         <div id="postsFeedContainer" class="mt-3">
-          <!-- ======================================================== -->
-          <!-- DỮ LIỆU BÀI VIẾT (POST FEED DATA PLACEHOLDER) -->
-          <!-- Thành viên phụ trách kết nối CSDL (bảng: posts, post_languages, users) -->
-          <!-- sẽ lập trình render danh sách bài viết tại đây. -->
-          <!-- ======================================================== -->
-          <div class="text-center py-5 text-muted border border-dashed rounded-4" style="border-style: dashed !important; border-width: 2px !important; border-color: var(--border-color) !important;">
-            <i class="bi bi-journal-richtext fs-1 d-block mb-3 text-secondary"></i>
-            <h5 class="fw-bold text-main">Bài viết Bảng tin (Post Feed)</h5>
-            <p class="small mb-0 px-4">Khu vực hiển thị danh sách bài đăng từ cơ sở dữ liệu. Thành viên phụ trách chức năng này sẽ render động danh sách bài viết ở đây.</p>
-          </div>
+          
+          <!-- POST 1: Artificial Intelligence - Supports EN, VI, ZH (Đủ 3 ngôn ngữ) -->
+          <article class="substack-post" data-supported-langs="en,vi,zh" data-category="Artificial Intelligence">
+            <div class="substack-post-header">
+              <div class="author-badge-group">
+                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=80&h=80" alt="Elena" class="author-avatar">
+                <div class="author-meta-info">
+                  <a href="../owner/profile.html?id=101" class="author-name">Elena Rostova</a>
+                  <span class="post-timestamp">2 hours ago</span>
+                </div>
+              </div>
+            </div>
+
+            <a href="post-detail.html?id=1" class="text-decoration-none text-reset d-block">
+              <h2 class="post-title h4 fw-bold mt-2 mb-1"
+                  data-translate-title-en="The Future of AI Agentic Coding in 2026"
+                  data-translate-title-vi="Tương lai của Lập trình Tự động hóa với AI năm 2026"
+                  data-translate-title-zh="2026年AI代理编程的未来">
+                The Future of AI Agentic Coding in 2026
+              </h2>
+
+              <div class="substack-post-content post-content"
+                   data-translate-content-en="We are witnessing a monumental paradigm shift where AI agents can autonomously plan, reason, and execute complex full-stack engineering tasks. From real-time DOM manipulation to database synchronization, modern coding assistants act as true pair programmers."
+                   data-translate-content-vi="Chúng ta đang chứng kiến một sự chuyển dịch mô hình lớn khi các tác nhân AI có thể tự chủ lập kế hoạch, suy luận và thực thi các nhiệm vụ kỹ thuật toàn diện. Từ thao tác DOM theo thời gian thực đến đồng bộ hóa cơ sở dữ liệu, trợ lý AI hiện đại đóng vai trò như người đồng hành thực thụ."
+                   data-translate-content-zh="我们正在见证一场巨大的范式转变，AI代理可以自主计划、推理并执行复杂的全栈工程任务。从实时DOM操作到数据库同步，现代编码助手充当真正的结对程序员。">
+                We are witnessing a monumental paradigm shift where AI agents can autonomously plan, reason, and execute complex full-stack engineering tasks. From real-time DOM manipulation to database synchronization, modern coding assistants act as true pair programmers.
+              </div>
+
+              <div class="post-image-embed">
+                <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&q=80&w=720&h=360" alt="AI Concept">
+              </div>
+            </a>
+
+            <div class="substack-post-footer">
+              <button class="footer-action-item" onclick="toggleLike(this, 142)"><i class="bi bi-heart"></i> <span class="like-count">142</span></button>
+              <button class="footer-action-item"><i class="bi bi-chat"></i> <span>28</span></button>
+            </div>
+          </article>
+
+          <!-- POST 2: Backend Engineering - Supports EN, VI, ZH (Đủ 3 ngôn ngữ) -->
+          <article class="substack-post" data-supported-langs="en,vi,zh" data-category="Backend Engineering">
+            <div class="substack-post-header">
+              <div class="author-badge-group">
+                <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=80&h=80" alt="Li" class="author-avatar">
+                <div class="author-meta-info">
+                  <a href="../owner/profile.html?id=103" class="author-name">李明 (Li Ming)</a>
+                  <span class="post-timestamp">3 days ago</span>
+                </div>
+              </div>
+            </div>
+
+            <a href="post-detail.html?id=2" class="text-decoration-none text-reset d-block">
+              <h2 class="post-title h4 fw-bold mt-2 mb-1"
+                  data-translate-title-en="Deep Dive into Modern Web Rendering Architectures"
+                  data-translate-title-vi="Hiểu sâu về Kiến trúc Render Web Hiện đại và Tối ưu hiệu năng"
+                  data-translate-title-zh="深入理解现代Web渲染架构与性能优化">
+                Deep Dive into Modern Web Rendering Architectures
+              </h2>
+
+              <div class="substack-post-content post-content"
+                   data-translate-content-en="In an era where Single Page Applications and Server-Side Rendering go hand-in-hand, frontend engineers must choose the right architectural pattern to balance initial load speed with SEO."
+                   data-translate-content-vi="Trong kỷ nguyên ứng dụng trang đơn (SPA) và Server-Side Rendering song hành, kỹ sư frontend cần lựa chọn kiến trúc phù hợp nhất để cân bằng giữa tốc độ tải trang và tối ưu hóa SEO."
+                   data-translate-content-zh="在单页应用与服务器端渲染齐头并进的今天，前端工程师需要针对不同业务场景选择最合理的架构设计，确保首屏加载速度与搜索引擎优化（SEO）的最佳平衡。">
+                In an era where Single Page Applications and Server-Side Rendering go hand-in-hand, frontend engineers must choose the right architectural pattern to balance initial load speed with SEO.
+              </div>
+            </a>
+
+            <div class="substack-post-footer">
+              <button class="footer-action-item" onclick="toggleLike(this, 210)"><i class="bi bi-heart"></i> <span class="like-count">210</span></button>
+              <button class="footer-action-item"><i class="bi bi-chat"></i> <span>45</span></button>
+            </div>
+          </article>
+
+          <!-- POST 3: Design - Supports EN, VI ONLY (Chỉ có VI và EN, KHÔNG có tiếng Trung) -->
+          <article class="substack-post" data-supported-langs="en,vi" data-category="Design">
+            <div class="substack-post-header">
+              <div class="author-badge-group">
+                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=80&h=80" alt="Tuấn" class="author-avatar">
+                <div class="author-meta-info">
+                  <a href="../owner/profile.html?id=102" class="author-name">Hồ Quốc Tuấn</a>
+                  <span class="post-timestamp">Yesterday</span>
+                </div>
+              </div>
+            </div>
+
+            <a href="post-detail.html?id=3" class="text-decoration-none text-reset d-block">
+              <h2 class="post-title h4 fw-bold mt-2 mb-1"
+                  data-translate-title-en="10 Essential Principles for Modern Glassmorphism UI"
+                  data-translate-title-vi="10 Nguyên tắc cốt lõi cho Giao diện Glassmorphism hiện đại">
+                10 Essential Principles for Modern Glassmorphism UI
+              </h2>
+
+              <div class="substack-post-content post-content"
+                   data-translate-content-en="Designing interfaces that feel responsive and alive encourages interaction. Achieve this with subtle hover effects, vibrant harmonious color palettes, and clean modern typography. Always prioritize visual excellence."
+                   data-translate-content-vi="Thiết kế giao diện mang lại cảm giác sống động và phản hồi tốt sẽ thúc đẩy sự tương tác. Hãy đạt được điều này với hiệu ứng hover tinh tế, bảng màu hài hòa sống động và nghệ thuật chữ hiện đại.">
+                Designing interfaces that feel responsive and alive encourages interaction. Achieve this with subtle hover effects, vibrant harmonious color palettes, and clean modern typography. Always prioritize visual excellence.
+              </div>
+            </a>
+
+            <div class="substack-post-footer">
+              <button class="footer-action-item" onclick="toggleLike(this, 89)"><i class="bi bi-heart"></i> <span class="like-count">89</span></button>
+              <button class="footer-action-item"><i class="bi bi-chat"></i> <span>14</span></button>
+            </div>
+          </article>
+
+          <!-- POST 4 [NEW]: Artificial Intelligence - Supports EN, VI, ZH (Đủ 3 ngôn ngữ) -->
+          <article class="substack-post" data-supported-langs="en,vi,zh" data-category="Artificial Intelligence">
+            <div class="substack-post-header">
+              <div class="author-badge-group">
+                <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=80&h=80" alt="Sarah" class="author-avatar">
+                <div class="author-meta-info">
+                  <a href="../owner/profile.html?id=104" class="author-name">Sarah Connor</a>
+                  <span class="post-timestamp">5 hours ago</span>
+                </div>
+              </div>
+            </div>
+
+            <a href="post-detail.html?id=4" class="text-decoration-none text-reset d-block">
+              <h2 class="post-title h4 fw-bold mt-2 mb-1"
+                  data-translate-title-en="Next-Gen LLM Reasoning & Tool Use in 2026"
+                  data-translate-title-vi="Khả năng Suy luận & Sử dụng Công cụ của LLM Thế hệ mới năm 2026"
+                  data-translate-title-zh="2026年下一代大语言模型推理与工具使用">
+                Next-Gen LLM Reasoning & Tool Use in 2026
+              </h2>
+
+              <div class="substack-post-content post-content"
+                   data-translate-content-en="Modern language models are moving beyond simple pattern matching. By integrating external tools, code interpreters, and multi-agent loops, they can tackle complex engineering workflows autonomously."
+                   data-translate-content-vi="Các mô hình ngôn ngữ hiện đại đang vượt qua giới hạn nhận diện mẫu đơn thuần. Bằng cách tích hợp công cụ bên ngoài, trình thông dịch mã và vòng lặp đa tác nhân, chúng có thể tự động giải quyết các quy trình kỹ thuật phức tạp."
+                   data-translate-content-zh="现代语言模型正在超越简单的模式匹配。通过集成外部工具、代码解释器和多代理循环，它们能够自主处理复杂的工程工作流。">
+                Modern language models are moving beyond simple pattern matching. By integrating external tools, code interpreters, and multi-agent loops, they can tackle complex engineering workflows autonomously.
+              </div>
+            </a>
+
+            <div class="substack-post-footer">
+              <button class="footer-action-item" onclick="toggleLike(this, 178)"><i class="bi bi-heart"></i> <span class="like-count">178</span></button>
+              <button class="footer-action-item"><i class="bi bi-chat"></i> <span>32</span></button>
+            </div>
+          </article>
+
+          <!-- POST 5 [NEW]: Backend Engineering - Supports EN, VI, ZH (Đủ 3 ngôn ngữ) -->
+          <article class="substack-post" data-supported-langs="en,vi,zh" data-category="Backend Engineering">
+            <div class="substack-post-header">
+              <div class="author-badge-group">
+                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=80&h=80" alt="Alex" class="author-avatar">
+                <div class="author-meta-info">
+                  <a href="../owner/profile.html?id=105" class="author-name">Alex Rivera</a>
+                  <span class="post-timestamp">1 day ago</span>
+                </div>
+              </div>
+            </div>
+
+            <a href="post-detail.html?id=5" class="text-decoration-none text-reset d-block">
+              <h2 class="post-title h4 fw-bold mt-2 mb-1"
+                  data-translate-title-en="Building High-Throughput Microservices with Rust & gRPC"
+                  data-translate-title-vi="Xây dựng Microservices Hiệu năng cao với Rust & gRPC"
+                  data-translate-title-zh="使用Rust和gRPC构建高吞吐量微服务">
+                Building High-Throughput Microservices with Rust & gRPC
+              </h2>
+
+              <div class="substack-post-content post-content"
+                   data-translate-content-en="As backend scalability requirements grow, transitioning performance-critical services to Rust and gRPC has proven to drastically reduce memory footprint while eliminating garbage collection pauses."
+                   data-translate-content-vi="Khi yêu cầu về khả năng mở rộng tăng lên, việc chuyển đổi các dịch vụ quan trọng về hiệu năng sang Rust và gRPC đã chứng minh giảm đáng kể lượng bộ nhớ sử dụng đồng thời loại bỏ các khoảng dừng do garbage collection."
+                   data-translate-content-zh="随着后端可扩展性需求的增长，将关键性能服务过渡到Rust和gRPC极大地减少了内存占用，同时消除了垃圾回收停顿。">
+                As backend scalability requirements grow, transitioning performance-critical services to Rust and gRPC has proven to drastically reduce memory footprint while eliminating garbage collection pauses.
+              </div>
+            </a>
+
+            <div class="substack-post-footer">
+              <button class="footer-action-item" onclick="toggleLike(this, 312)"><i class="bi bi-heart"></i> <span class="like-count">312</span></button>
+              <button class="footer-action-item"><i class="bi bi-chat"></i> <span>54</span></button>
+            </div>
+          </article>
+
+          <!-- POST 6 [NEW]: Design - Supports EN, VI, ZH (Đủ 3 ngôn ngữ) -->
+          <article class="substack-post" data-supported-langs="en,vi,zh" data-category="Design">
+            <div class="substack-post-header">
+              <div class="author-badge-group">
+                <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&q=80&w=80&h=80" alt="Maya" class="author-avatar">
+                <div class="author-meta-info">
+                  <a href="../owner/profile.html?id=106" class="author-name">Maya Lin</a>
+                  <span class="post-timestamp">2 days ago</span>
+                </div>
+              </div>
+            </div>
+
+            <a href="post-detail.html?id=6" class="text-decoration-none text-reset d-block">
+              <h2 class="post-title h4 fw-bold mt-2 mb-1"
+                  data-translate-title-en="The Psychology of Color in Modern Web Applications"
+                  data-translate-title-vi="Tâm lý học Màu sắc trong các Ứng dụng Web Hiện đại"
+                  data-translate-title-zh="现代Web应用程序中的色彩心理学">
+                The Psychology of Color in Modern Web Applications
+              </h2>
+
+              <div class="substack-post-content post-content"
+                   data-translate-content-en="Color is not just an aesthetic choice; it is a fundamental communication tool that guides user interaction, establishes brand trust, and influences cognitive load in complex user interfaces."
+                   data-translate-content-vi="Màu sắc không chỉ là lựa chọn thẩm mỹ; nó là công cụ giao tiếp cốt lõi dẫn dắt tương tác người dùng, xây dựng lòng tin thương hiệu và ảnh hưởng đến tải nhận thức trong các giao diện phức tạp."
+                   data-translate-content-zh="色彩不仅是美学选择，更是指导用户交互、建立品牌信任并在复杂用户界面中影响认知负荷的核心沟通工具。">
+                Color is not just an aesthetic choice; it is a fundamental communication tool that guides user interaction, establishes brand trust, and influences cognitive load in complex user interfaces.
+              </div>
+            </a>
+
+            <div class="substack-post-footer">
+              <button class="footer-action-item" onclick="toggleLike(this, 95)"><i class="bi bi-heart"></i> <span class="like-count">95</span></button>
+              <button class="footer-action-item"><i class="bi bi-chat"></i> <span>19</span></button>
+            </div>
+          </article>
+
         </div>
       </div>
 
+      <!-- RIGHT PANEL (Recommended Authors, Search, Footer) -->
       <!-- COLUMN 3: RIGHT PANEL (Search, Widgets, App promo) -->
       <aside class="right-panel">
         <!-- Rounded Search bar filters titles/authors in feed -->
         <div class="right-search-box">
           <i class="bi bi-search"></i>
-          <input type="search" id="feedSearchInput" placeholder="Search MundiBlog..." onkeyup="filterFeedPosts()">
+          <input type="search" id="feedSearchInput" placeholder="Search MundiBlog..." onkeyup="filterFeedPosts()" data-i18n="search_placeholder">
         </div>
         
         <!-- Platform Subscriptions widgets -->
@@ -404,8 +580,8 @@
               <i class="bi bi-bookmark-fill fs-3" style="color: var(--primary-color);"></i>
             </div>
             <div>
-              <h6 class="fw-bold text-main mb-0" style="font-size: 0.85rem;">Subscriptions</h6>
-              <span class="text-muted" style="font-size: 0.75rem;">Join creators on MundiBlog</span>
+              <h6 class="fw-bold text-main mb-0" style="font-size: 0.85rem;" data-i18n="subscriptions">Subscriptions</h6>
+              <span class="text-muted" style="font-size: 0.75rem;" data-i18n="join_creators">Join creators on MundiBlog</span>
             </div>
           </div>
         </div>
@@ -413,8 +589,8 @@
         <!-- Recommended Authors Widget (CSDL Users) -->
         <div class="featured-authors-widget">
           <div class="d-flex justify-content-between align-items-center mb-3">
-            <h6 class="fw-bold text-main mb-0" style="font-size: 0.85rem;">Recommended for You</h6>
-            <a href="#" class="text-decoration-none small text-muted">See all</a>
+            <h6 class="fw-bold text-main mb-0" style="font-size: 0.85rem;" data-i18n="recommended">Recommended for You</h6>
+            <a href="#" class="text-decoration-none small text-muted" data-i18n="see_all">See all</a>
           </div>
           
           <!-- Recommended Authors List (CSDL Users table mockup) -->
@@ -426,7 +602,7 @@
                 <span class="featured-author-count">Economics Author</span>
               </div>
             </div>
-            <button class="btn-profile-view" onclick="window.location.href='../owner/profile.html?id=1'">View Profile</button>
+            <button class="btn-profile-view" onclick="window.location.href='../owner/profile.html?id=1'" data-i18n="view_profile">View Profile</button>
           </div>
           
           <div class="featured-author-item">
@@ -437,7 +613,7 @@
                 <span class="featured-author-count">UX Designer</span>
               </div>
             </div>
-            <button class="btn-profile-view" onclick="window.location.href='../owner/profile.html?id=2'">View Profile</button>
+            <button class="btn-profile-view" onclick="window.location.href='../owner/profile.html?id=2'" data-i18n="view_profile">View Profile</button>
           </div>
 
           <div class="featured-author-item">
@@ -448,15 +624,15 @@
                 <span class="featured-author-count">Tech Lead</span>
               </div>
             </div>
-            <button class="btn-profile-view" onclick="window.location.href='../owner/profile.html?id=3'">View Profile</button>
+            <button class="btn-profile-view" onclick="window.location.href='../owner/profile.html?id=3'" data-i18n="view_profile">View Profile</button>
           </div>
         </div>
       </aside>
-      
+
     </main>
   </div>
 
-  <!-- MOBILE SIDEBAR -->
+  <!-- MOBILE SIDEBAR / OFFCANVAS -->
   <div class="offcanvas offcanvas-start" tabindex="-1" id="mobileSidebar" aria-labelledby="mobileSidebarLabel">
     <div class="offcanvas-header border-bottom">
       <h5 class="offcanvas-title fw-bold d-flex align-items-center" id="mobileSidebarLabel">
@@ -467,7 +643,10 @@
     <div class="offcanvas-body p-0">
       <nav class="sidebar-nav p-3">
         <a href="home.html" class="sidebar-nav-item active">
-          <i class="bi bi-house-door"></i> Home
+          <i class="bi bi-house-door"></i> <span data-i18n="home">Home</span>
+        </a>
+        <a href="settings.html" class="sidebar-nav-item">
+          <i class="bi bi-gear"></i> <span data-i18n="settings">Settings</span>
         </a>
         <a href="about.html" class="sidebar-nav-item">
           <i class="bi bi-info-circle"></i> About
@@ -489,25 +668,6 @@
   <script src="../../assets/js/core.js"></script>
   
   <script>
-    // Custom language switch logic for inline pills
-    document.addEventListener('DOMContentLoaded', () => {
-      const langPills = document.querySelectorAll('.lang-pill-btn');
-      langPills.forEach(pill => {
-        pill.addEventListener('click', () => {
-          langPills.forEach(p => p.classList.remove('active'));
-          pill.classList.add('active');
-          const val = pill.getAttribute('data-value');
-          
-          // Trigger the simulation logic same as old languageSelect
-          const languageSelectSim = document.getElementById('languageSelectSimTrigger');
-          if (languageSelectSim) {
-            languageSelectSim.value = val;
-            languageSelectSim.dispatchEvent(new Event('change'));
-          }
-        });
-      });
-    });
-
     // Live Search Filter for feed matching title or author name
     function filterFeedPosts() {
       const input = document.getElementById('feedSearchInput');
@@ -536,50 +696,11 @@
       if (isLiked) {
         icon.className = 'bi bi-heart-fill';
         text.textContent = baseCount + 1;
-        alert("Liked article! (Simulated insert into post_likes table)");
       } else {
         icon.className = 'bi bi-heart';
         text.textContent = baseCount;
-        alert("Unliked article! (Simulated delete from post_likes table)");
-      }
-    }
-
-    // Dynamic translate post content simulation based on database language triggers
-    function triggerFeedTranslation(triggerLink, origLang) {
-      const post = triggerLink.closest('.substack-post');
-      const titleEl = post.querySelector('.post-title');
-      const contentEl = post.querySelector('.post-content');
-      
-      const currentText = triggerLink.textContent.trim();
-      const currentLang = document.documentElement.getAttribute('data-lang') || 'en';
-      
-      // Determine next translation target
-      const targetLang = currentLang === 'en' ? 'vi' : 'en';
-      
-      const newTitle = titleEl.getAttribute(`data-translate-title-${targetLang}`);
-      const newContent = contentEl.getAttribute(`data-translate-content-${targetLang}`);
-      
-      if (newTitle && newContent) {
-        titleEl.textContent = newTitle;
-        contentEl.textContent = newContent;
-        triggerLink.innerHTML = `<i class="bi bi-arrow-counterclockwise"></i> Show Original (${origLang.toUpperCase()})`;
-        document.documentElement.setAttribute('data-lang', targetLang);
-      } else {
-        // Reset to original
-        const origTitle = titleEl.getAttribute(`data-translate-title-${origLang}`);
-        const origContent = contentEl.getAttribute(`data-translate-content-${origLang}`);
-        titleEl.textContent = origTitle;
-        contentEl.textContent = origContent;
-        triggerLink.innerHTML = `<i class="bi bi-translate"></i> Translate`;
-        document.documentElement.setAttribute('data-lang', origLang);
       }
     }
   </script>
-  <!-- Hidden simulation link for legacy trigger support -->
-  <select id="languageSelectSimTrigger" class="d-none">
-    <option value="en">EN</option>
-    <option value="vi">VI</option>
-    <option value="zh">ZH</option>
-  </select>
 </body>
 </html>
