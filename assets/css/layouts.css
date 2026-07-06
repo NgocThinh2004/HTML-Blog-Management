@@ -45,16 +45,17 @@ body {
 .app-main-content {
   display: grid;
   grid-template-columns: 260px 1fr 340px;
-  max-width: 1200px; /* Reduced from 1340px to eliminate large empty side margins */
-  margin: 0 auto;
   width: 100%;
+  max-width: 100%;
+  margin: 0;
   flex: 1;
 }
 
 /* Page layouts without right sidebar widgets (dashboard / editors) */
 .app-main-content.no-right-panel {
   grid-template-columns: 260px 1fr;
-  max-width: 1050px;
+  width: 100%;
+  max-width: 100%;
 }
 
 /* Left Sidebar: Sticky, full screen height, logo on top, plus menu bottom */
@@ -88,11 +89,19 @@ body {
 /* Center Feed: Pure white, clean reading column */
 .center-feed {
   background-color: var(--bg-body);
-  padding: 2rem 3rem;
-  min-width: 0;
+  padding: 1.5rem 2.5rem;
+  overflow-y: auto;
   border-right: 1px solid var(--border-color);
-  border-left: 1px solid var(--border-color);
-  transition: background-color var(--transition-speed) ease, border-color var(--transition-speed) ease;
+  transition: border-color var(--transition-speed) ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Restrict readable content width within center feed */
+.center-feed > * {
+  width: 100%;
+  max-width: 720px;
 }
 
 /* Right Panel: Sticky, search box on top, recommendations middle */
