@@ -339,3 +339,69 @@ select.form-select-sm {
   text-decoration: underline;
   color: var(--text-main);
 }
+
+/* ==========================================================
+   PRETTIER SYSTEM CONTROLS (THEME & LANGUAGE PILLS)
+   ========================================================== */
+.lang-selector-group {
+  display: flex;
+  background-color: rgba(0, 0, 0, 0.04);
+  padding: 3px;
+  border-radius: 99px;
+  border: 1px solid var(--border-color);
+  align-items: center;
+}
+
+[data-bs-theme="dark"] .lang-selector-group {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.lang-pill-btn {
+  background: transparent;
+  border: none;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  padding: 0.3rem 0.65rem;
+  border-radius: 99px;
+  transition: all var(--transition-speed) ease;
+  cursor: pointer;
+}
+
+.lang-pill-btn:hover {
+  color: var(--text-main);
+}
+
+.lang-pill-btn.active {
+  background-color: var(--bg-body);
+  color: var(--primary-color) !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.theme-circle-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: rgba(0, 0, 0, 0.03);
+  border: 1px solid var(--border-color);
+  color: var(--text-main);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-speed) ease;
+  cursor: pointer;
+}
+
+[data-bs-theme="dark"] .theme-circle-btn {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.theme-circle-btn:hover {
+  background-color: rgba(0, 0, 0, 0.08);
+  color: var(--primary-color);
+}
+
+[data-bs-theme="dark"] .theme-circle-btn:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+

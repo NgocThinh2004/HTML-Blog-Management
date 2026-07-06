@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
   // ========================================================
-  // Theme Toggle Mechanism
+  // Theme Toggle Mechanism (Circle button)
   // ========================================================
   const themeToggle = document.getElementById('themeToggle');
   const themeIcon = document.getElementById('themeIcon');
@@ -22,19 +22,22 @@ document.addEventListener('DOMContentLoaded', () => {
   function updateThemeIcon(theme) {
     if (!themeIcon) return;
     if (theme === 'dark') {
-      themeIcon.className = 'bi bi-sun fs-5';
+      themeIcon.className = 'bi bi-sun';
     } else {
-      themeIcon.className = 'bi bi-moon fs-5';
+      themeIcon.className = 'bi bi-moon';
     }
   }
 
   // ========================================================
-  // Language Switch Simulation Logic
+  // Language Switch Simulation Logic (Inline Custom Pills)
   // ========================================================
-  const languageSelect = document.getElementById('languageSelect');
-  if (languageSelect) {
-    languageSelect.addEventListener('change', (e) => {
-      const selectedLang = e.target.value;
+  const langPills = document.querySelectorAll('.lang-pill-btn');
+  langPills.forEach(pill => {
+    pill.addEventListener('click', () => {
+      langPills.forEach(p => p.classList.remove('active'));
+      pill.classList.add('active');
+      const selectedLang = pill.getAttribute('data-value');
+      
       console.log(`Simulating Language Shift to: ${selectedLang.toUpperCase()}`);
       
       const translatableTitles = document.querySelectorAll('[data-translate-title]');
@@ -50,12 +53,11 @@ document.addEventListener('DOMContentLoaded', () => {
         if (transVal) el.textContent = transVal;
       });
 
-      // Update visibility of warnings/badges
+      // Update warnings
       const cards = document.querySelectorAll('.post-card');
       cards.forEach(card => {
         const supportedLangs = card.getAttribute('data-supported-langs').split(',');
         const badge = card.querySelector('.badge-translation-warning');
-        
         if (badge) {
           if (supportedLangs.includes(selectedLang)) {
             badge.classList.add('d-none');
@@ -67,23 +69,24 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       });
     });
-  }
+  });
 
   // ========================================================
-  // Session State Sync (Desktop Sidebar & Mobile Header)
+  // Session State Sync (CSDL Roles & Login validations)
   // ========================================================
   const currentUser = localStorage.getItem('currentUser');
+  const userRole = localStorage.getItem('userRole'); // 'admin', 'author', or null
   const isSubFolder = window.location.pathname.includes('/pages/');
 
   // Relative link paths based on directory depth
+  const loginUrl = `${isSubFolder ? '../guest/' : 'pages/guest/'}login.html`;
   const writeUrl = `${isSubFolder ? '../owner/' : 'pages/owner/'}create-post.html`;
   const myPostsUrl = `${isSubFolder ? '../owner/' : 'pages/owner/'}my-posts.html`;
   const profileUrl = `${isSubFolder ? '../owner/' : 'pages/owner/'}profile.html`;
-  const pwdUrl = `${isSubFolder ? '../owner/' : 'pages/owner/'}change-password.html`;
   const signOutUrl = `${isSubFolder ? '../guest/' : 'pages/guest/'}home.html`;
   const avatarImg = "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=150&h=150";
 
-  // A. MOBILE NAVBAR ADJUSTMENTS
+  // A. MOBILE NAVBAR STATE ADJUSTMENT
   const mobileHeaderRight = document.getElementById('mobileHeaderRight');
   if (mobileHeaderRight) {
     if (currentUser) {
@@ -112,52 +115,68 @@ document.addEventListener('DOMContentLoaded', () => {
           localStorage.removeItem('userRole');
         });
       }
+    } else {
+      mobileHeaderRight.innerHTML = `<a href="${loginUrl}" class="btn btn-primary btn-sm fw-medium px-3">Log in</a>`;
     }
   }
 
-  // B. DESKTOP SIDEBAR ADJUSTMENTS
+  // B. DESKTOP SIDEBAR STATE ADJUSTMENTS (CSDL Role gates)
   const leftSidebar = document.querySelector('.left-sidebar');
   if (leftSidebar) {
-    const createBtn = leftSidebar.querySelector('.sidebar-create-btn');
-    const profileLink = leftSidebar.querySelector('.sidebar-nav-item[href*="profile.html"]');
+    const createBtn = leftSidebar.querySelector('.sidebar-create-btn') || document.getElementById('sidebarCreateBtn');
+    const profileLink = leftSidebar.querySelector('.sidebar-nav-item[href*="profile.html"]') || document.getElementById('sidebarProfileLink');
     const signOutBtn = leftSidebar.querySelector('#signOutBtn');
-    
-    // Sửa link dropdown More
-    const moreMenuDropdown = leftSidebar.querySelector('.dropdown-menu');
-    if (moreMenuDropdown) {
-      // Cập nhật lại đường dẫn cho menu More
-      const adminLink = moreMenuDropdown.querySelector('a[href*="dashboard.html"]');
-      if (adminLink) adminLink.href = `${isSubFolder ? '../admin/' : 'pages/admin/'}dashboard.html`;
-      
-      const pwdLink = moreMenuDropdown.querySelector('a[href*="change-password.html"]');
-      if (pwdLink) pwdLink.href = pwdUrl;
-    }
+    const adminPanelLink = leftSidebar.querySelector('a[href*="dashboard.html"]') || document.getElementById('adminPanelLink');
+    const quickDraftCard = document.getElementById('quickDraftCard');
 
+    // 1. Check logged-in user session
     if (currentUser) {
-      // Người dùng đã đăng nhập: hiện nút Write & cập nhật link Profile
+      // User logged in: show writing options
       if (createBtn) {
         createBtn.classList.remove('d-none');
         createBtn.href = writeUrl;
       }
       if (profileLink) {
-        profileLink.classList.remove('d-none');
         profileLink.href = profileUrl;
-        profileLink.innerHTML = `<i class="bi bi-person-fill"></i> ${currentUser}`;
+        profileLink.innerHTML = `<i class="bi bi-person-fill" style="color: var(--primary-color);"></i> ${currentUser}`;
+      }
+      if (quickDraftCard) {
+        quickDraftCard.style.display = 'flex'; // Show quick draft box on home page feed
+        const qAvatar = document.getElementById('quickDraftAvatar');
+        if (qAvatar) qAvatar.src = avatarImg;
+      }
+      
+      // 2. Authorization checks: Admin role check
+      if (userRole === 'admin') {
+        if (adminPanelLink) {
+          adminPanelLink.closest('li').style.display = 'block'; // Show Admin panel link
+        }
+      } else {
+        if (adminPanelLink) {
+          adminPanelLink.closest('li').style.display = 'none'; // Hide Admin panel link for regular authors/readers
+        }
       }
     } else {
-      // Người dùng là khách vãng lai: ẩn nút Write & đổi link Profile thành Log In
+      // Guest state: hide writing widgets, change profile to Login action
       if (createBtn) {
         createBtn.classList.add('d-none');
       }
       if (profileLink) {
-        profileLink.href = `${isSubFolder ? '../guest/' : 'pages/guest/'}login.html`;
+        profileLink.href = loginUrl;
         profileLink.innerHTML = `<i class="bi bi-box-arrow-in-right"></i> Log In`;
+      }
+      if (quickDraftCard) {
+        quickDraftCard.style.display = 'none'; // Hide quick draft
+      }
+      if (adminPanelLink) {
+        adminPanelLink.closest('li').style.display = 'none'; // Hide Admin panel link for guests
       }
     }
 
-    // Attach sign-out handler to desktop logout item
+    // Attach sign-out handler to desktop logout action item
     if (signOutBtn) {
       signOutBtn.addEventListener('click', (e) => {
+        e.preventDefault();
         localStorage.removeItem('currentUser');
         localStorage.removeItem('userRole');
         window.location.href = signOutUrl;

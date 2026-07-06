@@ -45,7 +45,7 @@ body {
 .app-main-content {
   display: grid;
   grid-template-columns: 260px 1fr 340px;
-  max-width: 1340px;
+  max-width: 1200px; /* Reduced from 1340px to eliminate large empty side margins */
   margin: 0 auto;
   width: 100%;
   flex: 1;

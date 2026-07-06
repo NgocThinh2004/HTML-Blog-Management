@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MundiBlog - Multilingual AI-Translated Feed</title>
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Bootstrap 5.3 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  
+  <!-- Custom CSS (Standard Shared Assets) -->
+  <link rel="stylesheet" href="../../assets/css/variables.css">
+  <link rel="stylesheet" href="../../assets/css/base.css">
+  <link rel="stylesheet" href="../../assets/css/layouts.css">
+  <link rel="stylesheet" href="../../assets/css/components.css">
+  
+  <style>
+    .substack-logo-container {
+      padding: 0.5rem 0.75rem 1.5rem 0.75rem;
+    }
+    
+    .substack-logo {
+      font-size: 1.6rem;
+      color: var(--primary-color);
+      font-weight: 800;
+      letter-spacing: -0.04em;
+    }
+    
+    .sidebar-create-btn {
+      background-color: var(--primary-color) !important;
+      border-color: var(--primary-color) !important;
+      color: #ffffff !important;
+      border-radius: 99px !important;
+      padding: 0.65rem 1.5rem !important;
+      font-weight: 600 !important;
+      font-size: 0.95rem !important;
+      width: 100%;
+      text-align: center;
+      margin-top: 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      transition: all var(--transition-speed) ease;
+    }
+    
+    .sidebar-create-btn:hover {
+      background-color: var(--primary-hover) !important;
+      border-color: var(--primary-hover) !important;
+    }
+    
+    .sidebar-footer-menu {
+      margin-top: auto;
+      padding-top: 1.25rem;
+      border-top: 1px solid var(--border-color);
+    }
+    
+    .footer-control-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 0.75rem;
+      margin-bottom: 0.75rem;
+    }
+    
+    /* Center Column Elements matching user screenshot */
+    .quick-draft-card {
+      border: 1px solid var(--border-color);
+      border-radius: 20px;
+      padding: 0.85rem 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+      margin-bottom: 1.5rem;
+      cursor: pointer;
+      background-color: var(--bg-panel);
+    }
+    
+    .quick-draft-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+    
+    .quick-draft-placeholder {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      flex: 1;
+    }
+    
+    .feed-filter-row {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+    
+    .feed-filter-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-weight: 600;
+      font-size: 0.875rem;
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.25rem 0.5rem;
+    }
+    
+    /* Substack Post Card redesign matching screenshots */
+    .substack-post {
+      padding: 1.75rem 0;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+    
+    .substack-post-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    
+    .author-badge-group {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    
+    .author-avatar {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+    
+    .author-meta-info {
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .author-name {
+      font-weight: 600;
+      color: var(--text-main);
+      font-size: 0.9rem;
+      text-decoration: none;
+    }
+    
+    .post-timestamp {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+    
+    .btn-subscribe-author {
+      background-color: transparent;
+      border: none;
+      color: var(--primary-color);
+      font-weight: 600;
+      font-size: 0.8rem;
+      padding: 0.2rem 0.5rem;
+      transition: color var(--transition-speed) ease;
+    }
+    
+    .btn-subscribe-author:hover {
+      color: var(--primary-hover);
+    }
+    
+    .translation-trigger {
+      font-size: 0.75rem;
+      color: var(--primary-color);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    
+    .translation-trigger:hover {
+      text-decoration: underline;
+    }
+    
+    .substack-post-content {
+      font-size: 0.95rem;
+      color: var(--text-main);
+      line-height: 1.55;
+      letter-spacing: -0.01em;
+      white-space: pre-line;
+    }
+    
+    .post-image-embed {
+      border-radius: 12px;
+      max-height: 360px;
+      overflow: hidden;
+      margin-top: 0.5rem;
+      border: 1px solid var(--border-color);
+    }
+    
+    .post-image-embed img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    
+    /* Interactive stats footer matching Substack icons */
+    .substack-post-footer {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      margin-top: 0.75rem;
+      padding-top: 0.25rem;
+    }
+    
+    .footer-action-item {
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      background: transparent;
+      border: none;
+      padding: 0.25rem 0.5rem;
+      transition: color var(--transition-speed) ease;
+    }
+    
+    .footer-action-item:hover {
+      color: var(--text-main);
+    }
+    
+    .footer-action-item.liked {
+      color: var(--primary-color);
+    }
+    
+    /* Right Panel recommended container */
+    .subscriptions-widget {
+      background-color: var(--bg-panel);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="app-wrapper">
+    
+    <!-- MOBILE HEADER -->
+    <header class="app-header">
+      <div class="header-container">
+        <button class="btn btn-link d-lg-none me-2 text-reset p-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#mobileSidebar" aria-controls="mobileSidebar">
+          <i class="bi bi-list fs-3"></i>
+        </button>
+        <a href="home.html" class="d-flex align-items-center text-decoration-none">
+          <i class="bi  bi-feather fs-4 text-primary me-2"></i>
+          <span class="fs-5 fw-bold text-main">MundiBlog</span>
+        </a>
+        <div class="d-flex align-items-center ms-auto gap-2" id="mobileHeaderRight">
+          <a href="login.html" class="btn btn-primary btn-sm fw-medium px-3">Log in</a>
+        </div>
+      </div>
+    </header>
+
+    <!-- 3-COLUMN LAYOUT -->
+    <main class="app-main-content">
+      
+      <!-- COLUMN 1: LEFT SIDEBAR NAVIGATION -->
+      <aside class="left-sidebar">
+        <div>
+          <!-- Substack Logo -->
+          <div class="substack-logo-container">
+            <a href="home.html" class="text-decoration-none d-flex align-items-center gap-2">
+              <i class="bi bi-bookmark-fill substack-logo"></i>
+              <span class="fs-5 fw-bold text-main" style="letter-spacing: -0.02em;">MundiBlog</span>
+            </a>
+          </div>
+          
+          <!-- Navigation menu items mapped to CSDL Features -->
+          <nav class="sidebar-nav">
+            <!-- 1. Home (Viewing feeds of categories/original text) -->
+            <a href="home.html" class="sidebar-nav-item active">
+              <i class="bi bi-house-door-fill" style="color: var(--primary-color);"></i> Home
+            </a>
+            <!-- 2. Inbox (Handles replies of comments & notification triggers) -->
+            <a href="#" class="sidebar-nav-item">
+              <i class="bi bi-inbox"></i> Inbox
+            </a>
+            <!-- 3. Liked Posts (Maps to post_likes CSDL table) -->
+            <a href="#" class="sidebar-nav-item">
+              <i class="bi bi-heart"></i> Liked Posts
+            </a>
+            <!-- 4. My Workspace (Maps to owner's posts table) -->
+            <a href="../owner/my-posts.html" class="sidebar-nav-item">
+              <i class="bi bi-journal-text"></i> My Articles
+            </a>
+            <!-- 5. About (Read-only static details page) -->
+            <a href="about.html" class="sidebar-nav-item">
+              <i class="bi bi-info-circle"></i> About
+            </a>
+            <!-- 6. Profile (Personal settings panel maps to user credentials) -->
+            <a href="../owner/profile.html" class="sidebar-nav-item" id="sidebarProfileLink">
+              <i class="bi bi-person"></i> Profile
+            </a>
+          </nav>
+          
+          <!-- Signature Orange Create Button (Substack style) -->
+          <a href="../owner/create-post.html" class="sidebar-create-btn" id="sidebarCreateBtn">
+            Create <i class="bi bi-plus-lg"></i>
+          </a>
+        </div>
+        
+        <!-- Bottom Section: Language switcher, theme toggle, and plus menu -->
+        <div class="sidebar-footer-menu">
+          <!-- CONTROL ROW (Matches screenshot layout: Moon toggle left, EN dropdown right) -->
+          <div class="footer-control-row">
+            <!-- Theme Toggle -->
+            <button class="theme-circle-btn" id="themeToggle" title="Toggle Theme">
+              <i class="bi bi-moon" id="themeIcon"></i>
+            </button>
+            
+            <!-- Language Selector (Maps to languages database table) -->
+            <div class="lang-selector-group" id="languageSelectGroup">
+              <button class="lang-pill-btn active" data-value="en">EN</button>
+              <button class="lang-pill-btn" data-value="vi">VI</button>
+              <button class="lang-pill-btn" data-value="zh">ZH</button>
+            </div>
+          </div>
+          
+          <!-- Plus Menu (Placed at the very bottom) -->
+          <div class="dropdown">
+            <button class="btn btn-link text-decoration-none text-main d-flex align-items-center gap-2 p-1.5 w-100 border-0 text-start" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="bi bi-list fs-5"></i>
+              <span class="fw-medium">More</span>
+            </button>
+            <ul class="dropdown-menu shadow border-light-subtle">
+              <!-- Admin DB Mappings: Users, Categories, Languages -->
+              <li><a class="dropdown-item py-2" href="../admin/dashboard.html" id="adminPanelLink"><i class="bi bi-speedometer2 me-2"></i> Admin Panel</a></li>
+              <li><a class="dropdown-item py-2" href="../owner/change-password.html"><i class="bi bi-shield-lock me-2"></i> Security</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item py-2 text-danger" href="#" id="signOutBtn"><i class="bi bi-box-arrow-right me-2"></i> Sign Out</a></li>
+            </ul>
+          </div>
+        </div>
+      </aside>
+
+      <!-- COLUMN 2: CENTER WORKSPACE FEED -->
+      <div class="center-feed">
+        
+        <!-- What do you have in mind? Quick draft input card -->
+        <div class="quick-draft-card" onclick="window.location.href='../owner/create-post.html'" id="quickDraftCard" style="display: none;">
+          <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=100&h=100" alt="Avatar" class="quick-draft-avatar" id="quickDraftAvatar">
+          <div class="quick-draft-placeholder">What is on your mind?</div>
+        </div>
+
+        <!-- Filter tabs aligning categories translations -->
+        <div class="feed-filter-row">
+          <div class="dropdown">
+            <button class="feed-filter-btn" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+              For you <i class="bi bi-chevron-down"></i>
+            </button>
+            <ul class="dropdown-menu shadow border-light-subtle">
+              <li><a class="dropdown-item active" href="#">For you</a></li>
+              <li><a class="dropdown-item" href="#">Artificial Intelligence</a></li>
+              <li><a class="dropdown-item" href="#">Backend Engineering</a></li>
+              <li><a class="dropdown-item" href="#">Design</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Posts List Feed Container (Dynamic matching search filters) -->
+        <div id="postsFeedContainer">
+          
+          <!-- Post 1 (Elena - EN) -->
+          <article class="substack-post" data-original-lang="en">
+            <div class="substack-post-header">
+              <div class="author-badge-group">
+                <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=100&h=100" alt="Elena" class="author-avatar">
+                <div class="author-meta-info">
+                  <div class="d-flex align-items-center gap-1">
+                    <a href="#" class="author-name">Elena Rostova</a>
+                    <button class="btn-subscribe-author" onclick="alert('Subscribed to Elena Rostova!')">Subscribe</button>
+                  </div>
+                  <span class="post-timestamp">11th Jun &middot; <a class="translation-trigger" href="#" onclick="triggerFeedTranslation(this, 'en')"><i class="bi bi-translate"></i> Translate</a></span>
+                </div>
+              </div>
+              <button class="btn btn-link text-reset p-0" title="Options"><i class="bi bi-three-dots"></i></button>
+            </div>
+            
+            <h3 class="h4 fw-bold text-main mt-2 mb-1 post-title" 
+                data-translate-title-en="The Evolution of Multilingual Large Language Models"
+                data-translate-title-vi="Sự tiến hóa của các mô hình ngôn ngữ lớn đa ngôn ngữ">The Evolution of Multilingual Large Language Models</h3>
+            
+            <div class="substack-post-content text-muted post-content"
+                 data-translate-content-en="Most language processing tasks are blocked, not because the technical challenge is too heavy, but because in their eyes, language is a boundary. The AI doesn't feel afraid of not knowing what translation is doing, it processes the semantics. When a translation task is failed, you can re-trigger it. In this system, you can see how AI compilation tasks run."
+                 data-translate-content-vi="Hầu hết các tác vụ xử lý ngôn ngữ bị tắc nghẽn, không phải vì thách thức kỹ thuật quá nặng nề, mà bởi vì trong mắt họ, ngôn ngữ là một ranh giới. AI không cảm thấy sợ hãi khi không biết việc dịch thuật đang diễn ra thế nào, nó xử lý ngữ nghĩa. Khi một tác vụ dịch bị lỗi, bạn có thể kích hoạt lại. Trong hệ thống này, bạn có thể xem các tác vụ biên dịch AI hoạt động ra sao.">Most language processing tasks are blocked, not because the technical challenge is too heavy, but because in their eyes, language is a boundary. The AI doesn't feel afraid of not knowing what translation is doing, it processes the semantics. When a translation task is failed, you can re-trigger it. In this system, you can see how AI compilation tasks run.</div>
+            
+            <!-- Likes and Comments count footer (CSDL joins) -->
+            <div class="substack-post-footer">
+              <button class="footer-action-item" onclick="toggleLike(this, 342)">
+                <i class="bi bi-heart"></i> <span class="like-count">342</span>
+              </button>
+              <button class="footer-action-item" onclick="window.location.href='../shared/post-detail-1.html'">
+                <i class="bi bi-chat"></i> <span>120</span>
+              </button>
+              <button class="footer-action-item"><i class="bi bi-arrow-left-right"></i> <span>1.8K</span></button>
+              <button class="footer-action-item ms-auto"><i class="bi bi-upload"></i></button>
+            </div>
+          </article>
+
+          <!-- Post 2 (Michael - VI) -->
+          <article class="substack-post" data-original-lang="vi">
+            <div class="substack-post-header">
+              <div class="author-badge-group">
+                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=100&h=100" alt="Michael" class="author-avatar">
+                <div class="author-meta-info">
+                  <div class="d-flex align-items-center gap-1">
+                    <a href="#" class="author-name">Michael Chen</a>
+                    <button class="btn-subscribe-author" onclick="alert('Subscribed to Michael Chen!')">Subscribe</button>
+                  </div>
+                  <span class="post-timestamp">8 days ago &middot; <a class="translation-trigger" href="#" onclick="triggerFeedTranslation(this, 'vi')"><i class="bi bi-translate"></i> Translate</a></span>
+                </div>
+              </div>
+              <button class="btn btn-link text-reset p-0" title="Options"><i class="bi bi-three-dots"></i></button>
+            </div>
+            
+            <h3 class="h4 fw-bold text-main mt-2 mb-1 post-title"
+                data-translate-title-en="PostgreSQL Optimization for High Load Systems"
+                data-translate-title-vi="Tối ưu hóa PostgreSQL cho các hệ thống chịu tải cao">Tối ưu hóa PostgreSQL cho các hệ thống chịu tải cao</h3>
+            
+            <div class="substack-post-content text-muted post-content"
+                 data-translate-content-en="If you asked me, 'Choose a database optimization recently,' I'd pick indexing and memory tuning. Not only because it increases transaction speed, but also because index scanning avoids full table scans. Imagine your query stuck in traffic, scanning millions of records. Let's explore how to optimize it with EXPLAIN ANALYZE."
+                 data-translate-content-vi="Nếu bạn hỏi tôi, 'Chọn một phương pháp tối ưu hóa cơ sở dữ liệu gần đây,' tôi sẽ chọn lập chỉ mục và điều chỉnh bộ nhớ. Không chỉ vì nó tăng tốc độ giao dịch, mà còn vì quét chỉ mục tránh quét toàn bộ bảng. Hãy tưởng tượng truy vấn của bạn bị tắc nghẽn giao thông, quét hàng triệu bản ghi. Hãy cùng khám phá cách tối ưu hóa bằng EXPLAIN ANALYZE.">Nếu bạn hỏi tôi, 'Chọn một phương pháp tối ưu hóa cơ sở dữ liệu gần đây,' tôi sẽ chọn lập chỉ mục và điều chỉnh bộ nhớ. Không chỉ vì nó tăng tốc độ giao dịch, mà còn vì quét chỉ mục tránh quét toàn bộ bảng. Hãy tưởng tượng truy vấn của bạn bị tắc nghẽn giao thông, quét hàng triệu bản ghi. Hãy cùng khám phá cách tối ưu hóa bằng EXPLAIN ANALYZE.</div>
+            
+            <!-- Embedded image matching the screenshot -->
+            <div class="post-image-embed">
+              <img src="https://images.unsplash.com/photo-1542831371-29b0f74f9713?auto=format&fit=crop&q=80&w=600&h=300" alt="Code map placeholder">
+            </div>
+
+            <!-- Likes and Comments count footer (CSDL joins) -->
+            <div class="substack-post-footer">
+              <button class="footer-action-item" onclick="toggleLike(this, 156)">
+                <i class="bi bi-heart"></i> <span class="like-count">156</span>
+              </button>
+              <button class="footer-action-item" onclick="window.location.href='../shared/post-detail-2.html'">
+                <i class="bi bi-chat"></i> <span>48</span>
+              </button>
+              <button class="footer-action-item"><i class="bi bi-arrow-left-right"></i> <span>250</span></button>
+              <button class="footer-action-item ms-auto"><i class="bi bi-upload"></i></button>
+            </div>
+          </article>
+
+        </div>
+      </div>
+
+      <!-- COLUMN 3: RIGHT PANEL (Search, Widgets, App promo) -->
+      <aside class="right-panel">
+        <!-- Rounded Search bar filters titles/authors in feed -->
+        <div class="right-search-box">
+          <i class="bi bi-search"></i>
+          <input type="search" id="feedSearchInput" placeholder="Search MundiBlog..." onkeyup="filterFeedPosts()">
+        </div>
+        
+        <!-- Platform Subscriptions widgets -->
+        <div class="subscriptions-widget">
+          <div class="d-flex align-items-center gap-3">
+            <div class="substack-logo-container p-0">
+              <i class="bi bi-bookmark-fill fs-3" style="color: var(--primary-color);"></i>
+            </div>
+            <div>
+              <h6 class="fw-bold text-main mb-0" style="font-size: 0.85rem;">Subscriptions</h6>
+              <span class="text-muted" style="font-size: 0.75rem;">Join creators on MundiBlog</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recommended Authors Widget (CSDL Users) -->
+        <div class="featured-authors-widget">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h6 class="fw-bold text-main mb-0" style="font-size: 0.85rem;">Recommended for You</h6>
+            <a href="#" class="text-decoration-none small text-muted">See all</a>
+          </div>
+          
+          <div class="featured-author-item">
+            <div class="featured-author-info">
+              <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=80&h=80" alt="Tuấn" class="featured-author-avatar">
+              <div class="featured-author-meta">
+                <span class="featured-author-name">Hồ Quốc Tuấn</span>
+                <span class="featured-author-count">Author &middot; Economics</span>
+              </div>
+            </div>
+            <button class="btn-profile-view" onclick="alert('Subscribed to Hồ Quốc Tuấn!')">Subscribe</button>
+          </div>
+          
+          <div class="featured-author-item">
+            <div class="featured-author-info">
+              <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=80&h=80" alt="Anh" class="featured-author-avatar">
+              <div class="featured-author-meta">
+                <span class="featured-author-name">Hoàng Anh</span>
+                <span class="featured-author-count">Designer &middot; Product UX</span>
+              </div>
+            </div>
+            <button class="btn-profile-view" onclick="alert('Subscribed to Hoàng Anh!')">Subscribe</button>
+          </div>
+
+          <div class="featured-author-item">
+            <div class="featured-author-info">
+              <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=80&h=80" alt="Duong" class="featured-author-avatar">
+              <div class="featured-author-meta">
+                <span class="featured-author-name">Thái Dương</span>
+                <span class="featured-author-count">Hacker Boss &middot; Tech lead</span>
+              </div>
+            </div>
+            <button class="btn-profile-view" onclick="alert('Subscribed to Thái Dương!')">Subscribe</button>
+          </div>
+        </div>
+        
+        <!-- App download promo at bottom -->
+        <div class="mt-auto pt-3 text-center">
+          <button class="btn btn-outline-secondary btn-sm w-100 py-2 border-light-subtle text-main fw-medium" onclick="alert('Downloading MundiBlog Mobile App...')" style="border-radius: 6px;">Download the app</button>
+        </div>
+      </aside>
+      
+    </main>
+  </div>
+
+  <!-- MOBILE SIDEBAR -->
+  <div class="offcanvas offcanvas-start" tabindex="-1" id="mobileSidebar" aria-labelledby="mobileSidebarLabel">
+    <div class="offcanvas-header border-bottom">
+      <h5 class="offcanvas-title fw-bold d-flex align-items-center" id="mobileSidebarLabel">
+        <i class="bi bi-feather text-primary me-2"></i>MundiBlog
+      </h5>
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body p-0">
+      <nav class="sidebar-nav p-3">
+        <a href="home.html" class="sidebar-nav-item active">
+          <i class="bi bi-house-door"></i> Home
+        </a>
+        <a href="about.html" class="sidebar-nav-item">
+          <i class="bi bi-info-circle"></i> About
+        </a>
+        <a href="../owner/profile.html" class="sidebar-nav-item">
+          <i class="bi bi-person"></i> Profile
+        </a>
+        <hr class="my-2">
+        <a href="../admin/dashboard.html" class="sidebar-nav-item">
+          <i class="bi bi-speedometer2"></i> Admin Panel
+        </a>
+      </nav>
+    </div>
+  </div>
+
+  <!-- Bootstrap 5 JS Bundle -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Core Script containing theme & language simulation -->
+  <script src="../../assets/js/core.js"></script>
+  
+  <script>
+    // Custom language switch logic for inline pills
+    document.addEventListener('DOMContentLoaded', () => {
+      const langPills = document.querySelectorAll('.lang-pill-btn');
+      langPills.forEach(pill => {
+        pill.addEventListener('click', () => {
+          langPills.forEach(p => p.classList.remove('active'));
+          pill.classList.add('active');
+          const val = pill.getAttribute('data-value');
+          
+          // Trigger the simulation logic same as old languageSelect
+          const languageSelectSim = document.getElementById('languageSelectSimTrigger');
+          if (languageSelectSim) {
+            languageSelectSim.value = val;
+            languageSelectSim.dispatchEvent(new Event('change'));
+          }
+        });
+      });
+    });
+
+    // Live Search Filter for feed matching title or author name
+    function filterFeedPosts() {
+      const input = document.getElementById('feedSearchInput');
+      const filter = input.value.toLowerCase();
+      const posts = document.querySelectorAll('#postsFeedContainer .substack-post');
+      
+      posts.forEach(post => {
+        const titleText = post.querySelector('.post-title').textContent.toLowerCase();
+        const authorText = post.querySelector('.author-name').textContent.toLowerCase();
+        const contentText = post.querySelector('.post-content').textContent.toLowerCase();
+        
+        if (titleText.includes(filter) || authorText.includes(filter) || contentText.includes(filter)) {
+          post.classList.remove('d-none');
+        } else {
+          post.classList.add('d-none');
+        }
+      });
+    }
+
+    // Toggle Feed Likes simulation (Maps to post_likes table)
+    function toggleLike(btn, baseCount) {
+      const icon = btn.querySelector('i');
+      const text = btn.querySelector('.like-count');
+      const isLiked = btn.classList.toggle('liked');
+      
+      if (isLiked) {
+        icon.className = 'bi bi-heart-fill';
+        text.textContent = baseCount + 1;
+        alert("Liked article! (Simulated insert into post_likes table)");
+      } else {
+        icon.className = 'bi bi-heart';
+        text.textContent = baseCount;
+        alert("Unliked article! (Simulated delete from post_likes table)");
+      }
+    }
+
+    // Dynamic translate post content simulation based on database language triggers
+    function triggerFeedTranslation(triggerLink, origLang) {
+      const post = triggerLink.closest('.substack-post');
+      const titleEl = post.querySelector('.post-title');
+      const contentEl = post.querySelector('.post-content');
+      
+      const currentText = triggerLink.textContent.trim();
+      const currentLang = document.documentElement.getAttribute('data-lang') || 'en';
+      
+      // Determine next translation target
+      const targetLang = currentLang === 'en' ? 'vi' : 'en';
+      
+      const newTitle = titleEl.getAttribute(`data-translate-title-${targetLang}`);
+      const newContent = contentEl.getAttribute(`data-translate-content-${targetLang}`);
+      
+      if (newTitle && newContent) {
+        titleEl.textContent = newTitle;
+        contentEl.textContent = newContent;
+        triggerLink.innerHTML = `<i class="bi bi-arrow-counterclockwise"></i> Show Original (${origLang.toUpperCase()})`;
+        document.documentElement.setAttribute('data-lang', targetLang);
+      } else {
+        // Reset to original
+        const origTitle = titleEl.getAttribute(`data-translate-title-${origLang}`);
+        const origContent = contentEl.getAttribute(`data-translate-content-${origLang}`);
+        titleEl.textContent = origTitle;
+        contentEl.textContent = origContent;
+        triggerLink.innerHTML = `<i class="bi bi-translate"></i> Translate`;
+        document.documentElement.setAttribute('data-lang', origLang);
+      }
+    }
+  </script>
+  <!-- Hidden simulation link for legacy trigger support -->
+  <select id="languageSelectSimTrigger" class="d-none">
+    <option value="en">EN</option>
+    <option value="vi">VI</option>
+    <option value="zh">ZH</option>
+  </select>
+</body>
+</html>
