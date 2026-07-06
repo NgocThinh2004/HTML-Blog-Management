@@ -93,7 +93,14 @@ document.addEventListener('DOMContentLoaded', () => {
       replying_to_comment: "Replying to comment by ",
       login_required_comment: "Please log in first to reply or comment!",
       please_enter_reply: "Please enter your reply!",
-      please_enter_comment: "Please enter your comment!"
+      please_enter_comment: "Please enter your comment!",
+      edit: "Edit",
+      delete: "Delete",
+      save: "Save",
+      delete_confirm_root: "Are you sure you want to delete this comment? All child replies will also be deleted!",
+      delete_confirm_reply: "Are you sure you want to delete this reply?",
+      comment_edited: "(edited)",
+      reset_demo: "Reset Demo Data"
     },
     vi: {
       home: "Trang chủ",
@@ -156,7 +163,14 @@ document.addEventListener('DOMContentLoaded', () => {
       replying_to_comment: "Trả lời bình luận của ",
       login_required_comment: "Vui lòng đăng nhập để bình luận hoặc trả lời!",
       please_enter_reply: "Vui lòng nhập nội dung trả lời!",
-      please_enter_comment: "Vui lòng nhập nội dung bình luận!"
+      please_enter_comment: "Vui lòng nhập nội dung bình luận!",
+      edit: "Sửa",
+      delete: "Xóa",
+      save: "Lưu",
+      delete_confirm_root: "Bạn có chắc muốn xóa bình luận này? Toàn bộ các bình luận phản hồi bên trong cũng sẽ bị xóa theo!",
+      delete_confirm_reply: "Bạn có chắc muốn xóa câu trả lời này?",
+      comment_edited: "(đã chỉnh sửa)",
+      reset_demo: "Khôi phục dữ liệu mẫu"
     },
     zh: {
       home: "首页",
@@ -219,7 +233,14 @@ document.addEventListener('DOMContentLoaded', () => {
       replying_to_comment: "回复 ",
       login_required_comment: "请先登录后再发表评论或回复！",
       please_enter_reply: "请输入回复内容！",
-      please_enter_comment: "请输入评论内容！"
+      please_enter_comment: "请输入评论内容！",
+      edit: "编辑",
+      delete: "删除",
+      save: "保存",
+      delete_confirm_root: "确定要删除此评论吗？所有子回复也将被一起删除！",
+      delete_confirm_reply: "确定要删除此回复吗？",
+      comment_edited: "(已编辑)",
+      reset_demo: "恢复演示数据"
     }
   };
 
@@ -365,6 +386,46 @@ document.addEventListener('DOMContentLoaded', () => {
         ]
       },
       {
+        id: 4,
+        author: "Hồ Quốc Tuấn",
+        avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=40&h=40",
+        time: "30 mins ago",
+        content: "Kiến trúc này thực sự giúp tối ưu hóa hiệu năng rất tốt. Mình đã thử nghiệm trên dự án thực tế và thấy tốc độ cải thiện đáng kể!",
+        lang: "vi",
+        translations: {
+          en: "This architecture really helps optimize performance very well. I tested it on a real project and saw a significant improvement in speed!",
+          zh: "这种架构的确实有助于很好地优化性能。我在真实项目中做了测试，发现速度有了显著提高！"
+        },
+        replies: [
+          {
+            id: 401,
+            author: "Elena Rostova",
+            avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=40&h=40",
+            time: "15 mins ago",
+            content: "That is awesome to hear, Tuấn! What database load did you test it with?",
+            lang: "en",
+            replyTo: "Hồ Quốc Tuấn",
+            translations: {
+              vi: "Thật tuyệt vời khi nghe điều đó, Tuấn! Bạn đã kiểm thử với tải cơ sở dữ liệu bao nhiêu?",
+              zh: "太棒了，Tuấn！你使用的是多大的数据库负载进行测试的？"
+            }
+          },
+          {
+            id: 402,
+            author: "Hồ Quốc Tuấn",
+            avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=40&h=40",
+            time: "5 mins ago",
+            content: "Mình test với khoảng 1 triệu record trong database, tốc độ truy vấn vẫn dưới 10ms nhé!",
+            lang: "vi",
+            replyTo: "Elena Rostova",
+            translations: {
+              en: "I tested with about 1 million records in the database, query speed remained under 10ms!",
+              zh: "我测试了大约100万条数据库记录，查询速度仍然保持在10毫秒以下！"
+            }
+          }
+        ]
+      },
+      {
         id: 2,
         author: "Elena Rostova",
         avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=40&h=40",
@@ -390,15 +451,85 @@ document.addEventListener('DOMContentLoaded', () => {
         },
         replies: []
       }
+    ],
+    3: [
+      {
+        id: 301,
+        author: "Elena Rostova",
+        avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=40&h=40",
+        time: "2 hours ago",
+        content: "Bài viết về Glassmorphism này quá đẹp và trực quan! Cảm ơn Tuấn đã chia sẻ.",
+        lang: "vi",
+        translations: {
+          en: "This Glassmorphism article is so beautiful and intuitive! Thanks Tuấn for sharing.",
+          zh: "这篇关于毛玻璃特效的文章太美观直观了！感谢Tuấn的分享。"
+        },
+        replies: [
+          {
+            id: 3011,
+            author: "Minh Khang",
+            avatar: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=40&h=40",
+            time: "1 hour ago",
+            content: "Đúng vậy, mình áp dụng nguyên tắc số 4 và thấy UI cải thiện rõ rệt.",
+            lang: "vi",
+            replyTo: "Elena Rostova",
+            translations: {
+              en: "Exactly, I applied principle #4 and saw clear UI improvement.",
+              zh: "没错，我应用了原则#4，UI提升明显。"
+            }
+          },
+          {
+            id: 3012,
+            author: "Hồ Quốc Tuấn",
+            avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=40&h=40",
+            time: "30 mins ago",
+            content: "Cảm ơn hai bạn rất nhiều! Nếu cần hỗ trợ thêm về phần shadow thì cứ nhắn mình nhé.",
+            lang: "vi",
+            replyTo: "Minh Khang",
+            translations: {
+              en: "Thank you both so much! If you need help with shadows, let me know.",
+              zh: "非常感谢你们！如果需要关于阴影的帮助请告诉我。"
+            }
+          }
+        ]
+      },
+      {
+        id: 302,
+        author: "Sarah Connor",
+        avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=40&h=40",
+        time: "3 hours ago",
+        content: "Great explanation of multi-layered interfaces and background blur balancing!",
+        lang: "en",
+        translations: {
+          vi: "Giải thích rất tuyệt vời về giao diện nhiều lớp và cân bằng độ mờ nền!",
+          zh: "关于多层界面和背景模糊平衡的解释特别棒！"
+        },
+        replies: []
+      },
+      {
+        id: 303,
+        author: "Hồ Quốc Tuấn",
+        avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=40&h=40",
+        time: "4 hours ago",
+        content: "Hy vọng bài viết này sẽ giúp ích cho các dự án sắp tới của mọi người!",
+        lang: "vi",
+        translations: {
+          en: "Hope this article helps with everyone's upcoming projects!",
+          zh: "希望这篇文章对大家接下来的项目有所帮助！"
+        },
+        replies: []
+      }
     ]
   };
 
   function getCommentsForPost(postId) {
     let db = JSON.parse(localStorage.getItem('mundi_comments_db'));
-    if (!db) {
-      db = defaultCommentsDatabase;
+    if (!db || db._version !== 3) {
+      db = JSON.parse(JSON.stringify(defaultCommentsDatabase));
+      db._version = 3;
       localStorage.setItem('mundi_comments_db', JSON.stringify(db));
     }
+
     if (!db[postId]) {
       db[postId] = [
         {
@@ -469,7 +600,19 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  function resetDemoComments() {
+    const lang = localStorage.getItem('preferredLanguage') || 'vi';
+    const confirmMsg = lang === 'en' ? "Do you want to reset all demo comments to initial state?" :
+                       lang === 'zh' ? "确定要恢复所有初始演示评论数据吗？" :
+                       "Bạn có muốn khôi phục lại toàn bộ dữ liệu bình luận mẫu ban đầu để demo không?";
+    if (confirm(confirmMsg)) {
+      localStorage.removeItem('mundi_comments_db');
+      window.location.reload();
+    }
+  }
+
   // Expose functions globally
+  window.resetDemoComments = resetDemoComments;
   window.uiTranslations = uiTranslations;
   window.applyUiTranslations = applyUiTranslations;
   window.applyLanguageFilter = applyLanguageFilter;
