@@ -354,7 +354,7 @@
       <div class="center-feed">
         
         <!-- What do you have in mind? Quick draft input card -->
-        <div class="quick-draft-card" onclick="window.location.href='../owner/create-post.html'" id="quickDraftCard" style="display: none;">
+        <div class="quick-draft-card" id="quickDraftCard">
           <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=100&h=100" alt="Avatar" class="quick-draft-avatar" id="quickDraftAvatar">
           <div class="quick-draft-placeholder">What is on your mind?</div>
         </div>
@@ -375,87 +375,17 @@
         </div>
 
         <!-- Posts List Feed Container (Dynamic matching search filters) -->
-        <div id="postsFeedContainer">
-          
-          <!-- Post 1 (Elena - EN) -->
-          <article class="substack-post" data-original-lang="en">
-            <div class="substack-post-header">
-              <div class="author-badge-group">
-                <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=100&h=100" alt="Elena" class="author-avatar">
-                <div class="author-meta-info">
-                  <div class="d-flex align-items-center gap-1">
-                    <a href="#" class="author-name">Elena Rostova</a>
-                    <button class="btn-subscribe-author" onclick="alert('Subscribed to Elena Rostova!')">Subscribe</button>
-                  </div>
-                  <span class="post-timestamp">11th Jun &middot; <a class="translation-trigger" href="#" onclick="triggerFeedTranslation(this, 'en')"><i class="bi bi-translate"></i> Translate</a></span>
-                </div>
-              </div>
-              <button class="btn btn-link text-reset p-0" title="Options"><i class="bi bi-three-dots"></i></button>
-            </div>
-            
-            <h3 class="h4 fw-bold text-main mt-2 mb-1 post-title" 
-                data-translate-title-en="The Evolution of Multilingual Large Language Models"
-                data-translate-title-vi="Sự tiến hóa của các mô hình ngôn ngữ lớn đa ngôn ngữ">The Evolution of Multilingual Large Language Models</h3>
-            
-            <div class="substack-post-content text-muted post-content"
-                 data-translate-content-en="Most language processing tasks are blocked, not because the technical challenge is too heavy, but because in their eyes, language is a boundary. The AI doesn't feel afraid of not knowing what translation is doing, it processes the semantics. When a translation task is failed, you can re-trigger it. In this system, you can see how AI compilation tasks run."
-                 data-translate-content-vi="Hầu hết các tác vụ xử lý ngôn ngữ bị tắc nghẽn, không phải vì thách thức kỹ thuật quá nặng nề, mà bởi vì trong mắt họ, ngôn ngữ là một ranh giới. AI không cảm thấy sợ hãi khi không biết việc dịch thuật đang diễn ra thế nào, nó xử lý ngữ nghĩa. Khi một tác vụ dịch bị lỗi, bạn có thể kích hoạt lại. Trong hệ thống này, bạn có thể xem các tác vụ biên dịch AI hoạt động ra sao.">Most language processing tasks are blocked, not because the technical challenge is too heavy, but because in their eyes, language is a boundary. The AI doesn't feel afraid of not knowing what translation is doing, it processes the semantics. When a translation task is failed, you can re-trigger it. In this system, you can see how AI compilation tasks run.</div>
-            
-            <!-- Likes and Comments count footer (CSDL joins) -->
-            <div class="substack-post-footer">
-              <button class="footer-action-item" onclick="toggleLike(this, 342)">
-                <i class="bi bi-heart"></i> <span class="like-count">342</span>
-              </button>
-              <button class="footer-action-item" onclick="window.location.href='../shared/post-detail-1.html'">
-                <i class="bi bi-chat"></i> <span>120</span>
-              </button>
-              <button class="footer-action-item"><i class="bi bi-arrow-left-right"></i> <span>1.8K</span></button>
-              <button class="footer-action-item ms-auto"><i class="bi bi-upload"></i></button>
-            </div>
-          </article>
-
-          <!-- Post 2 (Michael - VI) -->
-          <article class="substack-post" data-original-lang="vi">
-            <div class="substack-post-header">
-              <div class="author-badge-group">
-                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=100&h=100" alt="Michael" class="author-avatar">
-                <div class="author-meta-info">
-                  <div class="d-flex align-items-center gap-1">
-                    <a href="#" class="author-name">Michael Chen</a>
-                    <button class="btn-subscribe-author" onclick="alert('Subscribed to Michael Chen!')">Subscribe</button>
-                  </div>
-                  <span class="post-timestamp">8 days ago &middot; <a class="translation-trigger" href="#" onclick="triggerFeedTranslation(this, 'vi')"><i class="bi bi-translate"></i> Translate</a></span>
-                </div>
-              </div>
-              <button class="btn btn-link text-reset p-0" title="Options"><i class="bi bi-three-dots"></i></button>
-            </div>
-            
-            <h3 class="h4 fw-bold text-main mt-2 mb-1 post-title"
-                data-translate-title-en="PostgreSQL Optimization for High Load Systems"
-                data-translate-title-vi="Tối ưu hóa PostgreSQL cho các hệ thống chịu tải cao">Tối ưu hóa PostgreSQL cho các hệ thống chịu tải cao</h3>
-            
-            <div class="substack-post-content text-muted post-content"
-                 data-translate-content-en="If you asked me, 'Choose a database optimization recently,' I'd pick indexing and memory tuning. Not only because it increases transaction speed, but also because index scanning avoids full table scans. Imagine your query stuck in traffic, scanning millions of records. Let's explore how to optimize it with EXPLAIN ANALYZE."
-                 data-translate-content-vi="Nếu bạn hỏi tôi, 'Chọn một phương pháp tối ưu hóa cơ sở dữ liệu gần đây,' tôi sẽ chọn lập chỉ mục và điều chỉnh bộ nhớ. Không chỉ vì nó tăng tốc độ giao dịch, mà còn vì quét chỉ mục tránh quét toàn bộ bảng. Hãy tưởng tượng truy vấn của bạn bị tắc nghẽn giao thông, quét hàng triệu bản ghi. Hãy cùng khám phá cách tối ưu hóa bằng EXPLAIN ANALYZE.">Nếu bạn hỏi tôi, 'Chọn một phương pháp tối ưu hóa cơ sở dữ liệu gần đây,' tôi sẽ chọn lập chỉ mục và điều chỉnh bộ nhớ. Không chỉ vì nó tăng tốc độ giao dịch, mà còn vì quét chỉ mục tránh quét toàn bộ bảng. Hãy tưởng tượng truy vấn của bạn bị tắc nghẽn giao thông, quét hàng triệu bản ghi. Hãy cùng khám phá cách tối ưu hóa bằng EXPLAIN ANALYZE.</div>
-            
-            <!-- Embedded image matching the screenshot -->
-            <div class="post-image-embed">
-              <img src="https://images.unsplash.com/photo-1542831371-29b0f74f9713?auto=format&fit=crop&q=80&w=600&h=300" alt="Code map placeholder">
-            </div>
-
-            <!-- Likes and Comments count footer (CSDL joins) -->
-            <div class="substack-post-footer">
-              <button class="footer-action-item" onclick="toggleLike(this, 156)">
-                <i class="bi bi-heart"></i> <span class="like-count">156</span>
-              </button>
-              <button class="footer-action-item" onclick="window.location.href='../shared/post-detail-2.html'">
-                <i class="bi bi-chat"></i> <span>48</span>
-              </button>
-              <button class="footer-action-item"><i class="bi bi-arrow-left-right"></i> <span>250</span></button>
-              <button class="footer-action-item ms-auto"><i class="bi bi-upload"></i></button>
-            </div>
-          </article>
-
+        <div id="postsFeedContainer" class="mt-3">
+          <!-- ======================================================== -->
+          <!-- DỮ LIỆU BÀI VIẾT (POST FEED DATA PLACEHOLDER) -->
+          <!-- Thành viên phụ trách kết nối CSDL (bảng: posts, post_languages, users) -->
+          <!-- sẽ lập trình render danh sách bài viết tại đây. -->
+          <!-- ======================================================== -->
+          <div class="text-center py-5 text-muted border border-dashed rounded-4" style="border-style: dashed !important; border-width: 2px !important; border-color: var(--border-color) !important;">
+            <i class="bi bi-journal-richtext fs-1 d-block mb-3 text-secondary"></i>
+            <h5 class="fw-bold text-main">Bài viết Bảng tin (Post Feed)</h5>
+            <p class="small mb-0 px-4">Khu vực hiển thị danh sách bài đăng từ cơ sở dữ liệu. Thành viên phụ trách chức năng này sẽ render động danh sách bài viết ở đây.</p>
+          </div>
         </div>
       </div>
 
@@ -487,15 +417,16 @@
             <a href="#" class="text-decoration-none small text-muted">See all</a>
           </div>
           
+          <!-- Recommended Authors List (CSDL Users table mockup) -->
           <div class="featured-author-item">
             <div class="featured-author-info">
               <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=80&h=80" alt="Tuấn" class="featured-author-avatar">
               <div class="featured-author-meta">
                 <span class="featured-author-name">Hồ Quốc Tuấn</span>
-                <span class="featured-author-count">Author &middot; Economics</span>
+                <span class="featured-author-count">Economics Author</span>
               </div>
             </div>
-            <button class="btn-profile-view" onclick="alert('Subscribed to Hồ Quốc Tuấn!')">Subscribe</button>
+            <button class="btn-profile-view" onclick="window.location.href='../owner/profile.html?id=1'">View Profile</button>
           </div>
           
           <div class="featured-author-item">
@@ -503,27 +434,22 @@
               <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=80&h=80" alt="Anh" class="featured-author-avatar">
               <div class="featured-author-meta">
                 <span class="featured-author-name">Hoàng Anh</span>
-                <span class="featured-author-count">Designer &middot; Product UX</span>
+                <span class="featured-author-count">UX Designer</span>
               </div>
             </div>
-            <button class="btn-profile-view" onclick="alert('Subscribed to Hoàng Anh!')">Subscribe</button>
+            <button class="btn-profile-view" onclick="window.location.href='../owner/profile.html?id=2'">View Profile</button>
           </div>
 
           <div class="featured-author-item">
             <div class="featured-author-info">
-              <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=80&h=80" alt="Duong" class="featured-author-avatar">
+              <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=80&h=80" alt="Dương" class="featured-author-avatar">
               <div class="featured-author-meta">
                 <span class="featured-author-name">Thái Dương</span>
-                <span class="featured-author-count">Hacker Boss &middot; Tech lead</span>
+                <span class="featured-author-count">Tech Lead</span>
               </div>
             </div>
-            <button class="btn-profile-view" onclick="alert('Subscribed to Thái Dương!')">Subscribe</button>
+            <button class="btn-profile-view" onclick="window.location.href='../owner/profile.html?id=3'">View Profile</button>
           </div>
-        </div>
-        
-        <!-- App download promo at bottom -->
-        <div class="mt-auto pt-3 text-center">
-          <button class="btn btn-outline-secondary btn-sm w-100 py-2 border-light-subtle text-main fw-medium" onclick="alert('Downloading MundiBlog Mobile App...')" style="border-radius: 6px;">Download the app</button>
         </div>
       </aside>
       
