@@ -304,7 +304,12 @@
 
         <!-- Comments Section (Max 2 Levels, Multi-language Support) -->
         <div class="mt-5 pt-3">
-          <h4 class="fw-bold mb-4"><span data-i18n="comments">Comments</span> (<span id="commentCountText">0</span>)</h4>
+          <div class="d-flex justify-content-between align-items-center mb-4">
+            <h4 class="fw-bold mb-0"><span data-i18n="comments">Comments</span> (<span id="commentCountText">0</span>)</h4>
+            <button class="btn btn-sm btn-outline-secondary rounded-pill px-3 shadow-sm d-flex align-items-center gap-1" onclick="resetDemoComments()" title="Khôi phục dữ liệu mẫu">
+              <i class="bi bi-arrow-counterclockwise"></i><span data-i18n="reset_demo">Khôi phục dữ liệu mẫu</span>
+            </button>
+          </div>
           
           <div class="mb-4">
             <textarea id="newCommentInput" class="form-control mb-2" rows="3" placeholder="Write a comment in any language..." data-i18n="comment_placeholder"></textarea>
@@ -705,6 +710,9 @@
       const dict = (window.uiTranslations && window.uiTranslations[currentLang]) || (window.uiTranslations && window.uiTranslations.en) || {};
       const translateLabel = dict.translate_comment || "Dịch";
       const originalLabel = dict.show_original || "Hiển thị nội dung gốc";
+      const currentUser = localStorage.getItem('currentUser') || 'Hồ Quốc Tuấn';
+      const post = postsData[postId] || postsData["1"];
+      const isPostAuthor = (post.author_name === currentUser);
 
       let html = "";
       comments.forEach(root => {
@@ -731,6 +739,18 @@
               `;
             }
 
+            let repOwnerActionsHtml = "";
+            if (rep.author === currentUser) {
+              repOwnerActionsHtml = `
+                <button class="btn-reply text-secondary ms-3" onclick="editComment(${root.id}, ${rep.id}, true)"><i class="bi bi-pencil-square me-1"></i><span data-i18n="edit">${dict.edit || "Sửa"}</span></button>
+                <button class="btn-reply text-danger ms-3" onclick="deleteComment(${root.id}, ${rep.id}, true)"><i class="bi bi-trash me-1"></i><span data-i18n="delete">${dict.delete || "Xóa"}</span></button>
+              `;
+            } else if (isPostAuthor) {
+              repOwnerActionsHtml = `
+                <button class="btn-reply text-danger ms-3" onclick="deleteComment(${root.id}, ${rep.id}, true)"><i class="bi bi-trash me-1"></i><span data-i18n="delete">${dict.delete || "Xóa"}</span></button>
+              `;
+            }
+
             repliesHtml += `
               <div class="comment-reply-card" id="comment-${rep.id}">
                 <div class="d-flex align-items-center gap-2 mb-1">
@@ -740,8 +760,12 @@
                 </div>
                 <p class="mb-1 text-secondary comment-content-text" style="font-size: 0.95rem;">${tagHtml}${rep.content}</p>
                 ${repTranslateBtnHtml}
-                <button class="btn-reply" onclick="openReplyBox(${root.id}, '${rep.author}', true)"><i class="bi bi-reply-fill me-1"></i><span data-i18n="reply">Reply</span></button>
+                <div class="d-flex align-items-center flex-wrap">
+                  <button class="btn-reply" onclick="openReplyBox(${root.id}, '${rep.author}', true)"><i class="bi bi-reply-fill me-1"></i><span data-i18n="reply">Reply</span></button>
+                  ${repOwnerActionsHtml}
+                </div>
                 <div id="reply-box-child-${root.id}-${rep.author.replace(/\s+/g, '')}"></div>
+                <div id="edit-box-child-${root.id}-${rep.id}"></div>
               </div>
             `;
           });
@@ -765,6 +789,18 @@
           `;
         }
 
+        let rootOwnerActionsHtml = "";
+        if (root.author === currentUser) {
+          rootOwnerActionsHtml = `
+            <button class="btn-reply text-secondary ms-3" onclick="editComment(${root.id}, null, false)"><i class="bi bi-pencil-square me-1"></i><span data-i18n="edit">${dict.edit || "Sửa"}</span></button>
+            <button class="btn-reply text-danger ms-3" onclick="deleteComment(${root.id}, null, false)"><i class="bi bi-trash me-1"></i><span data-i18n="delete">${dict.delete || "Xóa"}</span></button>
+          `;
+        } else if (isPostAuthor) {
+          rootOwnerActionsHtml = `
+            <button class="btn-reply text-danger ms-3" onclick="deleteComment(${root.id}, null, false)"><i class="bi bi-trash me-1"></i><span data-i18n="delete">${dict.delete || "Xóa"}</span></button>
+          `;
+        }
+
         html += `
           <div class="comment-card" id="comment-${root.id}">
             <div class="d-flex align-items-center gap-2 mb-2">
@@ -774,8 +810,12 @@
             </div>
             <p class="mb-1 text-secondary comment-content-text">${root.content}</p>
             ${rootTranslateBtnHtml}
-            <button class="btn-reply" onclick="openReplyBox(${root.id}, '${root.author}', false)"><i class="bi bi-reply-fill me-1"></i><span data-i18n="reply">Reply</span></button>
+            <div class="d-flex align-items-center flex-wrap">
+              <button class="btn-reply" onclick="openReplyBox(${root.id}, '${root.author}', false)"><i class="bi bi-reply-fill me-1"></i><span data-i18n="reply">Reply</span></button>
+              ${rootOwnerActionsHtml}
+            </div>
             <div id="reply-box-root-${root.id}"></div>
+            <div id="edit-box-root-${root.id}"></div>
             ${repliesHtml}
           </div>
         `;
@@ -789,8 +829,8 @@
       const user = checkAuthOrSimulate();
       if (!user) return;
 
-      // Close all existing open reply boxes first
-      document.querySelectorAll('[id^="reply-box-"]').forEach(el => el.innerHTML = '');
+      // Close all existing open reply and edit boxes first
+      document.querySelectorAll('[id^="reply-box-"], [id^="edit-box-"]').forEach(el => el.innerHTML = '');
 
       const boxId = isChildReply ? `reply-box-child-${rootId}-${targetAuthor.replace(/\s+/g, '')}` : `reply-box-root-${rootId}`;
       const boxEl = document.getElementById(boxId);
@@ -877,6 +917,141 @@
       }
       inputEl.value = '';
       renderComments(postId);
+    }
+
+    function deleteComment(rootId, repId, isChild) {
+      const urlParams = new URLSearchParams(window.location.search);
+      const postId = urlParams.get('id') || "1";
+      let comments = getCommentsForPost(postId);
+      const currentLang = localStorage.getItem('preferredLanguage') || 'en';
+      const dict = (window.uiTranslations && window.uiTranslations[currentLang]) || (window.uiTranslations && window.uiTranslations.en) || {};
+      const currentUser = localStorage.getItem('currentUser') || 'Hồ Quốc Tuấn';
+      const post = postsData[postId] || postsData["1"];
+      const isPostAuthor = (post.author_name === currentUser);
+
+      if (isChild) {
+        const root = comments.find(c => c.id === rootId);
+        if (!root || !root.replies) return;
+        const targetRep = root.replies.find(r => r.id === repId);
+        if (!targetRep) return;
+
+        // Kiểm tra quyền: Chỉ tác giả comment hoặc chủ bài viết mới được xóa
+        if (targetRep.author !== currentUser && !isPostAuthor) {
+          alert("Bạn không có quyền xóa bình luận này! Chỉ tác giả bình luận hoặc chủ bài viết mới có quyền xóa.");
+          return;
+        }
+
+        const confirmMsg = dict.delete_confirm_reply || "Bạn có chắc muốn xóa câu trả lời này?";
+        if (!confirm(confirmMsg)) return;
+        
+        // Xóa bình luận con: Chỉ xóa chính xác câu phản hồi đó khỏi danh sách replies
+        root.replies = root.replies.filter(r => r.id !== repId);
+        saveCommentsForPost(postId, comments);
+        renderComments(postId);
+      } else {
+        const targetRoot = comments.find(c => c.id === rootId);
+        if (!targetRoot) return;
+
+        // Kiểm tra quyền: Chỉ tác giả comment hoặc chủ bài viết mới được xóa
+        if (targetRoot.author !== currentUser && !isPostAuthor) {
+          alert("Bạn không có quyền xóa bình luận này! Chỉ tác giả bình luận hoặc chủ bài viết mới có quyền xóa.");
+          return;
+        }
+
+        const confirmMsg = dict.delete_confirm_root || "Bạn có chắc muốn xóa bình luận này? Toàn bộ các bình luận phản hồi bên trong cũng sẽ bị xóa theo!";
+        if (!confirm(confirmMsg)) return;
+        
+        // Nếu là comment gốc mà bị xóa thì toàn bộ comment con cũng bị xóa theo (vì replies nằm trong root)
+        comments = comments.filter(c => c.id !== rootId);
+        saveCommentsForPost(postId, comments);
+        renderComments(postId);
+      }
+    }
+
+    function editComment(rootId, repId, isChild) {
+      // Close all reply and edit boxes first
+      document.querySelectorAll('[id^="reply-box-"], [id^="edit-box-"]').forEach(el => el.innerHTML = '');
+
+      const urlParams = new URLSearchParams(window.location.search);
+      const postId = urlParams.get('id') || "1";
+      const comments = getCommentsForPost(postId);
+      const currentUser = localStorage.getItem('currentUser') || 'Hồ Quốc Tuấn';
+      
+      let targetComment = null;
+      if (isChild) {
+        const root = comments.find(c => c.id === rootId);
+        if (root && root.replies) targetComment = root.replies.find(r => r.id === repId);
+      } else {
+        targetComment = comments.find(c => c.id === rootId);
+      }
+      if (!targetComment) return;
+
+      // Kiểm tra quyền: Chỉ tác giả bình luận mới có quyền Sửa
+      if (targetComment.author !== currentUser) {
+        alert("Bạn chỉ có quyền chỉnh sửa bình luận do chính bạn viết!");
+        return;
+      }
+
+      const boxId = isChild ? `edit-box-child-${rootId}-${repId}` : `edit-box-root-${rootId}`;
+      const boxEl = document.getElementById(boxId);
+      if (!boxEl) return;
+
+      const lang = localStorage.getItem('preferredLanguage') || 'en';
+      const dict = (window.uiTranslations && window.uiTranslations[lang]) || (window.uiTranslations && window.uiTranslations.en) || {};
+
+      boxEl.innerHTML = `
+        <div class="mt-2 pt-2 border-top">
+          <textarea id="input-edit-${isChild ? repId : rootId}" class="form-control form-control-sm mb-2" rows="3">${targetComment.content}</textarea>
+          <div class="d-flex justify-content-end gap-2">
+            <button class="btn btn-sm btn-outline-secondary rounded-pill px-3" onclick="this.parentElement.parentElement.innerHTML=''" data-i18n="cancel">${dict.cancel || "Cancel"}</button>
+            <button class="btn btn-sm btn-success rounded-pill px-3 fw-medium" onclick="submitEdit(${rootId}, ${isChild ? repId : 'null'}, ${isChild})" data-i18n="save">${dict.save || "Save"}</button>
+          </div>
+        </div>
+      `;
+      setTimeout(() => {
+        const inputEl = document.getElementById(`input-edit-${isChild ? repId : rootId}`);
+        if (inputEl) {
+          inputEl.focus();
+          inputEl.selectionStart = inputEl.selectionEnd = inputEl.value.length;
+        }
+      }, 50);
+    }
+
+    function submitEdit(rootId, repId, isChild) {
+      const inputId = `input-edit-${isChild ? repId : rootId}`;
+      const inputEl = document.getElementById(inputId);
+      if (!inputEl || !inputEl.value.trim()) {
+        alert('Vui lòng nhập nội dung bình luận!');
+        return;
+      }
+
+      const urlParams = new URLSearchParams(window.location.search);
+      const postId = urlParams.get('id') || "1";
+      const comments = getCommentsForPost(postId);
+      const currentUser = localStorage.getItem('currentUser') || 'Hồ Quốc Tuấn';
+      
+      let targetComment = null;
+      if (isChild) {
+        const root = comments.find(c => c.id === rootId);
+        if (root && root.replies) targetComment = root.replies.find(r => r.id === repId);
+      } else {
+        targetComment = comments.find(c => c.id === rootId);
+      }
+
+      if (targetComment) {
+        if (targetComment.author !== currentUser) {
+          alert("Bạn chỉ có quyền chỉnh sửa bình luận do chính bạn viết!");
+          return;
+        }
+        targetComment.content = inputEl.value.trim();
+        if (targetComment.translations) {
+          const currentLang = localStorage.getItem('preferredLanguage') || 'vi';
+          targetComment.lang = currentLang;
+          targetComment.translations = {}; // Clear old translations so new text is translated dynamically
+        }
+        saveCommentsForPost(postId, comments);
+        renderComments(postId);
+      }
     }
 
     // ==========================================
