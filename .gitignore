@@ -1,0 +1,6 @@
+# Ignore Microsoft Word documentation
+*.docx
+*.doc
+
+# Ignore division methodology
+work_division_and_methodology.md
