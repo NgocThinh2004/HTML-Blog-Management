@@ -1,0 +1,921 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MundiBlog - Post Details</title>
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Bootstrap 5.3 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  
+  <!-- Custom CSS (Standard Shared Assets) -->
+  <link rel="stylesheet" href="../../assets/css/variables.css">
+  <link rel="stylesheet" href="../../assets/css/base.css">
+  <link rel="stylesheet" href="../../assets/css/layouts.css">
+  <link rel="stylesheet" href="../../assets/css/components.css">
+  
+  <style>
+    .substack-logo-container {
+      padding: 0.5rem 0.75rem 1.5rem 0.75rem;
+    }
+    
+    .substack-logo {
+      font-size: 1.6rem;
+      color: var(--primary-color);
+      font-weight: 800;
+      letter-spacing: -0.04em;
+    }
+    
+    .sidebar-create-btn {
+      background-color: var(--primary-color) !important;
+      border-color: var(--primary-color) !important;
+      color: #ffffff !important;
+      border-radius: 99px !important;
+      padding: 0.65rem 1.5rem !important;
+      font-weight: 600 !important;
+      font-size: 0.95rem !important;
+      width: 100%;
+      text-align: center;
+      margin-top: 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      transition: all var(--transition-speed) ease;
+    }
+    
+    .sidebar-create-btn:hover {
+      background-color: var(--primary-hover) !important;
+      border-color: var(--primary-hover) !important;
+    }
+    
+    .sidebar-footer-menu {
+      margin-top: auto;
+      padding-top: 1.25rem;
+      border-top: 1px solid var(--border-color);
+    }
+    
+    .author-badge-group {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+    }
+    
+    .author-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+    
+    .author-meta-info {
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .author-name {
+      font-weight: 700;
+      color: var(--text-main);
+      font-size: 1rem;
+      text-decoration: none;
+    }
+    
+    .post-timestamp {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+    
+    .post-content {
+      font-size: 1.1rem;
+      color: var(--text-main);
+      line-height: 1.8;
+      letter-spacing: -0.01em;
+      white-space: pre-line;
+    }
+    
+    .post-image-embed {
+      border-radius: 16px;
+      max-height: 450px;
+      overflow: hidden;
+      margin: 1.5rem 0;
+      border: 1px solid var(--border-color);
+    }
+    
+    .post-image-embed img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    
+    .substack-post-footer {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      margin-top: 2rem;
+      padding: 1rem 0;
+      border-top: 1px solid var(--border-color);
+      border-bottom: 1px solid var(--border-color);
+    }
+    
+    .footer-action-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      background: transparent;
+      border: none;
+      padding: 0.25rem 0.5rem;
+      transition: color var(--transition-speed) ease;
+    }
+    
+    .footer-action-item:hover {
+      color: var(--text-main);
+    }
+    
+    .footer-action-item.liked {
+      color: var(--primary-color);
+    }
+
+    /* Right Panel recommended container */
+    .subscriptions-widget {
+      background-color: var(--bg-panel);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .comment-card {
+      background: var(--bg-panel);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .comment-reply-list {
+      margin-top: 0.75rem;
+      padding-left: 2rem;
+      border-left: 2px solid var(--border-color);
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .comment-reply-card {
+      background: var(--bg-color);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 0.75rem 1rem;
+    }
+
+    .btn-reply {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      font-weight: 600;
+      padding: 0;
+      margin-top: 0.5rem;
+      transition: color var(--transition-speed) ease;
+    }
+
+    .btn-reply:hover {
+      color: var(--primary-color);
+    }
+
+    .related-post-card {
+      background: var(--bg-panel);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 1.25rem;
+      transition: all var(--transition-speed) ease;
+      cursor: pointer;
+      text-decoration: none;
+      display: block;
+    }
+
+    .related-post-card:hover {
+      border-color: var(--primary-color);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+  </style>
+</head>
+<body>
+  <div class="app-wrapper">
+    
+    <!-- MOBILE HEADER -->
+    <header class="app-header">
+      <div class="header-container">
+        <button class="btn btn-link d-lg-none me-2 text-reset p-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#mobileSidebar" aria-controls="mobileSidebar">
+          <i class="bi bi-list fs-3"></i>
+        </button>
+        <a href="home.html" class="d-flex align-items-center text-decoration-none">
+          <i class="bi bi-feather fs-4 text-primary me-2"></i>
+          <span class="fs-5 fw-bold text-main">MundiBlog</span>
+        </a>
+        <div class="d-flex align-items-center ms-auto gap-2">
+          <a href="login.html" class="btn btn-primary btn-sm fw-medium px-3"><span data-i18n="login">Log in</span></a>
+        </div>
+      </div>
+    </header>
+
+    <!-- 3-COLUMN LAYOUT -->
+    <main class="app-main-content">
+      
+      <!-- COLUMN 1: LEFT SIDEBAR NAVIGATION -->
+      <aside class="left-sidebar">
+        <div>
+          <!-- Substack Logo -->
+          <div class="substack-logo-container">
+            <a href="home.html" class="text-decoration-none d-flex align-items-center gap-2">
+              <i class="bi bi-bookmark-fill substack-logo"></i>
+              <span class="fs-5 fw-bold text-main" style="letter-spacing: -0.02em;">MundiBlog</span>
+            </a>
+          </div>
+          
+          <!-- Navigation menu -->
+          <nav class="sidebar-nav">
+            <a href="home.html" class="sidebar-nav-item">
+              <i class="bi bi-house-door"></i> <span data-i18n="home">Home</span>
+            </a>
+            <a href="#" class="sidebar-nav-item">
+              <i class="bi bi-inbox"></i> <span data-i18n="inbox">Inbox</span>
+            </a>
+            <a href="#" class="sidebar-nav-item">
+              <i class="bi bi-heart"></i> <span data-i18n="liked_posts">Liked Posts</span>
+            </a>
+            <a href="../owner/my-posts.html" class="sidebar-nav-item">
+              <i class="bi bi-journal-text"></i> <span data-i18n="my_articles">My Articles</span>
+            </a>
+            <a href="about.html" class="sidebar-nav-item">
+              <i class="bi bi-info-circle"></i> <span data-i18n="about">About</span>
+            </a>
+            <a href="../owner/profile.html" class="sidebar-nav-item">
+              <i class="bi bi-person"></i> <span data-i18n="profile">Profile</span>
+            </a>
+          </nav>
+          
+          <a href="../owner/create-post.html" class="sidebar-create-btn">
+            <span data-i18n="create">Create</span> <i class="bi bi-plus-lg"></i>
+          </a>
+        </div>
+        
+        <!-- Bottom Section: Only More Dropdown (Clean Substack style) -->
+        <div class="sidebar-footer-menu">
+          <div class="dropdown">
+            <button class="btn btn-link text-decoration-none text-main d-flex align-items-center gap-2 p-1.5 w-100 border-0 text-start" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="bi bi-list fs-5"></i>
+              <span class="fw-medium" data-i18n="more">More</span>
+            </button>
+            <ul class="dropdown-menu shadow border-light-subtle">
+              <li><a class="dropdown-item py-2" href="settings.html"><i class="bi bi-gear me-2"></i> <span data-i18n="settings">Settings</span></a></li>
+              <li><a class="dropdown-item py-2" href="../admin/dashboard.html" id="adminPanelLink"><i class="bi bi-speedometer2 me-2"></i> <span data-i18n="admin_panel">Admin Panel</span></a></li>
+              <li><a class="dropdown-item py-2" href="../owner/change-password.html"><i class="bi bi-shield-lock me-2"></i> <span data-i18n="security">Security</span></a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item py-2 text-danger" href="#" id="signOutBtn"><i class="bi bi-box-arrow-right me-2"></i> <span data-i18n="sign_out">Sign Out</span></a></li>
+            </ul>
+          </div>
+        </div>
+      </aside>
+
+      <!-- COLUMN 2: CENTER WORKSPACE FEED (Post Details View) -->
+      <div class="center-feed">
+        <a href="home.html" class="text-decoration-none text-muted mb-4 d-inline-flex align-items-center fw-medium">
+          <i class="bi bi-arrow-left me-2"></i> <span data-i18n="back_feed">Back to Feed</span>
+        </a>
+
+        <!-- Article Details Container -->
+        <div id="postDetailContainer">
+          <!-- Dynamically loaded by script below -->
+        </div>
+
+        <!-- Comments Section (Max 2 Levels, Multi-language Support) -->
+        <div class="mt-5 pt-3">
+          <h4 class="fw-bold mb-4"><span data-i18n="comments">Comments</span> (<span id="commentCountText">0</span>)</h4>
+          
+          <div class="mb-4">
+            <textarea id="newCommentInput" class="form-control mb-2" rows="3" placeholder="Write a comment in any language..." data-i18n="comment_placeholder"></textarea>
+            <div class="d-flex justify-content-end">
+              <button class="btn btn-primary px-4 rounded-pill fw-medium" onclick="postNewComment()" data-i18n="post_comment">Post Comment</button>
+            </div>
+          </div>
+
+          <!-- Dynamic Comments Container -->
+          <div id="commentsListContainer" class="comments-list mt-4">
+            <!-- Rendered by script -->
+          </div>
+        </div>
+
+        <!-- Related Posts Section (Same Category) -->
+        <div class="mt-5 pt-4 border-top">
+          <h4 class="fw-bold mb-4" data-i18n="related_posts">Related Posts</h4>
+          
+          <div id="relatedPostsContainer" class="d-flex flex-column gap-3">
+            <!-- Dynamically loaded related posts -->
+          </div>
+        </div>
+      </div>
+
+      <!-- COLUMN 3: RIGHT PANEL (Search, Widgets, App promo) -->
+      <aside class="right-panel">
+        <!-- Rounded Search bar -->
+        <div class="right-search-box">
+          <i class="bi bi-search"></i>
+          <input type="search" id="feedSearchInput" placeholder="Search MundiBlog..." data-i18n="search_placeholder">
+        </div>
+        
+        <!-- Platform Subscriptions widgets -->
+        <div class="subscriptions-widget">
+          <div class="d-flex align-items-center gap-3">
+            <div class="substack-logo-container p-0">
+              <i class="bi bi-bookmark-fill fs-3" style="color: var(--primary-color);"></i>
+            </div>
+            <div>
+              <h6 class="fw-bold text-main mb-0" style="font-size: 0.85rem;" data-i18n="subscriptions">Subscriptions</h6>
+              <span class="text-muted" style="font-size: 0.75rem;" data-i18n="join_creators">Join creators on MundiBlog</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recommended Authors Widget (CSDL Users) -->
+        <div class="featured-authors-widget">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h6 class="fw-bold text-main mb-0" style="font-size: 0.85rem;" data-i18n="recommended">Recommended for You</h6>
+            <a href="#" class="text-decoration-none small text-muted" data-i18n="see_all">See all</a>
+          </div>
+          
+          <!-- Recommended Authors List -->
+          <div class="featured-author-item">
+            <div class="featured-author-info">
+              <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=80&h=80" alt="Tuấn" class="featured-author-avatar">
+              <div class="featured-author-meta">
+                <span class="featured-author-name">Hồ Quốc Tuấn</span>
+                <span class="featured-author-count">Economics Author</span>
+              </div>
+            </div>
+            <button class="btn-profile-view" onclick="window.location.href='../owner/profile.html?id=1'" data-i18n="view_profile">View Profile</button>
+          </div>
+          
+          <div class="featured-author-item">
+            <div class="featured-author-info">
+              <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=80&h=80" alt="Anh" class="featured-author-avatar">
+              <div class="featured-author-meta">
+                <span class="featured-author-name">Hoàng Anh</span>
+                <span class="featured-author-count">UX Designer</span>
+              </div>
+            </div>
+            <button class="btn-profile-view" onclick="window.location.href='../owner/profile.html?id=2'" data-i18n="view_profile">View Profile</button>
+          </div>
+
+          <div class="featured-author-item">
+            <div class="featured-author-info">
+              <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=80&h=80" alt="Dương" class="featured-author-avatar">
+              <div class="featured-author-meta">
+                <span class="featured-author-name">Thái Dương</span>
+                <span class="featured-author-count">Tech Lead</span>
+              </div>
+            </div>
+            <button class="btn-profile-view" onclick="window.location.href='../owner/profile.html?id=3'" data-i18n="view_profile">View Profile</button>
+          </div>
+        </div>
+      </aside>
+
+    </main>
+  </div>
+
+  <!-- MOBILE SIDEBAR / OFFCANVAS -->
+  <div class="offcanvas offcanvas-start" tabindex="-1" id="mobileSidebar" aria-labelledby="mobileSidebarLabel">
+    <div class="offcanvas-header border-bottom">
+      <h5 class="offcanvas-title fw-bold d-flex align-items-center" id="mobileSidebarLabel">
+        <i class="bi bi-feather text-primary me-2"></i>MundiBlog
+      </h5>
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body p-0">
+      <nav class="sidebar-nav p-3">
+        <a href="home.html" class="sidebar-nav-item">
+          <i class="bi bi-house-door"></i> <span data-i18n="home">Home</span>
+        </a>
+        <a href="settings.html" class="sidebar-nav-item">
+          <i class="bi bi-gear"></i> <span data-i18n="settings">Settings</span>
+        </a>
+        <a href="about.html" class="sidebar-nav-item">
+          <i class="bi bi-info-circle"></i> About
+        </a>
+        <a href="../owner/profile.html" class="sidebar-nav-item">
+          <i class="bi bi-person"></i> Profile
+        </a>
+        <hr class="my-2">
+        <a href="../admin/dashboard.html" class="sidebar-nav-item">
+          <i class="bi bi-speedometer2"></i> Admin Panel
+        </a>
+      </nav>
+    </div>
+  </div>
+
+  <!-- Bootstrap 5 JS Bundle -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Core Script containing theme & language simulation -->
+  <script src="../../assets/js/core.js"></script>
+  
+  <script>
+    const postsData = {
+      1: {
+        author_name: "Elena Rostova",
+        author_avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=80&h=80",
+        author_id: "101",
+        timestamp: "2 hours ago",
+        category: "Artificial Intelligence",
+        supported_langs: "en,vi,zh",
+        image: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&q=80&w=720&h=360",
+        likes: 142,
+        comments: 28,
+        title_en: "The Future of AI Agentic Coding in 2026",
+        title_vi: "Tương lai của Lập trình Tự động hóa với AI năm 2026",
+        title_zh: "2026年AI代理编程的未来",
+        content_en: "We are witnessing a monumental paradigm shift where AI agents can autonomously plan, reason, and execute complex full-stack engineering tasks. From real-time DOM manipulation to database synchronization, modern coding assistants act as true pair programmers.\n\nIn traditional software development, developers spent substantial time on boilerplate code, debugging syntax errors, and configuring environments. With advanced agentic frameworks, the AI not only writes code but also understands project architecture, adheres to established design patterns, and executes automated verification plans.\n\nAs we move further into 2026, the collaboration between human creativity and AI execution will redefine what is possible in software engineering.",
+        content_vi: "Chúng ta đang chứng kiến một sự chuyển dịch mô hình lớn khi các tác nhân AI có thể tự chủ lập kế hoạch, suy luận và thực thi các nhiệm vụ kỹ thuật toàn diện. Từ thao tác DOM theo thời gian thực đến đồng bộ hóa cơ sở dữ liệu, trợ lý AI hiện đại đóng vai trò như người đồng hành thực thụ.\n\nTrong phát triển phần mềm truyền thống, lập trình viên dành nhiều thời gian cho các đoạn mã lặp lại, sửa lỗi cú pháp và cấu hình môi trường. Với các khung tự động hóa tiên tiến, AI không chỉ viết mã mà còn hiểu kiến trúc dự án, tuân thủ các mẫu thiết kế và thực thi các kế hoạch xác minh tự động.\n\nKhi tiến sâu vào năm 2026, sự kết hợp giữa sáng tạo của con người và khả năng thực thi của AI sẽ định nghĩa lại giới hạn trong kỹ thuật phần mềm.",
+        content_zh: "我们正在见证一场巨大的范式转变，AI代理可以自主计划、推理并执行复杂的全栈工程任务。从实时DOM操作到数据库同步，现代编码助手充当真正的结对程序员。\n\n在传统的软件开发中，开发人员将大量时间花费在样板代码、调试语法错误和配置环境上。借助先进的代理框架，AI不仅编写代码，还能理解项目架构，遵循既定的设计模式，并执行自动验证计划。\n\n随着我们进入2026年，人类创造力与AI执行力的协作将重新定义软件工程的未来。"
+      },
+      2: {
+        author_name: "李明 (Li Ming)",
+        author_avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=80&h=80",
+        author_id: "103",
+        timestamp: "3 days ago",
+        category: "Backend Engineering",
+        supported_langs: "en,vi,zh",
+        image: "",
+        likes: 210,
+        comments: 45,
+        title_en: "Deep Dive into Modern Web Rendering Architectures",
+        title_vi: "Hiểu sâu về Kiến trúc Render Web Hiện đại và Tối ưu hiệu năng",
+        title_zh: "深入理解现代Web渲染架构与性能优化",
+        content_en: "In an era where Single Page Applications and Server-Side Rendering go hand-in-hand, frontend engineers must choose the right architectural pattern to balance initial load speed with SEO.\n\nServer-Side Rendering (SSR) delivers pre-rendered HTML to the client, resulting in significantly faster Largest Contentful Paint (LCP) times. Meanwhile, Client-Side Rendering (CSR) excels at dynamic, application-like interactivity once loaded.\n\nBy adopting hybrid approaches like Progressive Hydration and Islands Architecture, modern frameworks give developers the best of both worlds without compromising user experience.",
+        content_vi: "Trong kỷ nguyên ứng dụng trang đơn (SPA) và Server-Side Rendering song hành, kỹ sư frontend cần lựa chọn kiến trúc phù hợp nhất để cân bằng giữa tốc độ tải trang và tối ưu hóa SEO.\n\nServer-Side Rendering (SSR) cung cấp HTML đã được render sẵn cho máy khách, giúp cải thiện đáng kể thời gian hiển thị nội dung lớn nhất (LCP). Trong khi đó, Client-Side Rendering (CSR) vượt trội trong các tương tác động sau khi tải xong.\n\nBằng cách áp dụng các giải pháp lai như Progressive Hydration và Islands Architecture, các framework hiện đại mang lại ưu điểm của cả hai mô hình mà không làm giảm trải nghiệm người dùng.",
+        content_zh: "在单页应用与服务器端渲染齐头并进的今天，前端工程师需要针对不同业务场景选择最合理的架构设计，确保首屏加载速度与搜索引擎优化（SEO）的最佳平衡。\n\n服务器端渲染 (SSR) 向客户端提供预渲染的HTML，从而显著缩短最大内容渲染时间 (LCP)。同时，客户端渲染 (CSR) 在加载后擅长处理动态交互。\n\n通过采用渐进式水合和孤岛架构等混合方法，现代框架让开发者在不牺牲用户体验的前提下获得两者的优势。"
+      },
+      3: {
+        author_name: "Hồ Quốc Tuấn",
+        author_avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=80&h=80",
+        author_id: "102",
+        timestamp: "Yesterday",
+        category: "Design",
+        supported_langs: "en,vi",
+        image: "",
+        likes: 89,
+        comments: 14,
+        title_en: "10 Essential Principles for Modern Glassmorphism UI",
+        title_vi: "10 Nguyên tắc cốt lõi cho Giao diện Glassmorphism hiện đại",
+        title_zh: "",
+        content_en: "Designing interfaces that feel responsive and alive encourages interaction. Achieve this with subtle hover effects, vibrant harmonious color palettes, and clean modern typography. Always prioritize visual excellence.\n\nGlassmorphism relies on multi-layered interfaces where background elements show through a frosted-glass overlay. The key is balancing background blur with subtle multi-stop borders to maintain high contrast and readability.\n\nWhen implemented thoughtfully, this style elevates the interface from a flat document to a rich, premium digital workspace.",
+        content_vi: "Thiết kế giao diện mang lại cảm giác sống động và phản hồi tốt sẽ thúc đẩy sự tương tác. Hãy đạt được điều này với hiệu ứng hover tinh tế, bảng màu hài hòa sống động và nghệ thuật chữ hiện đại.\n\nGlassmorphism dựa trên giao diện nhiều lớp, nơi các phần tử nền hiển thị qua một lớp kính mờ. Bí quyết là cân bằng độ mờ nền với đường viền sắc nét để duy trì độ tương phản cao và dễ đọc.\n\nKhi được áp dụng đúng cách, phong cách này nâng tầm giao diện từ một tài liệu phẳng thành một không gian làm việc kỹ thuật số cao cấp.",
+        content_zh: ""
+      },
+      4: {
+        author_name: "Sarah Connor",
+        author_avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=80&h=80",
+        author_id: "104",
+        timestamp: "5 hours ago",
+        category: "Artificial Intelligence",
+        supported_langs: "en,vi,zh",
+        image: "",
+        likes: 178,
+        comments: 32,
+        title_en: "Next-Gen LLM Reasoning & Tool Use in 2026",
+        title_vi: "Khả năng Suy luận & Sử dụng Công cụ của LLM Thế hệ mới năm 2026",
+        title_zh: "2026年下一代大语言模型推理与工具使用",
+        content_en: "Modern language models are moving beyond simple pattern matching. By integrating external tools, code interpreters, and multi-agent loops, they can tackle complex engineering workflows autonomously.\n\nWe are now seeing systems that can formulate hypotheses, test them against real-world APIs, and self-correct when encountering unexpected errors. This loop of reasoning and action represents the bridge from passive chat assistants to autonomous AI engineers.",
+        content_vi: "Các mô hình ngôn ngữ hiện đại đang vượt qua giới hạn nhận diện mẫu đơn thuần. Bằng cách tích hợp công cụ bên ngoài, trình thông dịch mã và vòng lặp đa tác nhân, chúng có thể tự động giải quyết các quy trình kỹ thuật phức tạp.\n\nChúng ta đang chứng kiến các hệ thống có thể đưa ra giả thuyết, kiểm thử với API thực tế và tự sửa lỗi khi gặp sự cố không mong muốn. Vòng lặp suy luận và hành động này là bước tiến từ trợ lý trò chuyện thụ động sang kỹ sư AI tự chủ.",
+        content_zh: "现代语言模型正在超越简单的模式匹配。通过集成外部工具、代码解释器和多代理循环，它们能够自主处理复杂的工程工作流。\n\n我们现在看到系统可以提出假设，在实际API中测试它们，并在遇到意外错误时自我纠正。这种推理与行动的循环代表了从被动聊天助手到自主AI工程师的跨越。"
+      },
+      5: {
+        author_name: "Alex Rivera",
+        author_avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=80&h=80",
+        author_id: "105",
+        timestamp: "1 day ago",
+        category: "Backend Engineering",
+        supported_langs: "en,vi,zh",
+        image: "",
+        likes: 312,
+        comments: 54,
+        title_en: "Building High-Throughput Microservices with Rust & gRPC",
+        title_vi: "Xây dựng Microservices Hiệu năng cao với Rust & gRPC",
+        title_zh: "使用Rust和gRPC构建高吞吐量微服务",
+        content_en: "As backend scalability requirements grow, transitioning performance-critical services to Rust and gRPC has proven to drastically reduce memory footprint while eliminating garbage collection pauses.\n\nRust's ownership model guarantees memory safety and thread safety without runtime overhead. Coupled with gRPC's HTTP/2 multiplexing and Protocol Buffers serialization, microservices can handle tens of thousands of concurrent requests with predictable sub-millisecond latency.",
+        content_vi: "Khi yêu cầu về khả năng mở rộng tăng lên, việc chuyển đổi các dịch vụ quan trọng về hiệu năng sang Rust và gRPC đã chứng minh giảm đáng kể lượng bộ nhớ sử dụng đồng thời loại bỏ các khoảng dừng do garbage collection.\n\nMô hình sở hữu của Rust đảm bảo an toàn bộ nhớ và luồng mà không tốn chi phí thời gian chạy. Kết hợp với giao thức gRPC trên HTTP/2 và serialization Protocol Buffers, microservices có thể xử lý hàng chục nghìn yêu cầu đồng thời với độ trễ dưới mili giây.",
+        content_zh: "随着后端可扩展性需求的增长，将关键性能服务过渡到Rust和gRPC极大地减少了内存占用，同时消除了垃圾回收停顿。\n\nRust的所有权模型确保了内存安全和线程安全，且没有运行时开销。结合gRPC的HTTP/2多路复用和Protocol Buffers序列化，微服务能够以可预测的亚毫秒级延迟处理数万个并发请求。"
+      },
+      6: {
+        author_name: "Maya Lin",
+        author_avatar: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&q=80&w=80&h=80",
+        author_id: "106",
+        timestamp: "2 days ago",
+        category: "Design",
+        supported_langs: "en,vi,zh",
+        image: "",
+        likes: 95,
+        comments: 19,
+        title_en: "The Psychology of Color in Modern Web Applications",
+        title_vi: "Tâm lý học Màu sắc trong các Ứng dụng Web Hiện đại",
+        title_zh: "现代Web应用程序中的色彩心理学",
+        content_en: "Color is not just an aesthetic choice; it is a fundamental communication tool that guides user interaction, establishes brand trust, and influences cognitive load in complex user interfaces.\n\nWarm tones stimulate urgency and excitement, making them ideal for call-to-action buttons, while cool blues and neutral slates foster concentration and reliability in analytical dashboards. Understanding these cognitive responses enables designers to craft intuitive user experiences.",
+        content_vi: "Màu sắc không chỉ là lựa chọn thẩm mỹ; nó là công cụ giao tiếp cốt lõi dẫn dắt tương tác người dùng, xây dựng lòng tin thương hiệu và ảnh hưởng đến tải nhận thức trong các giao diện phức tạp.\n\nCác tông màu ấm kích thích sự cấp bách và hào hứng, lý tưởng cho nút kêu gọi hành động, trong khi sắc xanh lạnh và xám trung tính tạo sự tập trung và tin cậy cho bảng điều khiển phân tích. Hiểu được các phản ứng nhận thức này giúp nhà thiết kế tạo ra trải nghiệm người dùng trực quan.",
+        content_zh: "色彩不仅是美学选择，更是指导用户交互、建立品牌信任并在复杂用户界面中影响认知负荷的核心沟通工具。\n\n暖色调激发紧迫感和兴奋感，非常适合号召性用语按钮；而冷蓝色和中性石板色则在分析仪表板中培养专注力和可靠性。理解这些认知反应使设计师能够打造直观的用户体验。"
+      }
+    };
+
+    function renderPostDetail() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const postId = urlParams.get('id') || "1";
+      const post = postsData[postId] || postsData["1"];
+
+      // Sync post.comments with actual comments database count
+      const comments = getCommentsForPost(postId);
+      let initCount = 0;
+      comments.forEach(c => {
+        initCount += 1 + (c.replies ? c.replies.length : 0);
+      });
+      post.comments = initCount;
+
+      const container = document.getElementById('postDetailContainer');
+      
+      let imageHtml = "";
+      if (post.image) {
+        imageHtml = `
+          <div class="post-image-embed">
+            <img src="${post.image}" alt="Cover Image">
+          </div>
+        `;
+      }
+
+      container.innerHTML = `
+        <article class="substack-post border-0 py-0" data-supported-langs="${post.supported_langs}" data-category="${post.category}">
+          <div class="mb-3">
+            <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-3 py-1 rounded-pill fw-medium">${post.category}</span>
+          </div>
+          
+          <h1 class="post-title fw-bold display-6 mb-4"
+              data-translate-title-en="${post.title_en}"
+              data-translate-title-vi="${post.title_vi || post.title_en}"
+              data-translate-title-zh="${post.title_zh || post.title_en}">
+            ${post.title_en}
+          </h1>
+
+          <div class="substack-post-header mb-4 pb-3 border-bottom">
+            <div class="author-badge-group">
+              <img src="${post.author_avatar}" alt="${post.author_name}" class="author-avatar">
+              <div class="author-meta-info">
+                <a href="../owner/profile.html?id=${post.author_id}" class="author-name">${post.author_name}</a>
+                <span class="post-timestamp">${post.timestamp} &middot; 5 min read</span>
+              </div>
+            </div>
+          </div>
+
+          ${imageHtml}
+
+          <div class="substack-post-content post-content mt-4"
+               data-translate-content-en="${post.content_en}"
+               data-translate-content-vi="${post.content_vi || post.content_en}"
+               data-translate-content-zh="${post.content_zh || post.content_en}">
+            ${post.content_en}
+          </div>
+
+          <div class="substack-post-footer">
+            <button class="footer-action-item" onclick="toggleLike(this, ${post.likes})"><i class="bi bi-heart"></i> <span class="like-count">${post.likes}</span></button>
+            <button class="footer-action-item" onclick="document.getElementById('newCommentInput').focus()"><i class="bi bi-chat"></i> <span id="footerCommentCount">${post.comments}</span></button>
+          </div>
+        </article>
+      `;
+
+      // Render comments and related posts
+      renderComments(postId);
+      renderRelatedPosts(postId, post.category);
+
+      // Apply language filter and translations
+      const currentLang = localStorage.getItem('preferredLanguage') || 'en';
+      if (typeof window.applyLanguageFilter === 'function') {
+        window.applyLanguageFilter(currentLang);
+      }
+      if (typeof window.applyUiTranslations === 'function') {
+        window.applyUiTranslations(currentLang);
+      }
+    }
+
+    // ==========================================
+    // MULTILINGUAL COMMENTS SYSTEM (MAX 2 LEVELS)
+    // ==========================================
+    function toggleCommentTranslation(btn) {
+      const card = btn.closest('.comment-card, .comment-reply-card');
+      const contentEl = card.querySelector('.comment-content-text');
+      const spanEl = btn.querySelector('span');
+      
+      const originalText = decodeURIComponent(btn.getAttribute('data-original'));
+      const translatedText = decodeURIComponent(btn.getAttribute('data-translated'));
+      const labelTranslate = btn.getAttribute('data-label-translate');
+      const labelOriginal = btn.getAttribute('data-label-original');
+      
+      const isTranslated = btn.classList.toggle('is-translated');
+      
+      if (isTranslated) {
+        const tagSpan = contentEl.querySelector('.text-primary.fw-semibold');
+        const tagHtml = tagSpan ? tagSpan.outerHTML + ' ' : '';
+        contentEl.innerHTML = tagHtml + translatedText;
+        spanEl.textContent = labelOriginal;
+        btn.classList.replace('text-primary', 'text-success');
+      } else {
+        const tagSpan = contentEl.querySelector('.text-primary.fw-semibold');
+        const tagHtml = tagSpan ? tagSpan.outerHTML + ' ' : '';
+        contentEl.innerHTML = tagHtml + originalText;
+        spanEl.textContent = labelTranslate;
+        btn.classList.replace('text-success', 'text-primary');
+      }
+    }
+
+    function checkAuthOrSimulate() {
+      let currentUser = localStorage.getItem('currentUser');
+      if (!currentUser) {
+        const proceed = confirm('Bạn cần đăng nhập để bình luận hoặc trả lời! Bạn có muốn đăng nhập nhanh (Simulate Login) với tên "Hồ Quốc Tuấn" không?');
+        if (proceed) {
+          localStorage.setItem('currentUser', 'Hồ Quốc Tuấn');
+          return 'Hồ Quốc Tuấn';
+        }
+        return null;
+      }
+      return currentUser;
+    }
+
+    function renderComments(postId) {
+      const comments = window.getCommentsForPost ? window.getCommentsForPost(postId) : [];
+      const container = document.getElementById('commentsListContainer');
+      
+      // Calculate total count (roots + replies)
+      let totalCount = 0;
+      comments.forEach(c => {
+        totalCount += 1 + (c.replies ? c.replies.length : 0);
+      });
+      document.getElementById('commentCountText').textContent = totalCount;
+      const footerCountEl = document.getElementById('footerCommentCount');
+      if (footerCountEl) footerCountEl.textContent = totalCount;
+      if (postsData[postId]) postsData[postId].comments = totalCount;
+
+      if (comments.length === 0) {
+        container.innerHTML = `<p class="text-muted" data-i18n="no_comments">No comments yet. Be the first to comment!</p>`;
+        if (typeof window.applyUiTranslations === 'function') window.applyUiTranslations();
+        return;
+      }
+
+      const currentLang = localStorage.getItem('preferredLanguage') || 'en';
+      const dict = (window.uiTranslations && window.uiTranslations[currentLang]) || (window.uiTranslations && window.uiTranslations.en) || {};
+      const translateLabel = dict.translate_comment || "Dịch";
+      const originalLabel = dict.show_original || "Hiển thị nội dung gốc";
+
+      let html = "";
+      comments.forEach(root => {
+        let repliesHtml = "";
+        if (root.replies && root.replies.length > 0) {
+          repliesHtml += `<div class="comment-reply-list">`;
+          root.replies.forEach(rep => {
+            const tagHtml = rep.replyTo ? `<span class="text-primary fw-semibold">@${rep.replyTo}</span> ` : '';
+            
+            let repTranslateBtnHtml = "";
+            if (rep.lang && rep.lang !== currentLang) {
+              const translatedText = window.getCommentTranslation ? window.getCommentTranslation(rep, currentLang) : ("[Dịch]: " + rep.content);
+              repTranslateBtnHtml = `
+                <div class="mt-1 mb-2">
+                  <button class="btn btn-link p-0 text-decoration-none small text-primary fw-medium btn-translate-toggle" 
+                          data-original="${encodeURIComponent(rep.content)}" 
+                          data-translated="${encodeURIComponent(translatedText)}" 
+                          data-label-translate="${translateLabel}" 
+                          data-label-original="${originalLabel}" 
+                          onclick="toggleCommentTranslation(this)">
+                    <i class="bi bi-translate me-1"></i><span>${translateLabel}</span>
+                  </button>
+                </div>
+              `;
+            }
+
+            repliesHtml += `
+              <div class="comment-reply-card" id="comment-${rep.id}">
+                <div class="d-flex align-items-center gap-2 mb-1">
+                  <img src="${rep.avatar}" class="rounded-circle" width="28" height="28" alt="User">
+                  <span class="fw-bold fs-6">${rep.author}</span>
+                  <span class="text-muted small ms-auto">${rep.time}</span>
+                </div>
+                <p class="mb-1 text-secondary comment-content-text" style="font-size: 0.95rem;">${tagHtml}${rep.content}</p>
+                ${repTranslateBtnHtml}
+                <button class="btn-reply" onclick="openReplyBox(${root.id}, '${rep.author}', true)"><i class="bi bi-reply-fill me-1"></i><span data-i18n="reply">Reply</span></button>
+                <div id="reply-box-child-${root.id}-${rep.author.replace(/\s+/g, '')}"></div>
+              </div>
+            `;
+          });
+          repliesHtml += `</div>`;
+        }
+
+        let rootTranslateBtnHtml = "";
+        if (root.lang && root.lang !== currentLang) {
+          const translatedText = window.getCommentTranslation ? window.getCommentTranslation(root, currentLang) : ("[Dịch]: " + root.content);
+          rootTranslateBtnHtml = `
+            <div class="mt-1 mb-2">
+              <button class="btn btn-link p-0 text-decoration-none small text-primary fw-medium btn-translate-toggle" 
+                      data-original="${encodeURIComponent(root.content)}" 
+                      data-translated="${encodeURIComponent(translatedText)}" 
+                      data-label-translate="${translateLabel}" 
+                      data-label-original="${originalLabel}" 
+                      onclick="toggleCommentTranslation(this)">
+                <i class="bi bi-translate me-1"></i><span>${translateLabel}</span>
+              </button>
+            </div>
+          `;
+        }
+
+        html += `
+          <div class="comment-card" id="comment-${root.id}">
+            <div class="d-flex align-items-center gap-2 mb-2">
+              <img src="${root.avatar}" class="rounded-circle" width="36" height="36" alt="User">
+              <span class="fw-bold fs-6">${root.author}</span>
+              <span class="text-muted small ms-auto">${root.time}</span>
+            </div>
+            <p class="mb-1 text-secondary comment-content-text">${root.content}</p>
+            ${rootTranslateBtnHtml}
+            <button class="btn-reply" onclick="openReplyBox(${root.id}, '${root.author}', false)"><i class="bi bi-reply-fill me-1"></i><span data-i18n="reply">Reply</span></button>
+            <div id="reply-box-root-${root.id}"></div>
+            ${repliesHtml}
+          </div>
+        `;
+      });
+
+      container.innerHTML = html;
+      if (typeof window.applyUiTranslations === 'function') window.applyUiTranslations();
+    }
+
+    function openReplyBox(rootId, targetAuthor, isChildReply) {
+      const user = checkAuthOrSimulate();
+      if (!user) return;
+
+      // Close all existing open reply boxes first
+      document.querySelectorAll('[id^="reply-box-"]').forEach(el => el.innerHTML = '');
+
+      const boxId = isChildReply ? `reply-box-child-${rootId}-${targetAuthor.replace(/\s+/g, '')}` : `reply-box-root-${rootId}`;
+      const boxEl = document.getElementById(boxId);
+      if (!boxEl) return;
+
+      const lang = localStorage.getItem('preferredLanguage') || 'en';
+      const dict = (window.uiTranslations && window.uiTranslations[lang]) || (window.uiTranslations && window.uiTranslations.en) || {};
+      const replyPrefix = isChildReply ? (dict.replying_to || "Replying to @") : (dict.replying_to_comment || "Replying to comment by ");
+      const placeholderText = replyPrefix + targetAuthor + "...";
+      const replyToName = isChildReply ? targetAuthor : ""; // Nếu rep comment gốc thì replyTo = "" (không cần @)
+
+      boxEl.innerHTML = `
+        <div class="mt-2 pt-2 border-top">
+          <textarea id="input-reply-${rootId}" class="form-control form-control-sm mb-2" rows="2" placeholder="${placeholderText}"></textarea>
+          <div class="d-flex justify-content-end gap-2">
+            <button class="btn btn-sm btn-outline-secondary rounded-pill px-3" onclick="this.parentElement.parentElement.innerHTML=''" data-i18n="cancel">${dict.cancel || "Cancel"}</button>
+            <button class="btn btn-sm btn-primary rounded-pill px-3 fw-medium" onclick="submitReply(${rootId}, '${replyToName}')" data-i18n="submit_reply">${dict.submit_reply || "Submit Reply"}</button>
+          </div>
+        </div>
+      `;
+      setTimeout(() => {
+        const inputEl = document.getElementById(`input-reply-${rootId}`);
+        if (inputEl) inputEl.focus();
+      }, 50);
+    }
+
+    function submitReply(rootId, replyToName) {
+      const user = localStorage.getItem('currentUser') || 'Hồ Quốc Tuấn';
+      const inputEl = document.getElementById(`input-reply-${rootId}`);
+      if (!inputEl || !inputEl.value.trim()) {
+        alert('Vui lòng nhập nội dung trả lời!');
+        return;
+      }
+
+      const urlParams = new URLSearchParams(window.location.search);
+      const postId = urlParams.get('id') || "1";
+      const comments = getCommentsForPost(postId);
+      const rootComment = comments.find(c => c.id === rootId);
+
+      if (rootComment) {
+        if (!rootComment.replies) rootComment.replies = [];
+        rootComment.replies.push({
+          id: Date.now(),
+          author: user,
+          avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=40&h=40",
+          time: "Vừa xong",
+          content: inputEl.value.trim(),
+          lang: localStorage.getItem('preferredLanguage') || "vi",
+          replyTo: replyToName // "" nếu rep gốc, hoặc tên người dùng nếu rep con
+        });
+        if (typeof window.saveCommentsForPost === 'function') {
+          window.saveCommentsForPost(postId, comments);
+        }
+        renderComments(postId);
+      }
+    }
+
+    function postNewComment() {
+      const user = checkAuthOrSimulate();
+      if (!user) return;
+
+      const inputEl = document.getElementById('newCommentInput');
+      if (!inputEl || !inputEl.value.trim()) {
+        alert('Vui lòng nhập nội dung bình luận!');
+        return;
+      }
+
+      const urlParams = new URLSearchParams(window.location.search);
+      const postId = urlParams.get('id') || "1";
+      const comments = getCommentsForPost(postId);
+
+      comments.unshift({
+        id: Date.now(),
+        author: user,
+        avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=40&h=40",
+        time: "Vừa xong",
+        content: inputEl.value.trim(),
+        lang: localStorage.getItem('preferredLanguage') || "vi",
+        replies: []
+      });
+
+      if (typeof window.saveCommentsForPost === 'function') {
+        window.saveCommentsForPost(postId, comments);
+      }
+      inputEl.value = '';
+      renderComments(postId);
+    }
+
+    // ==========================================
+    // RELATED POSTS BY CATEGORY
+    // ==========================================
+    function renderRelatedPosts(currentPostId, category) {
+      const container = document.getElementById('relatedPostsContainer');
+      
+      // Find posts with matching category (excluding current post)
+      const relatedIds = Object.keys(postsData).filter(id => id !== String(currentPostId) && postsData[id].category === category);
+      
+      // If no other post in same category, fallback to showing all other posts
+      const idsToRender = relatedIds.length > 0 ? relatedIds : Object.keys(postsData).filter(id => id !== String(currentPostId)).slice(0, 2);
+
+      let html = "";
+      idsToRender.forEach(id => {
+        const p = postsData[id];
+        // Calculate real count from database so it's consistent everywhere
+        const relComments = getCommentsForPost(id);
+        let relCount = 0;
+        relComments.forEach(c => {
+          relCount += 1 + (c.replies ? c.replies.length : 0);
+        });
+        p.comments = relCount;
+
+        html += `
+          <a href="post-detail.html?id=${id}" class="related-post-card text-reset" data-supported-langs="${p.supported_langs}" data-category="${p.category}">
+            <div class="d-flex align-items-center justify-content-between mb-2">
+              <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-2.5 py-0.5 rounded-pill small">${p.category}</span>
+              <span class="text-muted small">${p.timestamp}</span>
+            </div>
+            <h5 class="fw-bold mb-2 text-main"
+                data-translate-title-en="${p.title_en}"
+                data-translate-title-vi="${p.title_vi || p.title_en}"
+                data-translate-title-zh="${p.title_zh || p.title_en}">
+              ${p.title_en}
+            </h5>
+            <div class="d-flex align-items-center gap-2 text-muted small mt-3">
+              <img src="${p.author_avatar}" class="rounded-circle" width="24" height="24" alt="${p.author_name}">
+              <span class="fw-medium text-main">${p.author_name}</span>
+              <span class="ms-auto"><i class="bi bi-heart me-1"></i>${p.likes}</span>
+              <span class="ms-2"><i class="bi bi-chat me-1"></i>${p.comments}</span>
+            </div>
+          </a>
+        `;
+      });
+
+      container.innerHTML = html;
+    }
+
+    // Toggle Feed Likes simulation
+    function toggleLike(btn, baseCount) {
+      const icon = btn.querySelector('i');
+      const text = btn.querySelector('.like-count');
+      const isLiked = btn.classList.toggle('liked');
+      
+      if (isLiked) {
+        icon.className = 'bi bi-heart-fill';
+        text.textContent = baseCount + 1;
+      } else {
+        icon.className = 'bi bi-heart';
+        text.textContent = baseCount;
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', renderPostDetail);
+  </script>
+</body>
+</html>
