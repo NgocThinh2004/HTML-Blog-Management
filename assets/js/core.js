@@ -1,3 +1,111 @@
+// ========================================================
+// Global Posts Data (Accessible across all pages for Live Search)
+// ========================================================
+window.globalPostsData = {
+  1: {
+    author_name: "Elena Rostova",
+    author_avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=80&h=80",
+    author_id: "101",
+    timestamp: "2 hours ago",
+    category: "Artificial Intelligence",
+    supported_langs: "en,vi,zh",
+    image: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&q=80&w=720&h=360",
+    likes: 142,
+    comments: 28,
+    title_en: "The Future of AI Agentic Coding in 2026",
+    title_vi: "Tương lai của Lập trình Tự động hóa với AI năm 2026",
+    title_zh: "2026年AI代理编程的未来",
+    content_en: "We are witnessing a monumental paradigm shift where AI agents can autonomously plan, reason, and execute complex full-stack engineering tasks. From real-time DOM manipulation to database synchronization, modern coding assistants act as true pair programmers.\n\nIn traditional software development, developers spent substantial time on boilerplate code, debugging syntax errors, and configuring environments. With advanced agentic frameworks, the AI not only writes code but also understands project architecture, adheres to established design patterns, and executes automated verification plans.\n\nAs we move further into 2026, the collaboration between human creativity and AI execution will redefine what is possible in software engineering.",
+    content_vi: "Chúng ta đang chứng kiến một sự chuyển dịch mô hình lớn khi các tác nhân AI có thể tự chủ lập kế hoạch, suy luận và thực thi các nhiệm vụ kỹ thuật toàn diện. Từ thao tác DOM theo thời gian thực đến đồng bộ hóa cơ sở dữ liệu, trợ lý AI hiện đại đóng vai trò như người đồng hành thực thụ.\n\nTrong phát triển phần mềm truyền thống, lập trình viên dành nhiều thời gian cho các đoạn mã lặp lại, sửa lỗi cú pháp và cấu hình môi trường. Với các khung tự động hóa tiên tiến, AI không chỉ viết mã mà còn hiểu kiến trúc dự án, tuân thủ các mẫu thiết kế và thực thi các kế hoạch xác minh tự động.\n\nKhi tiến sâu vào năm 2026, sự kết hợp giữa sáng tạo của con người và khả năng thực thi của AI sẽ định nghĩa lại giới hạn trong kỹ thuật phần mềm.",
+    content_zh: "我们正在见证一场巨大的范式转变，AI代理可以自主计划、推理并执行复杂的全栈工程任务。从实时DOM操作到数据库同步，现代编码助手充当真正的结对程序员。\n\n在传统的软件开发中，开发人员将大量时间花费在样板代码、调试语法错误和配置环境上。借助先进的代理框架，AI不仅编写代码，还能理解项目架构，遵循既定的设计模式，并执行自动验证计划。\n\n随着我们进入2026年，人类创造力与AI执行力的协作将重新定义软件工程的未来。"
+  },
+  2: {
+    author_name: "李明 (Li Ming)",
+    author_avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=80&h=80",
+    author_id: "103",
+    timestamp: "3 days ago",
+    category: "Backend Engineering",
+    supported_langs: "en,vi,zh",
+    image: "",
+    likes: 210,
+    comments: 45,
+    title_en: "Deep Dive into Modern Web Rendering Architectures",
+    title_vi: "Hiểu sâu về Kiến trúc Render Web Hiện đại và Tối ưu hiệu năng",
+    title_zh: "深入理解现代Web渲染架构与性能优化",
+    content_en: "In an era where Single Page Applications and Server-Side Rendering go hand-in-hand, frontend engineers must choose the right architectural pattern to balance initial load speed with SEO.\n\nServer-Side Rendering (SSR) delivers pre-rendered HTML to the client, resulting in significantly faster Largest Contentful Paint (LCP) times. Meanwhile, Client-Side Rendering (CSR) excels at dynamic, application-like interactivity once loaded.\n\nBy adopting hybrid approaches like Progressive Hydration and Islands Architecture, modern frameworks give developers the best of both worlds without compromising user experience.",
+    content_vi: "Trong kỷ nguyên ứng dụng trang đơn (SPA) và Server-Side Rendering song hành, kỹ sư frontend cần lựa chọn kiến trúc phù hợp nhất để cân bằng giữa tốc độ tải trang và tối ưu hóa SEO.\n\nServer-Side Rendering (SSR) cung cấp HTML đã được render sẵn cho máy khách, giúp cải thiện đáng kể thời gian hiển thị nội dung lớn nhất (LCP). Trong khi đó, Client-Side Rendering (CSR) vượt trội trong các tương tác động sau khi tải xong.\n\nBằng cách áp dụng các giải pháp lai như Progressive Hydration và Islands Architecture, các framework hiện đại mang lại ưu điểm của cả hai mô hình mà không làm giảm trải nghiệm người dùng.",
+    content_zh: "在单页应用与服务器端渲染齐头并进的今天，前端工程师需要针对不同业务场景选择最合理的架构设计，确保首屏加载速度与搜索引擎优化（SEO）的最佳平衡。\n\n服务器端渲染 (SSR) 向客户端提供预渲染的HTML，从而显著缩短最大内容渲染时间 (LCP)。同时，客户端渲染 (CSR) 在加载后擅长处理动态交互。\n\n通过采用渐进式水合和孤岛架构等混合方法，现代框架让开发者在不牺牲用户体验的前提下获得两者的优势。"
+  },
+  3: {
+    author_name: "Hồ Quốc Tuấn",
+    author_avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=80&h=80",
+    author_id: "102",
+    timestamp: "Yesterday",
+    category: "Design",
+    supported_langs: "en,vi",
+    image: "",
+    likes: 89,
+    comments: 14,
+    title_en: "10 Essential Principles for Modern Glassmorphism UI",
+    title_vi: "10 Nguyên tắc cốt lõi cho Giao diện Glassmorphism hiện đại",
+    title_zh: "",
+    content_en: "Designing interfaces that feel responsive and alive encourages interaction. Achieve this with subtle hover effects, vibrant harmonious color palettes, and clean modern typography. Always prioritize visual excellence.\n\nGlassmorphism relies on multi-layered interfaces where background elements show through a frosted-glass overlay. The key is balancing background blur with subtle multi-stop borders to maintain high contrast and readability.\n\nWhen implemented thoughtfully, this style elevates the interface from a flat document to a rich, premium digital workspace.",
+    content_vi: "Thiết kế giao diện mang lại cảm giác sống động và phản hồi tốt sẽ thúc đẩy sự tương tác. Hãy đạt được điều này với hiệu ứng hover tinh tế, bảng màu hài hòa sống động và nghệ thuật chữ hiện đại.\n\nGlassmorphism dựa trên giao diện nhiều lớp, nơi các phần tử nền hiển thị qua một lớp kính mờ. Bí quyết là cân bằng độ mờ nền với đường viền sắc nét để duy trì độ tương phản cao và dễ đọc.\n\nKhi được áp dụng đúng cách, phong cách này nâng tầm giao diện từ một tài liệu phẳng thành một không gian làm việc kỹ thuật số cao cấp.",
+    content_zh: ""
+  },
+  4: {
+    author_name: "Sarah Connor",
+    author_avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=80&h=80",
+    author_id: "104",
+    timestamp: "5 hours ago",
+    category: "Artificial Intelligence",
+    supported_langs: "en,vi,zh",
+    image: "",
+    likes: 178,
+    comments: 32,
+    title_en: "Next-Gen LLM Reasoning & Tool Use in 2026",
+    title_vi: "Khả năng Suy luận & Sử dụng Công cụ của LLM Thế hệ mới năm 2026",
+    title_zh: "2026年下一代大语言模型推理与工具使用",
+    content_en: "Modern language models are moving beyond simple pattern matching. By integrating external tools, code interpreters, and multi-agent loops, they can tackle complex engineering workflows autonomously.\n\nWe are now seeing systems that can formulate hypotheses, test them against real-world APIs, and self-correct when encountering unexpected errors. This loop of reasoning and action represents the bridge from passive chat assistants to autonomous AI engineers.",
+    content_vi: "Các mô hình ngôn ngữ hiện đại đang vượt qua giới hạn nhận diện mẫu đơn thuần. Bằng cách tích hợp công cụ bên ngoài, trình thông dịch mã và vòng lặp đa tác nhân, chúng có thể tự động giải quyết các quy trình kỹ thuật phức tạp.\n\nChúng ta đang chứng kiến các hệ thống có thể đưa ra giả thuyết, kiểm thử với API thực tế và tự sửa lỗi khi gặp sự cố không mong muốn. Vòng lặp suy luận và hành động này là bước tiến từ trợ lý trò chuyện thụ động sang kỹ sư AI tự chủ.",
+    content_zh: "现代语言模型正在超越简单的模式匹配。通过集成外部工具、代码解释器和多代理循环，它们能够自主处理复杂的工程工作流。\n\n我们现在看到系统可以提出假设，在实际API中测试它们，并在遇到意外错误时自我纠正。这种推理与行动的循环代表了从被动聊天助手到自主AI工程师的跨越。"
+  },
+  5: {
+    author_name: "Alex Rivera",
+    author_avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=80&h=80",
+    author_id: "105",
+    timestamp: "1 day ago",
+    category: "Backend Engineering",
+    supported_langs: "en,vi,zh",
+    image: "",
+    likes: 312,
+    comments: 54,
+    title_en: "Building High-Throughput Microservices with Rust & gRPC",
+    title_vi: "Xây dựng Microservices Hiệu năng cao với Rust & gRPC",
+    title_zh: "使用Rust和gRPC构建高吞吐量微服务",
+    content_en: "As backend scalability requirements grow, transitioning performance-critical services to Rust and gRPC has proven to drastically reduce memory footprint while eliminating garbage collection pauses.\n\nRust's ownership model guarantees memory safety and thread safety without runtime overhead. Coupled with gRPC's HTTP/2 multiplexing and Protocol Buffers serialization, microservices can handle tens of thousands of concurrent requests with predictable sub-millisecond latency.",
+    content_vi: "Khi yêu cầu về khả năng mở rộng tăng lên, việc chuyển đổi các dịch vụ quan trọng về hiệu năng sang Rust và gRPC đã chứng minh giảm đáng kể lượng bộ nhớ sử dụng đồng thời loại bỏ các khoảng dừng do garbage collection.\n\nMô hình sở hữu của Rust đảm bảo an toàn bộ nhớ và luồng mà không tốn chi phí thời gian chạy. Kết hợp với giao thức gRPC trên HTTP/2 và serialization Protocol Buffers, microservices có thể xử lý hàng chục nghìn yêu cầu đồng thời với độ trễ dưới mili giây.",
+    content_zh: "随着后端可扩展性需求的增长，将关键性能服务过渡到Rust和gRPC极大地减少了内存占用，同时消除了垃圾回收停顿。\n\nRust的所有权模型确保了内存安全和线程安全，且没有运行时开销。结合gRPC的HTTP/2多路复用和Protocol Buffers序列化，微服务能够以可预测的亚毫秒级延迟处理数万个并发请求。"
+  },
+  6: {
+    author_name: "Maya Lin",
+    author_avatar: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&q=80&w=80&h=80",
+    author_id: "106",
+    timestamp: "2 days ago",
+    category: "Design",
+    supported_langs: "en,vi,zh",
+    image: "",
+    likes: 95,
+    comments: 19,
+    title_en: "The Psychology of Color in Modern Web Applications",
+    title_vi: "Tâm lý học Màu sắc trong các Ứng dụng Web Hiện đại",
+    title_zh: "现代Web应用程序中的色彩心理学",
+    content_en: "Color is not just an aesthetic choice; it is a fundamental communication tool that guides user interaction, establishes brand trust, and influences cognitive load in complex user interfaces.\n\nWarm tones stimulate urgency and excitement, making them ideal for call-to-action buttons, while cool blues and neutral slates foster concentration and reliability in analytical dashboards. Understanding these cognitive responses enables designers to craft intuitive user experiences.",
+    content_vi: "Màu sắc không chỉ là lựa chọn thẩm mỹ; nó là công cụ giao tiếp cốt lõi dẫn dắt tương tác người dùng, xây dựng lòng tin thương hiệu và ảnh hưởng đến tải nhận thức trong các giao diện phức tạp.\n\nCác tông màu ấm kích thích sự cấp bách và hào hứng, lý tưởng cho nút kêu gọi hành động, trong khi sắc xanh lạnh và xám trung tính tạo sự tập trung và tin cậy cho bảng điều khiển phân tích. Hiểu được các phản ứng nhận thức này giúp nhà thiết kế tạo ra trải nghiệm người dùng trực quan.",
+    content_zh: "色彩不仅是美学选择，更是指导用户交互、建立品牌信任并在复杂用户界面中影响认知负荷的核心沟通工具。\n\n暖色调激发紧迫感和兴奋感，非常适合号召性用语按钮；而冷蓝色和中性石板色则在分析仪表板中培养专注力和可靠性。理解这些认知反应使设计师能够打造直观的用户体验。"
+  }
+};
+
 document.addEventListener('DOMContentLoaded', () => {
   // ========================================================
   // Theme Toggle Mechanism (Circle button)
@@ -5,7 +113,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const themeToggle = document.getElementById('themeToggle');
   const themeIcon = document.getElementById('themeIcon');
   const htmlElement = document.documentElement;
-  
+
   const savedTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
   htmlElement.setAttribute('data-bs-theme', savedTheme);
   updateThemeIcon(savedTheme);
@@ -63,9 +171,9 @@ document.addEventListener('DOMContentLoaded', () => {
       settings_desc: "Manage your interface, display language, and reading preferences on MundiBlog.",
       appearance_title: "Appearance & Theme",
       appearance_desc: "Choose a light or dark theme to suit your environment and protect your eyes when reading posts.",
-      theme_light: "Light (Sáng)",
+      theme_light: "Light",
       theme_light_sub: "Substack clean white paper",
-      theme_dark: "Dark (Tối)",
+      theme_dark: "Dark",
       theme_dark_sub: "Comfortable in low-light environments",
       lang_title: "Feed & UI Language",
       lang_desc: "Choose your default language. The Home Feed and UI will automatically display in your selected language.",
@@ -100,7 +208,11 @@ document.addEventListener('DOMContentLoaded', () => {
       delete_confirm_root: "Are you sure you want to delete this comment? All child replies will also be deleted!",
       delete_confirm_reply: "Are you sure you want to delete this reply?",
       comment_edited: "(edited)",
-      reset_demo: "Reset Demo Data"
+      reset_demo: "Reset Demo Data",
+      search_placeholder_modal: "Search people, publications, or topics...",
+      trending_topics: "Trending topics",
+      recommended_people: "People & Publications",
+      no_results: "No matching results found."
     },
     vi: {
       home: "Trang chủ",
@@ -170,7 +282,11 @@ document.addEventListener('DOMContentLoaded', () => {
       delete_confirm_root: "Bạn có chắc muốn xóa bình luận này? Toàn bộ các bình luận phản hồi bên trong cũng sẽ bị xóa theo!",
       delete_confirm_reply: "Bạn có chắc muốn xóa câu trả lời này?",
       comment_edited: "(đã chỉnh sửa)",
-      reset_demo: "Khôi phục dữ liệu mẫu"
+      reset_demo: "Khôi phục dữ liệu mẫu",
+      search_placeholder_modal: "Tìm kiếm tác giả, bài viết hoặc chuyên mục...",
+      trending_topics: "Chủ đề đang hot",
+      recommended_people: "Tác giả & Chuyên mục",
+      no_results: "Không tìm thấy kết quả phù hợp."
     },
     zh: {
       home: "首页",
@@ -240,9 +356,14 @@ document.addEventListener('DOMContentLoaded', () => {
       delete_confirm_root: "确定要删除此评论吗？所有子回复也将被一起删除！",
       delete_confirm_reply: "确定要删除此回复吗？",
       comment_edited: "(已编辑)",
-      reset_demo: "恢复演示数据"
+      reset_demo: "恢复演示数据",
+      search_placeholder_modal: "搜索作者、文章或主题...",
+      trending_topics: "热门话题",
+      recommended_people: "作者与出版物",
+      no_results: "未找到匹配的结果。"
     }
   };
+  window.uiTranslations = uiTranslations;
 
   const preferredLang = localStorage.getItem('preferredLanguage') || 'en';
   applyLanguageFilter(preferredLang);
@@ -250,7 +371,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function applyUiTranslations(lang = localStorage.getItem('preferredLanguage') || 'en') {
     const dict = uiTranslations[lang] || uiTranslations.en;
-    
+
     document.querySelectorAll('[data-i18n]').forEach(el => {
       const key = el.getAttribute('data-i18n');
       if (dict[key]) {
@@ -277,7 +398,7 @@ document.addEventListener('DOMContentLoaded', () => {
   function selectCategory(event, category, i18nKey) {
     if (event) event.preventDefault();
     window.currentSelectedCategory = category;
-    
+
     const label = document.getElementById('currentCategoryLabel');
     if (label) {
       if (i18nKey) {
@@ -315,8 +436,8 @@ document.addEventListener('DOMContentLoaded', () => {
       const contentEl = post.querySelector('.post-content');
 
       const hasTranslation = supportedLangs.split(',').includes(lang) ||
-                             post.hasAttribute(`data-translate-title-${lang}`) ||
-                             (titleEl && titleEl.hasAttribute(`data-translate-title-${lang}`));
+        post.hasAttribute(`data-translate-title-${lang}`) ||
+        (titleEl && titleEl.hasAttribute(`data-translate-title-${lang}`));
 
       const postCategory = post.getAttribute('data-category') || '';
       const matchesCategory = (selectedCategory === 'all') || (postCategory === selectedCategory);
@@ -603,8 +724,8 @@ document.addEventListener('DOMContentLoaded', () => {
   function resetDemoComments() {
     const lang = localStorage.getItem('preferredLanguage') || 'vi';
     const confirmMsg = lang === 'en' ? "Do you want to reset all demo comments to initial state?" :
-                       lang === 'zh' ? "确定要恢复所有初始演示评论数据吗？" :
-                       "Bạn có muốn khôi phục lại toàn bộ dữ liệu bình luận mẫu ban đầu để demo không?";
+      lang === 'zh' ? "确定要恢复所有初始演示评论数据吗？" :
+        "Bạn có muốn khôi phục lại toàn bộ dữ liệu bình luận mẫu ban đầu để demo không?";
     if (confirm(confirmMsg)) {
       localStorage.removeItem('mundi_comments_db');
       window.location.reload();
