@@ -215,7 +215,7 @@ document.addEventListener('DOMContentLoaded', () => {
       search_placeholder_modal: "Search people, publications, or topics...",
       trending_topics: "Trending topics",
       recommended_people: "People & Publications",
-      no_results: "No matching results found."
+      no_results: "No matching results found.",
       // Admin Panel
       admin_dashboard: "Admin Dashboard",
       manage_users: "Manage Users",
@@ -356,7 +356,7 @@ document.addEventListener('DOMContentLoaded', () => {
       search_placeholder_modal: "Tìm kiếm tác giả, bài viết hoặc chuyên mục...",
       trending_topics: "Chủ đề đang hot",
       recommended_people: "Tác giả & Chuyên mục",
-      no_results: "Không tìm thấy kết quả phù hợp."
+      no_results: "Không tìm thấy kết quả phù hợp.",
       // Admin Panel
       admin_dashboard: "Bảng điều khiển Admin",
       manage_users: "Quản lý thành viên",
@@ -498,7 +498,7 @@ document.addEventListener('DOMContentLoaded', () => {
       search_placeholder_modal: "搜索作者、文章或主题...",
       trending_topics: "热门话题",
       recommended_people: "作者与出版物",
-      no_results: "未找到匹配的结果。"
+      no_results: "未找到匹配的结果。",
       // Admin Panel
       admin_dashboard: "管理后台",
       manage_users: "用户管理",
