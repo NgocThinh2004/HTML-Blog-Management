@@ -444,6 +444,113 @@
 
   <script>
     document.addEventListener('DOMContentLoaded', () => {
+      // ========================================================
+      // Dynamic Admin Workspace Sidebar Adaptation
+      // ========================================================
+      const urlParams = new URLSearchParams(window.location.search);
+      const isFromAdmin = urlParams.get('from') === 'admin' || document.referrer.includes('/admin/');
+      
+      if (isFromAdmin) {
+        // 1. Update logo link and add Admin badge inline
+        const logoLinks = document.querySelectorAll('.substack-logo-container a');
+        logoLinks.forEach(link => {
+          link.setAttribute('href', '../admin/dashboard.html');
+          link.classList.add('flex-wrap');
+          
+          // Check if badge already exists, if not, add it
+          if (!link.querySelector('.badge')) {
+            const badge = document.createElement('span');
+            badge.className = 'badge bg-primary-subtle text-primary border border-primary-subtle rounded-pill ms-1';
+            badge.style.cssText = 'font-size: 0.68rem !important; padding: 0.15rem 0.4rem !important; font-weight: 600;';
+            badge.setAttribute('data-i18n', 'admin_panel');
+            badge.textContent = localStorage.getItem('preferredLanguage') === 'vi' ? 'Quản trị viên' : 
+                                localStorage.getItem('preferredLanguage') === 'zh' ? '管理后台' : 'Admin Panel';
+            link.appendChild(badge);
+          }
+        });
+
+        // 2. Define Admin Navigation HTML
+        const adminNavHTML = `
+          <a href="../admin/dashboard.html" class="sidebar-nav-item">
+            <i class="bi bi-speedometer2"></i> <span data-i18n="admin_dashboard">Admin Dashboard</span>
+          </a>
+          <a href="../admin/manage-users.html" class="sidebar-nav-item">
+            <i class="bi bi-people"></i> <span data-i18n="manage_users">Manage Users</span>
+          </a>
+          <a href="../admin/manage-categories.html" class="sidebar-nav-item">
+            <i class="bi bi-tags"></i> <span data-i18n="manage_categories">Manage Categories</span>
+          </a>
+          <a href="../admin/manage-languages.html" class="sidebar-nav-item">
+            <i class="bi bi-translate"></i> <span data-i18n="manage_languages">Manage Languages</span>
+          </a>
+        `;
+
+        // Replace Desktop Sidebar Nav
+        const desktopNav = document.querySelector('aside.left-sidebar nav.sidebar-nav');
+        if (desktopNav) {
+          desktopNav.innerHTML = adminNavHTML;
+        }
+
+        // Replace Mobile Sidebar Nav
+        const mobileNav = document.querySelector('.offcanvas-body nav.sidebar-nav');
+        if (mobileNav) {
+          mobileNav.innerHTML = adminNavHTML;
+        }
+
+        // 3. Hide Create Buttons
+        const createBtns = document.querySelectorAll('.sidebar-create-btn');
+        createBtns.forEach(btn => btn.style.display = 'none');
+
+        // 4. Update the bottom "Back to Feed" button to point back to Admin Dashboard
+        const backBtn = document.querySelector('.settings-container a[href="home.html"]');
+        if (backBtn) {
+          backBtn.setAttribute('href', '../admin/dashboard.html');
+          const backBtnText = backBtn.querySelector('span');
+          if (backBtnText) {
+            backBtnText.setAttribute('data-i18n', 'back_admin');
+            backBtnText.textContent = localStorage.getItem('preferredLanguage') === 'vi' ? 'Quay lại Bảng điều khiển Admin' : 
+                                     localStorage.getItem('preferredLanguage') === 'zh' ? '返回管理后台' : 'Back to Admin Dashboard';
+          }
+        }
+
+        // 5. Update More dropdown Settings link and footer links
+        const sidebarFooter = document.querySelector('aside.left-sidebar .sidebar-footer-menu');
+        if (sidebarFooter) {
+          sidebarFooter.innerHTML = `
+            <a href="../admin/dashboard.html" class="sidebar-nav-item mb-2">
+              <i class="bi bi-arrow-left"></i> <span data-i18n="back_admin">Back to Admin Dashboard</span>
+            </a>
+            <div class="dropdown">
+              <button class="btn btn-link text-decoration-none text-main d-flex align-items-center gap-2 p-1.5 w-100 border-0 text-start" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="bi bi-list fs-5"></i>
+                <span class="fw-medium" data-i18n="more">More</span>
+              </button>
+              <ul class="dropdown-menu shadow border-light-subtle">
+                <li><a class="dropdown-item py-2 active" href="settings.html?from=admin"><i class="bi bi-gear me-2"></i> <span data-i18n="settings">Settings</span></a></li>
+                <li><a class="dropdown-item py-2" href="../owner/change-password.html"><i class="bi bi-shield-lock me-2"></i> <span data-i18n="security">Security</span></a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item py-2 text-danger" href="#" id="signOutBtn"><i class="bi bi-box-arrow-right me-2"></i> <span data-i18n="sign_out">Sign Out</span></a></li>
+              </ul>
+            </div>
+          `;
+        }
+
+        const mobileFooter = document.querySelector('.offcanvas-body .mt-auto .d-flex');
+        if (mobileFooter) {
+          mobileFooter.innerHTML = `
+            <a class="sidebar-nav-item active" href="settings.html?from=admin"><i class="bi bi-gear"></i> <span data-i18n="settings">Settings</span></a>
+            <a class="sidebar-nav-item" href="../admin/dashboard.html"><i class="bi bi-speedometer2"></i> <span data-i18n="admin_panel">Admin Panel</span></a>
+            <a class="sidebar-nav-item" href="../owner/change-password.html"><i class="bi bi-shield-lock"></i> <span data-i18n="security">Security</span></a>
+            <a class="sidebar-nav-item text-danger" href="#" id="signOutBtn"><i class="bi bi-box-arrow-right"></i> <span data-i18n="sign_out">Sign Out</span></a>
+          `;
+        }
+
+        // Re-apply translation
+        if (window.applyUiTranslations) {
+          window.applyUiTranslations();
+        }
+      }
+
       const toastEl = document.getElementById('settingsToast');
       const toast = new bootstrap.Toast(toastEl, { delay: 3000 });
       const toastMessage = document.getElementById('toastMessage');

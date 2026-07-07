@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manage Categories - MundiBlog</title>
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Bootstrap 5.3 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  
+  <!-- Custom CSS (Standard Shared Assets) -->
+  <link rel="stylesheet" href="../../assets/css/variables.css">
+  <link rel="stylesheet" href="../../assets/css/base.css">
+  <link rel="stylesheet" href="../../assets/css/layouts.css">
+  <link rel="stylesheet" href="../../assets/css/components.css">
+  
+  <style>
+    .admin-container {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 2.5rem 1.5rem;
+      width: 100%;
+    }
+
+    .admin-header {
+      margin-bottom: 2rem;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 1.25rem;
+    }
+
+    .admin-card {
+      background-color: var(--bg-panel);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.02);
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    [data-bs-theme="dark"] .admin-card {
+      background-color: var(--bg-panel);
+      border-color: var(--border-color);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.24);
+    }
+
+    .admin-card:hover {
+      border-color: rgba(255, 90, 0, 0.25) !important;
+      box-shadow: 0 8px 30px rgba(255, 90, 0, 0.04);
+      transform: translateY(-2px);
+    }
+
+    .admin-card-clean {
+      background-color: transparent !important;
+      border: none !important;
+      box-shadow: none !important;
+      padding: 0 !important;
+      margin-bottom: 1.5rem;
+    }
+
+    .categories-table th {
+      font-weight: 600;
+      color: var(--text-muted);
+      border-bottom-width: 1px;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+
+    .categories-table td {
+      vertical-align: middle;
+      font-size: 0.9rem;
+      color: var(--text-main);
+      border-bottom-color: var(--border-color);
+      padding: 1rem 0.75rem;
+    }
+
+    /* Override center-feed defaults for admin pages to allow wider view */
+    .center-feed {
+      align-items: stretch !important;
+    }
+    
+    .center-feed > * {
+      max-width: 100% !important;
+    }
+  </style>
+</head>
+<body>
+  <div class="app-wrapper">
+    
+    <!-- HEADER (Visible on Mobile Only - Hidden on Desktop) -->
+    <header class="app-header">
+      <div class="header-container">
+        <!-- Mobile Sidebar Trigger -->
+        <button class="btn btn-link d-lg-none me-2 text-reset p-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#mobileSidebar" aria-controls="mobileSidebar">
+          <i class="bi bi-list fs-3"></i>
+        </button>
+        
+        <!-- Brand Logo for mobile -->
+        <a href="../guest/home.html" class="d-flex align-items-center text-decoration-none">
+          <i class="bi bi-bookmark-fill fs-4 text-primary me-2"></i>
+          <span class="fs-5 fw-bold text-main">MundiBlog</span>
+        </a>
+      </div>
+    </header>
+
+    <!-- MAIN APP WRAPPER (2-Column Layout for Admin Panel) -->
+    <main class="app-main-content no-right-panel">
+      
+      <!-- LEFT SIDEBAR -->
+      <aside class="left-sidebar">
+        <div>
+          <!-- Substack Logo -->
+          <div class="substack-logo-container">
+            <a href="../guest/home.html" class="text-decoration-none d-flex align-items-center gap-2 flex-wrap">
+              <i class="bi bi-bookmark-fill substack-logo"></i>
+              <span class="fs-5 fw-bold text-main" style="letter-spacing: -0.02em;">MundiBlog</span>
+              <span class="badge bg-primary-subtle text-primary border border-primary-subtle rounded-pill ms-1" style="font-size: 0.68rem !important; padding: 0.15rem 0.4rem !important; font-weight: 600;" data-i18n="admin_panel">Admin Panel</span>
+            </a>
+          </div>
+          
+          <!-- Navigation menu -->
+          <nav class="sidebar-nav">
+            <a href="dashboard.html" class="sidebar-nav-item">
+              <i class="bi bi-speedometer2"></i> <span data-i18n="admin_dashboard">Admin Dashboard</span>
+            </a>
+            <a href="manage-users.html" class="sidebar-nav-item">
+              <i class="bi bi-people"></i> <span data-i18n="manage_users">Manage Users</span>
+            </a>
+            <a href="manage-categories.html" class="sidebar-nav-item active">
+              <i class="bi bi-tags"></i> <span data-i18n="manage_categories">Manage Categories</span>
+            </a>
+            <a href="manage-languages.html" class="sidebar-nav-item">
+              <i class="bi bi-translate"></i> <span data-i18n="manage_languages">Manage Languages</span>
+            </a>
+          </nav>
+        </div>
+        
+        <!-- Bottom Section -->
+        <div class="sidebar-footer-menu">
+          <a href="../guest/home.html" class="sidebar-nav-item mb-2">
+            <i class="bi bi-arrow-left"></i> <span data-i18n="back_feed">Back to Feed</span>
+          </a>
+          <div class="dropdown">
+            <button class="btn btn-link text-decoration-none text-main d-flex align-items-center gap-2 p-1.5 w-100 border-0 text-start" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="bi bi-list fs-5"></i>
+              <span class="fw-medium" data-i18n="more">More</span>
+            </button>
+            <ul class="dropdown-menu shadow border-light-subtle">
+              <li><a class="dropdown-item py-2" href="../guest/settings.html?from=admin"><i class="bi bi-gear me-2"></i> <span data-i18n="settings">Settings</span></a></li>
+              <li><a class="dropdown-item py-2" href="../owner/change-password.html"><i class="bi bi-shield-lock me-2"></i> <span data-i18n="security">Security</span></a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item py-2 text-danger" href="#" id="signOutBtn"><i class="bi bi-box-arrow-right me-2"></i> <span data-i18n="sign_out">Sign Out</span></a></li>
+            </ul>
+          </div>
+        </div>
+      </aside>
+
+      <!-- CENTER COLUMN: Admin Workspace -->
+      <div class="center-feed">
+        <div class="admin-container">
+          
+          <div class="admin-header d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center gap-3">
+            <div>
+              <h1 class="fw-bold text-main mb-1" style="letter-spacing: -0.03em;" data-i18n="category_management">Category Management</h1>
+              <p class="text-muted mb-0" data-i18n="cat_desc">Create, organize, and edit post categories for the home feed.</p>
+            </div>
+            <button class="btn btn-primary rounded-pill px-4 d-flex align-items-center gap-2" data-bs-toggle="modal" data-bs-target="#addCategoryModal">
+              <i class="bi bi-plus-lg"></i> <span data-i18n="add_category">Add Category</span>
+            </button>
+          </div>
+
+          <!-- SEARCH FILTER -->
+          <div class="admin-card-clean mb-4">
+            <div class="input-group">
+              <span class="input-group-text bg-transparent border-end-0 text-muted"><i class="bi bi-search"></i></span>
+              <input type="text" id="categorySearchInput" class="form-control border-start-0" placeholder="Search categories..." data-i18n="search_cat_placeholder">
+            </div>
+          </div>
+
+          <!-- CATEGORIES TABLE CARD -->
+          <div class="admin-card-clean">
+            <div class="substack-list" id="categoryTableBody">
+              <!-- Item 1 -->
+              <div class="substack-list-item category-row">
+                <div class="item-title-block">
+                  <div class="item-main-title cat-title" data-i18n="cat_ai">Artificial Intelligence</div>
+                  <div class="item-sub-info">
+                    <span>Slug</span>: <code class="cat-slug" data-i18n="slug_ai">ai</code>
+                  </div>
+                </div>
+                <div class="categories-right-actions">
+                  <div>
+                    <span class="badge bg-secondary-subtle text-secondary border border-secondary-subtle px-2 py-1 rounded-pill">2 <span data-i18n="posts_suffix">posts</span></span>
+                  </div>
+                  <div class="form-check form-switch p-0 m-0 d-flex align-items-center gap-2">
+                    <input class="form-check-input ms-0 cat-status-switch" type="checkbox" checked data-category="Artificial Intelligence">
+                    <span class="status-indicator">
+                      <span class="status-dot status-dot-active"></span>
+                      <span class="status-badge-text" data-i18n="active">Active</span>
+                    </span>
+                  </div>
+                  <div>
+                    <button class="btn btn-sm btn-link text-primary p-1 me-2 btn-edit-cat" onclick="editCategory(this)"><i class="bi bi-pencil"></i></button>
+                    <button class="btn btn-sm btn-link text-danger p-1" onclick="deleteCategory(this)"><i class="bi bi-trash"></i></button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Item 2 -->
+              <div class="substack-list-item category-row">
+                <div class="item-title-block">
+                  <div class="item-main-title cat-title" data-i18n="cat_backend">Backend Engineering</div>
+                  <div class="item-sub-info">
+                    <span>Slug</span>: <code class="cat-slug" data-i18n="slug_backend">backend</code>
+                  </div>
+                </div>
+                <div class="categories-right-actions">
+                  <div>
+                    <span class="badge bg-secondary-subtle text-secondary border border-secondary-subtle px-2 py-1 rounded-pill">2 <span data-i18n="posts_suffix">posts</span></span>
+                  </div>
+                  <div class="form-check form-switch p-0 m-0 d-flex align-items-center gap-2">
+                    <input class="form-check-input ms-0 cat-status-switch" type="checkbox" checked data-category="Backend Engineering">
+                    <span class="status-indicator">
+                      <span class="status-dot status-dot-active"></span>
+                      <span class="status-badge-text" data-i18n="active">Active</span>
+                    </span>
+                  </div>
+                  <div>
+                    <button class="btn btn-sm btn-link text-primary p-1 me-2 btn-edit-cat" onclick="editCategory(this)"><i class="bi bi-pencil"></i></button>
+                    <button class="btn btn-sm btn-link text-danger p-1" onclick="deleteCategory(this)"><i class="bi bi-trash"></i></button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Item 3 -->
+              <div class="substack-list-item category-row">
+                <div class="item-title-block">
+                  <div class="item-main-title cat-title" data-i18n="cat_design">Design</div>
+                  <div class="item-sub-info">
+                    <span>Slug</span>: <code class="cat-slug" data-i18n="slug_design">design</code>
+                  </div>
+                </div>
+                <div class="categories-right-actions">
+                  <div>
+                    <span class="badge bg-secondary-subtle text-secondary border border-secondary-subtle px-2 py-1 rounded-pill">1 <span data-i18n="posts_suffix">posts</span></span>
+                  </div>
+                  <div class="form-check form-switch p-0 m-0 d-flex align-items-center gap-2">
+                    <input class="form-check-input ms-0 cat-status-switch" type="checkbox" checked data-category="Design">
+                    <span class="status-indicator">
+                      <span class="status-dot status-dot-active"></span>
+                      <span class="status-badge-text" data-i18n="active">Active</span>
+                    </span>
+                  </div>
+                  <div>
+                    <button class="btn btn-sm btn-link text-primary p-1 me-2 btn-edit-cat" onclick="editCategory(this)"><i class="bi bi-pencil"></i></button>
+                    <button class="btn btn-sm btn-link text-danger p-1" onclick="deleteCategory(this)"><i class="bi bi-trash"></i></button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- ADD CATEGORY MODAL -->
+  <div class="modal fade" id="addCategoryModal" tabindex="-1" aria-labelledby="addCategoryModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content rounded-4 border-0 shadow">
+        <div class="modal-header border-bottom">
+          <h5 class="modal-title fw-bold text-main" id="addCategoryModalLabel" data-i18n="add_category">Add Category</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form id="addCategoryForm">
+          <div class="modal-body">
+            <div class="mb-3">
+              <label for="inputCategoryName" class="form-label fw-semibold text-main" data-i18n="category_name">Category Name</label>
+              <input type="text" class="form-control" id="inputCategoryName" placeholder="Enter category name..." required autocomplete="off" data-i18n="cat_name_placeholder">
+            </div>
+            <div class="mb-1">
+              <label for="inputCategorySlug" class="form-label fw-semibold text-main" data-i18n="slug">Slug</label>
+              <input type="text" class="form-control bg-body-secondary" id="inputCategorySlug" placeholder="Slug automatically generated..." readonly data-i18n="slug_auto_placeholder">
+              <div class="form-text text-muted" data-i18n="slug_help">URLs will use this slug to route categories.</div>
+            </div>
+          </div>
+          <div class="modal-footer border-top">
+            <button type="button" class="btn btn-outline-secondary rounded-pill px-3" data-bs-dismiss="modal" data-i18n="cancel">Cancel</button>
+            <button type="submit" class="btn btn-primary rounded-pill px-4" data-i18n="save_changes">Save Changes</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- EDIT CATEGORY MODAL -->
+  <div class="modal fade" id="editCategoryModal" tabindex="-1" aria-labelledby="editCategoryModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content rounded-4 border-0 shadow">
+        <div class="modal-header border-bottom">
+          <h5 class="modal-title fw-bold text-main" id="editCategoryModalLabel" data-i18n="edit_category">Edit Category</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form id="editCategoryForm">
+          <div class="modal-body">
+            <!-- Reference input to know which item is being edited -->
+            <input type="hidden" id="editCategoryIndex">
+            <div class="mb-3">
+              <label for="editCategoryName" class="form-label fw-semibold text-main" data-i18n="category_name">Category Name</label>
+              <input type="text" class="form-control" id="editCategoryName" placeholder="Enter category name..." required autocomplete="off" data-i18n="cat_name_placeholder">
+            </div>
+            <div class="mb-1">
+              <label for="editCategorySlug" class="form-label fw-semibold text-main" data-i18n="slug">Slug</label>
+              <input type="text" class="form-control bg-body-secondary" id="editCategorySlug" placeholder="Slug automatically generated..." readonly data-i18n="slug_auto_placeholder">
+              <div class="form-text text-muted" data-i18n="slug_help">URLs will use this slug to route categories.</div>
+            </div>
+          </div>
+          <div class="modal-footer border-top">
+            <button type="button" class="btn btn-outline-secondary rounded-pill px-3" data-bs-dismiss="modal" data-i18n="cancel">Cancel</button>
+            <button type="submit" class="btn btn-primary rounded-pill px-4" data-i18n="save_changes">Save Changes</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- MOBILE SIDEBAR / OFFCANVAS -->
+  <div class="offcanvas offcanvas-start" tabindex="-1" id="mobileSidebar" aria-labelledby="mobileSidebarLabel">
+    <div class="offcanvas-header border-bottom">
+      <a href="../guest/home.html" class="text-decoration-none d-flex align-items-center gap-2">
+        <i class="bi bi-bookmark-fill text-primary fs-4"></i>
+        <span class="fs-5 fw-bold text-main" style="letter-spacing: -0.02em;">MundiBlog</span>
+      </a>
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body d-flex flex-column p-3">
+      <nav class="sidebar-nav mb-3">
+        <a href="dashboard.html" class="sidebar-nav-item">
+          <i class="bi bi-speedometer2"></i> <span data-i18n="admin_dashboard">Admin Dashboard</span>
+        </a>
+        <a href="manage-users.html" class="sidebar-nav-item">
+          <i class="bi bi-people"></i> <span data-i18n="manage_users">Manage Users</span>
+        </a>
+        <a href="manage-categories.html" class="sidebar-nav-item active">
+          <i class="bi bi-tags"></i> <span data-i18n="manage_categories">Manage Categories</span>
+        </a>
+        <a href="manage-languages.html" class="sidebar-nav-item">
+          <i class="bi bi-translate"></i> <span data-i18n="manage_languages">Manage Languages</span>
+        </a>
+      </nav>
+      
+      <div class="mt-auto pt-3 border-top">
+        <div class="d-flex flex-column gap-1">
+          <a class="sidebar-nav-item" href="../guest/home.html"><i class="bi bi-arrow-left"></i> <span data-i18n="back_feed">Back to Feed</span></a>
+          <a class="sidebar-nav-item" href="../guest/settings.html?from=admin"><i class="bi bi-gear"></i> <span data-i18n="settings">Settings</span></a>
+          <a class="sidebar-nav-item text-danger" href="#" id="mobileSignOutBtn"><i class="bi bi-box-arrow-right"></i> <span data-i18n="sign_out">Sign Out</span></a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST NOTIFICATION CONTAINER -->
+  <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 1100;">
+    <div id="adminToast" class="toast align-items-center text-bg-dark border-0 shadow-lg rounded-4" role="alert" aria-live="assertive" aria-atomic="true">
+      <div class="d-flex">
+        <div class="toast-body d-flex align-items-center gap-2 font-medium" id="toastMessage">
+          <i class="bi bi-check-circle-fill text-success fs-5"></i> Success message here.
+        </div>
+        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap 5 JS Bundle -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Core Script -->
+  <script src="../../assets/js/core.js"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const toastEl = document.getElementById('adminToast');
+      const toast = new bootstrap.Toast(toastEl, { delay: 3000 });
+      const toastMessage = document.getElementById('toastMessage');
+
+      window.showToast = function(msg) {
+        toastMessage.innerHTML = `<i class="bi bi-check-circle-fill text-success fs-5"></i> ${msg}`;
+        toast.show();
+      };
+
+      // real-time search filtering
+      const searchInput = document.getElementById('categorySearchInput');
+      const catRows = document.querySelectorAll('.category-row');
+
+      searchInput.addEventListener('input', () => {
+        const query = searchInput.value.toLowerCase().trim();
+        catRows.forEach(row => {
+          const title = row.querySelector('.cat-title').textContent.toLowerCase();
+          const slug = row.querySelector('.cat-slug').textContent.toLowerCase();
+          if (title.includes(query) || slug.includes(query)) {
+            row.style.display = '';
+          } else {
+            row.style.display = 'none';
+          }
+        });
+      });
+
+      // Slug Generator Logic
+      const nameInput = document.getElementById('inputCategoryName');
+      const slugInput = document.getElementById('inputCategorySlug');
+
+      function generateSlug(text) {
+        return text.toString()
+          .normalize('NFD') // Normalization to decompose accents
+          .replace(/[\u0300-\u036f]/g, '') // Remove decomposition marks (accents)
+          .toLowerCase()
+          .trim()
+          .replace(/\s+/g, '-') // Replace spaces with -
+          .replace(/[^\w\-]+/g, '') // Remove non-word characters
+          .replace(/\-\-+/g, '-'); // Replace double hyphens
+      }
+
+      nameInput.addEventListener('input', () => {
+        slugInput.value = generateSlug(nameInput.value);
+      });
+
+      // Modal form submission logic
+      const addForm = document.getElementById('addCategoryForm');
+      const tableBody = document.getElementById('categoryTableBody');
+      const bootstrapModal = bootstrap.Modal.getOrCreateInstance(document.getElementById('addCategoryModal'));
+
+      addForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const catName = nameInput.value.trim();
+        const catSlug = slugInput.value.trim();
+
+        if (catName && catSlug) {
+          // Check if slug already exists in table
+          const existingSlugs = Array.from(document.querySelectorAll('.cat-slug')).map(el => el.textContent.trim());
+          if (existingSlugs.includes(catSlug)) {
+            alert('A category with this slug already exists!');
+            return;
+          }
+
+          // Create new row
+          const newRow = document.createElement('div');
+          newRow.className = 'substack-list-item category-row';
+          newRow.innerHTML = `
+            <div class="item-title-block">
+              <div class="item-main-title cat-title">${catName}</div>
+              <div class="item-sub-info">
+                <span>Slug</span>: <code class="cat-slug">${catSlug}</code>
+              </div>
+            </div>
+            <div class="categories-right-actions">
+              <div>
+                <span class="badge bg-secondary-subtle text-secondary border border-secondary-subtle px-2 py-1 rounded-pill">0 <span data-i18n="posts_suffix">posts</span></span>
+              </div>
+              <div class="form-check form-switch p-0 m-0 d-flex align-items-center gap-2">
+                <input class="form-check-input ms-0 cat-status-switch" type="checkbox" checked data-category="${catName}">
+                <span class="status-indicator">
+                  <span class="status-dot status-dot-active"></span>
+                  <span class="status-badge-text" data-i18n="active">Active</span>
+                </span>
+              </div>
+              <div>
+                <button class="btn btn-sm btn-link text-primary p-1 me-2 btn-edit-cat" onclick="editCategory(this)"><i class="bi bi-pencil"></i></button>
+                <button class="btn btn-sm btn-link text-danger p-1" onclick="deleteCategory(this)"><i class="bi bi-trash"></i></button>
+              </div>
+            </div>
+          `;
+
+          tableBody.appendChild(newRow);
+          addForm.reset();
+          bootstrapModal.hide();
+          showToast(`Category <b>${catName}</b> created successfully!`);
+        }
+      });
+
+      // Delete category helper
+      window.deleteCategory = function(btn) {
+        const row = btn.closest('.category-row');
+        const catName = row.querySelector('.cat-title').textContent;
+        const confirmMsg = localStorage.getItem('preferredLanguage') === 'vi' ? 
+          `Bạn có chắc chắn muốn xóa chuyên mục "${catName}"?` : 
+          `Are you sure you want to delete category "${catName}"?`;
+        if (confirm(confirmMsg)) {
+          row.remove();
+          showToast(`Category <b>${catName}</b> deleted.`);
+        }
+      };
+
+      // Category Status switch change listener (Event delegation)
+      document.addEventListener('change', (e) => {
+        if (e.target && e.target.classList.contains('cat-status-switch')) {
+          const sw = e.target;
+          const catName = sw.getAttribute('data-category');
+          const isChecked = sw.checked;
+          const indicator = sw.nextElementSibling;
+          const dot = indicator.querySelector('.status-dot');
+          const label = indicator.querySelector('.status-badge-text');
+          
+          const currentLang = localStorage.getItem('preferredLanguage') || 'en';
+          
+          if (isChecked) {
+            dot.className = 'status-dot status-dot-active';
+            label.setAttribute('data-i18n', 'active');
+            label.textContent = currentLang === 'vi' ? 'Hoạt động' : currentLang === 'zh' ? '活跃' : 'Active';
+            showToast(`Category <b>${catName}</b> is now visible.`);
+          } else {
+            dot.className = 'status-dot status-dot-banned';
+            label.setAttribute('data-i18n', 'status_hidden');
+            label.textContent = currentLang === 'vi' ? 'Tạm ẩn' : currentLang === 'zh' ? '已隐藏' : 'Hidden';
+            showToast(`Category <b>${catName}</b> is now hidden.`);
+          }
+        }
+      });
+
+      // Edit Category helper functions
+      const editModalEl = document.getElementById('editCategoryModal');
+      const editModal = bootstrap.Modal.getOrCreateInstance(editModalEl);
+      const editForm = document.getElementById('editCategoryForm');
+      const editNameInput = document.getElementById('editCategoryName');
+      const editSlugInput = document.getElementById('editCategorySlug');
+      let currentEditingRow = null;
+
+      editNameInput.addEventListener('input', () => {
+        editSlugInput.value = generateSlug(editNameInput.value);
+      });
+
+      window.editCategory = function(btn) {
+        currentEditingRow = btn.closest('.category-row');
+        const catTitleEl = currentEditingRow.querySelector('.cat-title');
+        const catSlugEl = currentEditingRow.querySelector('.cat-slug');
+        
+        editNameInput.value = catTitleEl.textContent.trim();
+        editSlugInput.value = catSlugEl.textContent.trim();
+        
+        editModal.show();
+      };
+
+      editForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const newName = editNameInput.value.trim();
+        const newSlug = editSlugInput.value.trim();
+
+        if (newName && newSlug && currentEditingRow) {
+          // Update title and slug
+          const catTitleEl = currentEditingRow.querySelector('.cat-title');
+          const catSlugEl = currentEditingRow.querySelector('.cat-slug');
+          
+          // Also update data attribute of switch
+          const switchInput = currentEditingRow.querySelector('.cat-status-switch');
+          if (switchInput) {
+            switchInput.setAttribute('data-category', newName);
+          }
+
+          catTitleEl.textContent = newName;
+          catSlugEl.textContent = newSlug;
+          
+          // Remove translation data-i18n attributes so manual edit overrides static key
+          catTitleEl.removeAttribute('data-i18n');
+          catSlugEl.removeAttribute('data-i18n');
+
+          editModal.hide();
+          showToast(`Category updated successfully to <b>${newName}</b>!`);
+        }
+      });
+
+      // Sign out handler
+      const handleSignOut = (e) => {
+        e.preventDefault();
+        localStorage.removeItem('currentUser');
+        showToast('Signed out successfully! Redirecting...');
+        setTimeout(() => {
+          window.location.href = '../guest/home.html';
+        }, 1000);
+      };
+
+      const signOutBtn = document.getElementById('signOutBtn');
+      if (signOutBtn) signOutBtn.addEventListener('click', handleSignOut);
+
+      const mobileSignOutBtn = document.getElementById('mobileSignOutBtn');
+      if (mobileSignOutBtn) mobileSignOutBtn.addEventListener('click', handleSignOut);
+    });
+  </script>
+</body>
+</html>
