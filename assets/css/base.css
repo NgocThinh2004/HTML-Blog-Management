@@ -57,6 +57,18 @@ img {
   background-color: var(--primary-color) !important;
 }
 
+.bg-primary-subtle {
+  background-color: var(--accent-button-bg) !important;
+}
+
+.border-primary-subtle {
+  border-color: rgba(255, 90, 0, 0.2) !important;
+}
+
+[data-bs-theme="dark"] .border-primary-subtle {
+  border-color: rgba(255, 108, 31, 0.3) !important;
+}
+
 .btn-primary {
   background-color: var(--primary-color) !important;
   border-color: var(--primary-color) !important;
