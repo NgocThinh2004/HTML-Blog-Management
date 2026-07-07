@@ -405,3 +405,299 @@ select.form-select-sm {
   background-color: rgba(255, 255, 255, 0.1);
 }
 
+/* Substack Logo Styles */
+.substack-logo-container {
+  padding: 0.5rem 0.75rem 1.5rem 0.75rem;
+}
+
+.substack-logo {
+  font-size: 1.6rem;
+  color: var(--primary-color) !important;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+}
+
+/* ==========================================================
+   SUBSTACK LIST LAYOUTS (Replaces rigid HTML tables)
+   ========================================================== */
+.substack-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.substack-list-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 0.5rem;
+  border-bottom: 2px solid var(--border-color);
+  color: var(--text-muted);
+  font-size: 0.82rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.substack-list-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.25rem 0.5rem;
+  border-bottom: 1px solid var(--border-color);
+  transition: background-color var(--transition-speed) ease;
+}
+
+.substack-list-item:hover {
+  background-color: rgba(255, 90, 0, 0.015);
+}
+
+.substack-list-item:last-of-type {
+  border-bottom: none;
+}
+
+.item-title-block {
+  flex: 1;
+  min-width: 0;
+  padding-right: 1.5rem;
+}
+
+.item-main-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-main);
+  margin-bottom: 0.25rem;
+}
+
+.item-sub-info {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.item-sub-info-separator {
+  color: var(--text-muted);
+  opacity: 0.4;
+}
+
+.item-right-actions {
+  display: flex;
+  align-items: center;
+  gap: 1.75rem;
+  flex-shrink: 0;
+}
+
+.item-language-flow {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.flow-arrow {
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  opacity: 0.6;
+}
+
+/* Page-Specific Right Actions Alignment Grids */
+.queue-right-actions {
+  display: grid;
+  grid-template-columns: 240px 140px 40px;
+  align-items: center;
+  justify-items: start;
+}
+.queue-right-actions > *:last-child {
+  justify-self: end;
+}
+
+.users-right-actions {
+  display: grid;
+  grid-template-columns: 160px 140px;
+  align-items: center;
+  justify-items: start;
+}
+
+.categories-right-actions {
+  display: grid;
+  grid-template-columns: 120px 140px 80px;
+  align-items: center;
+  justify-items: start;
+}
+.categories-right-actions > *:last-child {
+  justify-self: end;
+}
+
+.languages-right-actions {
+  display: grid;
+  grid-template-columns: 180px 80px;
+  align-items: center;
+  justify-items: start;
+}
+.languages-right-actions > *:last-child {
+  justify-self: end;
+}
+
+/* ==========================================================
+   PREMIUM HUMAN-DESIGNED BADGES & STATUS INDICATORS (Non-AI)
+   ========================================================== */
+.role-badge {
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 0.2rem 0.55rem;
+  border-radius: 6px;
+  display: inline-flex;
+  align-items: center;
+  letter-spacing: 0.01em;
+}
+
+.role-badge-admin {
+  background-color: rgba(255, 108, 31, 0.08);
+  color: #ff6c1f;
+  border: 1px solid rgba(255, 108, 31, 0.2);
+}
+
+.role-badge-creator,
+.role-badge-member {
+  background-color: rgba(0, 102, 204, 0.08);
+  color: #0066cc;
+  border: 1px solid rgba(0, 102, 204, 0.2);
+}
+
+[data-bs-theme="dark"] .role-badge-creator,
+[data-bs-theme="dark"] .role-badge-member {
+  background-color: rgba(59, 130, 246, 0.08);
+  color: #60a5fa;
+  border: 1px solid rgba(59, 130, 246, 0.2);
+}
+
+.status-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--text-main);
+}
+
+.status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.status-dot-active {
+  background-color: #10b981;
+  box-shadow: 0 0 6px rgba(16, 185, 129, 0.4);
+}
+
+.status-dot-banned {
+  background-color: #ef4444;
+  box-shadow: 0 0 6px rgba(239, 68, 68, 0.4);
+}
+
+.status-dot-translating {
+  background-color: #f59e0b;
+  box-shadow: 0 0 6px rgba(245, 158, 11, 0.4);
+}
+
+/* Minimalist outlined language tags */
+.lang-tag {
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 0.15rem 0.35rem;
+  border-radius: 4px;
+  border: 1px solid var(--border-color);
+  color: var(--text-muted);
+  text-transform: uppercase;
+  background-color: transparent;
+}
+
+.lang-tag-active {
+  color: #10b981;
+  border-color: rgba(16, 185, 129, 0.25);
+  background-color: rgba(16, 185, 129, 0.04);
+}
+
+.lang-tag-failed {
+  color: #ef4444;
+  border-color: rgba(239, 68, 68, 0.25);
+  background-color: rgba(239, 68, 68, 0.04);
+}
+
+.lang-tag-translating {
+  color: #f59e0b;
+  border-color: rgba(245, 158, 11, 0.25);
+  background-color: rgba(245, 158, 11, 0.04);
+}
+
+/* ==========================================================
+   RESPONSIVE MOBILE STYLES FOR SUBSTACK FEED LAYOUT
+   ========================================================== */
+@media (max-width: 768px) {
+  .substack-list-item {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 1.25rem 0.75rem;
+    gap: 0.75rem;
+  }
+
+  .item-title-block {
+    padding-right: 0;
+    width: 100%;
+  }
+
+  .queue-right-actions {
+    display: grid !important;
+    grid-template-columns: 130px 110px 30px;
+    width: 100%;
+    align-items: center;
+    justify-content: start;
+    gap: 1.25rem;
+    padding-top: 0.75rem;
+    border-top: 1px dashed var(--border-color);
+  }
+
+  .users-right-actions {
+    display: grid !important;
+    grid-template-columns: 90px 140px;
+    width: 100%;
+    align-items: center;
+    justify-content: start;
+    gap: 1.5rem;
+    padding-top: 0.75rem;
+    border-top: 1px dashed var(--border-color);
+  }
+
+  .categories-right-actions {
+    display: grid !important;
+    grid-template-columns: 80px 130px 50px;
+    width: 100%;
+    align-items: center;
+    justify-content: start;
+    gap: 1.25rem;
+    padding-top: 0.75rem;
+    border-top: 1px dashed var(--border-color);
+  }
+
+  .languages-right-actions {
+    display: grid !important;
+    grid-template-columns: 160px 70px;
+    width: 100%;
+    align-items: center;
+    justify-content: start;
+    gap: 1.5rem;
+    padding-top: 0.75rem;
+    border-top: 1px dashed var(--border-color);
+  }
+
+  .queue-right-actions > *:last-child,
+  .users-right-actions > *:last-child,
+  .categories-right-actions > *:last-child,
+  .languages-right-actions > *:last-child {
+    justify-self: auto;
+  }
+}
+
