@@ -335,7 +335,7 @@
                 <div class="categories-right-actions">
                   <div>
                     <button class="btn btn-sm btn-light border rounded-pill px-3 fw-medium d-flex align-items-center gap-2 hover-shadow-sm transition-all text-nowrap" data-bs-toggle="offcanvas" data-bs-target="#categoryPostsOffcanvas" onclick="loadCategoryPosts('Mobile Development')">
-                      <span class="badge bg-secondary-subtle text-secondary border px-2 py-1 rounded-pill">0</span> <span data-i18n="posts_suffix">posts</span>
+                      <span class="badge bg-secondary-subtle text-secondary border px-2 py-1 rounded-pill">0</span> <span data-i18n="posts_suffix">posts</span> <i class="bi bi-chevron-right text-muted small ms-1"></i>
                     </button>
                   </div>
                   <div class="form-check form-switch p-0 m-0 d-flex align-items-center gap-2">
@@ -366,7 +366,7 @@
                 <div class="categories-right-actions">
                   <div>
                     <button class="btn btn-sm btn-light border rounded-pill px-3 fw-medium d-flex align-items-center gap-2 hover-shadow-sm transition-all text-nowrap" data-bs-toggle="offcanvas" data-bs-target="#categoryPostsOffcanvas" onclick="loadCategoryPosts('Data Science')">
-                      <span class="badge bg-secondary-subtle text-secondary border px-2 py-1 rounded-pill">0</span> <span data-i18n="posts_suffix">posts</span>
+                      <span class="badge bg-secondary-subtle text-secondary border px-2 py-1 rounded-pill">0</span> <span data-i18n="posts_suffix">posts</span> <i class="bi bi-chevron-right text-muted small ms-1"></i>
                     </button>
                   </div>
                   <div class="form-check form-switch p-0 m-0 d-flex align-items-center gap-2">
@@ -397,7 +397,7 @@
                 <div class="categories-right-actions">
                   <div>
                     <button class="btn btn-sm btn-light border rounded-pill px-3 fw-medium d-flex align-items-center gap-2 hover-shadow-sm transition-all text-nowrap" data-bs-toggle="offcanvas" data-bs-target="#categoryPostsOffcanvas" onclick="loadCategoryPosts('Cybersecurity')">
-                      <span class="badge bg-secondary-subtle text-secondary border px-2 py-1 rounded-pill">0</span> <span data-i18n="posts_suffix">posts</span>
+                      <span class="badge bg-secondary-subtle text-secondary border px-2 py-1 rounded-pill">0</span> <span data-i18n="posts_suffix">posts</span> <i class="bi bi-chevron-right text-muted small ms-1"></i>
                     </button>
                   </div>
                   <div class="form-check form-switch p-0 m-0 d-flex align-items-center gap-2">
@@ -806,7 +806,8 @@
         });
 
         document.querySelectorAll('.category-row').forEach(row => {
-          const catName = row.querySelector('.cat-title').textContent.trim();
+          const switchEl = row.querySelector('.cat-status-switch');
+          const catName = switchEl ? switchEl.getAttribute('data-category') : row.querySelector('.cat-title').textContent.trim();
           const count = counts[catName] || 0;
           const badge = row.querySelector('.badge');
           if (badge) {

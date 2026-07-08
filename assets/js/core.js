@@ -400,7 +400,6 @@ document.addEventListener('DOMContentLoaded', () => {
       comment_edited: "(edited)",
       reset_demo: "Reset Demo Data",
       search_placeholder_modal: "Search people, publications, or topics...",
-      trending_topics: "Trending topics",
       recommended_people: "People & Publications",
       no_results: "No matching results found.",
       // Explore page
@@ -481,7 +480,6 @@ document.addEventListener('DOMContentLoaded', () => {
       published_1d: "Published 1 day ago",
       published_5h: "Published 5 hours ago",
       showing_results_for: "Showing results for ",
-      trending_topics: "TRENDING",
       views: "Views",
       view: "View",
       yesterday: "Yesterday",
@@ -607,7 +605,6 @@ document.addEventListener('DOMContentLoaded', () => {
       comment_edited: "(đã chỉnh sửa)",
       reset_demo: "Khôi phục dữ liệu mẫu",
       search_placeholder_modal: "Tìm kiếm tác giả, bài viết hoặc danh mục...",
-      trending_topics: "Chủ đề đang hot",
       recommended_people: "Tác giả & Danh mục",
       no_results: "Không tìm thấy kết quả phù hợp.",
       // Explore page
@@ -697,7 +694,6 @@ document.addEventListener('DOMContentLoaded', () => {
       published_5h: "Đã đăng 5 giờ trước",
       views: "Lượt xem",
       view: "Xem",
-      trending_topics: "ĐANG HOT",
       password: "Mật khẩu",
       confirm_password: "Xác nhận mật khẩu",
       full_name: "Họ và tên",
@@ -815,7 +811,6 @@ document.addEventListener('DOMContentLoaded', () => {
       comment_edited: "(已编辑)",
       reset_demo: "恢复演示数据",
       search_placeholder_modal: "搜索作者、文章或主题...",
-      trending_topics: "热门话题",
       recommended_people: "作者与出版物",
       no_results: "未找到匹配的结果。",
       // Explore page
@@ -899,7 +894,6 @@ document.addEventListener('DOMContentLoaded', () => {
       showing_results_for: "显示结果: ",
       views: "次阅读",
       view: "阅读",
-      trending_topics: "热门趋势",
       yesterday: "昨天",
       just_now: "刚刚",
       hours_ago: "小时前",
