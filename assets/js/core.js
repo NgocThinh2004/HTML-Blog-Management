@@ -1307,3 +1307,10 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 });
+
+// Force page reload on back/forward navigation to refresh state (bfcache)
+window.addEventListener('pageshow', (event) => {
+  if (event.persisted) {
+    window.location.reload();
+  }
+});
