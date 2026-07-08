@@ -19,7 +19,12 @@ a:hover {
   color: var(--primary-color);
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-weight: 700;
   letter-spacing: -0.025em;
   color: var(--text-main);
@@ -35,13 +40,16 @@ img {
   width: 6px;
   height: 6px;
 }
+
 ::-webkit-scrollbar-track {
   background: transparent;
 }
+
 ::-webkit-scrollbar-thumb {
   background: var(--border-color);
   border-radius: 3px;
 }
+
 ::-webkit-scrollbar-thumb:hover {
   background: var(--text-muted);
 }
@@ -62,11 +70,11 @@ img {
 }
 
 .border-primary-subtle {
-  border-color: rgba(255, 90, 0, 0.2) !important;
+  border-color: rgba(255, 103, 25, 0.2) !important;
 }
 
 [data-bs-theme="dark"] .border-primary-subtle {
-  border-color: rgba(255, 108, 31, 0.3) !important;
+  border-color: rgba(255, 103, 25, 0.3) !important;
 }
 
 .btn-primary {
@@ -75,7 +83,9 @@ img {
   color: #ffffff !important;
 }
 
-.btn-primary:hover, .btn-primary:focus, .btn-primary:active {
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary:active {
   background-color: var(--primary-hover) !important;
   border-color: var(--primary-hover) !important;
   color: #ffffff !important;
@@ -92,7 +102,8 @@ img {
 }
 
 /* Focus outline overrides */
-.form-control:focus, .form-select:focus {
+.form-control:focus,
+.form-select:focus {
   border-color: var(--primary-color) !important;
-  box-shadow: 0 0 0 0.15rem rgba(255, 90, 0, 0.15) !important;
+  box-shadow: 0 0 0 0.15rem rgba(255, 103, 25, 0.15) !important;
 }

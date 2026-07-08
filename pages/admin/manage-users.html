@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" data-bs-theme="light">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,18 +8,18 @@
   <!-- Google Fonts: Inter -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
   <!-- Bootstrap 5.3 CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <!-- Bootstrap Icons -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-  
+
   <!-- Custom CSS (Standard Shared Assets) -->
   <link rel="stylesheet" href="../../assets/css/variables.css">
   <link rel="stylesheet" href="../../assets/css/base.css">
   <link rel="stylesheet" href="../../assets/css/layouts.css">
   <link rel="stylesheet" href="../../assets/css/components.css">
-  
+
   <style>
     .admin-container {
       max-width: 1080px;
@@ -36,23 +37,28 @@
     .admin-card {
       background-color: var(--bg-panel);
       border: 1px solid var(--border-color);
-      border-radius: 16px;
+      border-radius: 8px;
       padding: 1.5rem;
       margin-bottom: 1.5rem;
-      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.02);
-      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: all 0.2s ease;
     }
 
     [data-bs-theme="dark"] .admin-card {
       background-color: var(--bg-panel);
       border-color: var(--border-color);
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.24);
     }
 
     .admin-card:hover {
-      border-color: rgba(255, 90, 0, 0.25) !important;
-      box-shadow: 0 8px 30px rgba(255, 90, 0, 0.04);
+      border-color: var(--primary-color) !important;
       transform: translateY(-2px);
+    }
+
+    .user-row {
+      transition: background-color 0.2s ease;
+    }
+    .user-row:hover {
+      background-color: var(--border-light);
+      cursor: pointer;
     }
 
     .admin-card-clean {
@@ -100,23 +106,25 @@
     .center-feed {
       align-items: stretch !important;
     }
-    
-    .center-feed > * {
+
+    .center-feed>* {
       max-width: 100% !important;
     }
   </style>
 </head>
+
 <body>
   <div class="app-wrapper">
-    
+
     <!-- HEADER (Visible on Mobile Only - Hidden on Desktop) -->
     <header class="app-header">
       <div class="header-container">
         <!-- Mobile Sidebar Trigger -->
-        <button class="btn btn-link d-lg-none me-2 text-reset p-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#mobileSidebar" aria-controls="mobileSidebar">
+        <button class="btn btn-link d-lg-none me-2 text-reset p-0" type="button" data-bs-toggle="offcanvas"
+          data-bs-target="#mobileSidebar" aria-controls="mobileSidebar">
           <i class="bi bi-list fs-3"></i>
         </button>
-        
+
         <!-- Brand Logo for mobile -->
         <a href="../guest/home.html" class="d-flex align-items-center text-decoration-none">
           <i class="bi bi-bookmark-fill fs-4 text-primary me-2"></i>
@@ -127,7 +135,7 @@
 
     <!-- MAIN APP WRAPPER (2-Column Layout for Admin Panel) -->
     <main class="app-main-content no-right-panel">
-      
+
       <!-- LEFT SIDEBAR -->
       <aside class="left-sidebar">
         <div>
@@ -136,10 +144,12 @@
             <a href="../guest/home.html" class="text-decoration-none d-flex align-items-center gap-2 flex-wrap">
               <i class="bi bi-bookmark-fill substack-logo"></i>
               <span class="fs-5 fw-bold text-main" style="letter-spacing: -0.02em;">MundiBlog</span>
-              <span class="badge bg-primary-subtle text-primary border border-primary-subtle rounded-pill ms-1" style="font-size: 0.68rem !important; padding: 0.15rem 0.4rem !important; font-weight: 600;" data-i18n="admin_panel">Admin Panel</span>
+              <span class="badge bg-primary-subtle text-primary border border-primary-subtle rounded-pill ms-1"
+                style="font-size: 0.68rem !important; padding: 0.15rem 0.4rem !important; font-weight: 600;"
+                data-i18n="admin_panel">Admin Panel</span>
             </a>
           </div>
-          
+
           <!-- Navigation menu -->
           <nav class="sidebar-nav">
             <a href="dashboard.html" class="sidebar-nav-item">
@@ -156,22 +166,29 @@
             </a>
           </nav>
         </div>
-        
+
         <!-- Bottom Section -->
         <div class="sidebar-footer-menu">
           <a href="../guest/home.html" class="sidebar-nav-item mb-2">
             <i class="bi bi-arrow-left"></i> <span data-i18n="back_feed">Back to Feed</span>
           </a>
           <div class="dropdown">
-            <button class="btn btn-link text-decoration-none text-main d-flex align-items-center gap-2 p-1.5 w-100 border-0 text-start" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <button
+              class="btn btn-link text-decoration-none text-main d-flex align-items-center gap-2 p-1.5 w-100 border-0 text-start"
+              type="button" data-bs-toggle="dropdown" aria-expanded="false">
               <i class="bi bi-list fs-5"></i>
               <span class="fw-medium" data-i18n="more">More</span>
             </button>
             <ul class="dropdown-menu shadow border-light-subtle">
-              <li><a class="dropdown-item py-2" href="../guest/settings.html?from=admin"><i class="bi bi-gear me-2"></i> <span data-i18n="settings">Settings</span></a></li>
-              <li><a class="dropdown-item py-2" href="../owner/change-password.html"><i class="bi bi-shield-lock me-2"></i> <span data-i18n="security">Security</span></a></li>
-              <li><hr class="dropdown-divider"></li>
-              <li><a class="dropdown-item py-2 text-danger" href="#" id="signOutBtn"><i class="bi bi-box-arrow-right me-2"></i> <span data-i18n="sign_out">Sign Out</span></a></li>
+              <li><a class="dropdown-item py-2" href="../guest/settings.html?from=admin"><i class="bi bi-gear me-2"></i>
+                  <span data-i18n="settings">Settings</span></a></li>
+              <li><a class="dropdown-item py-2" href="../owner/change-password.html"><i
+                    class="bi bi-shield-lock me-2"></i> <span data-i18n="security">Security</span></a></li>
+              <li>
+                <hr class="dropdown-divider">
+              </li>
+              <li><a class="dropdown-item py-2 text-danger" href="#" id="signOutBtn"><i
+                    class="bi bi-box-arrow-right me-2"></i> <span data-i18n="sign_out">Sign Out</span></a></li>
             </ul>
           </div>
         </div>
@@ -180,10 +197,12 @@
       <!-- CENTER COLUMN: Admin Workspace -->
       <div class="center-feed">
         <div class="admin-container">
-          
+
           <div class="admin-header">
-            <h1 class="fw-bold text-main mb-2" style="letter-spacing: -0.03em;" data-i18n="user_management">User Management</h1>
-            <p class="text-muted mb-0" data-i18n="user_desc">View user directory, filter by roles, and manage account statuses.</p>
+            <h1 class="fw-bold text-main mb-2" style="letter-spacing: -0.03em;" data-i18n="user_management">User
+              Management</h1>
+            <p class="text-muted mb-0" data-i18n="user_desc">View user directory, filter by roles, and manage account
+              statuses.</p>
           </div>
 
           <!-- USER FILTER ROW -->
@@ -191,13 +210,16 @@
             <div class="row g-3 align-items-center">
               <div class="col-md-7">
                 <div class="input-group">
-                  <span class="input-group-text bg-transparent border-end-0 text-muted"><i class="bi bi-search"></i></span>
-                  <input type="text" id="userSearchInput" class="form-control border-start-0" placeholder="Search users by name or email..." data-i18n="search_user_placeholder">
+                  <span class="input-group-text bg-transparent border-end-0 text-muted"><i
+                      class="bi bi-search"></i></span>
+                  <input type="text" id="userSearchInput" class="form-control border-start-0"
+                    placeholder="Search users by name or email..." data-i18n="search_user_placeholder">
                 </div>
               </div>
               <div class="col-md-5">
                 <div class="d-flex gap-2 justify-content-md-end">
-                  <select id="roleFilter" class="form-select border-light-subtle" style="width: 160px; max-width: 100%;">
+                  <select id="roleFilter" class="form-select border-light-subtle"
+                    style="width: 160px; max-width: 100%;">
                     <option value="all" data-i18n="role_all">All Roles</option>
                     <option value="admin" data-i18n="role_admin">Admin</option>
                     <option value="member" data-i18n="role_member">Member</option>
@@ -213,7 +235,9 @@
               <!-- Item 1 -->
               <div class="substack-list-item user-row" data-role="admin">
                 <div class="d-flex align-items-center gap-3">
-                  <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=40&h=40" class="user-avatar border" alt="Avatar">
+                  <img
+                    src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=40&h=40"
+                    class="user-avatar border" alt="Avatar">
                   <div>
                     <div class="fw-semibold text-main user-name">Minh Khang</div>
                     <div class="item-sub-info">
@@ -221,7 +245,7 @@
                       <span class="item-sub-info-separator">•</span>
                       <span class="user-email">minhkhang@example.com</span>
                       <span class="item-sub-info-separator">•</span>
-                      <span>Joined Jun 05, 2026</span>
+                      <span><span data-i18n="joined">Joined</span> Jun 05, 2026</span>
                     </div>
                   </div>
                 </div>
@@ -242,7 +266,9 @@
               <!-- Item 2 -->
               <div class="substack-list-item user-row" data-role="member">
                 <div class="d-flex align-items-center gap-3">
-                  <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=40&h=40" class="user-avatar border" alt="Avatar">
+                  <img
+                    src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=40&h=40"
+                    class="user-avatar border" alt="Avatar">
                   <div>
                     <div class="fw-semibold text-main user-name">Elena Rostova</div>
                     <div class="item-sub-info">
@@ -250,7 +276,7 @@
                       <span class="item-sub-info-separator">•</span>
                       <span class="user-email">elena@example.com</span>
                       <span class="item-sub-info-separator">•</span>
-                      <span>Joined Jun 12, 2026</span>
+                      <span><span data-i18n="joined">Joined</span> Jun 12, 2026</span>
                     </div>
                   </div>
                 </div>
@@ -259,7 +285,8 @@
                     <span class="role-badge role-badge-member" data-i18n="role_member">Member</span>
                   </div>
                   <div class="form-check form-switch p-0 m-0 d-flex align-items-center gap-2">
-                    <input class="form-check-input ms-0 status-switch" type="checkbox" checked data-user="Elena Rostova">
+                    <input class="form-check-input ms-0 status-switch" type="checkbox" checked
+                      data-user="Elena Rostova">
                     <span class="status-indicator">
                       <span class="status-dot status-dot-active"></span>
                       <span class="status-badge-text" data-i18n="active">Active</span>
@@ -271,7 +298,9 @@
               <!-- Item 3 -->
               <div class="substack-list-item user-row" data-role="member">
                 <div class="d-flex align-items-center gap-3">
-                  <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=40&h=40" class="user-avatar border" alt="Avatar">
+                  <img
+                    src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=40&h=40"
+                    class="user-avatar border" alt="Avatar">
                   <div>
                     <div class="fw-semibold text-main user-name">Hồ Quốc Tuấn</div>
                     <div class="item-sub-info">
@@ -279,7 +308,7 @@
                       <span class="item-sub-info-separator">•</span>
                       <span class="user-email">tuan@example.com</span>
                       <span class="item-sub-info-separator">•</span>
-                      <span>Joined Jun 18, 2026</span>
+                      <span><span data-i18n="joined">Joined</span> Jun 18, 2026</span>
                     </div>
                   </div>
                 </div>
@@ -300,7 +329,9 @@
               <!-- Item 4 -->
               <div class="substack-list-item user-row" data-role="member">
                 <div class="d-flex align-items-center gap-3">
-                  <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=40&h=40" class="user-avatar border" alt="Avatar">
+                  <img
+                    src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=40&h=40"
+                    class="user-avatar border" alt="Avatar">
                   <div>
                     <div class="fw-semibold text-main user-name">李明 (Li Ming)</div>
                     <div class="item-sub-info">
@@ -308,7 +339,7 @@
                       <span class="item-sub-info-separator">•</span>
                       <span class="user-email">liming@example.com</span>
                       <span class="item-sub-info-separator">•</span>
-                      <span>Joined Jun 25, 2026</span>
+                      <span><span data-i18n="joined">Joined</span> Jun 25, 2026</span>
                     </div>
                   </div>
                 </div>
@@ -329,7 +360,9 @@
               <!-- Item 5 -->
               <div class="substack-list-item user-row" data-role="member">
                 <div class="d-flex align-items-center gap-3">
-                  <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=40&h=40" class="user-avatar border" alt="Avatar">
+                  <img
+                    src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=40&h=40"
+                    class="user-avatar border" alt="Avatar">
                   <div>
                     <div class="fw-semibold text-main user-name">Sarah Connor</div>
                     <div class="item-sub-info">
@@ -337,7 +370,7 @@
                       <span class="item-sub-info-separator">•</span>
                       <span class="user-email">sarah@example.com</span>
                       <span class="item-sub-info-separator">•</span>
-                      <span>Joined Jul 02, 2026</span>
+                      <span><span data-i18n="joined">Joined</span> Jul 02, 2026</span>
                     </div>
                   </div>
                 </div>
@@ -358,7 +391,9 @@
               <!-- Item 6 -->
               <div class="substack-list-item user-row" data-role="member">
                 <div class="d-flex align-items-center gap-3">
-                  <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=40&h=40" class="user-avatar border" alt="Avatar">
+                  <img
+                    src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=40&h=40"
+                    class="user-avatar border" alt="Avatar">
                   <div>
                     <div class="fw-semibold text-main user-name">Alex Rivera</div>
                     <div class="item-sub-info">
@@ -366,7 +401,7 @@
                       <span class="item-sub-info-separator">•</span>
                       <span class="user-email">alex@example.com</span>
                       <span class="item-sub-info-separator">•</span>
-                      <span>Joined Jul 04, 2026</span>
+                      <span><span data-i18n="joined">Joined</span> Jul 04, 2026</span>
                     </div>
                   </div>
                 </div>
@@ -389,6 +424,43 @@
         </div>
       </div>
     </main>
+  </div>
+
+  <!-- USER DETAIL OFFCANVAS -->
+  <div class="offcanvas offcanvas-end" tabindex="-1" id="userDetailOffcanvas" aria-labelledby="userDetailOffcanvasLabel" style="width: 400px; border-left: 1px solid var(--border-color);">
+    <div class="offcanvas-header border-bottom">
+      <h5 class="offcanvas-title fw-bold text-main" id="userDetailOffcanvasLabel" data-i18n="user_details">User Details</h5>
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+      <div class="text-center mb-4 mt-3">
+        <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=100&h=100" class="rounded-circle border mb-3" width="80" height="80" alt="Avatar" id="ocUserAvatar">
+        <h4 class="fw-bold text-main mb-1" id="ocUserName">Minh Khang</h4>
+        <div class="text-muted small" id="ocUserEmail">minhkhang@example.com</div>
+        <div class="mt-2" id="ocUserRoleContainer">
+          <span class="role-badge role-badge-admin" id="ocUserRole">Admin</span>
+        </div>
+      </div>
+      
+      <hr class="border-light-subtle">
+      
+      <div class="mb-4">
+        <h6 class="fw-semibold text-main mb-3" data-i18n="activity_info">Activity & Info</h6>
+        <div class="d-flex justify-content-between mb-2">
+          <span class="text-muted small" data-i18n="joined_date">Joined Date</span>
+          <span class="text-main small fw-medium" id="ocUserJoinDate">Jun 05, 2026</span>
+        </div>
+        <div class="d-flex justify-content-between mb-2">
+          <span class="text-muted small" data-i18n="articles_published">Articles Published</span>
+          <span class="text-main small fw-medium">12</span>
+        </div>
+        <div class="d-flex justify-content-between mb-2">
+          <span class="text-muted small" data-i18n="status">Status</span>
+          <span class="status-badge-text text-success fw-bold small" data-i18n="active">Active</span>
+        </div>
+      </div>
+      
+    </div>
   </div>
 
   <!-- MOBILE SIDEBAR / OFFCANVAS -->
@@ -415,12 +487,15 @@
           <i class="bi bi-translate"></i> <span data-i18n="manage_languages">Manage Languages</span>
         </a>
       </nav>
-      
+
       <div class="mt-auto pt-3 border-top">
         <div class="d-flex flex-column gap-1">
-          <a class="sidebar-nav-item" href="../guest/home.html"><i class="bi bi-arrow-left"></i> <span data-i18n="back_feed">Back to Feed</span></a>
-          <a class="sidebar-nav-item" href="../guest/settings.html?from=admin"><i class="bi bi-gear"></i> <span data-i18n="settings">Settings</span></a>
-          <a class="sidebar-nav-item text-danger" href="#" id="mobileSignOutBtn"><i class="bi bi-box-arrow-right"></i> <span data-i18n="sign_out">Sign Out</span></a>
+          <a class="sidebar-nav-item" href="../guest/home.html"><i class="bi bi-arrow-left"></i> <span
+              data-i18n="back_feed">Back to Feed</span></a>
+          <a class="sidebar-nav-item" href="../guest/settings.html?from=admin"><i class="bi bi-gear"></i> <span
+              data-i18n="settings">Settings</span></a>
+          <a class="sidebar-nav-item text-danger" href="#" id="mobileSignOutBtn"><i class="bi bi-box-arrow-right"></i>
+            <span data-i18n="sign_out">Sign Out</span></a>
         </div>
       </div>
     </div>
@@ -428,12 +503,14 @@
 
   <!-- TOAST NOTIFICATION CONTAINER -->
   <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 1100;">
-    <div id="adminToast" class="toast align-items-center text-bg-dark border-0 shadow-lg rounded-4" role="alert" aria-live="assertive" aria-atomic="true">
+    <div id="adminToast" class="toast align-items-center text-bg-dark border-0 shadow-lg rounded-4" role="alert"
+      aria-live="assertive" aria-atomic="true">
       <div class="d-flex">
         <div class="toast-body d-flex align-items-center gap-2 font-medium" id="toastMessage">
           <i class="bi bi-check-circle-fill text-success fs-5"></i> Success message here.
         </div>
-        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
+          aria-label="Close"></button>
       </div>
     </div>
   </div>
@@ -441,7 +518,7 @@
   <!-- Bootstrap 5 JS Bundle -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <!-- Core Script -->
-  <script src="../../assets/js/core.js"></script>
+  <script src="../../assets/js/core.js?v=2"></script>
 
   <script>
     document.addEventListener('DOMContentLoaded', () => {
@@ -449,29 +526,56 @@
       const toast = new bootstrap.Toast(toastEl, { delay: 3000 });
       const toastMessage = document.getElementById('toastMessage');
 
-      window.showToast = function(msg) {
+      window.showToast = function (msg) {
         toastMessage.innerHTML = `<i class="bi bi-check-circle-fill text-success fs-5"></i> ${msg}`;
         toast.show();
       };
 
+      // Handle Offcanvas trigger on row click
+      const userRows = document.querySelectorAll('.user-row');
+      const userDetailOffcanvas = new bootstrap.Offcanvas(document.getElementById('userDetailOffcanvas'));
+      userRows.forEach(row => {
+        row.addEventListener('click', function(e) {
+          // Ignore if clicking on switch or its label
+          if(e.target.closest('.form-check')) return;
+          
+          // Populate data
+          const name = this.querySelector('.user-name').textContent;
+          const email = this.querySelector('.user-email').textContent;
+          const roleBadge = this.querySelector('.role-badge').cloneNode(true);
+          let avatarSrc = this.querySelector('.user-avatar').src;
+          
+          // Nâng cấp độ phân giải ảnh (từ 40px lên 160px) để hiển thị sắc nét trên Offcanvas
+          avatarSrc = avatarSrc.replace('w=40&h=40', 'w=160&h=160');
+          
+          document.getElementById('ocUserName').textContent = name;
+          document.getElementById('ocUserEmail').textContent = email;
+          document.getElementById('ocUserAvatar').src = avatarSrc;
+          
+          const roleContainer = document.getElementById('ocUserRoleContainer');
+          roleContainer.innerHTML = '';
+          roleContainer.appendChild(roleBadge);
+          
+          userDetailOffcanvas.show();
+        });
+      });
+
       // Realtime search & filter logic
       const searchInput = document.getElementById('userSearchInput');
       const roleFilter = document.getElementById('roleFilter');
-      const userRows = document.querySelectorAll('.user-row');
-
       function filterUsers() {
-        const query = searchInput.value.toLowerCase().trim();
-        const selectedRole = roleFilter.value;
+        const role = roleFilter.value;
+        const searchTerm = searchInput.value.toLowerCase();
 
         userRows.forEach(row => {
+          const rowRole = row.getAttribute('data-role');
           const name = row.querySelector('.user-name').textContent.toLowerCase();
           const email = row.querySelector('.user-email').textContent.toLowerCase();
-          const role = row.getAttribute('data-role');
 
-          const matchesQuery = name.includes(query) || email.includes(query);
-          const matchesRole = (selectedRole === 'all') || (role === selectedRole);
+          const matchesRole = (role === 'all' || rowRole === role);
+          const matchesSearch = name.includes(searchTerm) || email.includes(searchTerm);
 
-          if (matchesQuery && matchesRole) {
+          if (matchesRole && matchesSearch) {
             row.style.display = '';
           } else {
             row.style.display = 'none';
@@ -479,21 +583,23 @@
         });
       }
 
-      searchInput.addEventListener('input', filterUsers);
       roleFilter.addEventListener('change', filterUsers);
+      searchInput.addEventListener('input', filterUsers);
 
-      // Handle Switch Toggles
-      const statusSwitches = document.querySelectorAll('.status-switch');
-      statusSwitches.forEach(sw => {
-        sw.addEventListener('change', (e) => {
-          const userName = sw.getAttribute('data-user');
-          const isChecked = sw.checked;
-          const indicator = sw.nextElementSibling;
+      // Handle Switch Toggle visually
+      const switches = document.querySelectorAll('.status-switch');
+      switches.forEach(sw => {
+        sw.addEventListener('change', function (e) {
+          e.stopPropagation(); // Prevent opening offcanvas when clicking switch
+          const container = this.closest('.users-right-actions');
+          const indicator = container.querySelector('.status-indicator');
           const dot = indicator.querySelector('.status-dot');
+
+          const isChecked = this.checked;
           const label = indicator.querySelector('.status-badge-text');
-          
           const currentLang = localStorage.getItem('preferredLanguage') || 'en';
-          
+          const userName = this.closest('.user-row').querySelector('.user-name').textContent;
+
           if (isChecked) {
             dot.className = 'status-dot status-dot-active';
             label.setAttribute('data-i18n', 'active');
@@ -526,4 +632,5 @@
     });
   </script>
 </body>
+
 </html>
