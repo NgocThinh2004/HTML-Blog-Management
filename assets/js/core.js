@@ -20,13 +20,14 @@ window.globalPostsData = {
     content_zh: "我们正在见证一场巨大的范式转变，AI代理可以自主计划、推理并执行复杂的全栈工程任务。从实时DOM操作到数据库同步，现代编码助手充当真正的结对程序员。\n\n在传统的软件开发中，开发人员将大量时间花费在样板代码、调试语法错误和配置环境上。借助先进的代理框架，AI不仅编写代码，还能理解项目架构，遵循既定的设计模式，并执行自动验证计划。\n\n随着我们进入2026年，人类创造力与AI执行力的协作将重新定义软件工程的未来。"
   },
   2: {
+    views: 987,
     author_name: "李明 (Li Ming)",
     author_avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=80&h=80",
     author_id: "103",
     timestamp: "3 days ago",
     category: "Backend Engineering",
     supported_langs: "en,vi,zh",
-    image: "",
+    image: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&q=80&w=720&h=360",
     likes: 210,
     comments: 45,
     title_en: "Deep Dive into Modern Web Rendering Architectures",
@@ -37,6 +38,7 @@ window.globalPostsData = {
     content_zh: "在单页应用与服务器端渲染齐头并进的今天，前端工程师需要针对不同业务场景选择最合理的架构设计，确保首屏加载速度与搜索引擎优化（SEO）的最佳平衡。\n\n服务器端渲染 (SSR) 向客户端提供预渲染的HTML，从而显著缩短最大内容渲染时间 (LCP)。同时，客户端渲染 (CSR) 在加载后擅长处理动态交互。\n\n通过采用渐进式水合和孤岛架构等混合方法，现代框架让开发者在不牺牲用户体验的前提下获得两者的优势。"
   },
   3: {
+    views: 456,
     author_name: "Hồ Quốc Tuấn",
     author_avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=80&h=80",
     author_id: "102",
@@ -54,13 +56,13 @@ window.globalPostsData = {
     content_zh: ""
   },
   4: {
+    views: 1500,
     author_name: "Sarah Connor",
     author_avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=80&h=80",
     author_id: "104",
     timestamp: "5 hours ago",
     category: "Artificial Intelligence",
     supported_langs: "en,vi,zh",
-    image: "",
     likes: 178,
     comments: 32,
     title_en: "Next-Gen LLM Reasoning & Tool Use in 2026",
@@ -71,13 +73,14 @@ window.globalPostsData = {
     content_zh: "现代语言模型正在超越简单的模式匹配。通过集成外部工具、代码解释器和多代理循环，它们能够自主处理复杂的工程工作流。\n\n我们现在看到系统可以提出假设，在实际API中测试它们，并在遇到意外错误时自我纠正。这种推理与行动的循环代表了从被动聊天助手到自主AI工程师的跨越。"
   },
   5: {
+    views: 800,
     author_name: "Alex Rivera",
     author_avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=80&h=80",
     author_id: "105",
     timestamp: "1 day ago",
     category: "Backend Engineering",
     supported_langs: "en,vi,zh",
-    image: "",
+    image: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&q=80&w=720&h=360",
     likes: 312,
     comments: 54,
     title_en: "Building High-Throughput Microservices with Rust & gRPC",
@@ -88,13 +91,14 @@ window.globalPostsData = {
     content_zh: "随着后端可扩展性需求的增长，将关键性能服务过渡到Rust和gRPC极大地减少了内存占用，同时消除了垃圾回收停顿。\n\nRust的所有权模型确保了内存安全和线程安全，且没有运行时开销。结合gRPC的HTTP/2多路复用和Protocol Buffers序列化，微服务能够以可预测的亚毫秒级延迟处理数万个并发请求。"
   },
   6: {
+    views: 620,
     author_name: "Maya Lin",
     author_avatar: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&q=80&w=80&h=80",
     author_id: "106",
     timestamp: "2 days ago",
     category: "Design",
     supported_langs: "en,vi,zh",
-    image: "",
+    image: "https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&q=80&w=720&h=360",
     likes: 95,
     comments: 19,
     title_en: "The Psychology of Color in Modern Web Applications",
@@ -103,6 +107,185 @@ window.globalPostsData = {
     content_en: "Color is not just an aesthetic choice; it is a fundamental communication tool that guides user interaction, establishes brand trust, and influences cognitive load in complex user interfaces.\n\nWarm tones stimulate urgency and excitement, making them ideal for call-to-action buttons, while cool blues and neutral slates foster concentration and reliability in analytical dashboards. Understanding these cognitive responses enables designers to craft intuitive user experiences.",
     content_vi: "Màu sắc không chỉ là lựa chọn thẩm mỹ; nó là công cụ giao tiếp cốt lõi dẫn dắt tương tác người dùng, xây dựng lòng tin thương hiệu và ảnh hưởng đến tải nhận thức trong các giao diện phức tạp.\n\nCác tông màu ấm kích thích sự cấp bách và hào hứng, lý tưởng cho nút kêu gọi hành động, trong khi sắc xanh lạnh và xám trung tính tạo sự tập trung và tin cậy cho bảng điều khiển phân tích. Hiểu được các phản ứng nhận thức này giúp nhà thiết kế tạo ra trải nghiệm người dùng trực quan.",
     content_zh: "色彩不仅是美学选择，更是指导用户交互、建立品牌信任并在复杂用户界面中影响认知负荷的核心沟通工具。\n\n暖色调激发紧迫感和兴奋感，非常适合号召性用语按钮；而冷蓝色和中性石板色则在分析仪表板中培养专注力和可靠性。理解这些认知反应使设计师能够打造直观的用户体验。"
+  },
+  7: {
+    views: 1120,
+    author_name: "Kenji Sato",
+    author_avatar: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&q=80&w=80&h=80",
+    author_id: "107",
+    timestamp: "3 days ago",
+    category: "Backend Engineering",
+    supported_langs: "en,vi,zh",
+    image: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&q=80&w=720&h=360",
+    likes: 245,
+    comments: 38,
+    title_en: "Distributed Caching Strategies for High-Traffic APIs",
+    title_vi: "Chiến lược Caching Phân tán cho API Lưu lượng cao",
+    title_zh: "高流量API的分布式缓存策略",
+    content_en: "When scaling web applications to millions of daily active users, database bottlenecks become the primary limiting factor. Implementing multi-tiered distributed caching using Redis and Memcached can alleviate up to 95% of read load.\n\nWe explore cache invalidation patterns, write-through vs write-behind architectures, and preventing cache stampedes during traffic spikes. Proper caching architecture is essential for maintaining sub-10ms response times globally.",
+    content_vi: "Khi mở rộng quy mô ứng dụng web lên hàng triệu người dùng hoạt động mỗi ngày, nghẽn cổ chai cơ sở dữ liệu trở thành yếu tố cản trở chính. Triển khai bộ nhớ đệm phân tán nhiều tầng bằng Redis và Memcached có thể giảm tới 95% tải đọc.\n\nChúng tôi phân tích các mô hình vô hiệu hóa cache, kiến trúc write-through và write-behind, cùng cách ngăn chặn hiện tượng cache stampede trong các đợt tăng đột biến lưu lượng truy cập.",
+    content_zh: "将Web应用程序扩展到数百万日活跃用户时，数据库瓶颈成为主要的限制因素。使用Redis和Memcached实施多层分布式缓存可以减轻高达95%的读负载。\n\n我们深入探讨了缓存失效模式、写穿透与写回架构，以及防止流量峰值期间的缓存雪崩。正确的缓存架构对于在全球范围内保持在10毫秒以内的响应时间至关重要。"
+  },
+  8: {
+    views: 890,
+    author_name: "Vũ Thu Hà",
+    author_avatar: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=80&h=80",
+    author_id: "108",
+    timestamp: "4 days ago",
+    category: "Design",
+    supported_langs: "en,vi,zh",
+    image: "https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&q=80&w=720&h=360",
+    likes: 189,
+    comments: 24,
+    title_en: "Designing Accessible & Inclusive Dark Mode Interfaces",
+    title_vi: "Thiết kế Giao diện Dark Mode Dễ tiếp cận & Toàn diện",
+    title_zh: "设计无障碍与包容性的深色模式界面",
+    content_en: "Dark mode is more than just inverting colors; it requires careful calibration of contrast ratios, elevation shadows, and typographic hierarchy to prevent eye strain and astigmatism halation.\n\nBy utilizing desaturated primary colors and elevation-based surface lightness, designers can create dark interfaces that feel comfortable in low-light environments while maintaining WCAG AAA accessibility standards.",
+    content_vi: "Dark mode không chỉ đơn thuần là đảo ngược màu sắc; nó đòi hỏi sự tinh chỉnh cẩn thận về tỷ lệ tương phản, độ bóng của các lớp không gian và cấu trúc chữ để ngăn ngừa mỏi mắt và hiện tượng lóa sáng.\n\nBằng cách sử dụng các màu chủ đạo giảm độ bão hòa và độ sáng bề mặt theo từng lớp, nhà thiết kế có thể tạo ra các giao diện tối thoải mái trong môi trường thiếu sáng đồng thời tuân thủ tiêu chuẩn tiếp cận WCAG AAA.",
+    content_zh: "深色模式不仅仅是反转颜色；它需要仔细校准对比度、层级阴影和排版层级，以防止视疲劳和散光晕影。\n\n通过使用低饱和度的主色调和基于层级的表面亮度，设计师可以创建在低光环境下令人舒适的深色界面，同时达到WCAG AAA无障碍标准。"
+  },
+  9: {
+    views: 1850,
+    author_name: "Elena Rostova",
+    author_avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=80&h=80",
+    author_id: "101",
+    timestamp: "5 days ago",
+    category: "Artificial Intelligence",
+    supported_langs: "en,vi,zh",
+    image: "https://images.unsplash.com/photo-1620712943543-bcc4688e7485?auto=format&fit=crop&q=80&w=720&h=360",
+    likes: 310,
+    comments: 62,
+    title_en: "Optimizing LLM Inference: Quantization & Speculative Decoding",
+    title_vi: "Tối ưu hóa LLM Inference: Lượng tử hóa & Speculative Decoding",
+    title_zh: "优化大语言模型推理：量化与推测解码",
+    content_en: "Running large language models in production efficiently demands cutting-edge optimization techniques. Quantizing models from FP16 down to INT4 or FP8 significantly reduces memory bandwidth requirements with negligible perplexity degradation.\n\nFurthermore, speculative decoding leverages a smaller draft model to generate candidate tokens verified in parallel by the target model, speeding up inference generation rates by up to 3x without changing the output distribution.",
+    content_vi: "Vận hành hiệu quả các mô hình ngôn ngữ lớn trong môi trường thực tế đòi hỏi các kỹ thuật tối ưu tiên tiến nhất. Lượng tử hóa mô hình từ FP16 xuống INT4 hoặc FP8 giúp giảm đáng kể yêu cầu băng thông bộ nhớ với độ suy giảm chất lượng gần như không đáng kể.\n\nHơn nữa, speculative decoding sử dụng một mô hình nháp nhỏ hơn để tạo các token ứng viên được kiểm chứng song song bởi mô hình chính, tăng tốc độ tạo văn bản lên tới 3 lần mà không làm thay đổi kết quả đầu ra.",
+    content_zh: "在生产环境中高效运行大语言模型需要最先进的优化技术。将模型从FP16量化到INT4或FP8大大降低了内存带宽需求，且困惑度下降微乎其微。\n\n此外，推测解码利用一个较小的草稿模型生成候选词元，并由目标模型并行验证，在不改变输出分布的情况下将推理生成速度提高了近3倍。"
+  },
+  10: {
+    views: 740,
+    author_name: "Hồ Quốc Tuấn",
+    author_avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=80&h=80",
+    author_id: "102",
+    timestamp: "6 days ago",
+    category: "Design",
+    supported_langs: "en,vi,zh",
+    image: "https://images.unsplash.com/photo-1581291518633-83b4ebd1d83e?auto=format&fit=crop&q=80&w=720&h=360",
+    likes: 165,
+    comments: 21,
+    title_en: "Micro-Animations: Bringing Interactive Web Layouts to Life",
+    title_vi: "Micro-Animations: Thổi hồn vào các Giao diện Web Tương tác",
+    title_zh: "微动画：赋予交互式Web布局生命力",
+    content_en: "Subtle micro-animations provide crucial feedback to user interactions, making interfaces feel tactile and responsive. From button press animations to smooth drawer transitions, motion design bridges the gap between static screens and fluid software.\n\nWhen implementing animations, respecting prefers-reduced-motion media queries and maintaining 60fps performance via CSS transforms is paramount for a polished, professional user experience.",
+    content_vi: "Các vi chuyển động (micro-animations) tinh tế mang lại phản hồi quan trọng cho các tương tác của người dùng, giúp giao diện mang lại cảm giác chân thực và nhạy bén. Từ hiệu ứng nhấn nút đến các chuyển tiếp mượt mà, thiết kế chuyển động thu hẹp khoảng cách giữa màn hình tĩnh và phần mềm sống động.\n\nKhi triển khai hoạt ảnh, việc tuân thủ cấu hình prefers-reduced-motion và duy trì hiệu năng 60fps qua CSS transforms là tối quan trọng để có một trải nghiệm chuyên nghiệp.",
+  },
+  11: {
+    views: 1240,
+    author_name: "Elena Rostova",
+    author_avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=80&h=80",
+    author_id: "101",
+    timestamp: "1 week ago",
+    category: "Frontend Development",
+    supported_langs: "en,vi,zh",
+    image: "https://images.unsplash.com/photo-1633356122544-f134324a6cee?auto=format&fit=crop&q=80&w=720&h=360",
+    likes: 420,
+    comments: 85,
+    title_en: "React 19 vs Vue 3: The Framework Wars Continue",
+    title_vi: "React 19 vs Vue 3: Cuộc chiến Framework Tiếp diễn",
+    title_zh: "React 19 vs Vue 3：框架之争继续",
+    content_en: "With React 19 introducing the new compiler and use() hook, and Vue 3 perfecting the Composition API with Vapor Mode, the frontend landscape is evolving faster than ever. We dive deep into bundle sizes, rendering benchmarks, and developer experience.",
+    content_vi: "Với việc React 19 giới thiệu trình biên dịch mới và hook use(), cùng với Vue 3 hoàn thiện Composition API qua Vapor Mode, bối cảnh frontend đang phát triển nhanh hơn bao giờ hết. Chúng tôi phân tích sâu về kích thước bundle, hiệu suất kết xuất và trải nghiệm nhà phát triển.",
+    content_zh: "随着React 19引入新的编译器和use()钩子，以及Vue 3通过Vapor模式完善Composition API，前端领域的发展比以往任何时候都快。我们深入探讨捆绑包大小、渲染基准和开发者体验。"
+  },
+  12: {
+    views: 980,
+    author_name: "Hồ Quốc Tuấn",
+    author_avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=80&h=80",
+    author_id: "102",
+    timestamp: "2 weeks ago",
+    category: "Mobile Development",
+    supported_langs: "en,vi,zh",
+    image: "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&q=80&w=720&h=360",
+    likes: 315,
+    comments: 42,
+    title_en: "Flutter Impeller: Redefining Cross-Platform Rendering",
+    title_vi: "Flutter Impeller: Định nghĩa lại Rendering Đa nền tảng",
+    title_zh: "Flutter Impeller：重新定义跨平台渲染",
+    content_en: "Skia has served Flutter well, but Impeller brings a new era of jank-free rendering by precompiling shaders. Learn how this architectural shift fundamentally solves the long-standing iOS shader compilation stutter.",
+    content_vi: "Skia đã phục vụ tốt cho Flutter, nhưng Impeller mang đến một kỷ nguyên mới của việc hiển thị mượt mà bằng cách biên dịch trước các shaders. Hãy tìm hiểu cách sự thay đổi kiến trúc này giải quyết triệt để tình trạng giật lag biên dịch shader trên iOS.",
+    content_zh: "Skia为Flutter提供了很好的服务，但Impeller通过预编译着色器开启了无卡顿渲染的新纪元。了解这种架构转变如何从根本上解决长期存在的iOS着色器编译卡顿问题。"
+  },
+  13: {
+    views: 1560,
+    author_name: "李明 (Li Ming)",
+    author_avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=80&h=80",
+    author_id: "103",
+    timestamp: "1 month ago",
+    category: "Data Science",
+    supported_langs: "en,vi,zh",
+    image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=720&h=360",
+    likes: 540,
+    comments: 112,
+    title_en: "Migrating from Pandas to Polars for Big Data Processing",
+    title_vi: "Chuyển đổi từ Pandas sang Polars để Xử lý Dữ liệu Lớn",
+    title_zh: "从Pandas迁移到Polars以进行大数据处理",
+    content_en: "Pandas has been the standard for data manipulation in Python, but it struggles with large datasets due to its single-threaded nature. Polars, written in Rust, leverages multi-threading and lazy evaluation to process data up to 50x faster.",
+    content_vi: "Pandas từng là tiêu chuẩn để thao tác dữ liệu trong Python, nhưng nó gặp khó khăn với các tập dữ liệu lớn do bản chất luồng đơn. Polars, được viết bằng Rust, tận dụng đa luồng và đánh giá lười (lazy evaluation) để xử lý dữ liệu nhanh hơn tới 50 lần.",
+    content_zh: "Pandas一直是Python中数据操作的标准，但由于其单线程特性，在处理大型数据集时显得吃力。用Rust编写的Polars利用多线程和延迟计算，将数据处理速度提高了多达50倍。"
+  },
+  14: {
+    views: 890,
+    author_name: "Sarah Connor",
+    author_avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=80&h=80",
+    author_id: "104",
+    timestamp: "1 month ago",
+    category: "Cybersecurity",
+    supported_langs: "en,vi,zh",
+    image: "https://images.unsplash.com/photo-1526304640581-d334cdbbf45e?auto=format&fit=crop&q=80&w=720&h=360",
+    likes: 210,
+    comments: 34,
+    title_en: "Zero Trust Architecture: Never Trust, Always Verify",
+    title_vi: "Kiến trúc Zero Trust: Không bao giờ tin tưởng, Luôn luôn xác minh",
+    title_zh: "零信任架构：永不信任，始终验证",
+    content_en: "Traditional network security models based on perimeter defense are obsolete in the era of remote work and cloud infrastructure. Zero Trust mandates strict identity verification for every person and device trying to access resources, regardless of their network location.",
+    content_vi: "Các mô hình bảo mật mạng truyền thống dựa trên phòng thủ vành đai đã lỗi thời trong kỷ nguyên làm việc từ xa và cơ sở hạ tầng đám mây. Zero Trust bắt buộc xác minh danh tính nghiêm ngặt đối với mọi người và thiết bị cố gắng truy cập tài nguyên, bất kể vị trí mạng của họ.",
+    content_zh: "在远程工作和云基础设施时代，基于边界防御的传统网络安全模型已经过时。零信任要求对试图访问资源的每个人和设备进行严格的身份验证，无论其网络位置如何。"
+  },
+  15: {
+    views: 2100,
+    author_name: "Alex Rivera",
+    author_avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=80&h=80",
+    author_id: "105",
+    timestamp: "2 months ago",
+    category: "Backend Engineering",
+    supported_langs: "en,vi,zh",
+    image: "https://images.unsplash.com/photo-1667372393119-3d4c48d07fc9?auto=format&fit=crop&q=80&w=720&h=360",
+    likes: 670,
+    comments: 156,
+    title_en: "Kubernetes Anti-Patterns: Why Your Cluster is Failing",
+    title_vi: "Các Anti-Pattern trong Kubernetes: Tại sao Cluster của bạn thất bại",
+    title_zh: "Kubernetes反模式：为什么你的集群会失败",
+    content_en: "Adopting Kubernetes does not automatically make your application scalable or resilient. We explore common anti-patterns such as omitting resource limits, hardcoding configuration inside containers, and relying on implicit dependencies.",
+    content_vi: "Việc áp dụng Kubernetes không tự động làm cho ứng dụng của bạn có khả năng mở rộng hay phục hồi. Chúng tôi khám phá các anti-pattern phổ biến như bỏ qua giới hạn tài nguyên, hardcode cấu hình bên trong container và phụ thuộc vào các liên kết ngầm.",
+    content_zh: "采用Kubernetes并不会自动使您的应用程序具有可扩展性或弹性。我们探讨了常见的反模式，例如省略资源限制、在容器内硬编码配置以及依赖隐式依赖项。"
+  },
+  16: {
+    views: 1120,
+    author_name: "Vũ Thu Hà",
+    author_avatar: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=80&h=80",
+    author_id: "108",
+    timestamp: "2 months ago",
+    category: "Design",
+    supported_langs: "en,vi,zh",
+    image: "https://images.unsplash.com/photo-1561070791-2526d30994b5?auto=format&fit=crop&q=80&w=720&h=360",
+    likes: 380,
+    comments: 65,
+    title_en: "The Return to Minimalism in Enterprise Software",
+    title_vi: "Sự Trở lại của Chủ nghĩa Tối giản trong Phần mềm Doanh nghiệp",
+    title_zh: "企业软件中极简主义的回归",
+    content_en: "After years of feature bloat and complex dashboards, enterprise users are experiencing cognitive overload. We analyze the shift back towards minimalist interfaces that prioritize white space, clear typography, and focused user workflows.",
+    content_vi: "Sau nhiều năm nhồi nhét tính năng và bảng điều khiển phức tạp, người dùng doanh nghiệp đang trải qua sự quá tải nhận thức. Chúng tôi phân tích sự chuyển dịch quay lại các giao diện tối giản, ưu tiên khoảng trắng, kiểu chữ rõ ràng và quy trình làm việc tập trung.",
+    content_zh: "经过多年的功能膨胀和复杂的仪表板，企业用户正经历着认知超载。我们分析了回归极简主义界面的趋势，这些界面优先考虑留白、清晰的排版和专注的用户工作流。"
   }
 };
 
@@ -159,6 +342,10 @@ document.addEventListener('DOMContentLoaded', () => {
       cat_ai: "Artificial Intelligence",
       cat_backend: "Backend Engineering",
       cat_design: "Design",
+      cat_frontend: "Frontend Development",
+      cat_mobile: "Mobile Development",
+      cat_data: "Data Science",
+      cat_cyber: "Cybersecurity",
       slug_ai: "ai",
       slug_backend: "backend",
       slug_design: "design",
@@ -216,6 +403,17 @@ document.addEventListener('DOMContentLoaded', () => {
       trending_topics: "Trending topics",
       recommended_people: "People & Publications",
       no_results: "No matching results found.",
+      // Explore page
+      explore: "Explore",
+      top: "Top",
+      recent: "Recent",
+      posts: "Posts",
+      publications: "Publications",
+      people: "People",
+      subscribed: "Subscribed",
+      author_economics: "Economics Author",
+      author_economics_lead: "Economics Lead",
+      author_tech_lead: "Tech Lead",
       // Admin Panel
       admin_dashboard: "Admin Dashboard",
       manage_users: "Manage Users",
@@ -279,7 +477,17 @@ document.addEventListener('DOMContentLoaded', () => {
       published_2h: "Published 2 hours ago",
       published_3d: "Published 3 days ago",
       published_1d: "Published 1 day ago",
-      published_5h: "Published 5 hours ago"
+      published_5h: "Published 5 hours ago",
+      showing_results_for: "Showing results for ",
+      trending_topics: "TRENDING",
+      views: "Views",
+      view: "View",
+      yesterday: "Yesterday",
+      just_now: "Just now",
+      hours_ago: "hours ago",
+      days_ago: "days ago",
+      weeks_ago: "weeks ago",
+      months_ago: "months ago"
     },
     vi: {
       home: "Trang chủ",
@@ -300,6 +508,10 @@ document.addEventListener('DOMContentLoaded', () => {
       cat_ai: "Trí tuệ nhân tạo (AI)",
       cat_backend: "Kỹ thuật Backend",
       cat_design: "Thiết kế UI/UX",
+      cat_frontend: "Lập trình Frontend",
+      cat_mobile: "Lập trình Mobile",
+      cat_data: "Khoa học Dữ liệu",
+      cat_cyber: "An ninh mạng",
       slug_ai: "tri-tue-nhan-tao",
       slug_backend: "ky-thuat-backend",
       slug_design: "thiet-ke-ui-ux",
@@ -357,6 +569,24 @@ document.addEventListener('DOMContentLoaded', () => {
       trending_topics: "Chủ đề đang hot",
       recommended_people: "Tác giả & Chuyên mục",
       no_results: "Không tìm thấy kết quả phù hợp.",
+      // Explore page
+      explore: "Khám phá",
+      top: "Nổi bật",
+      recent: "Mới nhất",
+      posts: "Bài viết",
+      publications: "Chuyên mục",
+      people: "Tác giả",
+      subscribed: "Đã theo dõi",
+      author_economics: "Chuyên gia Kinh tế",
+      author_economics_lead: "Trưởng phòng Kinh tế",
+      author_tech_lead: "Trưởng nhóm Kỹ thuật",
+      showing_results_for: "Hiển thị kết quả cho ",
+      yesterday: "Hôm qua",
+      just_now: "Vừa xong",
+      hours_ago: "giờ trước",
+      days_ago: "ngày trước",
+      weeks_ago: "tuần trước",
+      months_ago: "tháng trước",
       // Admin Panel
       admin_dashboard: "Bảng điều khiển Admin",
       manage_users: "Quản lý thành viên",
@@ -421,7 +651,10 @@ document.addEventListener('DOMContentLoaded', () => {
       published_2h: "Đã đăng 2 giờ trước",
       published_3d: "Đã đăng 3 ngày trước",
       published_1d: "Đã đăng 1 ngày trước",
-      published_5h: "Đã đăng 5 giờ trước"
+      published_5h: "Đã đăng 5 giờ trước",
+      views: "Lượt xem",
+      view: "Xem",
+      trending_topics: "ĐANG HOT",
     },
     zh: {
       home: "首页",
@@ -442,6 +675,10 @@ document.addEventListener('DOMContentLoaded', () => {
       cat_ai: "人工智能 (AI)",
       cat_backend: "后端工程",
       cat_design: "设计 (Design)",
+      cat_frontend: "前端开发",
+      cat_mobile: "移动开发",
+      cat_data: "数据科学",
+      cat_cyber: "网络安全",
       slug_ai: "ren-gong-zhi-neng",
       slug_backend: "hou-duan-gong-cheng",
       slug_design: "ui-ux-she-ji",
@@ -499,6 +736,17 @@ document.addEventListener('DOMContentLoaded', () => {
       trending_topics: "热门话题",
       recommended_people: "作者与出版物",
       no_results: "未找到匹配的结果。",
+      // Explore page
+      explore: "探索",
+      top: "热门",
+      recent: "最新",
+      posts: "文章",
+      publications: "专栏与出版物",
+      people: "创作者",
+      subscribed: "已订阅",
+      author_economics: "经济学作者",
+      author_economics_lead: "经济学主管",
+      author_tech_lead: "技术主管",
       // Admin Panel
       admin_dashboard: "管理后台",
       manage_users: "用户管理",
@@ -563,10 +811,87 @@ document.addEventListener('DOMContentLoaded', () => {
       published_2h: "发布于 2 小时前",
       published_3d: "发布于 3 天前",
       published_1d: "发布于 1 天前",
-      published_5h: "发布于 5 小时前"
+      published_5h: "发布于 5 小时前",
+      showing_results_for: "显示结果: ",
+      views: "次阅读",
+      view: "阅读",
+      trending_topics: "热门趋势",
+      yesterday: "昨天",
+      just_now: "刚刚",
+      hours_ago: "小时前",
+      days_ago: "天前",
+      weeks_ago: "周前",
+      months_ago: "个月前"
     }
   };
   window.uiTranslations = uiTranslations;
+
+  window.formatTimestampI18n = function (ts) {
+    if (!ts) return "";
+    const currentLang = localStorage.getItem('preferredLanguage') || 'en';
+    if (currentLang === 'en') return ts;
+
+    let str = ts.toString();
+    if (currentLang === 'vi') {
+      return str
+        .replace(/Yesterday/i, "Hôm qua")
+        .replace(/Just now/i, "Vừa xong")
+        .replace(/hours ago/i, "giờ trước")
+        .replace(/hour ago/i, "giờ trước")
+        .replace(/days ago/i, "ngày trước")
+        .replace(/day ago/i, "ngày trước")
+        .replace(/weeks ago/i, "tuần trước")
+        .replace(/week ago/i, "tuần trước")
+        .replace(/months ago/i, "tháng trước")
+        .replace(/month ago/i, "tháng trước")
+        .replace(/years ago/i, "năm trước")
+        .replace(/year ago/i, "năm trước")
+        .replace(/min read/i, "phút đọc")
+        .replace(/mins read/i, "phút đọc")
+        .replace(/reads/i, "lượt xem")
+        .replace(/read/i, "lượt xem");
+    } else if (currentLang === 'zh') {
+      return str
+        .replace(/Yesterday/i, "昨天")
+        .replace(/Just now/i, "刚刚")
+        .replace(/hours ago/i, "小时前")
+        .replace(/hour ago/i, "小时前")
+        .replace(/days ago/i, "天前")
+        .replace(/day ago/i, "天前")
+        .replace(/weeks ago/i, "周前")
+        .replace(/week ago/i, "周前")
+        .replace(/months ago/i, "个月前")
+        .replace(/month ago/i, "个月前")
+        .replace(/years ago/i, "年前")
+        .replace(/year ago/i, "年前")
+        .replace(/min read/i, "分钟阅读")
+        .replace(/mins read/i, "分钟阅读")
+        .replace(/reads/i, "次阅读")
+        .replace(/read/i, "次阅读");
+    }
+    return str;
+  };
+
+  // Map category English names to i18n dictionary keys
+  const categoryKeyMap = {
+    "Artificial Intelligence": "cat_ai",
+    "Backend Engineering": "cat_backend",
+    "Design": "cat_design",
+    "Frontend Development": "cat_frontend",
+    "Mobile Development": "cat_mobile",
+    "Data Science": "cat_data",
+    "Cybersecurity": "cat_cyber"
+  };
+
+  window.translateCategory = function (category) {
+    if (!category) return category;
+    const currentLang = localStorage.getItem('preferredLanguage') || 'en';
+    if (currentLang === 'en') return category;
+    const key = categoryKeyMap[category];
+    if (!key) return category;
+    const dict = (window.uiTranslations && window.uiTranslations[currentLang]) || (window.uiTranslations && window.uiTranslations.en) || {};
+    return dict[key] || category;
+  };
 
   const preferredLang = localStorage.getItem('preferredLanguage') || 'en';
   applyLanguageFilter(preferredLang);
@@ -600,6 +925,39 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
 
+    // Translate dynamic content
+    document.querySelectorAll('[data-translate-content-vi], [data-translate-content-zh]').forEach(el => {
+      const originalText = el.getAttribute('data-original-content') || el.textContent.trim();
+      if (!el.getAttribute('data-original-content')) {
+        el.setAttribute('data-original-content', originalText);
+      }
+      const transText = el.getAttribute(`data-translate-content-${lang}`);
+      if (transText) {
+        el.textContent = transText;
+      } else {
+        el.textContent = el.getAttribute('data-original-content');
+      }
+    });
+
+    // Translate timestamps across the page
+    document.querySelectorAll('.post-timestamp, .comment-time, .article-time, [data-timestamp]').forEach(el => {
+      const origTs = el.getAttribute('data-original-ts') || el.textContent.trim();
+      if (!el.getAttribute('data-original-ts')) {
+        el.setAttribute('data-original-ts', origTs);
+      }
+      if (typeof window.formatTimestampI18n === 'function') {
+        el.innerHTML = window.formatTimestampI18n(origTs);
+      }
+    });
+
+    // Translate category labels dynamically
+    document.querySelectorAll('.category-label[data-original-cat]').forEach(el => {
+      const originalCat = el.getAttribute('data-original-cat');
+      if (typeof window.translateCategory === 'function') {
+        el.textContent = window.translateCategory(originalCat);
+      }
+    });
+
     const searchInput = document.getElementById('feedSearchInput') || document.querySelector('.right-search-box input');
     if (searchInput && dict.search_placeholder) {
       searchInput.setAttribute('placeholder', dict.search_placeholder);
@@ -607,6 +965,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (typeof syncFeedCommentCounts === 'function') {
       syncFeedCommentCounts();
+    }
+    if (typeof window.renderTrendingWidgets === 'function') {
+      window.renderTrendingWidgets();
     }
   }
 
@@ -631,6 +992,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.querySelectorAll('.feed-filter-row .dropdown-item').forEach(el => el.classList.remove('active'));
     if (event && event.currentTarget) event.currentTarget.classList.add('active');
+
+    if (typeof window.renderFeedPosts === 'function') {
+      window.renderFeedPosts('postsFeedContainer', window.globalPostsData, category);
+    }
 
     const lang = localStorage.getItem('preferredLanguage') || 'en';
     applyLanguageFilter(lang);
