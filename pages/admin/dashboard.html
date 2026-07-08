@@ -497,6 +497,30 @@
       };
 
       // Sign out handler
+      
+      // Dynamic Dashboard Stats
+      function updateDashboardStats() {
+        if (!window.globalPostsData) return;
+        let totalArticles = 0;
+        let totalComments = 0;
+        let totalLikes = 0;
+        
+        Object.values(window.globalPostsData).forEach(post => {
+          totalArticles++;
+          totalComments += (post.comments || 0);
+          totalLikes += (post.likes || 0);
+        });
+        
+        const statEls = document.querySelectorAll('.admin-card .fs-4.fw-bold');
+        if (statEls.length >= 4) {
+          statEls[0].textContent = 9; // Hardcoded from manage-users 9 rows
+          statEls[1].textContent = totalArticles;
+          statEls[2].textContent = totalComments;
+          statEls[3].textContent = totalLikes.toLocaleString();
+        }
+      }
+      updateDashboardStats();
+
       const handleSignOut = (e) => {
         e.preventDefault();
         localStorage.removeItem('currentUser');
