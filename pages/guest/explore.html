@@ -47,15 +47,15 @@
       <div class="center-feed">
         
         <!-- Explore Search Bar with YouTube-style dropdown -->
-        <div class="explore-search-header mb-3 mt-2">
+        <div class="explore-search-header position-relative mb-3 mt-2">
           <div class="explore-search-input-box" id="exploreSearchBox">
             <i class="bi bi-search text-muted fs-5"></i>
             <input type="text" id="explorePageSearchInput" class="explore-page-search-input" placeholder="Search MundiBlog..." data-i18n="search_placeholder" autocomplete="off">
             <button type="button" class="btn-clear-search d-none" id="exploreClearBtn" aria-label="Clear"><i class="bi bi-x-lg fs-6"></i></button>
           </div>
-          <!-- Dropdown suggestions panel -->
+          <!-- Suggestions Panel -->
           <div id="exploreSuggestionsPanel" class="explore-suggestions-panel d-none">
-            <div id="exploreSuggestionsList"></div>
+            <!-- populated by JS -->
           </div>
         </div>
 
@@ -114,20 +114,68 @@
       renderExploreResults(currentQuery, currentTab);
 
       // Input events
+      const suggestionsPanel = document.getElementById('exploreSuggestionsPanel');
+      
       searchInput.addEventListener('input', () => {
-        currentQuery = searchInput.value.trim();
-        if (currentQuery.length > 0) {
+        const query = searchInput.value.trim().toLowerCase();
+        if (query.length > 0) {
           clearBtn.classList.remove('d-none');
+          
+          let matches = [];
+          if (window.globalPostsData) {
+            Object.keys(window.globalPostsData).forEach(id => {
+              const post = window.globalPostsData[id];
+              const titleEn = (post.title_en || '').toLowerCase();
+              const cat = (post.category || '').toLowerCase();
+              if (titleEn.includes(query) || cat.includes(query)) {
+                matches.push({ id, title: post.title_en || 'Untitled', type: 'post' });
+              }
+            });
+          }
+          
+          if (matches.length > 0) {
+             suggestionsPanel.innerHTML = '<div class="suggestions-section-label">Suggestions</div>';
+             matches.slice(0, 5).forEach(m => {
+                const item = document.createElement('a');
+                item.href = '#';
+                item.className = 'suggestion-item text-decoration-none text-main';
+                item.innerHTML = `<i class="bi bi-search text-muted me-2"></i> <span class="suggestion-title">${m.title}</span>`;
+                item.onclick = (e) => {
+                  e.preventDefault();
+                  searchInput.value = m.title;
+                  currentQuery = m.title;
+                  suggestionsPanel.classList.add('d-none');
+                  
+                  // Trigger search
+                  const newUrl = window.location.pathname + `?q=${encodeURIComponent(currentQuery)}`;
+                  window.history.pushState({path: newUrl}, '', newUrl);
+                  renderExploreResults(currentQuery, currentTab);
+                };
+                suggestionsPanel.appendChild(item);
+             });
+             suggestionsPanel.classList.remove('d-none');
+          } else {
+             suggestionsPanel.classList.add('d-none');
+          }
         } else {
           clearBtn.classList.add('d-none');
+          suggestionsPanel.classList.add('d-none');
         }
-        renderExploreResults(currentQuery, currentTab);
+      });
+
+      // Hide suggestions when clicking outside
+      document.addEventListener('click', (e) => {
+        if (!e.target.closest('.explore-search-header')) {
+          suggestionsPanel.classList.add('d-none');
+        }
       });
 
       // Pressing Enter updates URL without reloading
       searchInput.addEventListener('keydown', (e) => {
         if (e.key === 'Enter') {
           e.preventDefault();
+          suggestionsPanel.classList.add('d-none');
+          currentQuery = searchInput.value.trim();
           const newUrl = window.location.pathname + (currentQuery ? `?q=${encodeURIComponent(currentQuery)}` : '');
           window.history.pushState({path: newUrl}, '', newUrl);
           renderExploreResults(currentQuery, currentTab);
@@ -137,6 +185,7 @@
       clearBtn.addEventListener('click', () => {
         searchInput.value = '';
         clearBtn.classList.add('d-none');
+        suggestionsPanel.classList.add('d-none');
         searchInput.focus();
       });
 
@@ -150,105 +199,7 @@
         });
       });
 
-      // ===== YouTube-style suggestion dropdown =====
-      const suggestionsPanel = document.getElementById('exploreSuggestionsPanel');
-      const suggestionsList = document.getElementById('exploreSuggestionsList');
-
-      function buildSuggestions(q) {
-        const currentLang = localStorage.getItem('preferredLanguage') || 'en';
-        const dict = (window.uiTranslations && window.uiTranslations[currentLang]) || {};
-        const data = window.globalPostsData || {};
-        const qLower = q.toLowerCase().trim();
-
-        if (!qLower) {
-          // Show trending as horizontal chips
-          const trending = [
-            { icon: '🔥', label: 'Rust', query: 'Rust' },
-            { icon: '🤖', label: 'AI', query: 'AI' },
-            { icon: '✨', label: 'Glassmorphism', query: 'Glassmorphism' },
-            { icon: '⚡', label: 'gRPC', query: 'gRPC' },
-            { icon: '🎨', label: 'Color', query: 'Color' },
-            { icon: '🦀', label: 'Microservices', query: 'Microservices' },
-          ];
-          const trendLabel = dict.trending_topics || 'TRENDING';
-          suggestionsList.innerHTML = `
-            <div class="suggestions-section-label">${trendLabel}</div>
-            <div class="suggestions-trending-row">
-              ${trending.map(t => `
-                <span class="suggestion-chip" data-query="${t.query}">
-                  ${t.icon} ${t.label}
-                </span>`).join('')}
-            </div>
-          `;
-        } else {
-          // Filter posts matching query — show as compact rows
-          const matches = [];
-          Object.values(data).forEach(post => {
-            const title = (post[`title_${currentLang}`] || post.title_en || '').toLowerCase();
-            const author = (post.author_name || '').toLowerCase();
-            const cat = (post.category || '').toLowerCase();
-            if (title.includes(qLower) || author.includes(qLower) || cat.includes(qLower)) {
-              matches.push({
-                label: post[`title_${currentLang}`] || post.title_en,
-                sub: post.author_name,
-                query: post[`title_${currentLang}`] || post.title_en
-              });
-            }
-          });
-          if (matches.length === 0) {
-            suggestionsList.innerHTML = `
-              <div class="suggestion-item text-muted" style="pointer-events:none">
-                <i class="bi bi-search-x"></i>
-                <span>${dict.no_results || 'No results found'} — "${q}"</span>
-              </div>`;
-          } else {
-            suggestionsList.innerHTML = matches.slice(0, 6).map(m => `
-              <div class="suggestion-item" data-query="${m.query}">
-                <i class="bi bi-search text-muted" style="font-size:0.8rem;flex-shrink:0"></i>
-                <span class="suggestion-title">${m.label}</span>
-                ${m.sub ? `<span class="suggestion-sub">${m.sub}</span>` : ''}
-              </div>`).join('');
-          }
-        }
-
-        // Bind click events — chips AND items
-        const bindClick = (el) => {
-          el.addEventListener('mousedown', (e) => {
-            e.preventDefault();
-            const q = el.getAttribute('data-query');
-            searchInput.value = q;
-            currentQuery = q;
-            clearBtn.classList.remove('d-none');
-            hideSuggestions();
-            const newUrl = window.location.pathname + `?q=${encodeURIComponent(q)}`;
-            window.history.pushState({path: newUrl}, '', newUrl);
-            renderExploreResults(q, currentTab);
-          });
-        };
-        suggestionsList.querySelectorAll('.suggestion-item[data-query], .suggestion-chip[data-query]').forEach(bindClick);
-      }
-
-      let blurTimeout;
-      function showSuggestions() {
-        if (blurTimeout) clearTimeout(blurTimeout);
-        suggestionsPanel.classList.remove('d-none');
-        buildSuggestions(searchInput.value);
-      }
-
-      function hideSuggestions() {
-        suggestionsPanel.classList.add('d-none');
-      }
-
-      searchInput.addEventListener('focus', showSuggestions);
-      searchInput.addEventListener('input', () => {
-        buildSuggestions(searchInput.value);
-      });
-      searchInput.addEventListener('blur', () => {
-        blurTimeout = setTimeout(hideSuggestions, 150);
-      });
-
-      // Prevent the global search modal from opening on this input
-      searchInput.addEventListener('click', e => e.stopPropagation());
+      
     });
 
     function triggerExploreQuery(keyword) {

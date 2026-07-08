@@ -356,11 +356,7 @@ function initGlobalSearchModal() {
           </div>
         </div>
 
-        <!-- Trending Topics (Default View) -->
-        <div id="modalTrendingContainer">
-          <div class="search-section-title" id="modalSectionTrending" data-i18n="trending_topics">Trending topics</div>
-          <div class="search-trending-list" id="modalTrendingList"></div>
-        </div>
+        
 
         <!-- Live Search Results (Hidden until typing) -->
         <div id="modalResultsContainer" style="display: none;">
@@ -376,7 +372,6 @@ function initGlobalSearchModal() {
   const searchInput = document.getElementById('modalSearchInput');
   const closeBtn = document.getElementById('modalSearchClose');
   const peopleContainer = document.getElementById('modalPeopleContainer');
-  const trendingContainer = document.getElementById('modalTrendingContainer');
   const resultsContainer = document.getElementById('modalResultsContainer');
   const resultsList = document.getElementById('modalResultsList');
 
@@ -385,7 +380,6 @@ function initGlobalSearchModal() {
     modalDiv.classList.add('show');
     document.body.style.overflow = 'hidden'; // Prevent background scrolling
     updateModalLanguage();
-    if (typeof window.renderTrendingWidgets === 'function') window.renderTrendingWidgets();
     setTimeout(() => {
       searchInput.focus();
     }, 100);
@@ -485,13 +479,13 @@ function initGlobalSearchModal() {
 
     if (!query) {
       if (peopleContainer) peopleContainer.style.display = 'block';
-      trendingContainer.style.display = 'block';
+      
       resultsContainer.style.display = 'none';
       return;
     }
 
     if (peopleContainer) peopleContainer.style.display = 'none';
-    trendingContainer.style.display = 'none';
+    
     resultsContainer.style.display = 'block';
     resultsList.innerHTML = '';
 
@@ -573,11 +567,8 @@ function initGlobalSearchModal() {
       searchInput.setAttribute('placeholder', dict.search_placeholder_modal);
     }
     const peopleTitle = document.getElementById('modalSectionPeople');
-    const trendingTitle = document.getElementById('modalSectionTrending');
     if (peopleTitle && dict.recommended_people) peopleTitle.textContent = dict.recommended_people;
-    if (trendingTitle && dict.trending_topics) trendingTitle.textContent = dict.trending_topics;
-    if (typeof window.renderTrendingWidgets === 'function') window.renderTrendingWidgets();
-  }
+    }
 }
 
 /**
@@ -722,8 +713,7 @@ window.renderTrendingWidgets = function() {
 // Auto run on load
 document.addEventListener('DOMContentLoaded', () => {
   setTimeout(() => {
-    if (typeof window.renderTrendingWidgets === 'function') window.renderTrendingWidgets();
-  }, 100);
+    }, 100);
 });
 
 window.renderFeedPosts = function(containerId, dataObj, categoryFilter = 'all') {
