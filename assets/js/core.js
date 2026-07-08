@@ -598,10 +598,6 @@ document.addEventListener('DOMContentLoaded', () => {
   };
   window.uiTranslations = uiTranslations;
 
-  const preferredLang = localStorage.getItem('preferredLanguage') || 'en';
-  applyLanguageFilter(preferredLang);
-  applyUiTranslations(preferredLang);
-
   function applyUiTranslations(lang = localStorage.getItem('preferredLanguage') || 'en') {
     const dict = uiTranslations[lang] || uiTranslations.en;
 
@@ -989,6 +985,10 @@ document.addEventListener('DOMContentLoaded', () => {
   window.saveCommentsForPost = saveCommentsForPost;
   window.getCommentTranslation = getCommentTranslation;
   window.syncFeedCommentCounts = syncFeedCommentCounts;
+
+  const preferredLang = localStorage.getItem('preferredLanguage') || 'en';
+  applyLanguageFilter(preferredLang);
+  applyUiTranslations(preferredLang);
 
   // ========================================================
   // PATH & ROUTING RESOLUTION FOR STATIC WORKSPACE
