@@ -224,6 +224,8 @@ document.addEventListener('DOMContentLoaded', () => {
       total_users: "Total Users",
       total_articles: "Total Articles",
       ai_translated: "AI Translated",
+      total_comments: "Total Comments",
+      total_likes: "Total Likes",
       queue_status: "AI Translation Queue",
       user_management: "User Management",
       category_management: "Category Management",
@@ -240,7 +242,7 @@ document.addEventListener('DOMContentLoaded', () => {
       active: "Active",
       banned: "Banned",
       translation_coverage: "Translation Coverage",
-      admin_desc: "Overview of users, categories, translation metrics, and automated AI queues.",
+      admin_desc: "Overview of users, articles, total comments, and community engagement.",
       col_article: "Article",
       col_author: "Author",
       col_source: "Source",
@@ -289,7 +291,36 @@ document.addEventListener('DOMContentLoaded', () => {
       already_have_account: "Already have an account?",
       quick_demo_login: "QUICK DEMO LOGIN",
       register_here: "Register here",
-      login_here: "Log in here"
+      login_here: "Log in here",
+      post_list: "Article List",
+      translated_articles: "Translated Articles:",
+      make_primary: "Make Primary",
+      danger_warning: "Data Destruction Warning",
+      delete_lang_desc1: "You are about to delete the entire language ",
+      delete_lang_desc2: "This will permanently delete ",
+      delete_lang_desc3: " translated articles. This action cannot be undone!",
+      delete_lang_desc4: "To proceed, please type the exact language name in the box below:",
+      type_lang_name: "Type language name...",
+      cancel_safe: "Cancel Safely",
+      confirm_delete: "Confirm Permanent Deletion",
+      user_details: "User Details",
+      activity_info: "Activity & Info",
+      joined_date: "Joined Date",
+      articles_published: "Articles Published",
+      joined: "Joined",
+      views_over_time: "Views over time",
+      top_languages: "Top Languages",
+      lang_vi: "Vietnamese",
+      lang_zh: "Chinese",
+      lang_en: "English",
+      top_categories: "Top Categories",
+      cat_ai_auto: "AI & Automation",
+      cat_web_dev: "Web Development",
+      cat_ui_ux: "UI/UX Design",
+      new_users_growth: "New Users Growth",
+      mon: "Mon", tue: "Tue", wed: "Wed", thu: "Thu", fri: "Fri", sat: "Sat", sun: "Sun",
+      post_ai_1: "The Future of AI Agent Programming in 2026",
+      post_ai_2: "Next-Gen LLM Reasoning & Tool Use in 2026"
     },
     vi: {
       home: "Trang chủ",
@@ -346,7 +377,7 @@ document.addEventListener('DOMContentLoaded', () => {
       translate_comment: "Dịch",
       show_original: "Hiển thị nội dung gốc",
       related_posts: "Các bài viết liên quan",
-      related_posts_in: "Bài viết liên quan trong chuyên mục",
+      related_posts_in: "Bài viết liên quan trong danh mục",
       no_comments: "Chưa có bình luận nào. Hãy là người đầu tiên bình luận!",
       reply: "Trả lời",
       cancel: "Hủy",
@@ -363,18 +394,20 @@ document.addEventListener('DOMContentLoaded', () => {
       delete_confirm_reply: "Bạn có chắc muốn xóa câu trả lời này?",
       comment_edited: "(đã chỉnh sửa)",
       reset_demo: "Khôi phục dữ liệu mẫu",
-      search_placeholder_modal: "Tìm kiếm tác giả, bài viết hoặc chuyên mục...",
+      search_placeholder_modal: "Tìm kiếm tác giả, bài viết hoặc danh mục...",
       trending_topics: "Chủ đề đang hot",
-      recommended_people: "Tác giả & Chuyên mục",
+      recommended_people: "Tác giả & Danh mục",
       no_results: "Không tìm thấy kết quả phù hợp.",
       // Admin Panel
       admin_dashboard: "Bảng điều khiển Admin",
       manage_users: "Quản lý thành viên",
-      manage_categories: "Quản lý chuyên mục",
+      manage_categories: "Quản lý danh mục",
       manage_languages: "Quản lý ngôn ngữ",
       total_users: "Tổng số thành viên",
       total_articles: "Tổng số bài viết",
       ai_translated: "Đã dịch bằng AI",
+      total_comments: "Tổng bình luận",
+      total_likes: "Tổng lượt thích",
       queue_status: "Hàng đợi biên dịch AI",
       user_management: "Quản lý thành viên",
       category_management: "Quản lý danh mục",
@@ -382,7 +415,7 @@ document.addEventListener('DOMContentLoaded', () => {
       search_user_placeholder: "Tìm thành viên theo tên hoặc email...",
       search_cat_placeholder: "Tìm kiếm danh mục...",
       add_category: "Thêm danh mục",
-      edit_category: "Sửa chuyên mục",
+      edit_category: "Sửa danh mục",
       category_name: "Tên danh mục",
       slug: "Slug (Đường dẫn)",
       actions: "Thao tác",
@@ -392,7 +425,7 @@ document.addEventListener('DOMContentLoaded', () => {
       banned: "Bị khóa",
       save_changes: "Lưu thay đổi",
       translation_coverage: "Mức độ phủ dịch",
-      admin_desc: "Tổng quan về thành viên, chuyên mục, hiệu suất dịch thuật và hàng đợi dịch AI tự động.",
+      admin_desc: "Tổng quan về thành viên, bài viết, bình luận và mức độ tương tác của cộng đồng.",
       col_article: "Bài viết",
       col_author: "Tác giả",
       col_source: "Nguồn",
@@ -414,7 +447,7 @@ document.addEventListener('DOMContentLoaded', () => {
       col_posts_count: "Tổng số bài viết",
       cat_name_placeholder: "Nhập tên danh mục...",
       slug_auto_placeholder: "Đường dẫn tự động tạo...",
-      slug_help: "Đường dẫn liên kết (Slug) sẽ dùng để định tuyến chuyên mục bài viết.",
+      slug_help: "Đường dẫn liên kết (Slug) sẽ dùng để định tuyến danh mục bài viết.",
       lang_desc_page: "Cấu hình ngôn ngữ hệ thống và theo dõi tiến độ dịch thuật tự động của AI.",
       add_language: "Thêm ngôn ngữ",
       col_code: "Mã",
@@ -441,7 +474,36 @@ document.addEventListener('DOMContentLoaded', () => {
       already_have_account: "Đã có tài khoản?",
       quick_demo_login: "ĐĂNG NHẬP NHANH DEMO",
       register_here: "Đăng ký tại đây",
-      login_here: "Đăng nhập tại đây"
+      login_here: "Đăng nhập tại đây",
+      post_list: "Danh sách bài viết",
+      translated_articles: "Bài viết đã dịch:",
+      make_primary: "Mặc định",
+      danger_warning: "Cảnh báo Hủy diệt Dữ liệu",
+      delete_lang_desc1: "Bạn đang chuẩn bị xóa toàn bộ ngôn ngữ ",
+      delete_lang_desc2: "Việc này sẽ xóa sạch ",
+      delete_lang_desc3: " bài viết đã được dịch. Hành động này không thể hoàn tác!",
+      delete_lang_desc4: "Để tiếp tục, vui lòng gõ chính xác tên ngôn ngữ vào ô bên dưới:",
+      type_lang_name: "Gõ tên ngôn ngữ...",
+      cancel_safe: "Hủy bỏ an toàn",
+      confirm_delete: "Đồng ý Xóa vĩnh viễn",
+      user_details: "Chi tiết Người dùng",
+      activity_info: "Hoạt động & Thông tin",
+      joined_date: "Ngày tham gia",
+      articles_published: "Bài viết đã xuất bản",
+      joined: "Tham gia",
+      views_over_time: "Lượt xem theo thời gian",
+      top_languages: "Ngôn ngữ phổ biến",
+      lang_vi: "Tiếng Việt",
+      lang_zh: "Tiếng Trung",
+      lang_en: "Tiếng Anh",
+      top_categories: "Danh mục phổ biến",
+      cat_ai_auto: "Trí tuệ nhân tạo (AI)",
+      cat_web_dev: "Lập trình Web",
+      cat_ui_ux: "Thiết kế UI/UX",
+      new_users_growth: "Tăng trưởng Người dùng",
+      mon: "T2", tue: "T3", wed: "T4", thu: "T5", fri: "T6", sat: "T7", sun: "CN",
+      post_ai_1: "Tương lai của Lập trình Tác tử AI năm 2026",
+      post_ai_2: "Suy luận LLM thế hệ mới & Sử dụng Công cụ năm 2026"
     },
     zh: {
       home: "首页",
@@ -527,6 +589,8 @@ document.addEventListener('DOMContentLoaded', () => {
       total_users: "总用户数",
       total_articles: "总文章数",
       ai_translated: "AI 已翻译",
+      total_comments: "总评论数",
+      total_likes: "总点赞数",
       queue_status: "AI 翻译队列",
       user_management: "用户管理",
       category_management: "分类管理",
@@ -544,7 +608,7 @@ document.addEventListener('DOMContentLoaded', () => {
       banned: "已封禁",
       save_changes: "保存更改",
       translation_coverage: "翻译覆盖率",
-      admin_desc: "用户、分类、翻译指标 and 自动 AI 队列的总体概述。",
+      admin_desc: "用户、文章、评论数量与社区互动指标总览。",
       col_article: "文章",
       col_author: "作者",
       col_source: "源语言",
@@ -593,10 +657,40 @@ document.addEventListener('DOMContentLoaded', () => {
       already_have_account: "已有账号？",
       quick_demo_login: "快速测试登录",
       register_here: "点击注册",
-      login_here: "点击登录"
+      login_here: "点击登录",
+      post_list: "文章列表",
+      translated_articles: "已翻译文章：",
+      make_primary: "设为默认",
+      danger_warning: "数据销毁警告",
+      delete_lang_desc1: "您即将删除整个语言 ",
+      delete_lang_desc2: "这将永久删除 ",
+      delete_lang_desc3: " 篇已翻译的文章。此操作无法撤销！",
+      delete_lang_desc4: "要继续，请在下面的框中输入确切的语言名称：",
+      type_lang_name: "输入语言名称...",
+      cancel_safe: "安全取消",
+      confirm_delete: "确认永久删除",
+      user_details: "用户详情",
+      activity_info: "活动与信息",
+      joined_date: "加入日期",
+      articles_published: "已发布文章",
+      joined: "加入",
+      views_over_time: "浏览量趋势",
+      top_languages: "热门语言",
+      lang_vi: "越南语",
+      lang_zh: "中文",
+      lang_en: "英语",
+      top_categories: "热门分类",
+      cat_ai_auto: "人工智能与自动化",
+      cat_web_dev: "Web开发",
+      cat_ui_ux: "UI/UX设计",
+      new_users_growth: "新用户增长",
+      mon: "周一", tue: "周二", wed: "周三", thu: "周四", fri: "周五", sat: "周六", sun: "周日",
+      post_ai_1: "2026 年 AI 代理编程的未来",
+      post_ai_2: "2026 年下一代 LLM 推理与工具使用"
     }
   };
   window.uiTranslations = uiTranslations;
+  window.applyUiTranslations = applyUiTranslations;
 
   function applyUiTranslations(lang = localStorage.getItem('preferredLanguage') || 'en') {
     const dict = uiTranslations[lang] || uiTranslations.en;
@@ -997,7 +1091,7 @@ document.addEventListener('DOMContentLoaded', () => {
   let loginUrl = 'pages/guest/login.html';
   let writeUrl = 'pages/owner/create-post.html';
   let homeUrl = 'pages/guest/home.html';
-  
+
   if (path.includes('/pages/guest/')) {
     loginUrl = 'login.html';
     writeUrl = '../owner/create-post.html';
@@ -1085,9 +1179,9 @@ document.addEventListener('DOMContentLoaded', () => {
     e.preventDefault();
     localStorage.removeItem('currentUser');
     const currentLang = localStorage.getItem('preferredLanguage') || 'en';
-    const msg = currentLang === 'vi' ? 'Đăng xuất thành công!' : 
-                currentLang === 'zh' ? '登出成功！' : 
-                'Signed out successfully!';
+    const msg = currentLang === 'vi' ? 'Đăng xuất thành công!' :
+      currentLang === 'zh' ? '登出成功！' :
+        'Signed out successfully!';
     alert(msg);
     window.location.href = homeUrl;
   }
@@ -1119,9 +1213,9 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!localStorage.getItem('currentUser')) {
         e.preventDefault();
         const lang = localStorage.getItem('preferredLanguage') || 'en';
-        const msg = lang === 'vi' ? 'Vui lòng đăng nhập trước khi viết bài!' : 
-                    lang === 'zh' ? '请先登录以撰写文章！' : 
-                    'Please log in first to write a post!';
+        const msg = lang === 'vi' ? 'Vui lòng đăng nhập trước khi viết bài!' :
+          lang === 'zh' ? '请先登录以撰写文章！' :
+            'Please log in first to write a post!';
         alert(msg);
         window.location.href = loginUrl;
       }
@@ -1134,9 +1228,9 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!localStorage.getItem('currentUser')) {
         e.preventDefault();
         const lang = localStorage.getItem('preferredLanguage') || 'en';
-        const msg = lang === 'vi' ? 'Vui lòng đăng nhập trước khi viết bài!' : 
-                    lang === 'zh' ? '请先登录以撰写文章！' : 
-                    'Please log in first to write a post!';
+        const msg = lang === 'vi' ? 'Vui lòng đăng nhập trước khi viết bài!' :
+          lang === 'zh' ? '请先登录以撰写文章！' :
+            'Please log in first to write a post!';
         alert(msg);
         window.location.href = loginUrl;
       }
@@ -1280,9 +1374,9 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       const registeredUsers = JSON.parse(localStorage.getItem('registered_users') || '[]');
-      const emailExists = registeredUsers.some(u => u.email.toLowerCase() === email.toLowerCase()) || 
-                          email.toLowerCase() === 'admin@mundiblog.com' || 
-                          email.toLowerCase() === 'elena@mundiblog.com';
+      const emailExists = registeredUsers.some(u => u.email.toLowerCase() === email.toLowerCase()) ||
+        email.toLowerCase() === 'admin@mundiblog.com' ||
+        email.toLowerCase() === 'elena@mundiblog.com';
 
       if (emailExists) {
         alertDiv.classList.remove('d-none');

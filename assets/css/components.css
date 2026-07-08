@@ -793,28 +793,6 @@ select.form-select-sm {
   flex-shrink: 0;
 }
 
-.item-language-flow {
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
-}
-
-.flow-arrow {
-  color: var(--text-muted);
-  font-size: 0.8rem;
-  opacity: 0.6;
-}
-
-/* Page-Specific Right Actions Alignment Grids */
-.queue-right-actions {
-  display: grid;
-  grid-template-columns: 240px 140px 40px;
-  align-items: center;
-  justify-items: start;
-}
-.queue-right-actions > *:last-child {
-  justify-self: end;
-}
 
 .users-right-actions {
   display: grid;
@@ -825,7 +803,7 @@ select.form-select-sm {
 
 .categories-right-actions {
   display: grid;
-  grid-template-columns: 120px 140px 80px;
+  grid-template-columns: 150px 140px 80px;
   align-items: center;
   justify-items: start;
 }
@@ -835,7 +813,7 @@ select.form-select-sm {
 
 .languages-right-actions {
   display: grid;
-  grid-template-columns: 180px 80px;
+  grid-template-columns: 140px 180px;
   align-items: center;
   justify-items: start;
 }
@@ -902,40 +880,6 @@ select.form-select-sm {
   box-shadow: 0 0 6px rgba(239, 68, 68, 0.4);
 }
 
-.status-dot-translating {
-  background-color: #f59e0b;
-  box-shadow: 0 0 6px rgba(245, 158, 11, 0.4);
-}
-
-/* Minimalist outlined language tags */
-.lang-tag {
-  font-size: 0.7rem;
-  font-weight: 700;
-  padding: 0.15rem 0.35rem;
-  border-radius: 4px;
-  border: 1px solid var(--border-color);
-  color: var(--text-muted);
-  text-transform: uppercase;
-  background-color: transparent;
-}
-
-.lang-tag-active {
-  color: #10b981;
-  border-color: rgba(16, 185, 129, 0.25);
-  background-color: rgba(16, 185, 129, 0.04);
-}
-
-.lang-tag-failed {
-  color: #ef4444;
-  border-color: rgba(239, 68, 68, 0.25);
-  background-color: rgba(239, 68, 68, 0.04);
-}
-
-.lang-tag-translating {
-  color: #f59e0b;
-  border-color: rgba(245, 158, 11, 0.25);
-  background-color: rgba(245, 158, 11, 0.04);
-}
 
 /* ==========================================================
    RESPONSIVE MOBILE STYLES FOR SUBSTACK FEED LAYOUT
@@ -953,17 +897,6 @@ select.form-select-sm {
     width: 100%;
   }
 
-  .queue-right-actions {
-    display: grid !important;
-    grid-template-columns: 130px 110px 30px;
-    width: 100%;
-    align-items: center;
-    justify-content: start;
-    gap: 1.25rem;
-    padding-top: 0.75rem;
-    border-top: 1px dashed var(--border-color);
-  }
-
   .users-right-actions {
     display: grid !important;
     grid-template-columns: 90px 140px;
@@ -977,7 +910,7 @@ select.form-select-sm {
 
   .categories-right-actions {
     display: grid !important;
-    grid-template-columns: 80px 130px 50px;
+    grid-template-columns: 140px 130px 50px;
     width: 100%;
     align-items: center;
     justify-content: start;
@@ -988,7 +921,7 @@ select.form-select-sm {
 
   .languages-right-actions {
     display: grid !important;
-    grid-template-columns: 160px 70px;
+    grid-template-columns: 120px 160px;
     width: 100%;
     align-items: center;
     justify-content: start;
@@ -997,10 +930,15 @@ select.form-select-sm {
     border-top: 1px dashed var(--border-color);
   }
 
-  .queue-right-actions > *:last-child,
   .users-right-actions > *:last-child,
   .categories-right-actions > *:last-child,
   .languages-right-actions > *:last-child {
     justify-self: auto;
   }
+}
+
+/* Custom Primary Switch */
+.form-check-input:checked {
+  background-color: var(--primary-color) !important;
+  border-color: var(--primary-color) !important;
 }
