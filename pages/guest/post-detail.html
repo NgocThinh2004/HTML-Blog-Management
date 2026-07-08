@@ -729,7 +729,7 @@
         if (root.replies && root.replies.length > 0) {
           repliesHtml += `<div class="comment-reply-list">`;
           root.replies.forEach(rep => {
-            const tagHtml = rep.replyTo ? `<span class="text-primary fw-semibold">@${rep.replyTo}</span> ` : '';
+            const tagHtml = (rep.replyTo && rep.replyTo !== root.author) ? `<span class="text-primary fw-semibold">@${rep.replyTo}</span> ` : '';
             
             let repTranslateBtnHtml = "";
             if (rep.lang && rep.lang !== currentLang) {

@@ -742,7 +742,7 @@ document.addEventListener('DOMContentLoaded', () => {
             time: "15 mins ago",
             content: "That is awesome to hear, Tuấn! What database load did you test it with?",
             lang: "en",
-            replyTo: "Hồ Quốc Tuấn",
+            replyTo: "",
             translations: {
               vi: "Thật tuyệt vời khi nghe điều đó, Tuấn! Bạn đã kiểm thử với tải cơ sở dữ liệu bao nhiêu?",
               zh: "太棒了，Tuấn！你使用的是多大的数据库负载进行测试的？"
@@ -810,7 +810,7 @@ document.addEventListener('DOMContentLoaded', () => {
             time: "1 hour ago",
             content: "Đúng vậy, mình áp dụng nguyên tắc số 4 và thấy UI cải thiện rõ rệt.",
             lang: "vi",
-            replyTo: "Elena Rostova",
+            replyTo: "",
             translations: {
               en: "Exactly, I applied principle #4 and saw clear UI improvement.",
               zh: "没错，我应用了原则#4，UI提升明显。"
