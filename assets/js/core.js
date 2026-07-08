@@ -697,7 +697,7 @@ document.addEventListener('DOMContentLoaded', () => {
       published_5h: "Đã đăng 5 giờ trước",
       views: "Lượt xem",
       view: "Xem",
-      trending_topics: "ĐANG HOT",,
+      trending_topics: "ĐANG HOT",
       password: "Mật khẩu",
       confirm_password: "Xác nhận mật khẩu",
       full_name: "Họ và tên",
@@ -1016,9 +1016,7 @@ document.addEventListener('DOMContentLoaded', () => {
     return dict[key] || category;
   };
 
-  const preferredLang = localStorage.getItem('preferredLanguage') || 'en';
-  applyLanguageFilter(preferredLang);
-  applyUiTranslations(preferredLang);
+
   window.applyUiTranslations = applyUiTranslations;
 
   function applyUiTranslations(lang = localStorage.getItem('preferredLanguage') || 'en') {
