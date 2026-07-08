@@ -279,7 +279,17 @@ document.addEventListener('DOMContentLoaded', () => {
       published_2h: "Published 2 hours ago",
       published_3d: "Published 3 days ago",
       published_1d: "Published 1 day ago",
-      published_5h: "Published 5 hours ago"
+      published_5h: "Published 5 hours ago",
+      password: "Password",
+      confirm_password: "Confirm Password",
+      full_name: "Full Name",
+      create_account: "Create Account",
+      register: "Register",
+      dont_have_account: "Don't have an account?",
+      already_have_account: "Already have an account?",
+      quick_demo_login: "QUICK DEMO LOGIN",
+      register_here: "Register here",
+      login_here: "Log in here"
     },
     vi: {
       home: "Trang chủ",
@@ -421,7 +431,17 @@ document.addEventListener('DOMContentLoaded', () => {
       published_2h: "Đã đăng 2 giờ trước",
       published_3d: "Đã đăng 3 ngày trước",
       published_1d: "Đã đăng 1 ngày trước",
-      published_5h: "Đã đăng 5 giờ trước"
+      published_5h: "Đã đăng 5 giờ trước",
+      password: "Mật khẩu",
+      confirm_password: "Xác nhận mật khẩu",
+      full_name: "Họ và tên",
+      create_account: "Tạo tài khoản",
+      register: "Đăng ký",
+      dont_have_account: "Chưa có tài khoản?",
+      already_have_account: "Đã có tài khoản?",
+      quick_demo_login: "ĐĂNG NHẬP NHANH DEMO",
+      register_here: "Đăng ký tại đây",
+      login_here: "Đăng nhập tại đây"
     },
     zh: {
       home: "首页",
@@ -563,7 +583,17 @@ document.addEventListener('DOMContentLoaded', () => {
       published_2h: "发布于 2 小时前",
       published_3d: "发布于 3 天前",
       published_1d: "发布于 1 天前",
-      published_5h: "发布于 5 小时前"
+      published_5h: "发布于 5 小时前",
+      password: "密码",
+      confirm_password: "确认密码",
+      full_name: "姓名",
+      create_account: "创建账号",
+      register: "注册",
+      dont_have_account: "还没有账号？",
+      already_have_account: "已有账号？",
+      quick_demo_login: "快速测试登录",
+      register_here: "点击注册",
+      login_here: "点击登录"
     }
   };
   window.uiTranslations = uiTranslations;
@@ -961,39 +991,319 @@ document.addEventListener('DOMContentLoaded', () => {
   window.syncFeedCommentCounts = syncFeedCommentCounts;
 
   // ========================================================
-  // Unified Create Action Gate (Auth check routing)
+  // PATH & ROUTING RESOLUTION FOR STATIC WORKSPACE
   // ========================================================
-  const isSubFolder = window.location.pathname.includes('/pages/');
-  const loginUrl = `${isSubFolder ? '../guest/' : 'pages/guest/'}login.html`;
-  const writeUrl = `${isSubFolder ? '../owner/' : 'pages/owner/'}create-post.html`;
+  const path = window.location.pathname;
+  let loginUrl = 'pages/guest/login.html';
+  let writeUrl = 'pages/owner/create-post.html';
+  let homeUrl = 'pages/guest/home.html';
+  
+  if (path.includes('/pages/guest/')) {
+    loginUrl = 'login.html';
+    writeUrl = '../owner/create-post.html';
+    homeUrl = 'home.html';
+  } else if (path.includes('/pages/admin/')) {
+    loginUrl = '../guest/login.html';
+    writeUrl = '../owner/create-post.html';
+    homeUrl = '../guest/home.html';
+  } else if (path.includes('/pages/owner/')) {
+    loginUrl = '../guest/login.html';
+    writeUrl = 'create-post.html';
+    homeUrl = '../guest/home.html';
+  }
 
-  // 1. Sidebar Create Button
-  const createBtn = document.querySelector('.sidebar-create-btn') || document.getElementById('sidebarCreateBtn');
-  if (createBtn) {
-    createBtn.addEventListener('click', (e) => {
-      e.preventDefault();
-      const currentUser = localStorage.getItem('currentUser');
-      if (currentUser) {
-        window.location.href = writeUrl;
-      } else {
-        alert('Please log in first to write a post!');
+  // ========================================================
+  // SESSION STATE & DYNAMIC ROLE-BASED UI MANAGEMENT
+  // ========================================================
+  const currentUserJson = localStorage.getItem('currentUser');
+  const isAdmin = currentUserJson && JSON.parse(currentUserJson).role === 'admin';
+
+  // 1. Dynamic Profile & Feed Avatar Syncing
+  const defaultPlaceholder = `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23b0bac5"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/></svg>`;
+
+  if (currentUserJson) {
+    const user = JSON.parse(currentUserJson);
+    if (user.avatar) {
+      // A. Replace Profile nav item icon or update existing profile image with user avatar
+      document.querySelectorAll('a[href*="profile.html"]').forEach(link => {
+        const existingImg = link.querySelector('img');
+        if (existingImg) {
+          existingImg.src = user.avatar;
+          existingImg.style.removeProperty('opacity');
+        } else {
+          const icon = link.querySelector('i.bi-person') || link.querySelector('i.bi-person-fill');
+          if (icon) {
+            const img = document.createElement('img');
+            img.src = user.avatar;
+            img.className = 'rounded-circle border';
+            img.style.width = '20px';
+            img.style.height = '20px';
+            img.style.objectFit = 'cover';
+            img.style.marginRight = '0.95rem';
+            img.alt = user.name || 'Avatar';
+            icon.replaceWith(img);
+          }
+        }
+      });
+      // B. Update Quick Draft Avatar on Feed
+      const draftAvatar = document.getElementById('quickDraftAvatar');
+      if (draftAvatar) {
+        draftAvatar.src = user.avatar;
+        draftAvatar.style.removeProperty('opacity');
+      }
+    }
+  } else {
+    // If not logged in, set to grey silhouette placeholder
+    document.querySelectorAll('a[href*="profile.html"] img.rounded-circle').forEach(img => {
+      img.src = defaultPlaceholder;
+      img.style.opacity = '0.6';
+    });
+    const draftAvatar = document.getElementById('quickDraftAvatar');
+    if (draftAvatar) {
+      draftAvatar.src = defaultPlaceholder;
+      draftAvatar.style.opacity = '0.6';
+    }
+  }
+
+  // 2. Hide / Show Admin Panel link based on role
+  document.querySelectorAll('a[href*="admin/"]').forEach(link => {
+    if (!isAdmin) {
+      link.style.setProperty('display', 'none', 'important');
+      const parentLi = link.closest('li');
+      if (parentLi) {
+        parentLi.style.setProperty('display', 'none', 'important');
+      }
+    } else {
+      link.style.removeProperty('display');
+      const parentLi = link.closest('li');
+      if (parentLi) parentLi.style.removeProperty('display');
+    }
+  });
+
+  // 3. Handle Sign Out vs Log in Menu Toggles
+  function handleSignOut(e) {
+    e.preventDefault();
+    localStorage.removeItem('currentUser');
+    const currentLang = localStorage.getItem('preferredLanguage') || 'en';
+    const msg = currentLang === 'vi' ? 'Đăng xuất thành công!' : 
+                currentLang === 'zh' ? '登出成功！' : 
+                'Signed out successfully!';
+    alert(msg);
+    window.location.href = homeUrl;
+  }
+
+  const signOutLinks = document.querySelectorAll('#signOutBtn, #mobileSignOutBtn');
+  signOutLinks.forEach(link => {
+    if (currentUserJson) {
+      link.style.removeProperty('display');
+      link.classList.add('text-danger');
+      link.innerHTML = `<i class="bi bi-box-arrow-right me-2"></i> <span data-i18n="sign_out">Sign Out</span>`;
+      link.addEventListener('click', handleSignOut);
+    } else {
+      link.classList.remove('text-danger');
+      link.innerHTML = `<i class="bi bi-box-arrow-in-right me-2"></i> <span data-i18n="login">Log in</span>`;
+      link.setAttribute('href', loginUrl);
+      const clone = link.cloneNode(true);
+      link.replaceWith(clone);
+    }
+  });
+
+  // Re-translate dynamic auth links
+  if (typeof applyUiTranslations === 'function') {
+    applyUiTranslations();
+  }
+
+  // 4. Intercept Write post actions if not logged in
+  document.querySelectorAll('a[href*="create-post.html"]').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      if (!localStorage.getItem('currentUser')) {
+        e.preventDefault();
+        const lang = localStorage.getItem('preferredLanguage') || 'en';
+        const msg = lang === 'vi' ? 'Vui lòng đăng nhập trước khi viết bài!' : 
+                    lang === 'zh' ? '请先登录以撰写文章！' : 
+                    'Please log in first to write a post!';
+        alert(msg);
+        window.location.href = loginUrl;
+      }
+    });
+  });
+
+  const quickDraftCard = document.getElementById('quickDraftCard');
+  if (quickDraftCard) {
+    quickDraftCard.addEventListener('click', (e) => {
+      if (!localStorage.getItem('currentUser')) {
+        e.preventDefault();
+        const lang = localStorage.getItem('preferredLanguage') || 'en';
+        const msg = lang === 'vi' ? 'Vui lòng đăng nhập trước khi viết bài!' : 
+                    lang === 'zh' ? '请先登录以撰写文章！' : 
+                    'Please log in first to write a post!';
+        alert(msg);
         window.location.href = loginUrl;
       }
     });
   }
 
-  // 2. Homepage Quick Draft Card
-  const quickDraftCard = document.getElementById('quickDraftCard');
-  if (quickDraftCard) {
-    quickDraftCard.addEventListener('click', (e) => {
+  // ========================================================
+  // LOGIN FORM CONTROLLER
+  // ========================================================
+  const loginForm = document.getElementById('loginForm');
+  if (loginForm) {
+    const toggleBtn = document.getElementById('togglePasswordBtn');
+    const pwdInput = document.getElementById('loginPassword');
+    if (toggleBtn && pwdInput) {
+      toggleBtn.addEventListener('click', () => {
+        const isPwd = pwdInput.type === 'password';
+        pwdInput.type = isPwd ? 'text' : 'password';
+        toggleBtn.querySelector('i').className = isPwd ? 'bi bi-eye-slash' : 'bi bi-eye';
+      });
+    }
+
+    const elenaBtn = document.getElementById('quickLoginElena');
+    const adminBtn = document.getElementById('quickLoginAdmin');
+    if (elenaBtn) {
+      elenaBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        document.getElementById('loginEmail').value = 'elena@mundiblog.com';
+        document.getElementById('loginPassword').value = 'password123';
+        loginForm.dispatchEvent(new Event('submit'));
+      });
+    }
+    if (adminBtn) {
+      adminBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        document.getElementById('loginEmail').value = 'admin@mundiblog.com';
+        document.getElementById('loginPassword').value = 'admin123';
+        loginForm.dispatchEvent(new Event('submit'));
+      });
+    }
+
+    loginForm.addEventListener('submit', (e) => {
       e.preventDefault();
-      const currentUser = localStorage.getItem('currentUser');
-      if (currentUser) {
-        window.location.href = writeUrl;
-      } else {
-        alert('Please log in first to write a post!');
-        window.location.href = loginUrl;
+      const email = document.getElementById('loginEmail').value.trim();
+      const password = document.getElementById('loginPassword').value;
+      const alertDiv = document.getElementById('authAlert');
+      const alertText = document.getElementById('authAlertText');
+
+      if (!email || !password) {
+        alertDiv.classList.remove('d-none');
+        alertText.textContent = 'Please fill in all fields!';
+        return;
       }
+
+      const registeredUsers = JSON.parse(localStorage.getItem('registered_users') || '[]');
+      const mockUsers = [
+        {
+          email: 'admin@mundiblog.com',
+          password: 'admin123',
+          name: 'System Admin',
+          role: 'admin',
+          avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=80&h=80'
+        },
+        {
+          email: 'elena@mundiblog.com',
+          password: 'password123',
+          name: 'Elena Rostova',
+          role: 'member',
+          avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=80&h=80'
+        }
+      ];
+
+      const allUsers = [...mockUsers, ...registeredUsers];
+      const matchedUser = allUsers.find(u => u.email.toLowerCase() === email.toLowerCase() && u.password === password);
+
+      if (matchedUser) {
+        localStorage.setItem('currentUser', JSON.stringify({
+          email: matchedUser.email,
+          name: matchedUser.name,
+          role: matchedUser.role,
+          avatar: matchedUser.avatar
+        }));
+        alertDiv.classList.add('d-none');
+        window.location.href = 'home.html';
+      } else {
+        alertDiv.classList.remove('d-none');
+        alertText.textContent = 'Invalid email or password!';
+      }
+    });
+  }
+
+  // ========================================================
+  // REGISTER FORM CONTROLLER
+  // ========================================================
+  const registerForm = document.getElementById('registerForm');
+  if (registerForm) {
+    const pwd1 = document.getElementById('regPassword');
+    const pwd2 = document.getElementById('regConfirmPassword');
+    const toggle1 = document.getElementById('togglePasswordBtn1');
+    const toggle2 = document.getElementById('togglePasswordBtn2');
+
+    if (toggle1 && pwd1) {
+      toggle1.addEventListener('click', () => {
+        const isPwd = pwd1.type === 'password';
+        pwd1.type = isPwd ? 'text' : 'password';
+        toggle1.querySelector('i').className = isPwd ? 'bi bi-eye-slash' : 'bi bi-eye';
+      });
+    }
+    if (toggle2 && pwd2) {
+      toggle2.addEventListener('click', () => {
+        const isPwd = pwd2.type === 'password';
+        pwd2.type = isPwd ? 'text' : 'password';
+        toggle2.querySelector('i').className = isPwd ? 'bi bi-eye-slash' : 'bi bi-eye';
+      });
+    }
+
+    registerForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const name = document.getElementById('regName').value.trim();
+      const email = document.getElementById('regEmail').value.trim();
+      const password = document.getElementById('regPassword').value;
+      const confirmPwd = document.getElementById('regConfirmPassword').value;
+      const alertDiv = document.getElementById('authAlert');
+      const alertText = document.getElementById('authAlertText');
+
+      if (!name || !email || !password || !confirmPwd) {
+        alertDiv.classList.remove('d-none');
+        alertText.textContent = 'Please fill in all fields!';
+        return;
+      }
+
+      if (password.length < 6) {
+        alertDiv.classList.remove('d-none');
+        alertText.textContent = 'Password must be at least 6 characters!';
+        return;
+      }
+
+      if (password !== confirmPwd) {
+        alertDiv.classList.remove('d-none');
+        alertText.textContent = 'Passwords do not match!';
+        return;
+      }
+
+      const registeredUsers = JSON.parse(localStorage.getItem('registered_users') || '[]');
+      const emailExists = registeredUsers.some(u => u.email.toLowerCase() === email.toLowerCase()) || 
+                          email.toLowerCase() === 'admin@mundiblog.com' || 
+                          email.toLowerCase() === 'elena@mundiblog.com';
+
+      if (emailExists) {
+        alertDiv.classList.remove('d-none');
+        alertText.textContent = 'Email is already registered!';
+        return;
+      }
+
+      const newUser = {
+        name,
+        email,
+        password,
+        role: 'member',
+        avatar: `https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=80&h=80`
+      };
+
+      registeredUsers.push(newUser);
+      localStorage.setItem('registered_users', JSON.stringify(registeredUsers));
+
+      alertDiv.classList.add('d-none');
+      alert('Registration successful! Redirecting to log in...');
+      window.location.href = 'login.html';
     });
   }
 });
