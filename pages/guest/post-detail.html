@@ -195,60 +195,7 @@
     <main class="app-main-content">
       
       <!-- COLUMN 1: LEFT SIDEBAR NAVIGATION -->
-      <aside class="left-sidebar">
-        <div>
-          <!-- Substack Logo -->
-          <div class="substack-logo-container">
-            <a href="home.html" class="text-decoration-none d-flex align-items-center gap-2">
-              <i class="bi bi-bookmark-fill substack-logo"></i>
-              <span class="fs-5 fw-bold text-main" style="letter-spacing: -0.02em;">MundiBlog</span>
-            </a>
-          </div>
-          
-          <!-- Navigation menu -->
-          <nav class="sidebar-nav">
-            <a href="home.html" class="sidebar-nav-item">
-              <i class="bi bi-house-door"></i> <span data-i18n="home">Home</span>
-            </a>
-            <a href="#" class="sidebar-nav-item">
-              <i class="bi bi-inbox"></i> <span data-i18n="inbox">Inbox</span>
-            </a>
-            <a href="#" class="sidebar-nav-item">
-              <i class="bi bi-heart"></i> <span data-i18n="liked_posts">Liked Posts</span>
-            </a>
-            <a href="../owner/my-posts.html" class="sidebar-nav-item">
-              <i class="bi bi-journal-text"></i> <span data-i18n="my_articles">My Articles</span>
-            </a>
-            <a href="about.html" class="sidebar-nav-item">
-              <i class="bi bi-info-circle"></i> <span data-i18n="about">About</span>
-            </a>
-            <a href="../owner/profile.html" class="sidebar-nav-item">
-              <i class="bi bi-person"></i> <span data-i18n="profile">Profile</span>
-            </a>
-          </nav>
-          
-          <a href="../owner/create-post.html" class="sidebar-create-btn">
-            <span data-i18n="create">Create</span> <i class="bi bi-plus-lg"></i>
-          </a>
-        </div>
-        
-        <!-- Bottom Section: Only More Dropdown (Clean Substack style) -->
-        <div class="sidebar-footer-menu">
-          <div class="dropdown">
-            <button class="btn btn-link text-decoration-none text-main d-flex align-items-center gap-2 p-1.5 w-100 border-0 text-start" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-              <i class="bi bi-list fs-5"></i>
-              <span class="fw-medium" data-i18n="more">More</span>
-            </button>
-            <ul class="dropdown-menu shadow border-light-subtle">
-              <li><a class="dropdown-item py-2" href="settings.html"><i class="bi bi-gear me-2"></i> <span data-i18n="settings">Settings</span></a></li>
-              <li><a class="dropdown-item py-2" href="../admin/dashboard.html" id="adminPanelLink"><i class="bi bi-speedometer2 me-2"></i> <span data-i18n="admin_panel">Admin Panel</span></a></li>
-              <li><a class="dropdown-item py-2" href="../owner/change-password.html"><i class="bi bi-shield-lock me-2"></i> <span data-i18n="security">Security</span></a></li>
-              <li><hr class="dropdown-divider"></li>
-              <li><a class="dropdown-item py-2 text-danger" href="#" id="signOutBtn"><i class="bi bi-box-arrow-right me-2"></i> <span data-i18n="sign_out">Sign Out</span></a></li>
-            </ul>
-          </div>
-        </div>
-      </aside>
+      <aside class="left-sidebar"></aside>
 
       <!-- COLUMN 2: CENTER WORKSPACE FEED (Post Details View) -->
       <div class="center-feed">
@@ -302,125 +249,13 @@
       </div>
 
       <!-- COLUMN 3: RIGHT PANEL (Search, Widgets, App promo) -->
-      <aside class="right-panel">
-        <!-- Rounded Search bar -->
-        <div class="right-search-box">
-          <i class="bi bi-search"></i>
-          <input type="search" id="feedSearchInput" placeholder="Search MundiBlog..." data-i18n="search_placeholder">
-        </div>
-        
-        <!-- Platform Subscriptions widgets -->
-        <div class="subscriptions-widget">
-          <div class="d-flex align-items-center gap-3">
-            <div class="substack-logo-container p-0">
-              <i class="bi bi-bookmark-fill fs-3" style="color: var(--primary-color);"></i>
-            </div>
-            <div>
-              <h6 class="fw-bold text-main mb-0" style="font-size: 0.85rem;" data-i18n="subscriptions">Subscriptions</h6>
-              <span class="text-muted" style="font-size: 0.75rem;" data-i18n="join_creators">Join creators on MundiBlog</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Recommended Authors Widget (CSDL Users) -->
-        <div class="featured-authors-widget">
-          <div class="d-flex justify-content-between align-items-center mb-3">
-            <h6 class="fw-bold text-main mb-0" style="font-size: 0.85rem;" data-i18n="recommended">Recommended for You</h6>
-            <a href="#" class="text-decoration-none small text-muted" data-i18n="see_all">See all</a>
-          </div>
-          
-          <!-- Recommended Authors List -->
-          <div class="featured-author-item">
-            <div class="featured-author-info">
-              <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=80&h=80" alt="Tuấn" class="featured-author-avatar">
-              <div class="featured-author-meta">
-                <span class="featured-author-name">Hồ Quốc Tuấn</span>
-                <span class="featured-author-count">Economics Author</span>
-              </div>
-            </div>
-            <button class="btn-profile-view" onclick="window.location.href='../owner/profile.html?id=1'" data-i18n="view_profile">View Profile</button>
-          </div>
-          
-          <div class="featured-author-item">
-            <div class="featured-author-info">
-              <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=80&h=80" alt="Anh" class="featured-author-avatar">
-              <div class="featured-author-meta">
-                <span class="featured-author-name">Hoàng Anh</span>
-                <span class="featured-author-count">UX Designer</span>
-              </div>
-            </div>
-            <button class="btn-profile-view" onclick="window.location.href='../owner/profile.html?id=2'" data-i18n="view_profile">View Profile</button>
-          </div>
-
-          <div class="featured-author-item">
-            <div class="featured-author-info">
-              <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=80&h=80" alt="Dương" class="featured-author-avatar">
-              <div class="featured-author-meta">
-                <span class="featured-author-name">Thái Dương</span>
-                <span class="featured-author-count">Tech Lead</span>
-              </div>
-            </div>
-            <button class="btn-profile-view" onclick="window.location.href='../owner/profile.html?id=3'" data-i18n="view_profile">View Profile</button>
-          </div>
-        </div>
-      </aside>
+      <aside class="right-panel"></aside>
 
     </main>
   </div>
 
   <!-- MOBILE SIDEBAR / OFFCANVAS -->
-  <div class="offcanvas offcanvas-start" tabindex="-1" id="mobileSidebar" aria-labelledby="mobileSidebarLabel">
-    <div class="offcanvas-header border-bottom">
-      <a href="home.html" class="text-decoration-none d-flex align-items-center gap-2">
-        <i class="bi bi-bookmark-fill text-primary fs-4"></i>
-        <span class="fs-5 fw-bold text-main" style="letter-spacing: -0.02em;">MundiBlog</span>
-      </a>
-      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-    </div>
-    <div class="offcanvas-body d-flex flex-column p-3">
-      <!-- Mobile Search inside Sidebar -->
-      <div class="d-lg-none mb-3">
-        <div class="right-search-box w-100">
-          <i class="bi bi-search"></i>
-          <input type="text" id="sidebarSearchInput" placeholder="Search MundiBlog..." oninput="window.location.href='home.html?search=' + encodeURIComponent(this.value)" data-i18n="search_placeholder">
-        </div>
-      </div>
-
-      <nav class="sidebar-nav mb-3">
-        <a href="home.html" class="sidebar-nav-item">
-          <i class="bi bi-house-door-fill"></i> <span data-i18n="home">Home</span>
-        </a>
-        <a href="#" class="sidebar-nav-item">
-          <i class="bi bi-inbox"></i> <span data-i18n="inbox">Inbox</span>
-        </a>
-        <a href="#" class="sidebar-nav-item">
-          <i class="bi bi-heart"></i> <span data-i18n="liked_posts">Liked Posts</span>
-        </a>
-        <a href="../owner/my-posts.html" class="sidebar-nav-item">
-          <i class="bi bi-journal-text"></i> <span data-i18n="my_articles">My Articles</span>
-        </a>
-        <a href="about.html" class="sidebar-nav-item">
-          <i class="bi bi-info-circle"></i> <span data-i18n="about">About</span>
-        </a>
-        <a href="../owner/profile.html" class="sidebar-nav-item">
-          <i class="bi bi-person"></i> <span data-i18n="profile">Profile</span>
-        </a>
-      </nav>
-      
-      <a href="../owner/create-post.html" class="sidebar-create-btn mb-4">
-        <span data-i18n="create">Create</span> <i class="bi bi-plus-lg"></i>
-      </a>
-
-      <div class="mt-auto pt-3 border-top">
-        <div class="d-flex flex-column gap-1">
-          <a class="sidebar-nav-item" href="settings.html"><i class="bi bi-gear"></i> <span data-i18n="settings">Settings</span></a>
-          <a class="sidebar-nav-item" href="../admin/dashboard.html"><i class="bi bi-speedometer2"></i> <span data-i18n="admin_panel">Admin Panel</span></a>
-          <a class="sidebar-nav-item" href="../owner/change-password.html"><i class="bi bi-shield-lock"></i> <span data-i18n="security">Security</span></a>
-          <a class="sidebar-nav-item text-danger" href="#" id="mobileSignOutBtn"><i class="bi bi-box-arrow-right"></i> <span data-i18n="sign_out">Sign Out</span></a>
-        </div>
-      </div>
-    </div>
-  </div>
+  <div class="offcanvas offcanvas-start" tabindex="-1" id="mobileSidebar" aria-labelledby="mobileSidebarLabel"></div>
 
   <!-- Bootstrap 5 JS Bundle -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
@@ -429,115 +264,11 @@
   <script src="../../assets/js/components.js"></script>
   
   <script>
-    const postsData = {
-      1: {
-        author_name: "Elena Rostova",
-        author_avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=80&h=80",
-        author_id: "101",
-        timestamp: "2 hours ago",
-        category: "Artificial Intelligence",
-        supported_langs: "en,vi,zh",
-        image: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&q=80&w=720&h=360",
-        likes: 142,
-        comments: 28,
-        title_en: "The Future of AI Agentic Coding in 2026",
-        title_vi: "Tương lai của Lập trình Tự động hóa với AI năm 2026",
-        title_zh: "2026年AI代理编程的未来",
-        content_en: "We are witnessing a monumental paradigm shift where AI agents can autonomously plan, reason, and execute complex full-stack engineering tasks. From real-time DOM manipulation to database synchronization, modern coding assistants act as true pair programmers.\n\nIn traditional software development, developers spent substantial time on boilerplate code, debugging syntax errors, and configuring environments. With advanced agentic frameworks, the AI not only writes code but also understands project architecture, adheres to established design patterns, and executes automated verification plans.\n\nAs we move further into 2026, the collaboration between human creativity and AI execution will redefine what is possible in software engineering.",
-        content_vi: "Chúng ta đang chứng kiến một sự chuyển dịch mô hình lớn khi các tác nhân AI có thể tự chủ lập kế hoạch, suy luận và thực thi các nhiệm vụ kỹ thuật toàn diện. Từ thao tác DOM theo thời gian thực đến đồng bộ hóa cơ sở dữ liệu, trợ lý AI hiện đại đóng vai trò như người đồng hành thực thụ.\n\nTrong phát triển phần mềm truyền thống, lập trình viên dành nhiều thời gian cho các đoạn mã lặp lại, sửa lỗi cú pháp và cấu hình môi trường. Với các khung tự động hóa tiên tiến, AI không chỉ viết mã mà còn hiểu kiến trúc dự án, tuân thủ các mẫu thiết kế và thực thi các kế hoạch xác minh tự động.\n\nKhi tiến sâu vào năm 2026, sự kết hợp giữa sáng tạo của con người và khả năng thực thi của AI sẽ định nghĩa lại giới hạn trong kỹ thuật phần mềm.",
-        content_zh: "我们正在见证一场巨大的范式转变，AI代理可以自主计划、推理并执行复杂的全栈工程任务。从实时DOM操作到数据库同步，现代编码助手充当真正的结对程序员。\n\n在传统的软件开发中，开发人员将大量时间花费在样板代码、调试语法错误和配置环境上。借助先进的代理框架，AI不仅编写代码，还能理解项目架构，遵循既定的设计模式，并执行自动验证计划。\n\n随着我们进入2026年，人类创造力与AI执行力的协作将重新定义软件工程的未来。"
-      },
-      2: {
-        author_name: "李明 (Li Ming)",
-        author_avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=80&h=80",
-        author_id: "103",
-        timestamp: "3 days ago",
-        category: "Backend Engineering",
-        supported_langs: "en,vi,zh",
-        image: "",
-        likes: 210,
-        comments: 45,
-        title_en: "Deep Dive into Modern Web Rendering Architectures",
-        title_vi: "Hiểu sâu về Kiến trúc Render Web Hiện đại và Tối ưu hiệu năng",
-        title_zh: "深入理解现代Web渲染架构与性能优化",
-        content_en: "In an era where Single Page Applications and Server-Side Rendering go hand-in-hand, frontend engineers must choose the right architectural pattern to balance initial load speed with SEO.\n\nServer-Side Rendering (SSR) delivers pre-rendered HTML to the client, resulting in significantly faster Largest Contentful Paint (LCP) times. Meanwhile, Client-Side Rendering (CSR) excels at dynamic, application-like interactivity once loaded.\n\nBy adopting hybrid approaches like Progressive Hydration and Islands Architecture, modern frameworks give developers the best of both worlds without compromising user experience.",
-        content_vi: "Trong kỷ nguyên ứng dụng trang đơn (SPA) và Server-Side Rendering song hành, kỹ sư frontend cần lựa chọn kiến trúc phù hợp nhất để cân bằng giữa tốc độ tải trang và tối ưu hóa SEO.\n\nServer-Side Rendering (SSR) cung cấp HTML đã được render sẵn cho máy khách, giúp cải thiện đáng kể thời gian hiển thị nội dung lớn nhất (LCP). Trong khi đó, Client-Side Rendering (CSR) vượt trội trong các tương tác động sau khi tải xong.\n\nBằng cách áp dụng các giải pháp lai như Progressive Hydration và Islands Architecture, các framework hiện đại mang lại ưu điểm của cả hai mô hình mà không làm giảm trải nghiệm người dùng.",
-        content_zh: "在单页应用与服务器端渲染齐头并进的今天，前端工程师需要针对不同业务场景选择最合理的架构设计，确保首屏加载速度与搜索引擎优化（SEO）的最佳平衡。\n\n服务器端渲染 (SSR) 向客户端提供预渲染的HTML，从而显著缩短最大内容渲染时间 (LCP)。同时，客户端渲染 (CSR) 在加载后擅长处理动态交互。\n\n通过采用渐进式水合和孤岛架构等混合方法，现代框架让开发者在不牺牲用户体验的前提下获得两者的优势。"
-      },
-      3: {
-        author_name: "Hồ Quốc Tuấn",
-        author_avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=80&h=80",
-        author_id: "102",
-        timestamp: "Yesterday",
-        category: "Design",
-        supported_langs: "en,vi",
-        image: "",
-        likes: 89,
-        comments: 14,
-        title_en: "10 Essential Principles for Modern Glassmorphism UI",
-        title_vi: "10 Nguyên tắc cốt lõi cho Giao diện Glassmorphism hiện đại",
-        title_zh: "",
-        content_en: "Designing interfaces that feel responsive and alive encourages interaction. Achieve this with subtle hover effects, vibrant harmonious color palettes, and clean modern typography. Always prioritize visual excellence.\n\nGlassmorphism relies on multi-layered interfaces where background elements show through a frosted-glass overlay. The key is balancing background blur with subtle multi-stop borders to maintain high contrast and readability.\n\nWhen implemented thoughtfully, this style elevates the interface from a flat document to a rich, premium digital workspace.",
-        content_vi: "Thiết kế giao diện mang lại cảm giác sống động và phản hồi tốt sẽ thúc đẩy sự tương tác. Hãy đạt được điều này với hiệu ứng hover tinh tế, bảng màu hài hòa sống động và nghệ thuật chữ hiện đại.\n\nGlassmorphism dựa trên giao diện nhiều lớp, nơi các phần tử nền hiển thị qua một lớp kính mờ. Bí quyết là cân bằng độ mờ nền với đường viền sắc nét để duy trì độ tương phản cao và dễ đọc.\n\nKhi được áp dụng đúng cách, phong cách này nâng tầm giao diện từ một tài liệu phẳng thành một không gian làm việc kỹ thuật số cao cấp.",
-        content_zh: ""
-      },
-      4: {
-        author_name: "Sarah Connor",
-        author_avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=80&h=80",
-        author_id: "104",
-        timestamp: "5 hours ago",
-        category: "Artificial Intelligence",
-        supported_langs: "en,vi,zh",
-        image: "",
-        likes: 178,
-        comments: 32,
-        title_en: "Next-Gen LLM Reasoning & Tool Use in 2026",
-        title_vi: "Khả năng Suy luận & Sử dụng Công cụ của LLM Thế hệ mới năm 2026",
-        title_zh: "2026年下一代大语言模型推理与工具使用",
-        content_en: "Modern language models are moving beyond simple pattern matching. By integrating external tools, code interpreters, and multi-agent loops, they can tackle complex engineering workflows autonomously.\n\nWe are now seeing systems that can formulate hypotheses, test them against real-world APIs, and self-correct when encountering unexpected errors. This loop of reasoning and action represents the bridge from passive chat assistants to autonomous AI engineers.",
-        content_vi: "Các mô hình ngôn ngữ hiện đại đang vượt qua giới hạn nhận diện mẫu đơn thuần. Bằng cách tích hợp công cụ bên ngoài, trình thông dịch mã và vòng lặp đa tác nhân, chúng có thể tự động giải quyết các quy trình kỹ thuật phức tạp.\n\nChúng ta đang chứng kiến các hệ thống có thể đưa ra giả thuyết, kiểm thử với API thực tế và tự sửa lỗi khi gặp sự cố không mong muốn. Vòng lặp suy luận và hành động này là bước tiến từ trợ lý trò chuyện thụ động sang kỹ sư AI tự chủ.",
-        content_zh: "现代语言模型正在超越简单的模式匹配。通过集成外部工具、代码解释器和多代理循环，它们能够自主处理复杂的工程工作流。\n\n我们现在看到系统可以提出假设，在实际API中测试它们，并在遇到意外错误时自我纠正。这种推理与行动的循环代表了从被动聊天助手到自主AI工程师的跨越。"
-      },
-      5: {
-        author_name: "Alex Rivera",
-        author_avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=80&h=80",
-        author_id: "105",
-        timestamp: "1 day ago",
-        category: "Backend Engineering",
-        supported_langs: "en,vi,zh",
-        image: "",
-        likes: 312,
-        comments: 54,
-        title_en: "Building High-Throughput Microservices with Rust & gRPC",
-        title_vi: "Xây dựng Microservices Hiệu năng cao với Rust & gRPC",
-        title_zh: "使用Rust和gRPC构建高吞吐量微服务",
-        content_en: "As backend scalability requirements grow, transitioning performance-critical services to Rust and gRPC has proven to drastically reduce memory footprint while eliminating garbage collection pauses.\n\nRust's ownership model guarantees memory safety and thread safety without runtime overhead. Coupled with gRPC's HTTP/2 multiplexing and Protocol Buffers serialization, microservices can handle tens of thousands of concurrent requests with predictable sub-millisecond latency.",
-        content_vi: "Khi yêu cầu về khả năng mở rộng tăng lên, việc chuyển đổi các dịch vụ quan trọng về hiệu năng sang Rust và gRPC đã chứng minh giảm đáng kể lượng bộ nhớ sử dụng đồng thời loại bỏ các khoảng dừng do garbage collection.\n\nMô hình sở hữu của Rust đảm bảo an toàn bộ nhớ và luồng mà không tốn chi phí thời gian chạy. Kết hợp với giao thức gRPC trên HTTP/2 và serialization Protocol Buffers, microservices có thể xử lý hàng chục nghìn yêu cầu đồng thời với độ trễ dưới mili giây.",
-        content_zh: "随着后端可扩展性需求的增长，将关键性能服务过渡到Rust和gRPC极大地减少了内存占用，同时消除了垃圾回收停顿。\n\nRust的所有权模型确保了内存安全和线程安全，且没有运行时开销。结合gRPC的HTTP/2多路复用和Protocol Buffers序列化，微服务能够以可预测的亚毫秒级延迟处理数万个并发请求。"
-      },
-      6: {
-        author_name: "Maya Lin",
-        author_avatar: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&q=80&w=80&h=80",
-        author_id: "106",
-        timestamp: "2 days ago",
-        category: "Design",
-        supported_langs: "en,vi,zh",
-        image: "",
-        likes: 95,
-        comments: 19,
-        title_en: "The Psychology of Color in Modern Web Applications",
-        title_vi: "Tâm lý học Màu sắc trong các Ứng dụng Web Hiện đại",
-        title_zh: "现代Web应用程序中的色彩心理学",
-        content_en: "Color is not just an aesthetic choice; it is a fundamental communication tool that guides user interaction, establishes brand trust, and influences cognitive load in complex user interfaces.\n\nWarm tones stimulate urgency and excitement, making them ideal for call-to-action buttons, while cool blues and neutral slates foster concentration and reliability in analytical dashboards. Understanding these cognitive responses enables designers to craft intuitive user experiences.",
-        content_vi: "Màu sắc không chỉ là lựa chọn thẩm mỹ; nó là công cụ giao tiếp cốt lõi dẫn dắt tương tác người dùng, xây dựng lòng tin thương hiệu và ảnh hưởng đến tải nhận thức trong các giao diện phức tạp.\n\nCác tông màu ấm kích thích sự cấp bách và hào hứng, lý tưởng cho nút kêu gọi hành động, trong khi sắc xanh lạnh và xám trung tính tạo sự tập trung và tin cậy cho bảng điều khiển phân tích. Hiểu được các phản ứng nhận thức này giúp nhà thiết kế tạo ra trải nghiệm người dùng trực quan.",
-        content_zh: "色彩不仅是美学选择，更是指导用户交互、建立品牌信任并在复杂用户界面中影响认知负荷的核心沟通工具。\n\n暖色调激发紧迫感和兴奋感，非常适合号召性用语按钮；而冷蓝色和中性石板色则在分析仪表板中培养专注力和可靠性。理解这些认知反应使设计师能够打造直观的用户体验。"
-      }
-    };
 
     function renderPostDetail() {
       const urlParams = new URLSearchParams(window.location.search);
       const postId = urlParams.get('id') || "1";
-      const post = postsData[postId] || postsData["1"];
+      const post = window.globalPostsData[postId] || window.globalPostsData["1"];
 
       // Sync post.comments with actual comments database count
       const comments = getCommentsForPost(postId);
@@ -576,7 +307,7 @@
               <img src="${post.author_avatar}" alt="${post.author_name}" class="author-avatar">
               <div class="author-meta-info">
                 <a href="../owner/profile.html?id=${post.author_id}" class="author-name">${post.author_name}</a>
-                <span class="post-timestamp">${post.timestamp} &middot; 5 min read</span>
+                <span class="post-timestamp">${typeof window.formatTimestampI18n === 'function' ? window.formatTimestampI18n(post.timestamp) : post.timestamp}</span>
               </div>
             </div>
           </div>
@@ -593,6 +324,7 @@
           <div class="substack-post-footer">
             <button class="footer-action-item" onclick="toggleLike(this, ${post.likes})"><i class="bi bi-heart"></i> <span class="like-count">${post.likes}</span></button>
             <button class="footer-action-item" onclick="document.getElementById('newCommentInput').focus()"><i class="bi bi-chat"></i> <span id="footerCommentCount">${post.comments}</span></button>
+            <span class="footer-action-item text-muted"><i class="bi bi-eye"></i> <span>${post.views || 500}</span></span>
           </div>
         </article>
       `;
@@ -666,7 +398,7 @@
       document.getElementById('commentCountText').textContent = totalCount;
       const footerCountEl = document.getElementById('footerCommentCount');
       if (footerCountEl) footerCountEl.textContent = totalCount;
-      if (postsData[postId]) postsData[postId].comments = totalCount;
+      if (window.globalPostsData[postId]) window.globalPostsData[postId].comments = totalCount;
 
       if (comments.length === 0) {
         container.innerHTML = `<p class="text-muted" data-i18n="no_comments">No comments yet. Be the first to comment!</p>`;
@@ -679,7 +411,7 @@
       const translateLabel = dict.translate_comment || "Dịch";
       const originalLabel = dict.show_original || "Hiển thị nội dung gốc";
       const currentUser = localStorage.getItem('currentUser') || 'Hồ Quốc Tuấn';
-      const post = postsData[postId] || postsData["1"];
+      const post = window.globalPostsData[postId] || window.globalPostsData["1"];
       const isPostAuthor = (post.author_name === currentUser);
 
       let html = "";
@@ -724,7 +456,7 @@
                 <div class="d-flex align-items-center gap-2 mb-1">
                   <img src="${rep.avatar}" class="rounded-circle" width="28" height="28" alt="User">
                   <span class="fw-bold fs-6">${rep.author}</span>
-                  <span class="text-muted small ms-auto">${rep.time}</span>
+                  <span class="text-muted small ms-auto">${typeof window.formatTimestampI18n === 'function' ? window.formatTimestampI18n(rep.time) : rep.time}</span>
                 </div>
                 <p class="mb-1 text-secondary comment-content-text" style="font-size: 0.95rem;">${tagHtml}${rep.content}</p>
                 ${repTranslateBtnHtml}
@@ -774,7 +506,7 @@
             <div class="d-flex align-items-center gap-2 mb-2">
               <img src="${root.avatar}" class="rounded-circle" width="36" height="36" alt="User">
               <span class="fw-bold fs-6">${root.author}</span>
-              <span class="text-muted small ms-auto">${root.time}</span>
+              <span class="text-muted small ms-auto">${typeof window.formatTimestampI18n === 'function' ? window.formatTimestampI18n(root.time) : root.time}</span>
             </div>
             <p class="mb-1 text-secondary comment-content-text">${root.content}</p>
             ${rootTranslateBtnHtml}
@@ -894,7 +626,7 @@
       const currentLang = localStorage.getItem('preferredLanguage') || 'en';
       const dict = (window.uiTranslations && window.uiTranslations[currentLang]) || (window.uiTranslations && window.uiTranslations.en) || {};
       const currentUser = localStorage.getItem('currentUser') || 'Hồ Quốc Tuấn';
-      const post = postsData[postId] || postsData["1"];
+      const post = window.globalPostsData[postId] || window.globalPostsData["1"];
       const isPostAuthor = (post.author_name === currentUser);
 
       if (isChild) {
@@ -1029,14 +761,14 @@
       const container = document.getElementById('relatedPostsContainer');
       
       // Find posts with matching category (excluding current post)
-      const relatedIds = Object.keys(postsData).filter(id => id !== String(currentPostId) && postsData[id].category === category);
+      const relatedIds = Object.keys(window.globalPostsData).filter(id => id !== String(currentPostId) && window.globalPostsData[id].category === category);
       
       // If no other post in same category, fallback to showing all other posts
-      const idsToRender = relatedIds.length > 0 ? relatedIds : Object.keys(postsData).filter(id => id !== String(currentPostId)).slice(0, 2);
+      const idsToRender = relatedIds.length > 0 ? relatedIds : Object.keys(window.globalPostsData).filter(id => id !== String(currentPostId)).slice(0, 2);
 
       let html = "";
       idsToRender.forEach(id => {
-        const p = postsData[id];
+        const p = window.globalPostsData[id];
         // Calculate real count from database so it's consistent everywhere
         const relComments = getCommentsForPost(id);
         let relCount = 0;
@@ -1048,8 +780,8 @@
         html += `
           <a href="post-detail.html?id=${id}" class="related-post-card text-reset" data-supported-langs="${p.supported_langs}" data-category="${p.category}">
             <div class="d-flex align-items-center justify-content-between mb-2">
-              <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-2.5 py-0.5 rounded-pill small">${p.category}</span>
-              <span class="text-muted small">${p.timestamp}</span>
+              <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-2.5 py-0.5 rounded-pill small category-label" data-original-cat="${p.category}">${typeof window.translateCategory === 'function' ? window.translateCategory(p.category) : p.category}</span>
+              <span class="text-muted small post-timestamp">${typeof window.formatTimestampI18n === 'function' ? window.formatTimestampI18n(p.timestamp) : p.timestamp}</span>
             </div>
             <h5 class="fw-bold mb-2 text-main"
                 data-translate-title-en="${p.title_en}"
@@ -1089,3 +821,5 @@
   </script>
 </body>
 </html>
+
+
