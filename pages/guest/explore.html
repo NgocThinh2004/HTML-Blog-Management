@@ -29,8 +29,8 @@
           <span class="fs-5 fw-bold text-main">MundiBlog</span>
         </a>
         <div class="d-flex align-items-center ms-auto gap-2">
-          <a href="../owner/create-post.html" class="btn btn-primary btn-sm fw-medium px-3 rounded-pill"><i class="bi bi-plus-lg me-1"></i> <span data-i18n="create">Create</span></a>
-          <a href="../owner/profile.html" class="text-decoration-none">
+          <a href="create-post.html" class="btn btn-primary btn-sm fw-medium px-3 rounded-pill"><i class="bi bi-plus-lg me-1"></i> <span data-i18n="create">Create</span></a>
+          <a href="profile.html" class="text-decoration-none">
             <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=32&h=32" class="rounded-circle border" width="32" height="32" alt="Avatar">
           </a>
         </div>
@@ -305,7 +305,7 @@
                 <div class="author-badge-group">
                   <img src="${post.author_avatar}" alt="${post.author_name}" class="author-avatar">
                   <div class="author-meta-info">
-                    <a href="../owner/profile.html?id=${post.author_id || '101'}" class="author-name">${post.author_name}</a>
+                    <a href="profile.html?id=${post.author_id || '101'}" class="author-name">${post.author_name}</a>
                     <span class="post-timestamp">${tsLabel}</span>
                   </div>
                   <span class="badge bg-primary-subtle text-primary border border-primary-subtle rounded-pill small px-2 ms-auto category-label" data-original-cat="${post.category}">${catLabel}</span>
@@ -432,7 +432,7 @@
           const countTextVal = `${countVal} ${postWord}`;
           html += `
             <div class="explore-card-item align-items-center">
-              <a href="../owner/profile.html?id=${person.id}" class="explore-card-left text-decoration-none text-reset align-items-center">
+              <a href="profile.html?id=${person.id}" class="explore-card-left text-decoration-none text-reset align-items-center">
                 <img src="${person.avatar}" class="explore-card-avatar" alt="${person.name}">
                 <div class="explore-card-info">
                   <div class="explore-card-title fw-bold fs-6 mb-1">${person.name}</div>
@@ -440,7 +440,7 @@
                 </div>
               </a>
               <div class="d-flex align-items-center gap-2">
-                <a href="../owner/profile.html?id=${person.id}" class="btn btn-sm btn-outline-secondary rounded-pill px-3 fw-medium" data-i18n="view_profile">${dict.view_profile || 'View Profile'}</a>
+                <a href="profile.html?id=${person.id}" class="btn btn-sm btn-outline-secondary rounded-pill px-3 fw-medium" data-i18n="view_profile">${dict.view_profile || 'View Profile'}</a>
               </div>
             </div>
           `;
