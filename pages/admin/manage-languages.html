@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manage Languages - MundiBlog</title>
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+  <!-- Bootstrap 5.3 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <!-- Flag Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.2.3/css/flag-icons.min.css" />
+
+  <!-- Custom CSS (Standard Shared Assets) -->
+  <link rel="stylesheet" href="../../assets/css/variables.css">
+  <link rel="stylesheet" href="../../assets/css/base.css">
+  <link rel="stylesheet" href="../../assets/css/layouts.css">
+  <link rel="stylesheet" href="../../assets/css/components.css">
+
+  <style>
+    .admin-container {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 2.5rem 1.5rem;
+      width: 100%;
+    }
+
+    .admin-header {
+      margin-bottom: 2rem;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 1.25rem;
+    }
+
+    .admin-card {
+      background-color: var(--bg-panel);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      transition: all 0.2s ease;
+    }
+
+    [data-bs-theme="dark"] .admin-card {
+      background-color: var(--bg-panel);
+      border-color: var(--border-color);
+    }
+
+    .admin-card:hover {
+      border-color: var(--primary-color) !important;
+      transform: translateY(-2px);
+    }
+
+    .admin-card-clean {
+      background-color: transparent !important;
+      border: none !important;
+      box-shadow: none !important;
+      padding: 0 !important;
+      margin-bottom: 1.5rem;
+    }
+
+    .languages-table th {
+      font-weight: 600;
+      color: var(--text-muted);
+      border-bottom-width: 1px;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+
+    .languages-table td {
+      vertical-align: middle;
+      font-size: 0.9rem;
+      color: var(--text-main);
+      border-bottom-color: var(--border-color);
+      padding: 1rem 0.75rem;
+    }
+
+    .form-switch .form-check-input {
+      cursor: pointer;
+    }
+
+    .form-switch .form-check-input:checked {
+      background-color: var(--primary-color);
+      border-color: var(--primary-color);
+    }
+
+    .progress {
+      background-color: var(--border-color);
+      border-radius: 99px;
+      height: 8px;
+    }
+
+    .progress-bar {
+      border-radius: 99px;
+    }
+
+    /* Override center-feed defaults for admin pages to allow wider view */
+    .center-feed {
+      align-items: stretch !important;
+    }
+
+    .center-feed>* {
+      max-width: 100% !important;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="app-wrapper">
+
+    <!-- HEADER (Visible on Mobile Only - Hidden on Desktop) -->
+    <header class="app-header">
+      <div class="header-container">
+        <!-- Mobile Sidebar Trigger -->
+        <button class="btn btn-link d-lg-none me-2 text-reset p-0" type="button" data-bs-toggle="offcanvas"
+          data-bs-target="#mobileSidebar" aria-controls="mobileSidebar">
+          <i class="bi bi-list fs-3"></i>
+        </button>
+
+        <!-- Brand Logo for mobile -->
+        <a href="../guest/home.html" class="d-flex align-items-center text-decoration-none">
+          <i class="bi bi-bookmark-fill fs-4 text-primary me-2"></i>
+          <span class="fs-5 fw-bold text-main">MundiBlog</span>
+        </a>
+      </div>
+    </header>
+
+    <!-- MAIN APP WRAPPER (2-Column Layout for Admin Panel) -->
+    <main class="app-main-content no-right-panel">
+
+      <!-- LEFT SIDEBAR -->
+      <aside class="left-sidebar">
+        <div>
+          <!-- Substack Logo -->
+          <div class="substack-logo-container">
+            <a href="../guest/home.html" class="text-decoration-none d-flex align-items-center gap-2 flex-wrap">
+              <i class="bi bi-bookmark-fill substack-logo"></i>
+              <span class="fs-5 fw-bold text-main" style="letter-spacing: -0.02em;">MundiBlog</span>
+              <span class="badge bg-primary-subtle text-primary border border-primary-subtle rounded-pill ms-1"
+                style="font-size: 0.68rem !important; padding: 0.15rem 0.4rem !important; font-weight: 600;"
+                data-i18n="admin_panel">Admin Panel</span>
+            </a>
+          </div>
+
+          <!-- Navigation menu -->
+          <nav class="sidebar-nav">
+            <a href="dashboard.html" class="sidebar-nav-item">
+              <i class="bi bi-speedometer2"></i> <span data-i18n="admin_dashboard">Admin Dashboard</span>
+            </a>
+            <a href="manage-users.html" class="sidebar-nav-item">
+              <i class="bi bi-people"></i> <span data-i18n="manage_users">Manage Users</span>
+            </a>
+            <a href="manage-categories.html" class="sidebar-nav-item">
+              <i class="bi bi-tags"></i> <span data-i18n="manage_categories">Manage Categories</span>
+            </a>
+            <a href="manage-languages.html" class="sidebar-nav-item active">
+              <i class="bi bi-translate"></i> <span data-i18n="manage_languages">Manage Languages</span>
+            </a>
+          </nav>
+        </div>
+
+        <!-- Bottom Section -->
+        <div class="sidebar-footer-menu">
+          <a href="../guest/home.html" class="sidebar-nav-item mb-2">
+            <i class="bi bi-arrow-left"></i> <span data-i18n="back_feed">Back to Feed</span>
+          </a>
+          <div class="dropdown">
+            <button
+              class="btn btn-link text-decoration-none text-main d-flex align-items-center gap-2 p-1.5 w-100 border-0 text-start"
+              type="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="bi bi-list fs-5"></i>
+              <span class="fw-medium" data-i18n="more">More</span>
+            </button>
+            <ul class="dropdown-menu shadow border-light-subtle">
+              <li><a class="dropdown-item py-2" href="../guest/settings.html?from=admin"><i class="bi bi-gear me-2"></i>
+                  <span data-i18n="settings">Settings</span></a></li>
+              <li><a class="dropdown-item py-2" href="../owner/change-password.html"><i
+                    class="bi bi-shield-lock me-2"></i> <span data-i18n="security">Security</span></a></li>
+              <li>
+                <hr class="dropdown-divider">
+              </li>
+              <li><a class="dropdown-item py-2 text-danger" href="#" id="signOutBtn"><i
+                    class="bi bi-box-arrow-right me-2"></i> <span data-i18n="sign_out">Sign Out</span></a></li>
+            </ul>
+          </div>
+        </div>
+      </aside>
+
+      <!-- CENTER COLUMN: Admin Workspace -->
+      <div class="center-feed">
+        <div class="admin-container">
+
+          <div
+            class="admin-header d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center gap-3">
+            <div>
+              <h1 class="fw-bold text-main mb-1" style="letter-spacing: -0.03em;" data-i18n="language_management">
+                Language Management</h1>
+              <p class="text-muted mb-0" data-i18n="lang_desc_page">Configure system languages and monitor AI automatic
+                translation coverage.</p>
+            </div>
+            <button class="btn btn-primary rounded-pill px-4 d-flex align-items-center gap-2" data-bs-toggle="modal"
+              data-bs-target="#addLanguageModal">
+              <i class="bi bi-plus-lg"></i> <span data-i18n="add_language">Add Language</span>
+            </button>
+          </div>
+
+          <!-- LANGUAGES LIST CARD -->
+          <div class="admin-card-clean">
+            <div class="substack-list">
+              <!-- Item 1: English -->
+              <div class="substack-list-item">
+                <div class="item-title-block">
+                  <div class="item-main-title d-flex align-items-center gap-2">
+                    <span class="fi fi-us fs-4 border border-light-subtle rounded-1" style="width: 26px;"></span>
+                    <span>English</span>
+                    <span
+                      class="badge bg-secondary-subtle text-secondary border border-secondary-subtle px-2 py-0.5 rounded-pill"
+                      style="font-size: 0.72rem;">en</span>
+                    <span
+                      class="badge bg-primary-subtle text-primary border border-primary-subtle px-2 py-0.5 rounded-pill"
+                      style="font-size: 0.72rem;" data-i18n="primary_language">Primary Language</span>
+                  </div>
+                  <div class="item-sub-info mt-1.5">
+                    <div class="d-flex align-items-center gap-2 w-100">
+                      <span class="small text-muted"><i class="bi bi-file-earmark-text me-1"></i> <span data-i18n="translated_articles">Bài viết đã dịch:</span> <strong class="text-main">500 / 500</strong></span>
+                    </div>
+                  </div>
+                </div>
+                <div class="languages-right-actions">
+                  <div class="form-check form-switch p-0 m-0 d-flex align-items-center gap-2">
+                    <input class="form-check-input ms-0" type="checkbox" checked disabled>
+                    <span class="badge bg-success-subtle text-success border border-success-subtle"
+                      data-i18n="system_default">System Default</span>
+                  </div>
+                  <div>
+                    <button class="btn btn-sm btn-link text-muted p-1" disabled><i class="bi bi-trash"></i></button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Item 2: Vietnamese -->
+              <div class="substack-list-item">
+                <div class="item-title-block">
+                  <div class="item-main-title d-flex align-items-center gap-2">
+                    <span class="fi fi-vn fs-4 border border-light-subtle rounded-1" style="width: 26px;"></span>
+                    <span>Tiếng Việt</span>
+                    <span
+                      class="badge bg-secondary-subtle text-secondary border border-secondary-subtle px-2 py-0.5 rounded-pill"
+                      style="font-size: 0.72rem;">vi</span>
+                  </div>
+                  <div class="item-sub-info mt-1.5">
+                    <div class="d-flex align-items-center gap-2 w-100">
+                      <span class="small text-muted"><i class="bi bi-file-earmark-text me-1"></i> <span data-i18n="translated_articles">Bài viết đã dịch:</span> <strong class="text-main">450 / 500</strong></span>
+                    </div>
+                  </div>
+                </div>
+                <div class="languages-right-actions">
+                  <div class="form-check form-switch p-0 m-0 d-flex align-items-center gap-2">
+                    <input class="form-check-input ms-0 lang-status-switch" type="checkbox" checked
+                      data-lang="Tiếng Việt">
+                    <span class="badge bg-success-subtle text-success border border-success-subtle"
+                      data-i18n="active">Active</span>
+                  </div>
+                  <div class="d-flex align-items-center gap-1">
+                    <button class="btn btn-sm btn-outline-primary rounded-pill px-3 py-1" onclick="setPrimaryLang('Tiếng Việt')"><span data-i18n="make_primary">Mặc định</span></button>
+                    <button class="btn btn-sm btn-link text-danger p-1 delete-lang-btn" onclick="confirmDeleteLanguage(this, 'Tiếng Việt', 450)"><i class="bi bi-trash"></i></button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Item 3: Chinese -->
+              <div class="substack-list-item">
+                <div class="item-title-block">
+                  <div class="item-main-title d-flex align-items-center gap-2">
+                    <span class="fi fi-cn fs-4 border border-light-subtle rounded-1" style="width: 26px;"></span>
+                    <span>中文 (Chinese)</span>
+                    <span
+                      class="badge bg-secondary-subtle text-secondary border border-secondary-subtle px-2 py-0.5 rounded-pill"
+                      style="font-size: 0.72rem;">zh</span>
+                  </div>
+                  <div class="item-sub-info mt-1.5">
+                    <div class="d-flex align-items-center gap-2 w-100">
+                      <span class="small text-muted"><i class="bi bi-file-earmark-text me-1"></i> <span data-i18n="translated_articles">Bài viết đã dịch:</span> <strong class="text-main">325 / 500</strong></span>
+                    </div>
+                  </div>
+                </div>
+                <div class="languages-right-actions">
+                  <div class="form-check form-switch p-0 m-0 d-flex align-items-center gap-2">
+                    <input class="form-check-input ms-0 lang-status-switch" type="checkbox" checked data-lang="中文">
+                    <span class="badge bg-success-subtle text-success border border-success-subtle"
+                      data-i18n="active">Active</span>
+                  </div>
+                  <div class="d-flex align-items-center gap-1">
+                    <button class="btn btn-sm btn-outline-primary rounded-pill px-3 py-1" onclick="setPrimaryLang('中文 (Chinese)')"><span data-i18n="make_primary">Mặc định</span></button>
+                    <button class="btn btn-sm btn-link text-danger p-1 delete-lang-btn" onclick="confirmDeleteLanguage(this, '中文', 325)"><i class="bi bi-trash"></i></button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+  </div>
+  </main>
+  </div>
+
+  <!-- ADD LANGUAGE MODAL -->
+  <div class="modal fade" id="addLanguageModal" tabindex="-1" aria-labelledby="addLanguageModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content rounded-4 border-0 shadow">
+        <div class="modal-header border-bottom">
+          <h5 class="modal-title fw-bold text-main" id="addLanguageModalLabel" data-i18n="add_language">Add Language
+          </h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form id="addLanguageForm">
+          <div class="modal-body">
+            <div class="mb-3">
+              <label for="selectLang" class="form-label fw-semibold text-main" data-i18n="select_language">Select
+                Language</label>
+              <select class="form-select" id="selectLang" required>
+                <option value="" disabled selected data-i18n="choose_lang_placeholder">Choose a language...</option>
+                <option value="ja" data-name="日本語 (Japanese)" data-flag="jp">日本語 (Japanese)</option>
+                <option value="ko" data-name="한국어 (Korean)" data-flag="kr">한국어 (Korean)</option>
+                <option value="fr" data-name="Français (French)" data-flag="fr">Français (French)</option>
+                <option value="es" data-name="Español (Spanish)" data-flag="es">Español (Spanish)</option>
+                <option value="de" data-name="Deutsch (German)" data-flag="de">Deutsch (German)</option>
+              </select>
+            </div>
+            <div class="mb-1">
+              <label for="inputLangCode" class="form-label fw-semibold text-main" data-i18n="language_code">Language
+                Code</label>
+              <input type="text" class="form-control bg-body-secondary" id="inputLangCode" readonly
+                placeholder="Language code will be generated..." data-i18n="lang_code_placeholder">
+            </div>
+          </div>
+          <div class="modal-footer border-top">
+            <button type="button" class="btn btn-outline-secondary rounded-pill px-3" data-bs-dismiss="modal"
+              data-i18n="cancel">Cancel</button>
+            <button type="submit" class="btn btn-primary rounded-pill px-4" data-i18n="save_changes">Save
+              Changes</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- MOBILE SIDEBAR / OFFCANVAS -->
+  <div class="offcanvas offcanvas-start" tabindex="-1" id="mobileSidebar" aria-labelledby="mobileSidebarLabel">
+    <div class="offcanvas-header border-bottom">
+      <a href="../guest/home.html" class="text-decoration-none d-flex align-items-center gap-2">
+        <i class="bi bi-bookmark-fill text-primary fs-4"></i>
+        <span class="fs-5 fw-bold text-main" style="letter-spacing: -0.02em;">MundiBlog</span>
+      </a>
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body d-flex flex-column p-3">
+      <nav class="sidebar-nav mb-3">
+        <a href="dashboard.html" class="sidebar-nav-item">
+          <i class="bi bi-speedometer2"></i> <span data-i18n="admin_dashboard">Admin Dashboard</span>
+        </a>
+        <a href="manage-users.html" class="sidebar-nav-item">
+          <i class="bi bi-people"></i> <span data-i18n="manage_users">Manage Users</span>
+        </a>
+        <a href="manage-categories.html" class="sidebar-nav-item">
+          <i class="bi bi-tags"></i> <span data-i18n="manage_categories">Manage Categories</span>
+        </a>
+        <a href="manage-languages.html" class="sidebar-nav-item active">
+          <i class="bi bi-translate"></i> <span data-i18n="manage_languages">Manage Languages</span>
+        </a>
+      </nav>
+
+      <div class="mt-auto pt-3 border-top">
+        <div class="d-flex flex-column gap-1">
+          <a class="sidebar-nav-item" href="../guest/home.html"><i class="bi bi-arrow-left"></i> <span
+              data-i18n="back_feed">Back to Feed</span></a>
+          <a class="sidebar-nav-item" href="../guest/settings.html?from=admin"><i class="bi bi-gear"></i> <span
+              data-i18n="settings">Settings</span></a>
+          <a class="sidebar-nav-item text-danger" href="#" id="mobileSignOutBtn"><i class="bi bi-box-arrow-right"></i>
+            <span data-i18n="sign_out">Sign Out</span></a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST NOTIFICATION CONTAINER -->
+  <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 1100;">
+    <div id="adminToast" class="toast align-items-center text-bg-dark border-0 shadow-lg rounded-4" role="alert"
+      aria-live="assertive" aria-atomic="true">
+      <div class="d-flex">
+        <div class="toast-body d-flex align-items-center gap-2 font-medium" id="toastMessage">
+          <i class="bi bi-check-circle-fill text-success fs-5"></i> Success message here.
+        </div>
+        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
+          aria-label="Close"></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- HARD DELETE MODAL -->
+  <div class="modal fade" id="deleteLanguageModal" tabindex="-1" aria-labelledby="deleteLanguageModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden p-2">
+        <div class="modal-header border-0 pb-0">
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body text-center pt-0 px-4 pb-4">
+          <div class="mb-4">
+            <div class="d-inline-flex align-items-center justify-content-center bg-danger-subtle text-danger rounded-circle mb-3" style="width: 64px; height: 64px;">
+              <i class="bi bi-trash3-fill fs-2"></i>
+            </div>
+            <h4 class="fw-bold text-main mb-2" id="deleteLanguageModalLabel" data-i18n="danger_warning">Cảnh báo Hủy diệt Dữ liệu</h4>
+            <p class="text-muted"><span data-i18n="delete_lang_desc1">Bạn đang chuẩn bị xóa toàn bộ ngôn ngữ</span> <strong class="text-danger" id="delLangName">Tiếng Việt</strong></p>
+          </div>
+
+          <div class="alert bg-danger-subtle text-danger border-0 text-start small mb-4 rounded-3 d-flex gap-2">
+            <i class="bi bi-exclamation-triangle-fill flex-shrink-0 mt-1"></i>
+            <div>
+              <span data-i18n="delete_lang_desc2">Việc này sẽ xóa sạch</span> <strong><span id="delLangCount">450</span> <span data-i18n="delete_lang_desc3">bài viết đã được dịch. Hành động này không thể hoàn tác!</span></strong>
+            </div>
+          </div>
+
+          <div class="text-start">
+            <label class="form-label text-main fw-medium small mb-2" data-i18n="delete_lang_desc4">Để tiếp tục, vui lòng gõ chính xác tên ngôn ngữ vào ô bên dưới:</label>
+            <input type="text" class="form-control" id="confirmLangInput" placeholder="Gõ tên ngôn ngữ..." data-i18n="type_lang_name">
+          </div>
+        </div>
+        <div class="modal-footer border-0 pt-0 px-4 pb-4 d-flex gap-2 justify-content-end">
+          <button type="button" class="btn btn-light rounded-pill px-4 fw-medium" data-bs-dismiss="modal" data-i18n="cancel_safe">Hủy bỏ an toàn</button>
+          <button type="button" class="btn btn-danger rounded-pill px-4 fw-medium" id="confirmDeleteBtn" disabled data-i18n="confirm_delete">Đồng ý Xóa vĩnh viễn</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap 5 JS Bundle -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Core Script -->
+  <script src="../../assets/js/core.js?v=2"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const toastEl = document.getElementById('adminToast');
+      const toast = new bootstrap.Toast(toastEl, { delay: 3000 });
+      const toastMessage = document.getElementById('toastMessage');
+
+      window.showToast = function (msg) {
+        toastMessage.innerHTML = `<i class="bi bi-check-circle-fill text-success fs-5"></i> ${msg}`;
+        toast.show();
+      };
+
+      // Switch language status toggling (using event delegation)
+      document.addEventListener('change', (e) => {
+        if (e.target && e.target.classList.contains('lang-status-switch')) {
+          const sw = e.target;
+          const langName = sw.getAttribute('data-lang');
+          const isChecked = sw.checked;
+
+          if (isChecked) {
+            showToast(`Activated display language: <b>${langName}</b>`);
+          } else {
+            showToast(`Deactivated display language: <b>${langName}</b>`);
+          }
+        }
+      });
+
+      // Set Primary Language
+      window.setPrimaryLang = function(langName) {
+        showToast(`Ngôn ngữ <b>${langName}</b> đã được đặt làm Mặc định!`);
+      };
+
+      // Hard Delete language modal logic
+      let rowToDelete = null;
+      let targetLangName = '';
+      const deleteLangModalEl = document.getElementById('deleteLanguageModal');
+      const deleteLangModal = new bootstrap.Modal(deleteLangModalEl);
+      const confirmLangInput = document.getElementById('confirmLangInput');
+      const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+
+      window.confirmDeleteLanguage = function (btn, langName, count) {
+        rowToDelete = btn.closest('.substack-list-item');
+        targetLangName = langName;
+        document.getElementById('delLangName').textContent = langName;
+        document.getElementById('delLangCount').textContent = count;
+        confirmLangInput.value = '';
+        confirmDeleteBtn.disabled = true;
+        deleteLangModal.show();
+      };
+
+      confirmLangInput.addEventListener('input', (e) => {
+        if (e.target.value === targetLangName) {
+          confirmDeleteBtn.disabled = false;
+        } else {
+          confirmDeleteBtn.disabled = true;
+        }
+      });
+
+      confirmDeleteBtn.addEventListener('click', () => {
+        if (rowToDelete) {
+          rowToDelete.remove();
+          showToast(`Đã xóa vĩnh viễn ngôn ngữ <b>${targetLangName}</b> và toàn bộ dữ liệu liên quan.`);
+          deleteLangModal.hide();
+        }
+      });
+
+      // Add Language Modal Logic
+      const langSelect = document.getElementById('selectLang');
+      const langCodeInput = document.getElementById('inputLangCode');
+      const addLangForm = document.getElementById('addLanguageForm');
+      const bootstrapLangModal = bootstrap.Modal.getOrCreateInstance(document.getElementById('addLanguageModal'));
+      const languagesContainer = document.querySelector('.substack-list');
+
+      langSelect.addEventListener('change', () => {
+        langCodeInput.value = langSelect.value;
+      });
+
+      addLangForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const code = langSelect.value;
+        const name = langSelect.options[langSelect.selectedIndex].getAttribute('data-name');
+        const flag = langSelect.options[langSelect.selectedIndex].getAttribute('data-flag');
+
+        if (code && name) {
+          // Check if already exists
+          const existingCodes = Array.from(document.querySelectorAll('.substack-list-item .badge.bg-secondary-subtle')).map(el => el.textContent.trim().toLowerCase());
+          if (existingCodes.includes(code.toLowerCase())) {
+            alert('This language has already been configured!');
+            return;
+          }
+
+          // Create new language item
+          const newLangItem = document.createElement('div');
+          newLangItem.className = 'substack-list-item';
+          newLangItem.innerHTML = `
+            <div class="item-title-block">
+              <div class="item-main-title d-flex align-items-center gap-2">
+                <span class="fi fi-${flag} fs-4 border border-light-subtle rounded-1" style="width: 26px;"></span>
+                <span>${name}</span>
+                <span class="badge bg-secondary-subtle text-secondary border border-secondary-subtle px-2 py-0.5 rounded-pill" style="font-size: 0.72rem;">${code}</span>
+              </div>
+              <div class="item-sub-info mt-1.5">
+                <div class="d-flex align-items-center gap-2 w-100">
+                  <span class="small text-muted"><i class="bi bi-file-earmark-text me-1"></i> <span data-i18n="translated_articles">Bài viết đã dịch:</span> <strong class="text-main">0 / 500</strong></span>
+                </div>
+              </div>
+            </div>
+            <div class="languages-right-actions">
+              <div class="form-check form-switch p-0 m-0 d-flex align-items-center gap-2">
+                <input class="form-check-input ms-0 lang-status-switch" type="checkbox" checked data-lang="${name}">
+                <span class="badge bg-success-subtle text-success border border-success-subtle" data-i18n="active">Active</span>
+              </div>
+              <div class="d-flex align-items-center gap-1">
+                <button class="btn btn-sm btn-outline-primary rounded-pill px-3 py-1" onclick="setPrimaryLang('${name}')"><span data-i18n="make_primary">Mặc định</span></button>
+                <button class="btn btn-sm btn-link text-danger p-1 delete-lang-btn" onclick="confirmDeleteLanguage(this, '${name}', 0)"><i class="bi bi-trash"></i></button>
+              </div>
+            </div>
+          `;
+
+          languagesContainer.appendChild(newLangItem);
+          
+          if (window.applyUiTranslations) {
+            window.applyUiTranslations();
+          }
+
+          addLangForm.reset();
+          langCodeInput.value = '';
+          bootstrapLangModal.hide();
+          showToast(`Đã thêm ngôn ngữ <b>${name}</b> thành công! Hệ thống đang tự động dịch...`);
+        }
+      });
+
+      // Sign out handler
+      const handleSignOut = (e) => {
+        e.preventDefault();
+        localStorage.removeItem('currentUser');
+        showToast('Signed out successfully! Redirecting...');
+        setTimeout(() => {
+          window.location.href = '../guest/home.html';
+        }, 1000);
+      };
+
+      const signOutBtn = document.getElementById('signOutBtn');
+      if (signOutBtn) signOutBtn.addEventListener('click', handleSignOut);
+
+      const mobileSignOutBtn = document.getElementById('mobileSignOutBtn');
+      if (mobileSignOutBtn) mobileSignOutBtn.addEventListener('click', handleSignOut);
+    });
+  </script>
+</body>
+
+</html>

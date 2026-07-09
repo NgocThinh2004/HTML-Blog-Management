@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MundiBlog - Explore</title>
+  
+  <!-- Bootstrap 5 & Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  
+  <!-- Global & Layout CSS -->
+  <link rel="stylesheet" href="../../assets/css/variables.css">
+  <link rel="stylesheet" href="../../assets/css/base.css">
+  <link rel="stylesheet" href="../../assets/css/layouts.css">
+  <link rel="stylesheet" href="../../assets/css/components.css">
+</head>
+<body>
+  <div class="app-wrapper">
+    
+    <!-- MOBILE HEADER -->
+    <header class="app-header">
+      <div class="header-container">
+        <button class="btn btn-link d-lg-none me-2 text-reset p-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#mobileSidebar" aria-controls="mobileSidebar">
+          <i class="bi bi-list fs-3"></i>
+        </button>
+        <a href="home.html" class="d-flex align-items-center text-decoration-none">
+          <i class="bi bi-feather fs-4 text-primary me-2"></i>
+          <span class="fs-5 fw-bold text-main">MundiBlog</span>
+        </a>
+        <div class="d-flex align-items-center ms-auto gap-2">
+          <a href="../owner/create-post.html" class="btn btn-primary btn-sm fw-medium px-3 rounded-pill"><i class="bi bi-plus-lg me-1"></i> <span data-i18n="create">Create</span></a>
+          <a href="../owner/profile.html" class="text-decoration-none">
+            <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=32&h=32" class="rounded-circle border" width="32" height="32" alt="Avatar">
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <!-- 3-COLUMN LAYOUT -->
+    <main class="app-main-content">
+      
+      <!-- COLUMN 1: LEFT SIDEBAR NAVIGATION -->
+      <aside class="left-sidebar"></aside>
+
+      <!-- COLUMN 2: CENTER WORKSPACE FEED -->
+      <div class="center-feed">
+        
+        <!-- Explore Search Bar with YouTube-style dropdown -->
+        <div class="explore-search-header position-relative mb-3 mt-2">
+          <div class="explore-search-input-box" id="exploreSearchBox">
+            <i class="bi bi-search text-muted fs-5"></i>
+            <input type="text" id="explorePageSearchInput" class="explore-page-search-input" placeholder="Search MundiBlog..." data-i18n="search_placeholder" autocomplete="off">
+            <button type="button" class="btn-clear-search d-none" id="exploreClearBtn" aria-label="Clear"><i class="bi bi-x-lg fs-6"></i></button>
+          </div>
+          <!-- Suggestions Panel -->
+          <div id="exploreSuggestionsPanel" class="explore-suggestions-panel d-none">
+            <!-- populated by JS -->
+          </div>
+        </div>
+
+        <!-- Substack Explore Tabs -->
+        <div class="explore-tabs-nav border-bottom mb-4">
+          <button class="explore-tab-btn active" data-tab="posts" data-i18n="posts">Posts</button>
+          <button class="explore-tab-btn" data-tab="top" data-i18n="top">Top</button>
+          <button class="explore-tab-btn" data-tab="publications" data-i18n="publications">Publications</button>
+          <button class="explore-tab-btn" data-tab="people" data-i18n="people">People</button>
+        </div>
+
+        <!-- Search Query Header / Results Count -->
+        <div id="exploreQueryHeader" class="mb-3 text-muted small d-none">
+          <span data-i18n="showing_results_for">Showing results for </span><strong id="exploreQueryText" class="text-main"></strong><span> &bull; </span><span id="exploreCountText">0 results</span>
+        </div>
+
+        <!-- Results Feed Container -->
+        <div id="exploreResultsContainer" class="explore-results-list pb-5">
+          <!-- Dynamic contents loaded via JS -->
+        </div>
+
+      </div>
+
+      <!-- COLUMN 3: RIGHT PANEL (Widgets & Recommendations) -->
+      <aside class="right-panel"></aside>
+
+    </main>
+  </div>
+
+  <!-- MOBILE SIDEBAR / OFFCANVAS -->
+  <div class="offcanvas offcanvas-start" tabindex="-1" id="mobileSidebar" aria-labelledby="mobileSidebarLabel"></div>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="../../assets/js/core.js"></script>
+  <script src="../../assets/js/components.js"></script>
+  
+  <!-- Explore Page Specific Logic -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const searchInput = document.getElementById('explorePageSearchInput');
+      const clearBtn = document.getElementById('exploreClearBtn');
+      const tabBtns = document.querySelectorAll('.explore-tab-btn');
+      
+      // Get query from URL parameter
+      const urlParams = new URLSearchParams(window.location.search);
+      let currentQuery = (urlParams.get('q') || '').trim();
+      let currentTab = 'posts';
+
+      if (currentQuery) {
+        searchInput.value = currentQuery;
+        clearBtn.classList.remove('d-none');
+      }
+
+      // Render initial results
+      renderExploreResults(currentQuery, currentTab);
+
+      // Input events
+      const suggestionsPanel = document.getElementById('exploreSuggestionsPanel');
+      
+      searchInput.addEventListener('input', () => {
+        const query = searchInput.value.trim().toLowerCase();
+        if (query.length > 0) {
+          clearBtn.classList.remove('d-none');
+          
+          let matches = [];
+          if (window.globalPostsData) {
+            Object.keys(window.globalPostsData).forEach(id => {
+              const post = window.globalPostsData[id];
+              const titleEn = (post.title_en || '').toLowerCase();
+              const cat = (post.category || '').toLowerCase();
+              if (titleEn.includes(query) || cat.includes(query)) {
+                matches.push({ id, title: post.title_en || 'Untitled', type: 'post' });
+              }
+            });
+          }
+          
+          if (matches.length > 0) {
+             suggestionsPanel.innerHTML = '<div class="suggestions-section-label">Suggestions</div>';
+             matches.slice(0, 5).forEach(m => {
+                const item = document.createElement('a');
+                item.href = '#';
+                item.className = 'suggestion-item text-decoration-none text-main';
+                item.innerHTML = `<i class="bi bi-search text-muted me-2"></i> <span class="suggestion-title">${m.title}</span>`;
+                item.onclick = (e) => {
+                  e.preventDefault();
+                  searchInput.value = m.title;
+                  currentQuery = m.title;
+                  suggestionsPanel.classList.add('d-none');
+                  
+                  // Trigger search
+                  const newUrl = window.location.pathname + `?q=${encodeURIComponent(currentQuery)}`;
+                  window.history.pushState({path: newUrl}, '', newUrl);
+                  renderExploreResults(currentQuery, currentTab);
+                };
+                suggestionsPanel.appendChild(item);
+             });
+             suggestionsPanel.classList.remove('d-none');
+          } else {
+             suggestionsPanel.classList.add('d-none');
+          }
+        } else {
+          clearBtn.classList.add('d-none');
+          suggestionsPanel.classList.add('d-none');
+        }
+      });
+
+      // Hide suggestions when clicking outside
+      document.addEventListener('click', (e) => {
+        if (!e.target.closest('.explore-search-header')) {
+          suggestionsPanel.classList.add('d-none');
+        }
+      });
+
+      // Pressing Enter updates URL without reloading
+      searchInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          suggestionsPanel.classList.add('d-none');
+          currentQuery = searchInput.value.trim();
+          const newUrl = window.location.pathname + (currentQuery ? `?q=${encodeURIComponent(currentQuery)}` : '');
+          window.history.pushState({path: newUrl}, '', newUrl);
+          renderExploreResults(currentQuery, currentTab);
+        }
+      });
+
+      clearBtn.addEventListener('click', () => {
+        searchInput.value = '';
+        clearBtn.classList.add('d-none');
+        suggestionsPanel.classList.add('d-none');
+        searchInput.focus();
+      });
+
+      // Tab click events
+      tabBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          tabBtns.forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          currentTab = btn.getAttribute('data-tab');
+          renderExploreResults(currentQuery, currentTab);
+        });
+      });
+
+      
+    });
+
+    function triggerExploreQuery(keyword) {
+      const searchInput = document.getElementById('explorePageSearchInput');
+      if (searchInput) {
+        searchInput.value = keyword;
+        searchInput.dispatchEvent(new Event('input'));
+        const newUrl = window.location.pathname + `?q=${encodeURIComponent(keyword)}`;
+        window.history.pushState({path: newUrl}, '', newUrl);
+      }
+    }
+
+    function renderExploreResults(query, tab) {
+      const container = document.getElementById('exploreResultsContainer');
+      const queryHeader = document.getElementById('exploreQueryHeader');
+      const queryText = document.getElementById('exploreQueryText');
+      const countText = document.getElementById('exploreCountText');
+      
+      const dataObj = window.globalPostsData || {};
+      const currentLang = localStorage.getItem('preferredLanguage') || 'en';
+      const dict = (window.uiTranslations && window.uiTranslations[currentLang]) || (window.uiTranslations && window.uiTranslations.en) || {};
+      const noResultsText = dict.no_results || "No matching results found.";
+      const qLower = query.toLowerCase();
+
+      if (query) {
+        queryHeader.classList.remove('d-none');
+        queryText.textContent = `"${query}"`;
+        const showSpan = queryHeader.querySelector('[data-i18n="showing_results_for"]');
+        if (showSpan && dict.showing_results_for) {
+          showSpan.textContent = dict.showing_results_for;
+        }
+      } else {
+        queryHeader.classList.add('d-none');
+      }
+
+      // Filter matching posts first
+      let matchingPosts = [];
+      Object.keys(dataObj).forEach(id => {
+        const post = dataObj[id];
+        if (post.supported_langs && !post.supported_langs.split(',').includes(currentLang)) return;
+        
+        const title = (post[`title_${currentLang}`] || "").toLowerCase();
+        const content = (post[`content_${currentLang}`] || "").toLowerCase();
+        const author = (post.author_name || "").toLowerCase();
+        const category = (post.category || "").toLowerCase();
+        const localizedCat = (typeof window.translateCategory === 'function' ? window.translateCategory(post.category) : category).toLowerCase();
+
+        if (!title && !content) return;
+
+        if (!qLower || title.includes(qLower) || content.includes(qLower) || author.includes(qLower) || category.includes(qLower) || localizedCat.includes(qLower)) {
+          matchingPosts.push({ id, ...post });
+        }
+      });
+
+      // Handle rendering based on active tab
+      if (tab === 'recent' || tab === 'top' || tab === 'posts') {
+        function getPostAgeInMinutes(ts) {
+          if (!ts) return 999999;
+          const s = ts.toString().toLowerCase().trim();
+          if (s.includes('just now') || s.includes('vừa xong') || s.includes('刚刚')) return 0;
+          if (s.includes('yesterday') || s.includes('hôm qua') || s.includes('昨天')) return 1440;
+          
+          const numMatch = s.match(/\d+/);
+          const num = numMatch ? parseInt(numMatch[0], 10) : 1;
+          
+          if (s.includes('min') || s.includes('phút') || s.includes('分')) return num;
+          if (s.includes('hour') || s.includes('giờ') || s.includes('hr') || s.includes('tiếng') || s.includes('小时') || s.includes('时')) return num * 60;
+          if (s.includes('day') || s.includes('ngày') || s.includes('天') || s.includes('日')) return num * 1440;
+          if (s.includes('week') || s.includes('tuần') || s.includes('周')) return num * 10080;
+          if (s.includes('month') || s.includes('tháng') || s.includes('月')) return num * 43200;
+          if (s.includes('year') || s.includes('năm') || s.includes('年')) return num * 525600;
+          
+          return 999999;
+        }
+
+        if (tab === 'recent' || tab === 'posts') {
+          matchingPosts.sort((a, b) => {
+            const ageA = getPostAgeInMinutes(a.timestamp);
+            const ageB = getPostAgeInMinutes(b.timestamp);
+            if (ageA !== ageB) return ageA - ageB;
+            return parseInt(b.id) - parseInt(a.id);
+          });
+        } else if (tab === 'top') {
+          matchingPosts.sort((a, b) => (b.likes || 15) - (a.likes || 15));
+        }
+
+        countText.textContent = `${matchingPosts.length} ${dict.posts || 'posts'}`;
+
+        if (matchingPosts.length === 0) {
+          container.innerHTML = `<div class="text-center py-5 text-muted"><i class="bi bi-search fs-1 d-block mb-2"></i><span>${noResultsText}</span></div>`;
+          return;
+        }
+
+        let html = '';
+        matchingPosts.forEach(post => {
+          const title = post[`title_${currentLang}`] || post.title_en;
+          const content = post[`content_${currentLang}`] || post.content_en;
+          const tsLabel = typeof window.formatTimestampI18n === 'function' ? window.formatTimestampI18n(post.timestamp) : post.timestamp;
+          const catLabel = typeof window.translateCategory === 'function' ? window.translateCategory(post.category) : post.category;
+          html += `
+            <article class="substack-post" data-supported-langs="${post.supported_langs || 'en,vi,zh'}" data-category="${post.category}">
+              <div class="substack-post-header">
+                <div class="author-badge-group">
+                  <img src="${post.author_avatar}" alt="${post.author_name}" class="author-avatar">
+                  <div class="author-meta-info">
+                    <a href="../owner/profile.html?id=${post.author_id || '101'}" class="author-name">${post.author_name}</a>
+                    <span class="post-timestamp">${tsLabel}</span>
+                  </div>
+                  <span class="badge bg-primary-subtle text-primary border border-primary-subtle rounded-pill small px-2 ms-auto category-label" data-original-cat="${post.category}">${catLabel}</span>
+                </div>
+              </div>
+
+              <a href="post-detail.html?id=${post.id}" class="text-decoration-none text-reset d-block">
+                <h2 class="post-title h4 fw-bold mt-2 mb-1">${title}</h2>
+                <div class="substack-post-content post-content">${content}</div>
+                ${post.image ? `<div class="post-image-embed"><img src="${post.image}" alt="${title}"></div>` : ''}
+              </a>
+
+              <div class="substack-post-footer">
+                <button class="footer-action-item" onclick="toggleLike(this, ${post.likes || 12})"><i class="bi bi-heart"></i> <span class="like-count">${post.likes || 12}</span></button>
+                <button class="footer-action-item"><i class="bi bi-chat"></i> <span>${post.comments_count || post.comments || 5}</span></button>
+                <span class="footer-action-item text-muted"><i class="bi bi-eye"></i> <span>${post.views || 300}</span></span>
+              </div>
+            </article>
+          `;
+        });
+        container.innerHTML = html;
+
+      } else if (tab === 'publications') {
+        // Collect publications / categories dynamically from actual posts data
+        const categoryCounts = {};
+        if (dataObj) {
+          Object.values(dataObj).forEach(post => {
+            const cat = post.category || "General";
+            categoryCounts[cat] = (categoryCounts[cat] || 0) + 1;
+          });
+        }
+
+        const catMetadata = {
+          "Artificial Intelligence": { name: dict.cat_ai || "Artificial Intelligence", icon: "bi-cpu", desc: dict.desc_ai || "Agentic coding, LLM inference optimization, and neural architectures." },
+          "Backend Engineering": { name: dict.cat_backend || "Backend Engineering", icon: "bi-hdd-network", desc: dict.desc_backend || "Distributed systems, microservices, gRPC, and high-concurrency architecture." },
+          "Design": { name: dict.cat_design || "Design & UX", icon: "bi-palette", desc: dict.desc_design || "Glassmorphism, color psychology, and responsive interface design." },
+          "Frontend Development": { name: dict.cat_frontend || "Frontend Development", icon: "bi-browser-edge", desc: dict.desc_frontend || "React, Vue, Web Components, and modern rendering architectures." },
+          "Mobile Development": { name: dict.cat_mobile || "Mobile Development", icon: "bi-phone", desc: dict.desc_mobile || "Flutter, React Native, iOS, Android, and cross-platform solutions." },
+          "Data Science": { name: dict.cat_data || "Data Science", icon: "bi-bar-chart", desc: dict.desc_data || "Pandas, Polars, machine learning pipelines, and big data analysis." },
+          "Cybersecurity": { name: dict.cat_cyber || "Cybersecurity", icon: "bi-shield-lock", desc: dict.desc_cyber || "Zero Trust, network defense, penetration testing, and cryptography." }
+        };
+
+        const knownCats = Object.keys(categoryCounts).length > 0 ? Object.keys(categoryCounts) : ["Artificial Intelligence", "Backend Engineering", "Design"];
+        const postWord = currentLang === 'vi' ? 'bài viết' : (currentLang === 'zh' ? '篇文章' : 'posts');
+
+        let pubList = knownCats.map(cat => {
+          const meta = catMetadata[cat] || { name: cat, icon: "bi-folder", desc: "Articles and discussions in this category." };
+          const countVal = categoryCounts[cat] || 2;
+          return {
+            key: cat,
+            name: meta.name,
+            icon: meta.icon,
+            desc: meta.desc,
+            count: `${countVal} ${postWord}`
+          };
+        });
+
+        if (qLower) {
+          pubList = pubList.filter(p => p.name.toLowerCase().includes(qLower) || p.desc.toLowerCase().includes(qLower) || p.key.toLowerCase().includes(qLower));
+        }
+
+        countText.textContent = `${pubList.length} ${dict.publications || 'publications'}`;
+
+        if (pubList.length === 0) {
+          container.innerHTML = `<div class="text-center py-5 text-muted"><i class="bi bi-journal-x fs-1 d-block mb-2"></i><span>${noResultsText}</span></div>`;
+          return;
+        }
+
+        let html = '';
+        pubList.forEach(pub => {
+          html += `
+            <a href="explore.html?q=${encodeURIComponent(pub.name)}" class="explore-card-item text-decoration-none text-reset d-flex">
+              <div class="explore-card-left">
+                <div class="explore-card-pub-icon"><i class="bi ${pub.icon}"></i></div>
+                <div class="explore-card-info">
+                  <div class="explore-card-title">${pub.name}</div>
+                  <div class="explore-card-sub">${pub.desc}</div>
+                  <div class="text-muted small mt-1"><i class="bi bi-file-earmark-text me-1"></i>${pub.count}</div>
+                </div>
+              </div>
+            </a>
+          `;
+        });
+        container.innerHTML = html;
+
+      } else if (tab === 'people') {
+        // Collect people / authors without profession and bio
+        const peopleList = [
+          { id: "101", name: "Elena Rostova", avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=80&h=80" },
+          { id: "102", name: "Hồ Quốc Tuấn", avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=80&h=80" },
+          { id: "103", name: "李明 (Li Ming)", avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=80&h=80" },
+          { id: "104", name: "Sarah Connor", avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=80&h=80" },
+          { id: "105", name: "Alex Rivera", avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=80&h=80" },
+          { id: "106", name: "Maya Lin", avatar: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&q=80&w=80&h=80" },
+          { id: "107", name: "Kenji Sato", avatar: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&q=80&w=80&h=80" },
+          { id: "108", name: "Vũ Thu Hà", avatar: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=80&h=80" }
+        ];
+
+        const authorCounts = {};
+        if (dataObj) {
+          Object.values(dataObj).forEach(post => {
+            if (post.author_id) {
+              authorCounts[post.author_id] = (authorCounts[post.author_id] || 0) + 1;
+            }
+          });
+        }
+        const postWord = currentLang === 'vi' ? 'bài viết' : (currentLang === 'zh' ? '篇文章' : 'posts');
+
+        let filteredPeople = peopleList;
+        if (qLower) {
+          filteredPeople = peopleList.filter(p => p.name.toLowerCase().includes(qLower));
+        }
+
+        countText.textContent = `${filteredPeople.length} ${dict.people || 'people'}`;
+
+        if (filteredPeople.length === 0) {
+          container.innerHTML = `<div class="text-center py-5 text-muted"><i class="bi bi-people fs-1 d-block mb-2"></i><span>${noResultsText}</span></div>`;
+          return;
+        }
+
+        let html = '';
+        filteredPeople.forEach(person => {
+          const countVal = authorCounts[person.id] || 1;
+          const countTextVal = `${countVal} ${postWord}`;
+          html += `
+            <div class="explore-card-item align-items-center">
+              <a href="../owner/profile.html?id=${person.id}" class="explore-card-left text-decoration-none text-reset align-items-center">
+                <img src="${person.avatar}" class="explore-card-avatar" alt="${person.name}">
+                <div class="explore-card-info">
+                  <div class="explore-card-title fw-bold fs-6 mb-1">${person.name}</div>
+                  <div class="text-muted small"><i class="bi bi-journal-text me-1"></i>${countTextVal}</div>
+                </div>
+              </a>
+              <div class="d-flex align-items-center gap-2">
+                <a href="../owner/profile.html?id=${person.id}" class="btn btn-sm btn-outline-secondary rounded-pill px-3 fw-medium" data-i18n="view_profile">${dict.view_profile || 'View Profile'}</a>
+              </div>
+            </div>
+          `;
+        });
+        container.innerHTML = html;
+      }
+    }
+  </script>
+</body>
+</html>

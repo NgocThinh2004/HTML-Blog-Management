@@ -1,3 +1,294 @@
+// ========================================================
+// Global Posts Data (Accessible across all pages for Live Search)
+// ========================================================
+window.globalPostsData = {
+  1: {
+    author_name: "Elena Rostova",
+    author_avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=80&h=80",
+    author_id: "101",
+    timestamp: "2 hours ago",
+    category: "Artificial Intelligence",
+    supported_langs: "en,vi,zh",
+    image: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&q=80&w=720&h=360",
+    likes: 142,
+    comments: 28,
+    title_en: "The Future of AI Agentic Coding in 2026",
+    title_vi: "Tương lai của Lập trình Tự động hóa với AI năm 2026",
+    title_zh: "2026年AI代理编程的未来",
+    content_en: "We are witnessing a monumental paradigm shift where AI agents can autonomously plan, reason, and execute complex full-stack engineering tasks. From real-time DOM manipulation to database synchronization, modern coding assistants act as true pair programmers.\n\nIn traditional software development, developers spent substantial time on boilerplate code, debugging syntax errors, and configuring environments. With advanced agentic frameworks, the AI not only writes code but also understands project architecture, adheres to established design patterns, and executes automated verification plans.\n\nAs we move further into 2026, the collaboration between human creativity and AI execution will redefine what is possible in software engineering.",
+    content_vi: "Chúng ta đang chứng kiến một sự chuyển dịch mô hình lớn khi các tác nhân AI có thể tự chủ lập kế hoạch, suy luận và thực thi các nhiệm vụ kỹ thuật toàn diện. Từ thao tác DOM theo thời gian thực đến đồng bộ hóa cơ sở dữ liệu, trợ lý AI hiện đại đóng vai trò như người đồng hành thực thụ.\n\nTrong phát triển phần mềm truyền thống, lập trình viên dành nhiều thời gian cho các đoạn mã lặp lại, sửa lỗi cú pháp và cấu hình môi trường. Với các khung tự động hóa tiên tiến, AI không chỉ viết mã mà còn hiểu kiến trúc dự án, tuân thủ các mẫu thiết kế và thực thi các kế hoạch xác minh tự động.\n\nKhi tiến sâu vào năm 2026, sự kết hợp giữa sáng tạo của con người và khả năng thực thi của AI sẽ định nghĩa lại giới hạn trong kỹ thuật phần mềm.",
+    content_zh: "我们正在见证一场巨大的范式转变，AI代理可以自主计划、推理并执行复杂的全栈工程任务。从实时DOM操作到数据库同步，现代编码助手充当真正的结对程序员。\n\n在传统的软件开发中，开发人员将大量时间花费在样板代码、调试语法错误和配置环境上。借助先进的代理框架，AI不仅编写代码，还能理解项目架构，遵循既定的设计模式，并执行自动验证计划。\n\n随着我们进入2026年，人类创造力与AI执行力的协作将重新定义软件工程的未来。"
+  },
+  2: {
+    views: 987,
+    author_name: "李明 (Li Ming)",
+    author_avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=80&h=80",
+    author_id: "103",
+    timestamp: "3 days ago",
+    category: "Backend Engineering",
+    supported_langs: "en,vi,zh",
+    image: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&q=80&w=720&h=360",
+    likes: 210,
+    comments: 45,
+    title_en: "Deep Dive into Modern Web Rendering Architectures",
+    title_vi: "Hiểu sâu về Kiến trúc Render Web Hiện đại và Tối ưu hiệu năng",
+    title_zh: "深入理解现代Web渲染架构与性能优化",
+    content_en: "In an era where Single Page Applications and Server-Side Rendering go hand-in-hand, frontend engineers must choose the right architectural pattern to balance initial load speed with SEO.\n\nServer-Side Rendering (SSR) delivers pre-rendered HTML to the client, resulting in significantly faster Largest Contentful Paint (LCP) times. Meanwhile, Client-Side Rendering (CSR) excels at dynamic, application-like interactivity once loaded.\n\nBy adopting hybrid approaches like Progressive Hydration and Islands Architecture, modern frameworks give developers the best of both worlds without compromising user experience.",
+    content_vi: "Trong kỷ nguyên ứng dụng trang đơn (SPA) và Server-Side Rendering song hành, kỹ sư frontend cần lựa chọn kiến trúc phù hợp nhất để cân bằng giữa tốc độ tải trang và tối ưu hóa SEO.\n\nServer-Side Rendering (SSR) cung cấp HTML đã được render sẵn cho máy khách, giúp cải thiện đáng kể thời gian hiển thị nội dung lớn nhất (LCP). Trong khi đó, Client-Side Rendering (CSR) vượt trội trong các tương tác động sau khi tải xong.\n\nBằng cách áp dụng các giải pháp lai như Progressive Hydration và Islands Architecture, các framework hiện đại mang lại ưu điểm của cả hai mô hình mà không làm giảm trải nghiệm người dùng.",
+    content_zh: "在单页应用与服务器端渲染齐头并进的今天，前端工程师需要针对不同业务场景选择最合理的架构设计，确保首屏加载速度与搜索引擎优化（SEO）的最佳平衡。\n\n服务器端渲染 (SSR) 向客户端提供预渲染的HTML，从而显著缩短最大内容渲染时间 (LCP)。同时，客户端渲染 (CSR) 在加载后擅长处理动态交互。\n\n通过采用渐进式水合和孤岛架构等混合方法，现代框架让开发者在不牺牲用户体验的前提下获得两者的优势。"
+  },
+  3: {
+    views: 456,
+    author_name: "Hồ Quốc Tuấn",
+    author_avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=80&h=80",
+    author_id: "102",
+    timestamp: "Yesterday",
+    category: "Design",
+    supported_langs: "en,vi",
+    image: "",
+    likes: 89,
+    comments: 14,
+    title_en: "10 Essential Principles for Modern Glassmorphism UI",
+    title_vi: "10 Nguyên tắc cốt lõi cho Giao diện Glassmorphism hiện đại",
+    title_zh: "",
+    content_en: "Designing interfaces that feel responsive and alive encourages interaction. Achieve this with subtle hover effects, vibrant harmonious color palettes, and clean modern typography. Always prioritize visual excellence.\n\nGlassmorphism relies on multi-layered interfaces where background elements show through a frosted-glass overlay. The key is balancing background blur with subtle multi-stop borders to maintain high contrast and readability.\n\nWhen implemented thoughtfully, this style elevates the interface from a flat document to a rich, premium digital workspace.",
+    content_vi: "Thiết kế giao diện mang lại cảm giác sống động và phản hồi tốt sẽ thúc đẩy sự tương tác. Hãy đạt được điều này với hiệu ứng hover tinh tế, bảng màu hài hòa sống động và nghệ thuật chữ hiện đại.\n\nGlassmorphism dựa trên giao diện nhiều lớp, nơi các phần tử nền hiển thị qua một lớp kính mờ. Bí quyết là cân bằng độ mờ nền với đường viền sắc nét để duy trì độ tương phản cao và dễ đọc.\n\nKhi được áp dụng đúng cách, phong cách này nâng tầm giao diện từ một tài liệu phẳng thành một không gian làm việc kỹ thuật số cao cấp.",
+    content_zh: ""
+  },
+  4: {
+    views: 1500,
+    author_name: "Sarah Connor",
+    author_avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=80&h=80",
+    author_id: "104",
+    timestamp: "5 hours ago",
+    category: "Artificial Intelligence",
+    supported_langs: "en,vi,zh",
+    likes: 178,
+    comments: 32,
+    title_en: "Next-Gen LLM Reasoning & Tool Use in 2026",
+    title_vi: "Khả năng Suy luận & Sử dụng Công cụ của LLM Thế hệ mới năm 2026",
+    title_zh: "2026年下一代大语言模型推理与工具使用",
+    content_en: "Modern language models are moving beyond simple pattern matching. By integrating external tools, code interpreters, and multi-agent loops, they can tackle complex engineering workflows autonomously.\n\nWe are now seeing systems that can formulate hypotheses, test them against real-world APIs, and self-correct when encountering unexpected errors. This loop of reasoning and action represents the bridge from passive chat assistants to autonomous AI engineers.",
+    content_vi: "Các mô hình ngôn ngữ hiện đại đang vượt qua giới hạn nhận diện mẫu đơn thuần. Bằng cách tích hợp công cụ bên ngoài, trình thông dịch mã và vòng lặp đa tác nhân, chúng có thể tự động giải quyết các quy trình kỹ thuật phức tạp.\n\nChúng ta đang chứng kiến các hệ thống có thể đưa ra giả thuyết, kiểm thử với API thực tế và tự sửa lỗi khi gặp sự cố không mong muốn. Vòng lặp suy luận và hành động này là bước tiến từ trợ lý trò chuyện thụ động sang kỹ sư AI tự chủ.",
+    content_zh: "现代语言模型正在超越简单的模式匹配。通过集成外部工具、代码解释器和多代理循环，它们能够自主处理复杂的工程工作流。\n\n我们现在看到系统可以提出假设，在实际API中测试它们，并在遇到意外错误时自我纠正。这种推理与行动的循环代表了从被动聊天助手到自主AI工程师的跨越。"
+  },
+  5: {
+    views: 800,
+    author_name: "Alex Rivera",
+    author_avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=80&h=80",
+    author_id: "105",
+    timestamp: "1 day ago",
+    category: "Backend Engineering",
+    supported_langs: "en,vi,zh",
+    image: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&q=80&w=720&h=360",
+    likes: 312,
+    comments: 54,
+    title_en: "Building High-Throughput Microservices with Rust & gRPC",
+    title_vi: "Xây dựng Microservices Hiệu năng cao với Rust & gRPC",
+    title_zh: "使用Rust和gRPC构建高吞吐量微服务",
+    content_en: "As backend scalability requirements grow, transitioning performance-critical services to Rust and gRPC has proven to drastically reduce memory footprint while eliminating garbage collection pauses.\n\nRust's ownership model guarantees memory safety and thread safety without runtime overhead. Coupled with gRPC's HTTP/2 multiplexing and Protocol Buffers serialization, microservices can handle tens of thousands of concurrent requests with predictable sub-millisecond latency.",
+    content_vi: "Khi yêu cầu về khả năng mở rộng tăng lên, việc chuyển đổi các dịch vụ quan trọng về hiệu năng sang Rust và gRPC đã chứng minh giảm đáng kể lượng bộ nhớ sử dụng đồng thời loại bỏ các khoảng dừng do garbage collection.\n\nMô hình sở hữu của Rust đảm bảo an toàn bộ nhớ và luồng mà không tốn chi phí thời gian chạy. Kết hợp với giao thức gRPC trên HTTP/2 và serialization Protocol Buffers, microservices có thể xử lý hàng chục nghìn yêu cầu đồng thời với độ trễ dưới mili giây.",
+    content_zh: "随着后端可扩展性需求的增长，将关键性能服务过渡到Rust和gRPC极大地减少了内存占用，同时消除了垃圾回收停顿。\n\nRust的所有权模型确保了内存安全和线程安全，且没有运行时开销。结合gRPC的HTTP/2多路复用和Protocol Buffers序列化，微服务能够以可预测的亚毫秒级延迟处理数万个并发请求。"
+  },
+  6: {
+    views: 620,
+    author_name: "Maya Lin",
+    author_avatar: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&q=80&w=80&h=80",
+    author_id: "106",
+    timestamp: "2 days ago",
+    category: "Design",
+    supported_langs: "en,vi,zh",
+    image: "https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&q=80&w=720&h=360",
+    likes: 95,
+    comments: 19,
+    title_en: "The Psychology of Color in Modern Web Applications",
+    title_vi: "Tâm lý học Màu sắc trong các Ứng dụng Web Hiện đại",
+    title_zh: "现代Web应用程序中的色彩心理学",
+    content_en: "Color is not just an aesthetic choice; it is a fundamental communication tool that guides user interaction, establishes brand trust, and influences cognitive load in complex user interfaces.\n\nWarm tones stimulate urgency and excitement, making them ideal for call-to-action buttons, while cool blues and neutral slates foster concentration and reliability in analytical dashboards. Understanding these cognitive responses enables designers to craft intuitive user experiences.",
+    content_vi: "Màu sắc không chỉ là lựa chọn thẩm mỹ; nó là công cụ giao tiếp cốt lõi dẫn dắt tương tác người dùng, xây dựng lòng tin thương hiệu và ảnh hưởng đến tải nhận thức trong các giao diện phức tạp.\n\nCác tông màu ấm kích thích sự cấp bách và hào hứng, lý tưởng cho nút kêu gọi hành động, trong khi sắc xanh lạnh và xám trung tính tạo sự tập trung và tin cậy cho bảng điều khiển phân tích. Hiểu được các phản ứng nhận thức này giúp nhà thiết kế tạo ra trải nghiệm người dùng trực quan.",
+    content_zh: "色彩不仅是美学选择，更是指导用户交互、建立品牌信任并在复杂用户界面中影响认知负荷的核心沟通工具。\n\n暖色调激发紧迫感和兴奋感，非常适合号召性用语按钮；而冷蓝色和中性石板色则在分析仪表板中培养专注力和可靠性。理解这些认知反应使设计师能够打造直观的用户体验。"
+  },
+  7: {
+    views: 1120,
+    author_name: "Kenji Sato",
+    author_avatar: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&q=80&w=80&h=80",
+    author_id: "107",
+    timestamp: "3 days ago",
+    category: "Backend Engineering",
+    supported_langs: "en,vi,zh",
+    image: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&q=80&w=720&h=360",
+    likes: 245,
+    comments: 38,
+    title_en: "Distributed Caching Strategies for High-Traffic APIs",
+    title_vi: "Chiến lược Caching Phân tán cho API Lưu lượng cao",
+    title_zh: "高流量API的分布式缓存策略",
+    content_en: "When scaling web applications to millions of daily active users, database bottlenecks become the primary limiting factor. Implementing multi-tiered distributed caching using Redis and Memcached can alleviate up to 95% of read load.\n\nWe explore cache invalidation patterns, write-through vs write-behind architectures, and preventing cache stampedes during traffic spikes. Proper caching architecture is essential for maintaining sub-10ms response times globally.",
+    content_vi: "Khi mở rộng quy mô ứng dụng web lên hàng triệu người dùng hoạt động mỗi ngày, nghẽn cổ chai cơ sở dữ liệu trở thành yếu tố cản trở chính. Triển khai bộ nhớ đệm phân tán nhiều tầng bằng Redis và Memcached có thể giảm tới 95% tải đọc.\n\nChúng tôi phân tích các mô hình vô hiệu hóa cache, kiến trúc write-through và write-behind, cùng cách ngăn chặn hiện tượng cache stampede trong các đợt tăng đột biến lưu lượng truy cập.",
+    content_zh: "将Web应用程序扩展到数百万日活跃用户时，数据库瓶颈成为主要的限制因素。使用Redis和Memcached实施多层分布式缓存可以减轻高达95%的读负载。\n\n我们深入探讨了缓存失效模式、写穿透与写回架构，以及防止流量峰值期间的缓存雪崩。正确的缓存架构对于在全球范围内保持在10毫秒以内的响应时间至关重要。"
+  },
+  8: {
+    views: 890,
+    author_name: "Vũ Thu Hà",
+    author_avatar: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=80&h=80",
+    author_id: "108",
+    timestamp: "4 days ago",
+    category: "Design",
+    supported_langs: "en,vi,zh",
+    image: "https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&q=80&w=720&h=360",
+    likes: 189,
+    comments: 24,
+    title_en: "Designing Accessible & Inclusive Dark Mode Interfaces",
+    title_vi: "Thiết kế Giao diện Dark Mode Dễ tiếp cận & Toàn diện",
+    title_zh: "设计无障碍与包容性的深色模式界面",
+    content_en: "Dark mode is more than just inverting colors; it requires careful calibration of contrast ratios, elevation shadows, and typographic hierarchy to prevent eye strain and astigmatism halation.\n\nBy utilizing desaturated primary colors and elevation-based surface lightness, designers can create dark interfaces that feel comfortable in low-light environments while maintaining WCAG AAA accessibility standards.",
+    content_vi: "Dark mode không chỉ đơn thuần là đảo ngược màu sắc; nó đòi hỏi sự tinh chỉnh cẩn thận về tỷ lệ tương phản, độ bóng của các lớp không gian và cấu trúc chữ để ngăn ngừa mỏi mắt và hiện tượng lóa sáng.\n\nBằng cách sử dụng các màu chủ đạo giảm độ bão hòa và độ sáng bề mặt theo từng lớp, nhà thiết kế có thể tạo ra các giao diện tối thoải mái trong môi trường thiếu sáng đồng thời tuân thủ tiêu chuẩn tiếp cận WCAG AAA.",
+    content_zh: "深色模式不仅仅是反转颜色；它需要仔细校准对比度、层级阴影和排版层级，以防止视疲劳和散光晕影。\n\n通过使用低饱和度的主色调和基于层级的表面亮度，设计师可以创建在低光环境下令人舒适的深色界面，同时达到WCAG AAA无障碍标准。"
+  },
+  9: {
+    views: 1850,
+    author_name: "Elena Rostova",
+    author_avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=80&h=80",
+    author_id: "101",
+    timestamp: "5 days ago",
+    category: "Artificial Intelligence",
+    supported_langs: "en,vi,zh",
+    image: "https://images.unsplash.com/photo-1620712943543-bcc4688e7485?auto=format&fit=crop&q=80&w=720&h=360",
+    likes: 310,
+    comments: 62,
+    title_en: "Optimizing LLM Inference: Quantization & Speculative Decoding",
+    title_vi: "Tối ưu hóa LLM Inference: Lượng tử hóa & Speculative Decoding",
+    title_zh: "优化大语言模型推理：量化与推测解码",
+    content_en: "Running large language models in production efficiently demands cutting-edge optimization techniques. Quantizing models from FP16 down to INT4 or FP8 significantly reduces memory bandwidth requirements with negligible perplexity degradation.\n\nFurthermore, speculative decoding leverages a smaller draft model to generate candidate tokens verified in parallel by the target model, speeding up inference generation rates by up to 3x without changing the output distribution.",
+    content_vi: "Vận hành hiệu quả các mô hình ngôn ngữ lớn trong môi trường thực tế đòi hỏi các kỹ thuật tối ưu tiên tiến nhất. Lượng tử hóa mô hình từ FP16 xuống INT4 hoặc FP8 giúp giảm đáng kể yêu cầu băng thông bộ nhớ với độ suy giảm chất lượng gần như không đáng kể.\n\nHơn nữa, speculative decoding sử dụng một mô hình nháp nhỏ hơn để tạo các token ứng viên được kiểm chứng song song bởi mô hình chính, tăng tốc độ tạo văn bản lên tới 3 lần mà không làm thay đổi kết quả đầu ra.",
+    content_zh: "在生产环境中高效运行大语言模型需要最先进的优化技术。将模型从FP16量化到INT4或FP8大大降低了内存带宽需求，且困惑度下降微乎其微。\n\n此外，推测解码利用一个较小的草稿模型生成候选词元，并由目标模型并行验证，在不改变输出分布的情况下将推理生成速度提高了近3倍。"
+  },
+  10: {
+    views: 740,
+    author_name: "Hồ Quốc Tuấn",
+    author_avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=80&h=80",
+    author_id: "102",
+    timestamp: "6 days ago",
+    category: "Design",
+    supported_langs: "en,vi,zh",
+    image: "https://images.unsplash.com/photo-1581291518633-83b4ebd1d83e?auto=format&fit=crop&q=80&w=720&h=360",
+    likes: 165,
+    comments: 21,
+    title_en: "Micro-Animations: Bringing Interactive Web Layouts to Life",
+    title_vi: "Micro-Animations: Thổi hồn vào các Giao diện Web Tương tác",
+    title_zh: "微动画：赋予交互式Web布局生命力",
+    content_en: "Subtle micro-animations provide crucial feedback to user interactions, making interfaces feel tactile and responsive. From button press animations to smooth drawer transitions, motion design bridges the gap between static screens and fluid software.\n\nWhen implementing animations, respecting prefers-reduced-motion media queries and maintaining 60fps performance via CSS transforms is paramount for a polished, professional user experience.",
+    content_vi: "Các vi chuyển động (micro-animations) tinh tế mang lại phản hồi quan trọng cho các tương tác của người dùng, giúp giao diện mang lại cảm giác chân thực và nhạy bén. Từ hiệu ứng nhấn nút đến các chuyển tiếp mượt mà, thiết kế chuyển động thu hẹp khoảng cách giữa màn hình tĩnh và phần mềm sống động.\n\nKhi triển khai hoạt ảnh, việc tuân thủ cấu hình prefers-reduced-motion và duy trì hiệu năng 60fps qua CSS transforms là tối quan trọng để có một trải nghiệm chuyên nghiệp.",
+  },
+  11: {
+    views: 1240,
+    author_name: "Elena Rostova",
+    author_avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=80&h=80",
+    author_id: "101",
+    timestamp: "1 week ago",
+    category: "Frontend Development",
+    supported_langs: "en,vi,zh",
+    image: "https://images.unsplash.com/photo-1633356122544-f134324a6cee?auto=format&fit=crop&q=80&w=720&h=360",
+    likes: 420,
+    comments: 85,
+    title_en: "React 19 vs Vue 3: The Framework Wars Continue",
+    title_vi: "React 19 vs Vue 3: Cuộc chiến Framework Tiếp diễn",
+    title_zh: "React 19 vs Vue 3：框架之争继续",
+    content_en: "With React 19 introducing the new compiler and use() hook, and Vue 3 perfecting the Composition API with Vapor Mode, the frontend landscape is evolving faster than ever. We dive deep into bundle sizes, rendering benchmarks, and developer experience.",
+    content_vi: "Với việc React 19 giới thiệu trình biên dịch mới và hook use(), cùng với Vue 3 hoàn thiện Composition API qua Vapor Mode, bối cảnh frontend đang phát triển nhanh hơn bao giờ hết. Chúng tôi phân tích sâu về kích thước bundle, hiệu suất kết xuất và trải nghiệm nhà phát triển.",
+    content_zh: "随着React 19引入新的编译器和use()钩子，以及Vue 3通过Vapor模式完善Composition API，前端领域的发展比以往任何时候都快。我们深入探讨捆绑包大小、渲染基准和开发者体验。"
+  },
+  12: {
+    views: 980,
+    author_name: "Hồ Quốc Tuấn",
+    author_avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=80&h=80",
+    author_id: "102",
+    timestamp: "2 weeks ago",
+    category: "Mobile Development",
+    supported_langs: "en,vi,zh",
+    image: "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&q=80&w=720&h=360",
+    likes: 315,
+    comments: 42,
+    title_en: "Flutter Impeller: Redefining Cross-Platform Rendering",
+    title_vi: "Flutter Impeller: Định nghĩa lại Rendering Đa nền tảng",
+    title_zh: "Flutter Impeller：重新定义跨平台渲染",
+    content_en: "Skia has served Flutter well, but Impeller brings a new era of jank-free rendering by precompiling shaders. Learn how this architectural shift fundamentally solves the long-standing iOS shader compilation stutter.",
+    content_vi: "Skia đã phục vụ tốt cho Flutter, nhưng Impeller mang đến một kỷ nguyên mới của việc hiển thị mượt mà bằng cách biên dịch trước các shaders. Hãy tìm hiểu cách sự thay đổi kiến trúc này giải quyết triệt để tình trạng giật lag biên dịch shader trên iOS.",
+    content_zh: "Skia为Flutter提供了很好的服务，但Impeller通过预编译着色器开启了无卡顿渲染的新纪元。了解这种架构转变如何从根本上解决长期存在的iOS着色器编译卡顿问题。"
+  },
+  13: {
+    views: 1560,
+    author_name: "李明 (Li Ming)",
+    author_avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=80&h=80",
+    author_id: "103",
+    timestamp: "1 month ago",
+    category: "Data Science",
+    supported_langs: "en,vi,zh",
+    image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=720&h=360",
+    likes: 540,
+    comments: 112,
+    title_en: "Migrating from Pandas to Polars for Big Data Processing",
+    title_vi: "Chuyển đổi từ Pandas sang Polars để Xử lý Dữ liệu Lớn",
+    title_zh: "从Pandas迁移到Polars以进行大数据处理",
+    content_en: "Pandas has been the standard for data manipulation in Python, but it struggles with large datasets due to its single-threaded nature. Polars, written in Rust, leverages multi-threading and lazy evaluation to process data up to 50x faster.",
+    content_vi: "Pandas từng là tiêu chuẩn để thao tác dữ liệu trong Python, nhưng nó gặp khó khăn với các tập dữ liệu lớn do bản chất luồng đơn. Polars, được viết bằng Rust, tận dụng đa luồng và đánh giá lười (lazy evaluation) để xử lý dữ liệu nhanh hơn tới 50 lần.",
+    content_zh: "Pandas一直是Python中数据操作的标准，但由于其单线程特性，在处理大型数据集时显得吃力。用Rust编写的Polars利用多线程和延迟计算，将数据处理速度提高了多达50倍。"
+  },
+  14: {
+    views: 890,
+    author_name: "Sarah Connor",
+    author_avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=80&h=80",
+    author_id: "104",
+    timestamp: "1 month ago",
+    category: "Cybersecurity",
+    supported_langs: "en,vi,zh",
+    image: "https://images.unsplash.com/photo-1526304640581-d334cdbbf45e?auto=format&fit=crop&q=80&w=720&h=360",
+    likes: 210,
+    comments: 34,
+    title_en: "Zero Trust Architecture: Never Trust, Always Verify",
+    title_vi: "Kiến trúc Zero Trust: Không bao giờ tin tưởng, Luôn luôn xác minh",
+    title_zh: "零信任架构：永不信任，始终验证",
+    content_en: "Traditional network security models based on perimeter defense are obsolete in the era of remote work and cloud infrastructure. Zero Trust mandates strict identity verification for every person and device trying to access resources, regardless of their network location.",
+    content_vi: "Các mô hình bảo mật mạng truyền thống dựa trên phòng thủ vành đai đã lỗi thời trong kỷ nguyên làm việc từ xa và cơ sở hạ tầng đám mây. Zero Trust bắt buộc xác minh danh tính nghiêm ngặt đối với mọi người và thiết bị cố gắng truy cập tài nguyên, bất kể vị trí mạng của họ.",
+    content_zh: "在远程工作和云基础设施时代，基于边界防御的传统网络安全模型已经过时。零信任要求对试图访问资源的每个人和设备进行严格的身份验证，无论其网络位置如何。"
+  },
+  15: {
+    views: 2100,
+    author_name: "Alex Rivera",
+    author_avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=80&h=80",
+    author_id: "105",
+    timestamp: "2 months ago",
+    category: "Backend Engineering",
+    supported_langs: "en,vi,zh",
+    image: "https://images.unsplash.com/photo-1667372393119-3d4c48d07fc9?auto=format&fit=crop&q=80&w=720&h=360",
+    likes: 670,
+    comments: 156,
+    title_en: "Kubernetes Anti-Patterns: Why Your Cluster is Failing",
+    title_vi: "Các Anti-Pattern trong Kubernetes: Tại sao Cluster của bạn thất bại",
+    title_zh: "Kubernetes反模式：为什么你的集群会失败",
+    content_en: "Adopting Kubernetes does not automatically make your application scalable or resilient. We explore common anti-patterns such as omitting resource limits, hardcoding configuration inside containers, and relying on implicit dependencies.",
+    content_vi: "Việc áp dụng Kubernetes không tự động làm cho ứng dụng của bạn có khả năng mở rộng hay phục hồi. Chúng tôi khám phá các anti-pattern phổ biến như bỏ qua giới hạn tài nguyên, hardcode cấu hình bên trong container và phụ thuộc vào các liên kết ngầm.",
+    content_zh: "采用Kubernetes并不会自动使您的应用程序具有可扩展性或弹性。我们探讨了常见的反模式，例如省略资源限制、在容器内硬编码配置以及依赖隐式依赖项。"
+  },
+  16: {
+    views: 1120,
+    author_name: "Vũ Thu Hà",
+    author_avatar: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=80&h=80",
+    author_id: "108",
+    timestamp: "2 months ago",
+    category: "Design",
+    supported_langs: "en,vi,zh",
+    image: "https://images.unsplash.com/photo-1561070791-2526d30994b5?auto=format&fit=crop&q=80&w=720&h=360",
+    likes: 380,
+    comments: 65,
+    title_en: "The Return to Minimalism in Enterprise Software",
+    title_vi: "Sự Trở lại của Chủ nghĩa Tối giản trong Phần mềm Doanh nghiệp",
+    title_zh: "企业软件中极简主义的回归",
+    content_en: "After years of feature bloat and complex dashboards, enterprise users are experiencing cognitive overload. We analyze the shift back towards minimalist interfaces that prioritize white space, clear typography, and focused user workflows.",
+    content_vi: "Sau nhiều năm nhồi nhét tính năng và bảng điều khiển phức tạp, người dùng doanh nghiệp đang trải qua sự quá tải nhận thức. Chúng tôi phân tích sự chuyển dịch quay lại các giao diện tối giản, ưu tiên khoảng trắng, kiểu chữ rõ ràng và quy trình làm việc tập trung.",
+    content_zh: "经过多年的功能膨胀和复杂的仪表板，企业用户正经历着认知超载。我们分析了回归极简主义界面的趋势，这些界面优先考虑留白、清晰的排版和专注的用户工作流。"
+  }
+};
+
 document.addEventListener('DOMContentLoaded', () => {
   // ========================================================
   // Theme Toggle Mechanism (Circle button)
@@ -5,7 +296,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const themeToggle = document.getElementById('themeToggle');
   const themeIcon = document.getElementById('themeIcon');
   const htmlElement = document.documentElement;
-  
+
   const savedTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
   htmlElement.setAttribute('data-bs-theme', savedTheme);
   updateThemeIcon(savedTheme);
@@ -130,6 +421,13 @@ document.addEventListener('DOMContentLoaded', () => {
       cat_ai: "Artificial Intelligence",
       cat_backend: "Backend Engineering",
       cat_design: "Design",
+      cat_frontend: "Frontend Development",
+      cat_mobile: "Mobile Development",
+      cat_data: "Data Science",
+      cat_cyber: "Cybersecurity",
+      slug_ai: "ai",
+      slug_backend: "backend",
+      slug_design: "design",
       search_placeholder: "Search MundiBlog...",
       subscriptions: "Subscriptions",
       join_creators: "Join creators on MundiBlog",
@@ -161,9 +459,9 @@ document.addEventListener('DOMContentLoaded', () => {
       settings_desc: "Manage your interface, display language, and reading preferences on MundiBlog.",
       appearance_title: "Appearance & Theme",
       appearance_desc: "Choose a light or dark theme to suit your environment and protect your eyes when reading posts.",
-      theme_light: "Light (Sáng)",
+      theme_light: "Light",
       theme_light_sub: "Substack clean white paper",
-      theme_dark: "Dark (Tối)",
+      theme_dark: "Dark",
       theme_dark_sub: "Comfortable in low-light environments",
       lang_title: "Feed & UI Language",
       lang_desc: "Choose your default language. The Home Feed and UI will automatically display in your selected language.",
@@ -237,7 +535,133 @@ document.addEventListener('DOMContentLoaded', () => {
       cat_profile_branding: "Profile Branding",
       cat_design_general: "Design",
       cat_analytics: "Analytics",
-      cat_localization: "Localization"
+      cat_localization: "Localization",
+      search_placeholder_modal: "Search people, publications, or topics...",
+      recommended_people: "People & Publications",
+      no_results: "No matching results found.",
+      // Explore page
+      explore: "Explore",
+      top: "Top",
+      recent: "Recent",
+      posts: "Posts",
+      publications: "Publications",
+      people: "People",
+      subscribed: "Subscribed",
+      author_economics: "Economics Author",
+      author_economics_lead: "Economics Lead",
+      author_tech_lead: "Tech Lead",
+      // Admin Panel
+      admin_dashboard: "Admin Dashboard",
+      manage_users: "Manage Users",
+      manage_categories: "Manage Categories",
+      manage_languages: "Manage Languages",
+      total_users: "Total Users",
+      total_articles: "Total Articles",
+      ai_translated: "AI Translated",
+      total_comments: "Total Comments",
+      total_likes: "Total Likes",
+      queue_status: "AI Translation Queue",
+      user_management: "User Management",
+      category_management: "Category Management",
+      language_management: "Language Management",
+      search_user_placeholder: "Search users by name or email...",
+      search_cat_placeholder: "Search categories...",
+      add_category: "Add Category",
+      edit_category: "Edit Category",
+      category_name: "Category Name",
+      slug: "Slug",
+      status: "Status",
+      role: "Role",
+      active: "Active",
+      banned: "Banned",
+      translation_coverage: "Translation Coverage",
+      admin_desc: "Overview of users, articles, total comments, and community engagement.",
+      col_article: "Article",
+      col_author: "Author",
+      col_source: "Source",
+      col_target: "Target",
+      col_status: "Status",
+      col_actions: "Actions",
+      status_translating: "Translating",
+      status_completed: "Completed",
+      status_hidden: "Hidden",
+      user_desc: "View user directory, filter by roles, and manage account statuses.",
+      col_user: "User",
+      col_email: "Email",
+      col_joined: "Joined",
+      role_all: "All Roles",
+      role_admin: "Admin",
+      role_member: "Member",
+      cat_desc: "Create, organize, and edit post categories for the home feed.",
+      col_posts_count: "Total Posts",
+      cat_name_placeholder: "Enter category name...",
+      slug_auto_placeholder: "Slug automatically generated...",
+      slug_help: "URLs will use this slug to route categories.",
+      lang_desc_page: "Configure system languages and monitor AI automatic translation coverage.",
+      add_language: "Add Language",
+      col_code: "Code",
+      col_lang_name: "Language Name",
+      col_progress: "AI Translation Progress",
+      primary_language: "Primary Language",
+      system_default: "System Default",
+      back_admin: "Back to Admin Dashboard",
+      posts_suffix: "posts",
+      select_language: "Select Language",
+      choose_lang_placeholder: "Choose a language...",
+      language_code: "Language Code",
+      lang_code_placeholder: "Language code will be generated...",
+      published_2h: "Published 2 hours ago",
+      published_3d: "Published 3 days ago",
+      published_1d: "Published 1 day ago",
+      published_5h: "Published 5 hours ago",
+      showing_results_for: "Showing results for ",
+      views: "Views",
+      view: "View",
+      yesterday: "Yesterday",
+      just_now: "Just now",
+      hours_ago: "hours ago",
+      days_ago: "days ago",
+      weeks_ago: "weeks ago",
+      months_ago: "months ago",
+      password: "Password",
+      confirm_password: "Confirm Password",
+      full_name: "Full Name",
+      create_account: "Create Account",
+      register: "Register",
+      dont_have_account: "Don't have an account?",
+      already_have_account: "Already have an account?",
+      quick_demo_login: "QUICK DEMO LOGIN",
+      register_here: "Register here",
+      login_here: "Log in here",
+      post_list: "Article List",
+      translated_articles: "Translated Articles:",
+      make_primary: "Make Primary",
+      danger_warning: "Data Destruction Warning",
+      delete_lang_desc1: "You are about to delete the entire language ",
+      delete_lang_desc2: "This will permanently delete ",
+      delete_lang_desc3: " translated articles. This action cannot be undone!",
+      delete_lang_desc4: "To proceed, please type the exact language name in the box below:",
+      type_lang_name: "Type language name...",
+      cancel_safe: "Cancel Safely",
+      confirm_delete: "Confirm Permanent Deletion",
+      user_details: "User Details",
+      activity_info: "Activity & Info",
+      joined_date: "Joined Date",
+      articles_published: "Articles Published",
+      joined: "Joined",
+      views_over_time: "Views over time",
+      top_languages: "Top Languages",
+      lang_vi: "Vietnamese",
+      lang_zh: "Chinese",
+      lang_en: "English",
+      top_categories: "Top Categories",
+      cat_ai_auto: "AI & Automation",
+      cat_web_dev: "Web Development",
+      cat_ui_ux: "UI/UX Design",
+      new_users_growth: "New Users Growth",
+      mon: "Mon", tue: "Tue", wed: "Wed", thu: "Thu", fri: "Fri", sat: "Sat", sun: "Sun",
+      post_ai_1: "The Future of AI Agent Programming in 2026",
+      post_ai_2: "Next-Gen LLM Reasoning & Tool Use in 2026"
     },
     vi: {
       home: "Trang chủ",
@@ -271,6 +695,13 @@ document.addEventListener('DOMContentLoaded', () => {
       cat_ai: "Trí tuệ nhân tạo (AI)",
       cat_backend: "Kỹ thuật Backend",
       cat_design: "Thiết kế UI/UX",
+      cat_frontend: "Lập trình Frontend",
+      cat_mobile: "Lập trình Mobile",
+      cat_data: "Khoa học Dữ liệu",
+      cat_cyber: "An ninh mạng",
+      slug_ai: "tri-tue-nhan-tao",
+      slug_backend: "ky-thuat-backend",
+      slug_design: "thiet-ke-ui-ux",
       search_placeholder: "Tìm kiếm trên MundiBlog...",
       subscriptions: "Đăng ký theo dõi",
       join_creators: "Kết nối cùng tác giả",
@@ -323,7 +754,7 @@ document.addEventListener('DOMContentLoaded', () => {
       translate_comment: "Dịch",
       show_original: "Hiển thị nội dung gốc",
       related_posts: "Các bài viết liên quan",
-      related_posts_in: "Bài viết liên quan trong chuyên mục",
+      related_posts_in: "Bài viết liên quan trong danh mục",
       no_comments: "Chưa có bình luận nào. Hãy là người đầu tiên bình luận!",
       reply: "Trả lời",
       cancel: "Hủy",
@@ -378,7 +809,136 @@ document.addEventListener('DOMContentLoaded', () => {
       cat_profile_branding: "Thương hiệu hồ sơ",
       cat_design_general: "Thiết kế",
       cat_analytics: "Phân tích",
-      cat_localization: "Bản địa hóa"
+      cat_localization: "Bản địa hóa",
+      search_placeholder_modal: "Tìm kiếm tác giả, bài viết hoặc danh mục...",
+      recommended_people: "Tác giả & Danh mục",
+      no_results: "Không tìm thấy kết quả phù hợp.",
+      // Explore page
+      explore: "Khám phá",
+      top: "Nổi bật",
+      recent: "Mới nhất",
+      posts: "Bài viết",
+      publications: "Chuyên mục",
+      people: "Tác giả",
+      subscribed: "Đã theo dõi",
+      author_economics: "Chuyên gia Kinh tế",
+      author_economics_lead: "Trưởng phòng Kinh tế",
+      author_tech_lead: "Trưởng nhóm Kỹ thuật",
+      showing_results_for: "Hiển thị kết quả cho ",
+      yesterday: "Hôm qua",
+      just_now: "Vừa xong",
+      hours_ago: "giờ trước",
+      days_ago: "ngày trước",
+      weeks_ago: "tuần trước",
+      months_ago: "tháng trước",
+      // Admin Panel
+      admin_dashboard: "Bảng điều khiển Admin",
+      manage_users: "Quản lý thành viên",
+      manage_categories: "Quản lý danh mục",
+      manage_languages: "Quản lý ngôn ngữ",
+      total_users: "Tổng số thành viên",
+      total_articles: "Tổng số bài viết",
+      ai_translated: "Đã dịch bằng AI",
+      total_comments: "Tổng bình luận",
+      total_likes: "Tổng lượt thích",
+      queue_status: "Hàng đợi biên dịch AI",
+      user_management: "Quản lý thành viên",
+      category_management: "Quản lý danh mục",
+      language_management: "Quản lý ngôn ngữ",
+      search_user_placeholder: "Tìm thành viên theo tên hoặc email...",
+      search_cat_placeholder: "Tìm kiếm danh mục...",
+      add_category: "Thêm danh mục",
+      edit_category: "Sửa danh mục",
+      category_name: "Tên danh mục",
+      slug: "Slug (Đường dẫn)",
+      actions: "Thao tác",
+      status: "Trạng thái",
+      role: "Vai trò",
+      active: "Hoạt động",
+      banned: "Bị khóa",
+      save_changes: "Lưu thay đổi",
+      translation_coverage: "Mức độ phủ dịch",
+      admin_desc: "Tổng quan về thành viên, bài viết, bình luận và mức độ tương tác của cộng đồng.",
+      col_article: "Bài viết",
+      col_author: "Tác giả",
+      col_source: "Nguồn",
+      col_target: "Đích",
+      col_status: "Trạng thái",
+      col_actions: "Thao tác",
+      status_translating: "Đang dịch...",
+      status_completed: "Hoàn thành",
+      status_failed: "Thất bại",
+      status_hidden: "Tạm ẩn",
+      user_desc: "Xem danh sách thành viên, lọc theo vai trò và quản lý trạng thái tài khoản.",
+      col_user: "Người dùng",
+      col_email: "Email",
+      col_joined: "Ngày tham gia",
+      role_all: "Tất cả vai trò",
+      role_admin: "Quản trị viên",
+      role_member: "Thành viên",
+      cat_desc: "Tạo, sắp xếp và chỉnh sửa các danh mục bài viết trên bảng tin.",
+      col_posts_count: "Tổng số bài viết",
+      cat_name_placeholder: "Nhập tên danh mục...",
+      slug_auto_placeholder: "Đường dẫn tự động tạo...",
+      slug_help: "Đường dẫn liên kết (Slug) sẽ dùng để định tuyến danh mục bài viết.",
+      lang_desc_page: "Cấu hình ngôn ngữ hệ thống và theo dõi tiến độ dịch thuật tự động của AI.",
+      add_language: "Thêm ngôn ngữ",
+      col_code: "Mã",
+      col_lang_name: "Tên ngôn ngữ",
+      col_progress: "Tiến độ dịch thuật AI",
+      primary_language: "Ngôn ngữ chính",
+      system_default: "Mặc định hệ thống",
+      back_admin: "Quay lại Bảng điều khiển Admin",
+      posts_suffix: "bài viết",
+      select_language: "Chọn ngôn ngữ",
+      choose_lang_placeholder: "Chọn một ngôn ngữ...",
+      language_code: "Mã ngôn ngữ",
+      lang_code_placeholder: "Mã ngôn ngữ sẽ tự động sinh...",
+      published_2h: "Đã đăng 2 giờ trước",
+      published_3d: "Đã đăng 3 ngày trước",
+      published_1d: "Đã đăng 1 ngày trước",
+      published_5h: "Đã đăng 5 giờ trước",
+      views: "Lượt xem",
+      view: "Xem",
+      password: "Mật khẩu",
+      confirm_password: "Xác nhận mật khẩu",
+      full_name: "Họ và tên",
+      create_account: "Tạo tài khoản",
+      register: "Đăng ký",
+      dont_have_account: "Chưa có tài khoản?",
+      already_have_account: "Đã có tài khoản?",
+      quick_demo_login: "ĐĂNG NHẬP NHANH DEMO",
+      register_here: "Đăng ký tại đây",
+      login_here: "Đăng nhập tại đây",
+      post_list: "Danh sách bài viết",
+      translated_articles: "Bài viết đã dịch:",
+      make_primary: "Mặc định",
+      danger_warning: "Cảnh báo Hủy diệt Dữ liệu",
+      delete_lang_desc1: "Bạn đang chuẩn bị xóa toàn bộ ngôn ngữ ",
+      delete_lang_desc2: "Việc này sẽ xóa sạch ",
+      delete_lang_desc3: " bài viết đã được dịch. Hành động này không thể hoàn tác!",
+      delete_lang_desc4: "Để tiếp tục, vui lòng gõ chính xác tên ngôn ngữ vào ô bên dưới:",
+      type_lang_name: "Gõ tên ngôn ngữ...",
+      cancel_safe: "Hủy bỏ an toàn",
+      confirm_delete: "Đồng ý Xóa vĩnh viễn",
+      user_details: "Chi tiết Người dùng",
+      activity_info: "Hoạt động & Thông tin",
+      joined_date: "Ngày tham gia",
+      articles_published: "Bài viết đã xuất bản",
+      joined: "Tham gia",
+      views_over_time: "Lượt xem theo thời gian",
+      top_languages: "Ngôn ngữ phổ biến",
+      lang_vi: "Tiếng Việt",
+      lang_zh: "Tiếng Trung",
+      lang_en: "Tiếng Anh",
+      top_categories: "Danh mục phổ biến",
+      cat_ai_auto: "Trí tuệ nhân tạo (AI)",
+      cat_web_dev: "Lập trình Web",
+      cat_ui_ux: "Thiết kế UI/UX",
+      new_users_growth: "Tăng trưởng Người dùng",
+      mon: "T2", tue: "T3", wed: "T4", thu: "T5", fri: "T6", sat: "T7", sun: "CN",
+      post_ai_1: "Tương lai của Lập trình Tác tử AI năm 2026",
+      post_ai_2: "Suy luận LLM thế hệ mới & Sử dụng Công cụ năm 2026"
     },
     zh: {
       home: "首页",
@@ -412,6 +972,13 @@ document.addEventListener('DOMContentLoaded', () => {
       cat_ai: "人工智能 (AI)",
       cat_backend: "后端工程",
       cat_design: "设计 (Design)",
+      cat_frontend: "前端开发",
+      cat_mobile: "移动开发",
+      cat_data: "数据科学",
+      cat_cyber: "网络安全",
+      slug_ai: "ren-gong-zhi-neng",
+      slug_backend: "hou-duan-gong-cheng",
+      slug_design: "ui-ux-she-ji",
       search_placeholder: "搜索 MundiBlog...",
       subscriptions: "关注作者",
       join_creators: "在 MundiBlog 上连接创作者",
@@ -519,17 +1086,213 @@ document.addEventListener('DOMContentLoaded', () => {
       cat_profile_branding: "个人资料品牌",
       cat_design_general: "设计",
       cat_analytics: "分析",
-      cat_localization: "本地化"
+      cat_localization: "本地化",
+      search_placeholder_modal: "搜索作者、文章或主题...",
+      recommended_people: "作者与出版物",
+      no_results: "未找到匹配的结果。",
+      // Explore page
+      explore: "探索",
+      top: "热门",
+      recent: "最新",
+      posts: "文章",
+      publications: "专栏与出版物",
+      people: "创作者",
+      subscribed: "已订阅",
+      author_economics: "经济学作者",
+      author_economics_lead: "经济学主管",
+      author_tech_lead: "技术主管",
+      // Admin Panel
+      admin_dashboard: "管理后台",
+      manage_users: "用户管理",
+      manage_categories: "分类管理",
+      manage_languages: "语言管理",
+      total_users: "总用户数",
+      total_articles: "总文章数",
+      ai_translated: "AI 已翻译",
+      total_comments: "总评论数",
+      total_likes: "总点赞数",
+      queue_status: "AI 翻译队列",
+      user_management: "用户管理",
+      category_management: "分类管理",
+      language_management: "语言管理",
+      search_user_placeholder: "按姓名或邮箱搜索用户...",
+      search_cat_placeholder: "搜索分类...",
+      add_category: "添加分类",
+      edit_category: "编辑分类",
+      category_name: "分类名称",
+      slug: "别名 (Slug)",
+      actions: "操作",
+      status: "状态",
+      role: "角色",
+      active: "活跃",
+      banned: "已封禁",
+      save_changes: "保存更改",
+      translation_coverage: "翻译覆盖率",
+      admin_desc: "用户、文章、评论数量与社区互动指标总览。",
+      col_article: "文章",
+      col_author: "作者",
+      col_source: "源语言",
+      col_target: "目标语言",
+      col_status: "状态",
+      col_actions: "操作",
+      status_translating: "翻译中...",
+      status_completed: "已完成",
+      status_failed: "失败",
+      status_hidden: "已隐藏",
+      user_desc: "查看用户目录，按角色过滤，并管理帐户状态。",
+      col_user: "用户",
+      col_email: "邮箱",
+      col_joined: "加入时间",
+      role_all: "所有角色",
+      role_admin: "管理员",
+      role_member: "成员",
+      cat_desc: "创建、组织和编辑首页动态的文章分类。",
+      col_posts_count: "总文章数",
+      cat_name_placeholder: "输入分类名称...",
+      slug_auto_placeholder: "别名将自动生成...",
+      slug_help: "URL 将使用此别名进行分类路由。",
+      lang_desc_page: "配置系统语言并监控 AI 自动翻译覆盖率。",
+      add_language: "添加语言",
+      col_code: "代码",
+      col_lang_name: "语言名称",
+      col_progress: "AI 翻译进度",
+      primary_language: "主要语言",
+      system_default: "系统默认",
+      back_admin: "返回管理后台",
+      posts_suffix: "篇内容",
+      select_language: "选择语言",
+      choose_lang_placeholder: "选择语言...",
+      language_code: "语言代码",
+      lang_code_placeholder: "系统将自动生成语言代码...",
+      published_2h: "发布于 2 小时前",
+      published_3d: "发布于 3 天前",
+      published_1d: "发布于 1 天前",
+      published_5h: "发布于 5 小时前",
+      showing_results_for: "显示结果: ",
+      views: "次阅读",
+      view: "阅读",
+      yesterday: "昨天",
+      just_now: "刚刚",
+      hours_ago: "小时前",
+      days_ago: "天前",
+      weeks_ago: "周前",
+      months_ago: "个月前",
+      password: "密码",
+      confirm_password: "确认密码",
+      full_name: "姓名",
+      create_account: "创建账号",
+      register: "注册",
+      dont_have_account: "还没有账号？",
+      already_have_account: "已有账号？",
+      quick_demo_login: "快速测试登录",
+      register_here: "点击注册",
+      login_here: "点击登录",
+      post_list: "文章列表",
+      translated_articles: "已翻译文章：",
+      make_primary: "设为默认",
+      danger_warning: "数据销毁警告",
+      delete_lang_desc1: "您即将删除整个语言 ",
+      delete_lang_desc2: "这将永久删除 ",
+      delete_lang_desc3: " 篇已翻译的文章。此操作无法撤销！",
+      delete_lang_desc4: "要继续，请在下面的框中输入确切的语言名称：",
+      type_lang_name: "输入语言名称...",
+      cancel_safe: "安全取消",
+      confirm_delete: "确认永久删除",
+      user_details: "用户详情",
+      activity_info: "活动与信息",
+      joined_date: "加入日期",
+      articles_published: "已发布文章",
+      joined: "加入",
+      views_over_time: "浏览量趋势",
+      top_languages: "热门语言",
+      lang_vi: "越南语",
+      lang_zh: "中文",
+      lang_en: "英语",
+      top_categories: "热门分类",
+      cat_ai_auto: "人工智能与自动化",
+      cat_web_dev: "Web开发",
+      cat_ui_ux: "UI/UX设计",
+      new_users_growth: "新用户增长",
+      mon: "周一", tue: "周二", wed: "周三", thu: "周四", fri: "周五", sat: "周六", sun: "周日",
+      post_ai_1: "2026 年 AI 代理编程的未来",
+      post_ai_2: "2026 年下一代 LLM 推理与工具使用"
     }
   };
+  window.uiTranslations = uiTranslations;
 
-  const preferredLang = localStorage.getItem('preferredLanguage') || 'en';
-  applyLanguageFilter(preferredLang);
-  applyUiTranslations(preferredLang);
+  window.formatTimestampI18n = function (ts) {
+    if (!ts) return "";
+    const currentLang = localStorage.getItem('preferredLanguage') || 'en';
+    if (currentLang === 'en') return ts;
+
+    let str = ts.toString();
+    if (currentLang === 'vi') {
+      return str
+        .replace(/Yesterday/i, "Hôm qua")
+        .replace(/Just now/i, "Vừa xong")
+        .replace(/hours ago/i, "giờ trước")
+        .replace(/hour ago/i, "giờ trước")
+        .replace(/days ago/i, "ngày trước")
+        .replace(/day ago/i, "ngày trước")
+        .replace(/weeks ago/i, "tuần trước")
+        .replace(/week ago/i, "tuần trước")
+        .replace(/months ago/i, "tháng trước")
+        .replace(/month ago/i, "tháng trước")
+        .replace(/years ago/i, "năm trước")
+        .replace(/year ago/i, "năm trước")
+        .replace(/min read/i, "phút đọc")
+        .replace(/mins read/i, "phút đọc")
+        .replace(/reads/i, "lượt xem")
+        .replace(/read/i, "lượt xem");
+    } else if (currentLang === 'zh') {
+      return str
+        .replace(/Yesterday/i, "昨天")
+        .replace(/Just now/i, "刚刚")
+        .replace(/hours ago/i, "小时前")
+        .replace(/hour ago/i, "小时前")
+        .replace(/days ago/i, "天前")
+        .replace(/day ago/i, "天前")
+        .replace(/weeks ago/i, "周前")
+        .replace(/week ago/i, "周前")
+        .replace(/months ago/i, "个月前")
+        .replace(/month ago/i, "个月前")
+        .replace(/years ago/i, "年前")
+        .replace(/year ago/i, "年前")
+        .replace(/min read/i, "分钟阅读")
+        .replace(/mins read/i, "分钟阅读")
+        .replace(/reads/i, "次阅读")
+        .replace(/read/i, "次阅读");
+    }
+    return str;
+  };
+
+  // Map category English names to i18n dictionary keys
+  const categoryKeyMap = {
+    "Artificial Intelligence": "cat_ai",
+    "Backend Engineering": "cat_backend",
+    "Design": "cat_design",
+    "Frontend Development": "cat_frontend",
+    "Mobile Development": "cat_mobile",
+    "Data Science": "cat_data",
+    "Cybersecurity": "cat_cyber"
+  };
+
+  window.translateCategory = function (category) {
+    if (!category) return category;
+    const currentLang = localStorage.getItem('preferredLanguage') || 'en';
+    if (currentLang === 'en') return category;
+    const key = categoryKeyMap[category];
+    if (!key) return category;
+    const dict = (window.uiTranslations && window.uiTranslations[currentLang]) || (window.uiTranslations && window.uiTranslations.en) || {};
+    return dict[key] || category;
+  };
+
+
+  window.applyUiTranslations = applyUiTranslations;
 
   function applyUiTranslations(lang = localStorage.getItem('preferredLanguage') || 'en') {
     const dict = uiTranslations[lang] || uiTranslations.en;
-    
+
     document.querySelectorAll('[data-i18n]').forEach(el => {
       const key = el.getAttribute('data-i18n');
       if (dict[key]) {
@@ -541,6 +1304,53 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
 
+    // Translate dynamic titles in any list items (such as the admin queue)
+    document.querySelectorAll('[data-translate-title-vi], [data-translate-title-zh]').forEach(el => {
+      const originalText = el.getAttribute('data-original-title') || el.textContent.trim();
+      if (!el.getAttribute('data-original-title')) {
+        el.setAttribute('data-original-title', originalText);
+      }
+      const transText = el.getAttribute(`data-translate-title-${lang}`);
+      if (transText) {
+        el.textContent = transText;
+      } else {
+        el.textContent = el.getAttribute('data-original-title');
+      }
+    });
+
+    // Translate dynamic content
+    document.querySelectorAll('[data-translate-content-vi], [data-translate-content-zh]').forEach(el => {
+      const originalText = el.getAttribute('data-original-content') || el.textContent.trim();
+      if (!el.getAttribute('data-original-content')) {
+        el.setAttribute('data-original-content', originalText);
+      }
+      const transText = el.getAttribute(`data-translate-content-${lang}`);
+      if (transText) {
+        el.textContent = transText;
+      } else {
+        el.textContent = el.getAttribute('data-original-content');
+      }
+    });
+
+    // Translate timestamps across the page
+    document.querySelectorAll('.post-timestamp, .comment-time, .article-time, [data-timestamp]').forEach(el => {
+      const origTs = el.getAttribute('data-original-ts') || el.textContent.trim();
+      if (!el.getAttribute('data-original-ts')) {
+        el.setAttribute('data-original-ts', origTs);
+      }
+      if (typeof window.formatTimestampI18n === 'function') {
+        el.innerHTML = window.formatTimestampI18n(origTs);
+      }
+    });
+
+    // Translate category labels dynamically
+    document.querySelectorAll('.category-label[data-original-cat]').forEach(el => {
+      const originalCat = el.getAttribute('data-original-cat');
+      if (typeof window.translateCategory === 'function') {
+        el.textContent = window.translateCategory(originalCat);
+      }
+    });
+
     const searchInput = document.getElementById('feedSearchInput') || document.querySelector('.right-search-box input');
     if (searchInput && dict.search_placeholder) {
       searchInput.setAttribute('placeholder', dict.search_placeholder);
@@ -549,6 +1359,9 @@ document.addEventListener('DOMContentLoaded', () => {
     if (typeof syncFeedCommentCounts === 'function') {
       syncFeedCommentCounts();
     }
+    if (typeof window.renderTrendingWidgets === 'function') {
+      window.renderTrendingWidgets();
+    }
   }
 
   window.currentSelectedCategory = 'all';
@@ -556,7 +1369,7 @@ document.addEventListener('DOMContentLoaded', () => {
   function selectCategory(event, category, i18nKey) {
     if (event) event.preventDefault();
     window.currentSelectedCategory = category;
-    
+
     const label = document.getElementById('currentCategoryLabel');
     if (label) {
       if (i18nKey) {
@@ -572,6 +1385,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.querySelectorAll('.feed-filter-row .dropdown-item').forEach(el => el.classList.remove('active'));
     if (event && event.currentTarget) event.currentTarget.classList.add('active');
+
+    if (typeof window.renderFeedPosts === 'function') {
+      window.renderFeedPosts('postsFeedContainer', window.globalPostsData, category);
+    }
 
     const lang = localStorage.getItem('preferredLanguage') || 'en';
     applyLanguageFilter(lang);
@@ -594,8 +1411,8 @@ document.addEventListener('DOMContentLoaded', () => {
       const contentEl = post.querySelector('.post-content');
 
       const hasTranslation = supportedLangs.split(',').includes(lang) ||
-                             post.hasAttribute(`data-translate-title-${lang}`) ||
-                             (titleEl && titleEl.hasAttribute(`data-translate-title-${lang}`));
+        post.hasAttribute(`data-translate-title-${lang}`) ||
+        (titleEl && titleEl.hasAttribute(`data-translate-title-${lang}`));
 
       const postCategory = post.getAttribute('data-category') || '';
       const matchesCategory = (selectedCategory === 'all') || (postCategory === selectedCategory);
@@ -683,7 +1500,7 @@ document.addEventListener('DOMContentLoaded', () => {
             time: "15 mins ago",
             content: "That is awesome to hear, Tuấn! What database load did you test it with?",
             lang: "en",
-            replyTo: "Hồ Quốc Tuấn",
+            replyTo: "",
             translations: {
               vi: "Thật tuyệt vời khi nghe điều đó, Tuấn! Bạn đã kiểm thử với tải cơ sở dữ liệu bao nhiêu?",
               zh: "太棒了，Tuấn！你使用的是多大的数据库负载进行测试的？"
@@ -751,7 +1568,7 @@ document.addEventListener('DOMContentLoaded', () => {
             time: "1 hour ago",
             content: "Đúng vậy, mình áp dụng nguyên tắc số 4 và thấy UI cải thiện rõ rệt.",
             lang: "vi",
-            replyTo: "Elena Rostova",
+            replyTo: "",
             translations: {
               en: "Exactly, I applied principle #4 and saw clear UI improvement.",
               zh: "没错，我应用了原则#4，UI提升明显。"
@@ -882,8 +1699,8 @@ document.addEventListener('DOMContentLoaded', () => {
   function resetDemoComments() {
     const lang = localStorage.getItem('preferredLanguage') || 'vi';
     const confirmMsg = lang === 'en' ? "Do you want to reset all demo comments to initial state?" :
-                       lang === 'zh' ? "确定要恢复所有初始演示评论数据吗？" :
-                       "Bạn có muốn khôi phục lại toàn bộ dữ liệu bình luận mẫu ban đầu để demo không?";
+      lang === 'zh' ? "确定要恢复所有初始演示评论数据吗？" :
+        "Bạn có muốn khôi phục lại toàn bộ dữ liệu bình luận mẫu ban đầu để demo không?";
     if (confirm(confirmMsg)) {
       localStorage.removeItem('mundi_comments_db');
       window.location.reload();
@@ -901,4 +1718,331 @@ document.addEventListener('DOMContentLoaded', () => {
   window.getCommentTranslation = getCommentTranslation;
   window.syncFeedCommentCounts = syncFeedCommentCounts;
 
+  const preferredLang = localStorage.getItem('preferredLanguage') || 'en';
+  applyLanguageFilter(preferredLang);
+  applyUiTranslations(preferredLang);
+
+  // ========================================================
+  // PATH & ROUTING RESOLUTION FOR STATIC WORKSPACE
+  // ========================================================
+  const path = window.location.pathname;
+  let loginUrl = 'pages/guest/login.html';
+  let writeUrl = 'pages/owner/create-post.html';
+  let homeUrl = 'pages/guest/home.html';
+
+  if (path.includes('/pages/guest/')) {
+    loginUrl = 'login.html';
+    writeUrl = '../owner/create-post.html';
+    homeUrl = 'home.html';
+  } else if (path.includes('/pages/admin/')) {
+    loginUrl = '../guest/login.html';
+    writeUrl = '../owner/create-post.html';
+    homeUrl = '../guest/home.html';
+  } else if (path.includes('/pages/owner/')) {
+    loginUrl = '../guest/login.html';
+    writeUrl = 'create-post.html';
+    homeUrl = '../guest/home.html';
+  }
+
+  // ========================================================
+  // SESSION STATE & DYNAMIC ROLE-BASED UI MANAGEMENT
+  // ========================================================
+  const currentUserJson = localStorage.getItem('currentUser');
+  const isAdmin = currentUserJson && JSON.parse(currentUserJson).role === 'admin';
+
+  // 1. Dynamic Profile & Feed Avatar Syncing
+  const defaultPlaceholder = `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23b0bac5"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/></svg>`;
+
+  if (currentUserJson) {
+    const user = JSON.parse(currentUserJson);
+    if (user.avatar) {
+      // A. Replace Profile nav item icon or update existing profile image with user avatar
+      document.querySelectorAll('a[href*="profile.html"]').forEach(link => {
+        const existingImg = link.querySelector('img');
+        if (existingImg) {
+          existingImg.src = user.avatar;
+          existingImg.style.removeProperty('opacity');
+        } else {
+          const icon = link.querySelector('i.bi-person') || link.querySelector('i.bi-person-fill');
+          if (icon) {
+            const img = document.createElement('img');
+            img.src = user.avatar;
+            img.className = 'rounded-circle border';
+            img.style.width = '20px';
+            img.style.height = '20px';
+            img.style.objectFit = 'cover';
+            img.style.marginRight = '0.95rem';
+            img.alt = user.name || 'Avatar';
+            icon.replaceWith(img);
+          }
+        }
+      });
+      // B. Update Quick Draft Avatar on Feed
+      const draftAvatar = document.getElementById('quickDraftAvatar');
+      if (draftAvatar) {
+        draftAvatar.src = user.avatar;
+        draftAvatar.style.removeProperty('opacity');
+      }
+    }
+  } else {
+    // If not logged in, set to grey silhouette placeholder
+    document.querySelectorAll('a[href*="profile.html"] img.rounded-circle').forEach(img => {
+      img.src = defaultPlaceholder;
+      img.style.opacity = '0.6';
+    });
+    const draftAvatar = document.getElementById('quickDraftAvatar');
+    if (draftAvatar) {
+      draftAvatar.src = defaultPlaceholder;
+      draftAvatar.style.opacity = '0.6';
+    }
+  }
+
+  // 2. Hide / Show Admin Panel link based on role
+  document.querySelectorAll('a[href*="admin/"]').forEach(link => {
+    if (!isAdmin) {
+      link.style.setProperty('display', 'none', 'important');
+      const parentLi = link.closest('li');
+      if (parentLi) {
+        parentLi.style.setProperty('display', 'none', 'important');
+      }
+    } else {
+      link.style.removeProperty('display');
+      const parentLi = link.closest('li');
+      if (parentLi) parentLi.style.removeProperty('display');
+    }
+  });
+
+  // 3. Handle Sign Out vs Log in Menu Toggles
+  function handleSignOut(e) {
+    e.preventDefault();
+    localStorage.removeItem('currentUser');
+    const currentLang = localStorage.getItem('preferredLanguage') || 'en';
+    const msg = currentLang === 'vi' ? 'Đăng xuất thành công!' :
+      currentLang === 'zh' ? '登出成功！' :
+        'Signed out successfully!';
+    alert(msg);
+    window.location.href = homeUrl;
+  }
+
+  const signOutLinks = document.querySelectorAll('#signOutBtn, #mobileSignOutBtn');
+  signOutLinks.forEach(link => {
+    if (currentUserJson) {
+      link.style.removeProperty('display');
+      link.classList.add('text-danger');
+      link.innerHTML = `<i class="bi bi-box-arrow-right me-2"></i> <span data-i18n="sign_out">Sign Out</span>`;
+      link.addEventListener('click', handleSignOut);
+    } else {
+      link.classList.remove('text-danger');
+      link.innerHTML = `<i class="bi bi-box-arrow-in-right me-2"></i> <span data-i18n="login">Log in</span>`;
+      link.setAttribute('href', loginUrl);
+      const clone = link.cloneNode(true);
+      link.replaceWith(clone);
+    }
+  });
+
+  // Re-translate dynamic auth links
+  if (typeof applyUiTranslations === 'function') {
+    applyUiTranslations();
+  }
+
+  // 4. Intercept Write post actions if not logged in
+  document.querySelectorAll('a[href*="create-post.html"]').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      if (!localStorage.getItem('currentUser')) {
+        e.preventDefault();
+        const lang = localStorage.getItem('preferredLanguage') || 'en';
+        const msg = lang === 'vi' ? 'Vui lòng đăng nhập trước khi viết bài!' :
+          lang === 'zh' ? '请先登录以撰写文章！' :
+            'Please log in first to write a post!';
+        alert(msg);
+        window.location.href = loginUrl;
+      }
+    });
+  });
+
+  const quickDraftCard = document.getElementById('quickDraftCard');
+  if (quickDraftCard) {
+    quickDraftCard.addEventListener('click', (e) => {
+      if (!localStorage.getItem('currentUser')) {
+        e.preventDefault();
+        const lang = localStorage.getItem('preferredLanguage') || 'en';
+        const msg = lang === 'vi' ? 'Vui lòng đăng nhập trước khi viết bài!' :
+          lang === 'zh' ? '请先登录以撰写文章！' :
+            'Please log in first to write a post!';
+        alert(msg);
+        window.location.href = loginUrl;
+      }
+    });
+  }
+
+  // ========================================================
+  // LOGIN FORM CONTROLLER
+  // ========================================================
+  const loginForm = document.getElementById('loginForm');
+  if (loginForm) {
+    const toggleBtn = document.getElementById('togglePasswordBtn');
+    const pwdInput = document.getElementById('loginPassword');
+    if (toggleBtn && pwdInput) {
+      toggleBtn.addEventListener('click', () => {
+        const isPwd = pwdInput.type === 'password';
+        pwdInput.type = isPwd ? 'text' : 'password';
+        toggleBtn.querySelector('i').className = isPwd ? 'bi bi-eye-slash' : 'bi bi-eye';
+      });
+    }
+
+    const elenaBtn = document.getElementById('quickLoginElena');
+    const adminBtn = document.getElementById('quickLoginAdmin');
+    if (elenaBtn) {
+      elenaBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        document.getElementById('loginEmail').value = 'elena@mundiblog.com';
+        document.getElementById('loginPassword').value = 'password123';
+        loginForm.dispatchEvent(new Event('submit'));
+      });
+    }
+    if (adminBtn) {
+      adminBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        document.getElementById('loginEmail').value = 'admin@mundiblog.com';
+        document.getElementById('loginPassword').value = 'admin123';
+        loginForm.dispatchEvent(new Event('submit'));
+      });
+    }
+
+    loginForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const email = document.getElementById('loginEmail').value.trim();
+      const password = document.getElementById('loginPassword').value;
+      const alertDiv = document.getElementById('authAlert');
+      const alertText = document.getElementById('authAlertText');
+
+      if (!email || !password) {
+        alertDiv.classList.remove('d-none');
+        alertText.textContent = 'Please fill in all fields!';
+        return;
+      }
+
+      const registeredUsers = JSON.parse(localStorage.getItem('registered_users') || '[]');
+      const mockUsers = [
+        {
+          email: 'admin@mundiblog.com',
+          password: 'admin123',
+          name: 'System Admin',
+          role: 'admin',
+          avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=80&h=80'
+        },
+        {
+          email: 'elena@mundiblog.com',
+          password: 'password123',
+          name: 'Elena Rostova',
+          role: 'member',
+          avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=80&h=80'
+        }
+      ];
+
+      const allUsers = [...mockUsers, ...registeredUsers];
+      const matchedUser = allUsers.find(u => u.email.toLowerCase() === email.toLowerCase() && u.password === password);
+
+      if (matchedUser) {
+        localStorage.setItem('currentUser', JSON.stringify({
+          email: matchedUser.email,
+          name: matchedUser.name,
+          role: matchedUser.role,
+          avatar: matchedUser.avatar
+        }));
+        alertDiv.classList.add('d-none');
+        window.location.href = 'home.html';
+      } else {
+        alertDiv.classList.remove('d-none');
+        alertText.textContent = 'Invalid email or password!';
+      }
+    });
+  }
+
+  // ========================================================
+  // REGISTER FORM CONTROLLER
+  // ========================================================
+  const registerForm = document.getElementById('registerForm');
+  if (registerForm) {
+    const pwd1 = document.getElementById('regPassword');
+    const pwd2 = document.getElementById('regConfirmPassword');
+    const toggle1 = document.getElementById('togglePasswordBtn1');
+    const toggle2 = document.getElementById('togglePasswordBtn2');
+
+    if (toggle1 && pwd1) {
+      toggle1.addEventListener('click', () => {
+        const isPwd = pwd1.type === 'password';
+        pwd1.type = isPwd ? 'text' : 'password';
+        toggle1.querySelector('i').className = isPwd ? 'bi bi-eye-slash' : 'bi bi-eye';
+      });
+    }
+    if (toggle2 && pwd2) {
+      toggle2.addEventListener('click', () => {
+        const isPwd = pwd2.type === 'password';
+        pwd2.type = isPwd ? 'text' : 'password';
+        toggle2.querySelector('i').className = isPwd ? 'bi bi-eye-slash' : 'bi bi-eye';
+      });
+    }
+
+    registerForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const name = document.getElementById('regName').value.trim();
+      const email = document.getElementById('regEmail').value.trim();
+      const password = document.getElementById('regPassword').value;
+      const confirmPwd = document.getElementById('regConfirmPassword').value;
+      const alertDiv = document.getElementById('authAlert');
+      const alertText = document.getElementById('authAlertText');
+
+      if (!name || !email || !password || !confirmPwd) {
+        alertDiv.classList.remove('d-none');
+        alertText.textContent = 'Please fill in all fields!';
+        return;
+      }
+
+      if (password.length < 6) {
+        alertDiv.classList.remove('d-none');
+        alertText.textContent = 'Password must be at least 6 characters!';
+        return;
+      }
+
+      if (password !== confirmPwd) {
+        alertDiv.classList.remove('d-none');
+        alertText.textContent = 'Passwords do not match!';
+        return;
+      }
+
+      const registeredUsers = JSON.parse(localStorage.getItem('registered_users') || '[]');
+      const emailExists = registeredUsers.some(u => u.email.toLowerCase() === email.toLowerCase()) ||
+        email.toLowerCase() === 'admin@mundiblog.com' ||
+        email.toLowerCase() === 'elena@mundiblog.com';
+
+      if (emailExists) {
+        alertDiv.classList.remove('d-none');
+        alertText.textContent = 'Email is already registered!';
+        return;
+      }
+
+      const newUser = {
+        name,
+        email,
+        password,
+        role: 'member',
+        avatar: `https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=80&h=80`
+      };
+
+      registeredUsers.push(newUser);
+      localStorage.setItem('registered_users', JSON.stringify(registeredUsers));
+
+      alertDiv.classList.add('d-none');
+      alert('Registration successful! Redirecting to log in...');
+      window.location.href = 'login.html';
+    });
+  }
+});
+
+// Force page reload on back/forward navigation to refresh state (bfcache)
+window.addEventListener('pageshow', (event) => {
+  if (event.persisted) {
+    window.location.reload();
+  }
 });
