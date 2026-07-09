@@ -51,18 +51,18 @@ function initSharedSidebars() {
           <a href="explore.html" class="sidebar-nav-item ${activePage === 'explore' ? 'active' : ''}">
             <i class="bi bi-compass-fill"></i> <span data-i18n="explore">Explore</span>
           </a>
-          <a href="../owner/my-posts.html" class="sidebar-nav-item ${activePage === 'my-posts' ? 'active' : ''}">
+          <a href="my-posts.html" class="sidebar-nav-item ${activePage === 'my-posts' ? 'active' : ''}">
             <i class="bi bi-journal-text"></i> <span data-i18n="my_articles">My Articles</span>
           </a>
           <a href="about.html" class="sidebar-nav-item ${activePage === 'about' ? 'active' : ''}">
             <i class="bi bi-info-circle"></i> <span data-i18n="about">About</span>
           </a>
-          <a href="../owner/profile.html" class="sidebar-nav-item ${activePage === 'profile' ? 'active' : ''}">
+          <a href="profile.html" class="sidebar-nav-item ${activePage === 'profile' ? 'active' : ''}">
             <i class="bi bi-person"></i> <span data-i18n="profile">Profile</span>
           </a>
         </nav>
         
-        <a href="../owner/create-post.html" class="sidebar-create-btn">
+        <a href="create-post.html" class="sidebar-create-btn">
           <span data-i18n="create">Create</span> <i class="bi bi-plus-lg"></i>
         </a>
       </div>
@@ -77,7 +77,7 @@ function initSharedSidebars() {
           <ul class="dropdown-menu shadow border-light-subtle">
             <li><a class="dropdown-item py-2 ${activePage === 'settings' ? 'active' : ''}" href="settings.html"><i class="bi bi-gear me-2"></i> <span data-i18n="settings">Settings</span></a></li>
             <li><a class="dropdown-item py-2" href="../admin/dashboard.html" id="adminPanelLink"><i class="bi bi-speedometer2 me-2"></i> <span data-i18n="admin_panel">Admin Panel</span></a></li>
-            <li><a class="dropdown-item py-2" href="../owner/change-password.html"><i class="bi bi-shield-lock me-2"></i> <span data-i18n="security">Security</span></a></li>
+            <li><a class="dropdown-item py-2" href="change-password.html"><i class="bi bi-shield-lock me-2"></i> <span data-i18n="security">Security</span></a></li>
             <li><hr class="dropdown-divider"></li>
             <li><a class="dropdown-item py-2 text-danger" href="#" id="signOutBtn"><i class="bi bi-box-arrow-right me-2"></i> <span data-i18n="sign_out">Sign Out</span></a></li>
           </ul>
@@ -111,15 +111,15 @@ function initSharedSidebars() {
           <a href="#" class="sidebar-nav-item"><i class="bi bi-inbox"></i> <span data-i18n="inbox">Inbox</span></a>
           <a href="#" class="sidebar-nav-item"><i class="bi bi-heart"></i> <span data-i18n="liked_posts">Liked Posts</span></a>
           <a href="explore.html" class="sidebar-nav-item ${activePage === 'explore' ? 'active' : ''}"><i class="bi bi-compass-fill"></i> <span data-i18n="explore">Explore</span></a>
-          <a href="../owner/my-posts.html" class="sidebar-nav-item"><i class="bi bi-journal-text"></i> <span data-i18n="my_articles">My Articles</span></a>
-          <a href="about.html" class="sidebar-nav-item"><i class="bi bi-info-circle"></i> <span data-i18n="about">About</span></a>
-          <a href="../owner/profile.html" class="sidebar-nav-item"><i class="bi bi-person"></i> <span data-i18n="profile">Profile</span></a>
+          <a href="my-posts.html" class="sidebar-nav-item ${activePage === 'my-posts' ? 'active' : ''}"><i class="bi bi-journal-text"></i> <span data-i18n="my_articles">My Articles</span></a>
+          <a href="about.html" class="sidebar-nav-item ${activePage === 'about' ? 'active' : ''}"><i class="bi bi-info-circle"></i> <span data-i18n="about">About</span></a>
+          <a href="profile.html" class="sidebar-nav-item ${activePage === 'profile' ? 'active' : ''}"><i class="bi bi-person"></i> <span data-i18n="profile">Profile</span></a>
         </nav>
 
         <div class="border-top pt-3 mt-3">
           <a href="settings.html" class="sidebar-nav-item mb-2 ${activePage === 'settings' ? 'active' : ''}"><i class="bi bi-gear"></i> <span data-i18n="settings">Settings</span></a>
           <a href="../admin/dashboard.html" class="sidebar-nav-item mb-2"><i class="bi bi-speedometer2"></i> <span data-i18n="admin_panel">Admin Panel</span></a>
-          <a href="../owner/change-password.html" class="sidebar-nav-item mb-2"><i class="bi bi-shield-lock"></i> <span data-i18n="security">Security</span></a>
+          <a href="change-password.html" class="sidebar-nav-item mb-2"><i class="bi bi-shield-lock"></i> <span data-i18n="security">Security</span></a>
           <a href="#" class="sidebar-nav-item text-danger"><i class="bi bi-box-arrow-right"></i> <span data-i18n="sign_out">Sign Out</span></a>
         </div>
       </div>
@@ -153,7 +153,7 @@ function initSharedSidebars() {
               <span class="featured-author-count">Economics Author</span>
             </div>
           </div>
-          <button class="btn-profile-view" onclick="window.location.href='../owner/profile.html?id=102'" data-i18n="view_profile">View Profile</button>
+          <button class="btn-profile-view" onclick="window.location.href='profile.html?id=102'" data-i18n="view_profile">View Profile</button>
         </div>
         <div class="featured-author-item">
           <div class="featured-author-info">
@@ -163,7 +163,7 @@ function initSharedSidebars() {
               <span class="featured-author-count">Economics Lead</span>
             </div>
           </div>
-          <button class="btn-profile-view" onclick="window.location.href='../owner/profile.html?id=101'" data-i18n="view_profile">View Profile</button>
+          <button class="btn-profile-view" onclick="window.location.href='profile.html?id=101'" data-i18n="view_profile">View Profile</button>
         </div>
         <div class="featured-author-item">
           <div class="featured-author-info">
@@ -173,7 +173,7 @@ function initSharedSidebars() {
               <span class="featured-author-count">Tech Lead</span>
             </div>
           </div>
-          <button class="btn-profile-view" onclick="window.location.href='../owner/profile.html?id=103'" data-i18n="view_profile">View Profile</button>
+          <button class="btn-profile-view" onclick="window.location.href='profile.html?id=103'" data-i18n="view_profile">View Profile</button>
         </div>
       </div>
     `;
@@ -329,27 +329,27 @@ function initGlobalSearchModal() {
         <div id="modalPeopleContainer">
           <div class="search-section-title" id="modalSectionPeople" data-i18n="recommended_people">People & Publications</div>
           <div class="search-avatar-scroll" id="modalAvatarScroll">
-            <a href="../owner/profile.html?id=101" class="search-avatar-item">
+            <a href="profile.html?id=101" class="search-avatar-item">
               <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=80&h=80" class="search-avatar-img" alt="Elena">
               <span class="search-avatar-label">Elena R.</span>
             </a>
-            <a href="../owner/profile.html?id=103" class="search-avatar-item">
+            <a href="profile.html?id=103" class="search-avatar-item">
               <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=80&h=80" class="search-avatar-img" alt="Li Ming">
               <span class="search-avatar-label">Li Ming</span>
             </a>
-            <a href="../owner/profile.html?id=102" class="search-avatar-item">
+            <a href="profile.html?id=102" class="search-avatar-item">
               <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=80&h=80" class="search-avatar-img" alt="Tuấn">
               <span class="search-avatar-label">Tuấn Hồ</span>
             </a>
-            <a href="../owner/profile.html?id=104" class="search-avatar-item">
+            <a href="profile.html?id=104" class="search-avatar-item">
               <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=80&h=80" class="search-avatar-img" alt="Sarah">
               <span class="search-avatar-label">Sarah C.</span>
             </a>
-            <a href="../owner/profile.html?id=105" class="search-avatar-item">
+            <a href="profile.html?id=105" class="search-avatar-item">
               <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=80&h=80" class="search-avatar-img" alt="Alex">
               <span class="search-avatar-label">Alex R.</span>
             </a>
-            <a href="../owner/profile.html?id=106" class="search-avatar-item">
+            <a href="profile.html?id=106" class="search-avatar-item">
               <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&q=80&w=80&h=80" class="search-avatar-img" alt="Maya">
               <span class="search-avatar-label">Maya Lin</span>
             </a>
@@ -739,7 +739,7 @@ window.renderFeedPosts = function(containerId, dataObj, categoryFilter = 'all') 
         <div class="author-badge-group">
           <img src="${post.author_avatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=80&h=80'}" alt="${post.author_name}" class="author-avatar">
           <div class="author-meta-info">
-            <a href="../owner/profile.html?id=${post.author_id || 101}" class="author-name">${post.author_name || 'Anonymous'}</a>
+            <a href="profile.html?id=${post.author_id || 101}" class="author-name">${post.author_name || 'Anonymous'}</a>
             <span class="post-timestamp" data-original-ts="${post.timestamp || 'Just now'}">${post.timestamp || 'Just now'}</span>
           </div>
         </div>

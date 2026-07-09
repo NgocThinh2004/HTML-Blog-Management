@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Articles | MundiBlog</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="../../assets/css/variables.css">
+  <link rel="stylesheet" href="../../assets/css/base.css">
+  <link rel="stylesheet" href="../../assets/css/layouts.css">
+  <link rel="stylesheet" href="../../assets/css/components.css">
+  <style>
+    .substack-logo-container {
+      padding: 0.5rem 0.75rem 1.5rem 0.75rem;
+    }
+
+    .substack-logo {
+      color: var(--primary-color);
+      font-size: 1.6rem;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+    }
+
+    .sidebar-create-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      width: 100%;
+      margin-top: 1.5rem;
+      padding: 0.65rem 1.5rem !important;
+      border-color: var(--primary-color) !important;
+      border-radius: 99px !important;
+      color: #ffffff !important;
+      background-color: var(--primary-color) !important;
+      font-size: 0.95rem !important;
+      font-weight: 600 !important;
+      text-align: center;
+      transition: all var(--transition-speed) ease;
+    }
+
+    .sidebar-create-btn:hover {
+      border-color: var(--primary-hover) !important;
+      background-color: var(--primary-hover) !important;
+    }
+
+    .sidebar-footer-menu {
+      margin-top: auto;
+      padding-top: 1.25rem;
+      border-top: 1px solid var(--border-color);
+    }
+
+    .center-feed {
+      background:
+        radial-gradient(circle at top left, rgba(255, 90, 0, 0.08), transparent 28rem),
+        linear-gradient(180deg, color-mix(in srgb, var(--bg-body) 94%, var(--primary-color) 6%), var(--bg-body) 18rem);
+    }
+
+    .center-feed > .my-posts-workspace {
+      max-width: 1180px;
+    }
+
+    .my-posts-workspace {
+      width: 100%;
+      padding: 1.1rem 0 3rem;
+    }
+
+    .my-posts-top {
+      min-height: 74px;
+      display: grid;
+      place-items: center;
+      margin: -1.1rem 0 1rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .my-posts-top h1 {
+      margin: 0;
+      color: var(--text-main);
+      font-size: 30px;
+      line-height: 1;
+      letter-spacing: 0;
+    }
+
+    .command-btn {
+      min-height: 42px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.45rem;
+      padding: 0 1rem;
+      border: 1px solid var(--border-color);
+      border-radius: 999px;
+      color: var(--text-main);
+      background: var(--bg-body);
+      font-weight: 850;
+      white-space: nowrap;
+    }
+
+    .command-btn.is-primary {
+      border-color: var(--primary-color);
+      color: #ffffff;
+      background: var(--primary-color);
+      box-shadow: 0 14px 30px rgba(255, 90, 0, 0.22);
+    }
+
+    .command-btn:hover {
+      border-color: var(--primary-color);
+      color: var(--primary-color);
+    }
+
+    .command-btn.is-primary:hover {
+      color: #ffffff;
+      background: var(--primary-hover);
+    }
+
+    .posts-toolbar {
+      display: grid;
+      gap: 0.5rem;
+      margin-bottom: 0.75rem;
+      padding: 0;
+      color: var(--text-muted);
+    }
+
+    .toolbar-main-row,
+    .toolbar-filter-row {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 1rem;
+      min-width: 0;
+    }
+
+    .toolbar-actions {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 0.35rem;
+      min-width: 0;
+      margin-left: auto;
+    }
+
+    .filter-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      flex-wrap: wrap;
+      width: 100%;
+      min-width: 0;
+    }
+
+    .admin-select {
+      min-height: 30px;
+      padding: 0 1.85rem 0 0.55rem;
+      border: 1px solid var(--border-color);
+      border-radius: 2px;
+      color: var(--text-main);
+      background-color: var(--bg-panel);
+      font-size: 0.86rem;
+      font-weight: 500;
+      outline: none;
+    }
+
+    .admin-select:focus {
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 2px rgba(255, 90, 0, 0.12);
+    }
+
+    .items-count {
+      margin-left: auto;
+      color: var(--text-muted);
+      font-size: 0.82rem;
+      font-weight: 600;
+      white-space: nowrap;
+      align-self: center;
+    }
+
+    .toolbar-links-stack {
+      display: grid;
+      gap: 0.35rem;
+      min-width: 0;
+    }
+
+    .status-tabs,
+    .language-tabs {
+      display: inline-flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0;
+      padding: 0;
+      border: 0;
+      background: transparent;
+    }
+
+    .status-tab,
+    .language-tab {
+      min-height: 0;
+      display: inline-flex;
+      align-items: center;
+      gap: 0;
+      padding: 0;
+      border: 0;
+      color: #ffffff;
+      background: transparent;
+      font-size: 0.82rem;
+      font-weight: 600;
+      line-height: 1.35;
+      white-space: nowrap;
+    }
+
+    .status-tab:not(:last-child)::after,
+    .language-tab:not(:last-child)::after {
+      content: "|";
+      margin: 0 0.45rem;
+      color: var(--border-color);
+      font-weight: 500;
+    }
+
+    .status-tab.is-active,
+    .language-tab.is-active {
+      color: var(--primary-color);
+      font-weight: 800;
+    }
+
+    .post-search {
+      position: relative;
+      width: 220px;
+    }
+
+    .post-search i {
+      display: none;
+    }
+
+    .post-search input {
+      width: 100%;
+      min-height: 30px;
+      padding: 0 0.55rem;
+      border: 1px solid var(--border-color);
+      border-radius: 2px;
+      color: var(--text-main);
+      background: var(--bg-panel);
+      font-size: 0.86rem;
+      outline: none;
+    }
+
+    .post-search input:focus {
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 2px rgba(255, 90, 0, 0.12);
+    }
+
+    .list-control-btn {
+      min-height: 30px;
+      padding: 0 0.7rem;
+      border: 1px solid var(--border-color);
+      border-radius: 2px;
+      color: var(--text-main);
+      background: var(--bg-panel);
+      font-size: 0.84rem;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .list-control-btn:hover {
+      border-color: var(--primary-color);
+      color: var(--primary-color);
+    }
+
+    .posts-table-panel {
+      overflow: hidden;
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      background: var(--bg-panel);
+      box-shadow: 0 22px 64px rgba(15, 15, 16, 0.07);
+    }
+
+    .posts-table-scroll {
+      width: 100%;
+      overflow-x: auto;
+    }
+
+    .posts-table {
+      width: 100%;
+      min-width: 1120px;
+      border-collapse: collapse;
+    }
+
+    .posts-table th,
+    .posts-table td {
+      padding: 0.9rem 1rem;
+      border-bottom: 1px solid var(--border-color);
+      vertical-align: middle;
+    }
+
+    .posts-table thead th {
+      color: var(--text-muted);
+      background: color-mix(in srgb, var(--bg-body) 88%, var(--text-main) 12%);
+      font-size: 0.75rem;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .posts-table tbody tr:last-child td {
+      border-bottom: 0;
+    }
+
+    .posts-table tbody tr:hover {
+      background: color-mix(in srgb, var(--bg-body) 94%, var(--primary-color) 6%);
+    }
+
+    .posts-table tbody tr.is-selected {
+      background: color-mix(in srgb, var(--bg-body) 88%, var(--primary-color) 12%);
+    }
+
+    .select-col {
+      width: 46px;
+      text-align: center;
+    }
+
+    .row-check {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--primary-color);
+    }
+
+    .post-title-cell {
+      min-width: 320px;
+    }
+
+    .post-title-cell strong {
+      display: block;
+      color: var(--text-main);
+      font-size: 0.98rem;
+      line-height: 1.3;
+    }
+
+    .post-title-cell span {
+      display: block;
+      margin-top: 0.3rem;
+      color: var(--text-muted);
+      font-size: 0.8rem;
+    }
+
+    .post-row-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.45rem;
+      margin-top: 0.6rem;
+      opacity: 0;
+      transform: translateY(2px);
+      transition: opacity 0.15s ease, transform 0.15s ease;
+    }
+
+    .posts-table tr:hover .post-row-actions,
+    .posts-table tr:focus-within .post-row-actions {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .row-link {
+      border: 0;
+      padding: 0;
+      color: var(--primary-color);
+      background: transparent;
+      font-size: 0.78rem;
+      font-weight: 850;
+      text-decoration: none;
+    }
+
+    .row-link.is-danger {
+      color: #dc2626;
+    }
+
+    .status-badge,
+    .language-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.38rem;
+      min-height: 28px;
+      padding: 0 0.65rem;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .status-badge.is-published {
+      color: #146c43;
+      background: rgba(22, 163, 74, 0.12);
+    }
+
+    .status-badge.is-draft {
+      color: #9a6700;
+      background: rgba(201, 135, 18, 0.14);
+    }
+
+    .status-badge.is-trash {
+      color: #dc2626;
+      background: rgba(220, 38, 38, 0.12);
+    }
+
+    .language-badge {
+      color: var(--text-main);
+      background: color-mix(in srgb, var(--bg-body) 86%, var(--text-main) 14%);
+    }
+
+    .action-group {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.45rem;
+    }
+
+    .action-btn {
+      display: inline-grid;
+      place-items: center;
+      width: 36px;
+      height: 36px;
+      padding: 0;
+      border: 1px solid var(--border-color);
+      border-radius: 999px;
+      color: var(--text-main);
+      background: var(--bg-body);
+      line-height: 1;
+    }
+
+    .action-btn i {
+      font-size: 1rem;
+      line-height: 1;
+    }
+
+    .action-btn:hover {
+      border-color: var(--primary-color);
+      color: var(--primary-color);
+    }
+
+    .empty-state {
+      display: none;
+      padding: 3rem 1rem;
+      color: var(--text-muted);
+      text-align: center;
+    }
+
+    .empty-state.is-visible {
+      display: block;
+    }
+
+    .empty-state i {
+      display: block;
+      margin-bottom: 0.65rem;
+      color: var(--primary-color);
+      font-size: 2rem;
+    }
+
+    @media (max-width: 991px) {
+      .my-posts-workspace {
+        padding-top: 0;
+      }
+
+      .toolbar-main-row,
+      .toolbar-filter-row {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .toolbar-actions,
+      .filter-actions {
+        justify-content: flex-start;
+      }
+
+      .toolbar-actions {
+        margin-left: 0;
+      }
+
+      .post-search,
+      .admin-select {
+        width: 100%;
+      }
+
+      .items-count {
+        margin-left: 0;
+      }
+    }
+
+    @media (max-width: 576px) {
+      .toolbar-actions,
+      .filter-actions {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .command-btn {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-wrapper">
+    <header class="app-header">
+      <div class="header-container">
+        <button class="btn btn-link d-lg-none me-2 text-reset p-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#mobileSidebar" aria-controls="mobileSidebar">
+          <i class="bi bi-list fs-3"></i>
+        </button>
+        <a href="home.html" class="d-flex align-items-center text-decoration-none">
+          <i class="bi bi-feather fs-4 text-primary me-2"></i>
+          <span class="fs-5 fw-bold text-main">MundiBlog</span>
+        </a>
+        <div class="d-flex align-items-center ms-auto gap-2">
+          <a href="create-post.html?from=my-posts.html" class="btn btn-primary btn-sm fw-medium px-3 rounded-pill"><i class="bi bi-plus-lg me-1"></i> <span data-i18n="create">Create</span></a>
+          <a href="profile.html" class="text-decoration-none">
+            <span class="rounded-circle border text-white fw-bold" style="display: inline-grid; place-items: center; width: 32px; height: 32px; background: var(--primary-color);">A</span>
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <main class="app-main-content no-right-panel">
+      <aside class="left-sidebar">
+        <div>
+          <div class="substack-logo-container">
+            <a href="home.html" class="text-decoration-none d-flex align-items-center gap-2">
+              <i class="bi bi-bookmark-fill substack-logo"></i>
+              <span class="fs-5 fw-bold text-main" style="letter-spacing: -0.02em;">MundiBlog</span>
+            </a>
+          </div>
+
+          <nav class="sidebar-nav">
+            <a href="home.html" class="sidebar-nav-item">
+              <i class="bi bi-house-door"></i> <span data-i18n="home">Home</span>
+            </a>
+            <a href="#" class="sidebar-nav-item">
+              <i class="bi bi-inbox"></i> <span data-i18n="inbox">Inbox</span>
+            </a>
+            <a href="#" class="sidebar-nav-item">
+              <i class="bi bi-heart"></i> <span data-i18n="liked_posts">Liked Posts</span>
+            </a>
+            <a href="my-posts.html" class="sidebar-nav-item active" aria-current="page">
+              <i class="bi bi-journal-text"></i> <span data-i18n="my_articles">My Articles</span>
+            </a>
+            <a href="about.html" class="sidebar-nav-item">
+              <i class="bi bi-info-circle"></i> <span data-i18n="about">About</span>
+            </a>
+            <a href="profile.html" class="sidebar-nav-item">
+              <i class="bi bi-person"></i> <span data-i18n="profile">Profile</span>
+            </a>
+          </nav>
+
+          <a href="create-post.html?new=1" class="sidebar-create-btn" data-create-from-my-posts>
+            <span data-i18n="create">Create</span> <i class="bi bi-plus-lg"></i>
+          </a>
+        </div>
+
+        <div class="sidebar-footer-menu">
+          <div class="dropdown">
+            <button class="btn btn-link text-decoration-none text-main d-flex align-items-center gap-2 p-1.5 w-100 border-0 text-start" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="bi bi-list fs-5"></i>
+              <span class="fw-medium" data-i18n="more">More</span>
+            </button>
+            <ul class="dropdown-menu shadow border-light-subtle">
+              <li><a class="dropdown-item py-2" href="settings.html"><i class="bi bi-gear me-2"></i> <span data-i18n="settings">Settings</span></a></li>
+              <li><a class="dropdown-item py-2" href="../admin/dashboard.html"><i class="bi bi-speedometer2 me-2"></i> <span data-i18n="admin_panel">Admin Panel</span></a></li>
+              <li><a class="dropdown-item py-2" href="change-password.html"><i class="bi bi-shield-lock me-2"></i> <span data-i18n="security">Security</span></a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item py-2 text-danger" href="#" id="signOutBtn"><i class="bi bi-box-arrow-right me-2"></i> <span data-i18n="sign_out">Sign Out</span></a></li>
+            </ul>
+          </div>
+        </div>
+      </aside>
+
+      <div class="center-feed" style="max-width: 100%; align-items: stretch;">
+        <section class="my-posts-workspace">
+          <header class="my-posts-top">
+            <h1 data-i18n="my_posts_title">My Articles</h1>
+          </header>
+
+          <div class="posts-toolbar">
+            <div class="toolbar-main-row">
+              <div class="toolbar-links-stack">
+                <div class="status-tabs" role="tablist" aria-label="Post status filters">
+                  <button class="status-tab is-active" type="button" data-filter="all"><span data-i18n="all_posts_tab">All</span> (<span data-count-all>5</span>)</button>
+                  <button class="status-tab" type="button" data-filter="draft"><span data-i18n="drafts">Drafts</span> (<span data-count-drafts>2</span>)</button>
+                  <button class="status-tab" type="button" data-filter="published"><span data-i18n="published">Published</span> (<span data-count-published>3</span>)</button>
+                  <button class="status-tab" type="button" data-filter="trash"><span data-i18n="trash">Trash</span> (<span data-count-trash>1</span>)</button>
+                </div>
+              </div>
+
+              <div class="toolbar-actions">
+                <label class="post-search">
+                  <i class="bi bi-search"></i>
+                  <input type="search" data-post-search data-i18n="search_posts" placeholder="Search your posts...">
+                </label>
+              </div>
+            </div>
+
+            <div class="toolbar-filter-row">
+              <div class="filter-actions">
+                <select class="admin-select" data-language-filter aria-label="Filter by language">
+                  <option value="all" data-i18n="all_languages">All languages</option>
+                  <option value="en" data-i18n="english">English</option>
+                  <option value="vi" data-i18n="vietnamese">Vietnamese</option>
+                  <option value="zh" data-i18n="chinese">Chinese</option>
+                </select>
+                <select class="admin-select" aria-label="Filter by date">
+                  <option value="all" data-i18n="all_dates">All dates</option>
+                  <option value="2026-07">July 2026</option>
+                  <option value="2026-06">June 2026</option>
+                </select>
+                <select class="admin-select" data-category-filter aria-label="Filter by category">
+                  <option value="all" data-i18n="all_categories">All categories</option>
+                  <option value="ai translation" data-i18n="cat_ai_translation">AI Translation</option>
+                  <option value="profile branding" data-i18n="cat_profile_branding">Profile Branding</option>
+                  <option value="design" data-i18n="cat_design_general">Design</option>
+                  <option value="analytics" data-i18n="cat_analytics">Analytics</option>
+                  <option value="localization" data-i18n="cat_localization">Localization</option>
+                </select>
+                <span class="items-count" data-visible-count>5 items</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="posts-table-panel">
+            <div class="posts-table-scroll">
+              <table class="posts-table">
+                <thead>
+                  <tr>
+                    <th class="select-col" scope="col"><input class="row-check" type="checkbox" data-select-all aria-label="Select all posts"></th>
+                    <th scope="col" data-i18n="title_label">Title</th>
+                    <th scope="col" data-i18n="status_label">Status</th>
+                    <th scope="col" data-i18n="original_language">Original language</th>
+                    <th scope="col" data-i18n="translated_language">Translated language</th>
+                    <th scope="col" data-i18n="updated">Updated</th>
+                    <th scope="col" data-i18n="reads">Reads</th>
+                    <th scope="col" data-i18n="actions">Actions</th>
+                  </tr>
+                </thead>
+                <tbody data-post-table-body>
+                  <tr data-status="published" data-category="ai translation" data-language="en" data-search="building ai assisted multilingual workflows localization translation">
+                    <td class="select-col"><input class="row-check" type="checkbox" aria-label="Select Building AI-assisted multilingual workflows"></td>
+                    <td class="post-title-cell">
+                      <strong>Building AI-assisted multilingual workflows</strong>
+                      <span data-i18n="cat_ai_translation">AI Translation</span>
+
+                    </td>
+                    <td><span class="status-badge is-published"><i class="bi bi-check2-circle"></i><span data-i18n="status_published">Published</span></span></td>
+                    <td><span class="language-badge">EN</span></td>
+                    <td>
+                      <span class="language-badge" style="background: rgba(13, 110, 253, 0.12); color: #0d6efd;">VI</span>
+                      <span class="language-badge" style="background: rgba(13, 110, 253, 0.12); color: #0d6efd;">ZH</span>
+                    </td>
+                    <td>Jul 07, 2026</td>
+                    <td>3,412</td>
+                    <td>
+                      <div class="action-group">
+                        <a class="action-btn" href="post-detail.html?id=5" title="Open"><i class="bi bi-box-arrow-up-right"></i></a>
+                        <a class="action-btn" href="create-post.html?edit=1&from=my-posts.html" title="Edit"><i class="bi bi-pencil"></i></a>
+                        <a class="action-btn text-danger" href="#" title="Trash"><i class="bi bi-trash"></i></a>
+                      </div>
+                    </td>
+                  </tr>
+
+                  <tr data-status="draft" data-category="profile branding" data-language="en" data-search="product notes mundiblog profiles draft branding profile">
+                    <td class="select-col"><input class="row-check" type="checkbox" aria-label="Select Product notes for MundiBlog profiles"></td>
+                    <td class="post-title-cell">
+                      <strong>Product notes for MundiBlog profiles</strong>
+                      <span data-i18n="cat_profile_branding">Profile Branding</span>
+
+                    </td>
+                    <td><span class="status-badge is-draft"><i class="bi bi-file-earmark-text"></i><span data-i18n="status_draft">Draft</span></span></td>
+                    <td><span class="language-badge">EN</span></td>
+                    <td><span class="text-muted small">-</span></td>
+                    <td>Jul 06, 2026</td>
+                    <td>0</td>
+                    <td>
+                      <div class="action-group">
+                        <a class="action-btn" href="create-post.html?edit=2" title="Open"><i class="bi bi-box-arrow-up-right"></i></a>
+                        <a class="action-btn" href="create-post.html?edit=2&from=my-posts.html" title="Edit"><i class="bi bi-pencil"></i></a>
+                        <a class="action-btn text-danger" href="#" title="Trash"><i class="bi bi-trash"></i></a>
+                      </div>
+                    </td>
+                  </tr>
+
+                  <tr data-status="published" data-category="design" data-language="vi" data-search="profile design guide vietnamese ui avatar bio">
+                    <td class="select-col"><input class="row-check" type="checkbox" aria-label="Select Profile design guide for creators"></td>
+                    <td class="post-title-cell">
+                      <strong>Profile design guide for creators</strong>
+                      <span data-i18n="cat_design_general">Design</span>
+
+                    </td>
+                    <td><span class="status-badge is-published"><i class="bi bi-check2-circle"></i><span data-i18n="status_published">Published</span></span></td>
+                    <td><span class="language-badge">VI</span></td>
+                    <td><span class="language-badge" style="background: rgba(13, 110, 253, 0.12); color: #0d6efd;">EN</span></td>
+                    <td>Jul 05, 2026</td>
+                    <td>1,129</td>
+                    <td>
+                      <div class="action-group">
+                        <a class="action-btn" href="post-detail.html?id=6" title="Open"><i class="bi bi-box-arrow-up-right"></i></a>
+                        <a class="action-btn" href="create-post.html?from=my-posts.html" title="Edit"><i class="bi bi-pencil"></i></a>
+                        <a class="action-btn text-danger" href="#" title="Trash"><i class="bi bi-trash"></i></a>
+                      </div>
+                    </td>
+                  </tr>
+
+                  <tr data-status="draft" data-category="analytics" data-language="en" data-search="creator analytics weekly recap metrics draft">
+                    <td class="select-col"><input class="row-check" type="checkbox" aria-label="Select Creator analytics weekly recap"></td>
+                    <td class="post-title-cell">
+                      <strong>Creator analytics weekly recap</strong>
+                      <span data-i18n="cat_analytics">Analytics</span>
+
+                    </td>
+                    <td><span class="status-badge is-draft"><i class="bi bi-file-earmark-text"></i><span data-i18n="status_draft">Draft</span></span></td>
+                    <td><span class="language-badge">EN</span></td>
+                    <td><span class="text-muted small">-</span></td>
+                    <td>Jul 03, 2026</td>
+                    <td>0</td>
+                    <td>
+                      <div class="action-group">
+                        <a class="action-btn" href="create-post.html?from=my-posts.html" title="Open"><i class="bi bi-box-arrow-up-right"></i></a>
+                        <a class="action-btn" href="create-post.html?from=my-posts.html" title="Edit"><i class="bi bi-pencil"></i></a>
+                        <a class="action-btn text-danger" href="#" title="Trash"><i class="bi bi-trash"></i></a>
+                      </div>
+                    </td>
+                  </tr>
+
+                  <tr data-status="published" data-category="localization" data-language="en" data-search="ai translation qa checklist localization review">
+                    <td class="select-col"><input class="row-check" type="checkbox" aria-label="Select AI translation QA checklist"></td>
+                    <td class="post-title-cell">
+                      <strong>AI translation QA checklist</strong>
+                      <span data-i18n="cat_localization">Localization</span>
+
+                    </td>
+                    <td><span class="status-badge is-published"><i class="bi bi-check2-circle"></i><span data-i18n="status_published">Published</span></span></td>
+                    <td><span class="language-badge">EN</span></td>
+                    <td><span class="language-badge" style="background: rgba(13, 110, 253, 0.12); color: #0d6efd;">VI</span></td>
+                    <td>Jun 29, 2026</td>
+                    <td>842</td>
+                    <td>
+                      <div class="action-group">
+                        <a class="action-btn" href="post-detail.html?id=4" title="Open"><i class="bi bi-box-arrow-up-right"></i></a>
+                        <a class="action-btn" href="create-post.html?from=my-posts.html" title="Edit"><i class="bi bi-pencil"></i></a>
+                        <a class="action-btn text-danger" href="#" title="Trash"><i class="bi bi-trash"></i></a>
+                      </div>
+                    </td>
+                  </tr>
+
+                  <tr data-status="trash" data-category="design" data-language="vi" data-search="old homepage layout archived trash">
+                    <td class="select-col"><input class="row-check" type="checkbox" aria-label="Select Old homepage layout notes"></td>
+                    <td class="post-title-cell">
+                      <strong>Old homepage layout notes</strong>
+                      <span data-i18n="cat_design_general">Design</span>
+                    </td>
+                    <td><span class="status-badge is-trash"><i class="bi bi-trash3"></i><span>Trash</span></span></td>
+                    <td><span class="language-badge">VI</span></td>
+                    <td><span class="text-muted small">-</span></td>
+                    <td>Jun 21, 2026</td>
+                    <td>218</td>
+                    <td>
+                      <div class="action-group">
+                        <a class="action-btn" href="create-post.html?from=my-posts.html" title="Restore"><i class="bi bi-arrow-counterclockwise"></i></a>
+                        <a class="action-btn text-danger" href="#" title="Delete"><i class="bi bi-trash3"></i></a>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="empty-state" data-empty-state>
+              <i class="bi bi-search"></i>
+              <strong data-i18n="no_posts_found">No posts match your filters.</strong>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <div class="offcanvas offcanvas-start" tabindex="-1" id="mobileSidebar" aria-labelledby="mobileSidebarLabel">
+    <div class="offcanvas-header border-bottom">
+      <a href="home.html" class="text-decoration-none d-flex align-items-center gap-2">
+        <i class="bi bi-bookmark-fill text-primary fs-4"></i>
+        <span class="fs-5 fw-bold text-main" style="letter-spacing: -0.02em;">MundiBlog</span>
+      </a>
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body d-flex flex-column p-3">
+      <nav class="sidebar-nav mb-3">
+        <a href="home.html" class="sidebar-nav-item">
+          <i class="bi bi-house-door"></i> <span data-i18n="home">Home</span>
+        </a>
+        <a href="#" class="sidebar-nav-item">
+          <i class="bi bi-inbox"></i> <span data-i18n="inbox">Inbox</span>
+        </a>
+        <a href="#" class="sidebar-nav-item">
+          <i class="bi bi-heart"></i> <span data-i18n="liked_posts">Liked Posts</span>
+        </a>
+        <a href="my-posts.html" class="sidebar-nav-item active" aria-current="page">
+          <i class="bi bi-journal-text"></i> <span data-i18n="my_articles">My Articles</span>
+        </a>
+        <a href="about.html" class="sidebar-nav-item">
+          <i class="bi bi-info-circle"></i> <span data-i18n="about">About</span>
+        </a>
+        <a href="profile.html" class="sidebar-nav-item">
+          <i class="bi bi-person"></i> <span data-i18n="profile">Profile</span>
+        </a>
+      </nav>
+
+      <a href="create-post.html?new=1" class="sidebar-create-btn mb-4" data-create-from-my-posts>
+        <span data-i18n="create">Create</span> <i class="bi bi-plus-lg"></i>
+      </a>
+
+      <div class="mt-auto pt-3 border-top">
+        <div class="d-flex flex-column gap-1">
+          <a class="sidebar-nav-item" href="settings.html"><i class="bi bi-gear"></i> <span data-i18n="settings">Settings</span></a>
+          <a class="sidebar-nav-item" href="../admin/dashboard.html"><i class="bi bi-speedometer2"></i> <span data-i18n="admin_panel">Admin Panel</span></a>
+          <a class="sidebar-nav-item" href="change-password.html"><i class="bi bi-shield-lock"></i> <span data-i18n="security">Security</span></a>
+          <a class="sidebar-nav-item text-danger" href="#" id="mobileSignOutBtn"><i class="bi bi-box-arrow-right"></i> <span data-i18n="sign_out">Sign Out</span></a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="../../assets/js/core.js"></script>
+  <script src="../../assets/js/components.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const rows = Array.from(document.querySelectorAll('[data-post-table-body] tr'));
+      const filterButtons = Array.from(document.querySelectorAll('[data-filter]'));
+      const languageFilter = document.querySelector('[data-language-filter]');
+      const searchInput = document.querySelector('[data-post-search]');
+      const categoryFilter = document.querySelector('[data-category-filter]');
+      const visibleCountLabel = document.querySelector('[data-visible-count]');
+      const selectAll = document.querySelector('[data-select-all]');
+      const rowChecks = Array.from(document.querySelectorAll('[data-post-table-body] .row-check'));
+      const emptyState = document.querySelector('[data-empty-state]');
+      const createLinks = document.querySelectorAll('[data-create-from-my-posts]');
+      let activeFilter = 'all';
+      let activeLanguage = 'all';
+
+      function setText(selector, value) {
+        const element = document.querySelector(selector);
+        if (element) element.textContent = value;
+      }
+
+      function updateSummary() {
+        const activeRows = rows.filter(row => row.dataset.status !== 'trash');
+        const published = rows.filter(row => row.dataset.status === 'published').length;
+        const drafts = rows.filter(row => row.dataset.status === 'draft').length;
+        const trash = rows.filter(row => row.dataset.status === 'trash').length;
+        const english = activeRows.filter(row => row.dataset.language === 'en').length;
+        const vietnamese = activeRows.filter(row => row.dataset.language === 'vi').length;
+        const chinese = activeRows.filter(row => row.dataset.language === 'zh').length;
+
+        setText('[data-count-all]', activeRows.length);
+        setText('[data-count-published]', published);
+        setText('[data-count-drafts]', drafts);
+        setText('[data-count-trash]', trash);
+      }
+
+      function applyFilters() {
+        const query = (searchInput?.value || '').trim().toLowerCase();
+        const categoryValue = categoryFilter?.value || 'all';
+        const languageValue = languageFilter?.value || 'all';
+        let visibleRows = 0;
+
+        rows.forEach(row => {
+          const matchesStatus = activeFilter === 'all'
+            ? row.dataset.status !== 'trash'
+            : row.dataset.status === activeFilter;
+          const matchesCategory = categoryValue === 'all' || row.dataset.category === categoryValue;
+          const matchesLanguage = languageValue === 'all' || row.dataset.language === languageValue;
+          const searchableText = `${row.textContent} ${row.dataset.search || ''}`.toLowerCase();
+          const matchesSearch = !query || searchableText.includes(query);
+          const shouldShow = matchesStatus && matchesCategory && matchesLanguage && matchesSearch;
+
+          row.hidden = !shouldShow;
+          if (shouldShow) visibleRows += 1;
+        });
+
+        if (visibleCountLabel) {
+          visibleCountLabel.textContent = `${visibleRows} ${visibleRows === 1 ? 'item' : 'items'}`;
+        }
+        if (emptyState) emptyState.classList.toggle('is-visible', visibleRows === 0);
+      }
+
+      function syncSelectedRows() {
+        const visibleChecks = rowChecks.filter(check => !check.closest('tr')?.hidden);
+        const checkedRows = visibleChecks.filter(check => check.checked);
+        rowChecks.forEach(check => {
+          check.closest('tr')?.classList.toggle('is-selected', check.checked);
+        });
+
+        if (selectAll) {
+          selectAll.checked = visibleChecks.length > 0 && checkedRows.length === visibleChecks.length;
+          selectAll.indeterminate = checkedRows.length > 0 && checkedRows.length < visibleChecks.length;
+        }
+      }
+
+      filterButtons.forEach(button => {
+        button.addEventListener('click', () => {
+          activeFilter = button.dataset.filter || 'all';
+          filterButtons.forEach(item => item.classList.toggle('is-active', item === button));
+          applyFilters();
+        });
+      });
+
+      languageFilter?.addEventListener('change', applyFilters);
+
+      searchInput?.addEventListener('input', applyFilters);
+      categoryFilter?.addEventListener('change', applyFilters);
+
+      selectAll?.addEventListener('change', () => {
+        rowChecks.forEach(check => {
+          if (!check.closest('tr')?.hidden) check.checked = selectAll.checked;
+        });
+        syncSelectedRows();
+      });
+
+      rowChecks.forEach(check => {
+        check.addEventListener('change', syncSelectedRows);
+      });
+
+      createLinks.forEach(link => {
+        link.addEventListener('click', () => {
+          sessionStorage.setItem('mundiCreatePostBackHref', 'my-posts.html');
+        });
+      });
+
+      updateSummary();
+      applyFilters();
+    });
+  </script>
+</body>
+</html>

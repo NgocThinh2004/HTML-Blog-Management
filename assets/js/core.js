@@ -300,6 +300,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const savedTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
   htmlElement.setAttribute('data-bs-theme', savedTheme);
   updateThemeIcon(savedTheme);
+  applySavedBrandAccent();
 
   if (themeToggle) {
     themeToggle.addEventListener('click', () => {
@@ -319,6 +320,71 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  function hexToRgb(hex) {
+    const normalized = String(hex || '').replace('#', '').trim();
+    if (!/^[0-9a-f]{6}$/i.test(normalized)) return null;
+
+    return {
+      r: parseInt(normalized.slice(0, 2), 16),
+      g: parseInt(normalized.slice(2, 4), 16),
+      b: parseInt(normalized.slice(4, 6), 16)
+    };
+  }
+
+  function normalizeHex(value) {
+    const rgb = hexToRgb(value);
+    if (!rgb) return '';
+    return `#${[rgb.r, rgb.g, rgb.b].map(part => part.toString(16).padStart(2, '0')).join('')}`.toUpperCase();
+  }
+
+  function shiftColor(hex, amount) {
+    const rgb = hexToRgb(hex);
+    if (!rgb) return hex;
+
+    const shift = channel => {
+      const target = amount < 0 ? 0 : 255;
+      return Math.round(channel + (target - channel) * Math.abs(amount));
+    };
+
+    return `#${[shift(rgb.r), shift(rgb.g), shift(rgb.b)].map(part => part.toString(16).padStart(2, '0')).join('')}`;
+  }
+
+  function getRelativeLuminance(hex) {
+    const rgb = hexToRgb(hex);
+    if (!rgb) return 0;
+    return (0.2126 * rgb.r + 0.7152 * rgb.g + 0.0722 * rgb.b) / 255;
+  }
+
+  function colorToRgba(hex, alpha) {
+    const rgb = hexToRgb(hex);
+    if (!rgb) return `rgba(255, 90, 0, ${alpha})`;
+    return `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${alpha})`;
+  }
+
+  function applyBrandAccent(accentColor) {
+    const accent = normalizeHex(accentColor);
+    if (!accent) return;
+
+    const hover = shiftColor(accent, getRelativeLuminance(accent) > 0.58 ? -0.18 : 0.16);
+    htmlElement.style.setProperty('--primary-color', accent);
+    htmlElement.style.setProperty('--primary-hover', hover);
+    htmlElement.style.setProperty('--accent-button-bg', colorToRgba(accent, 0.1));
+    htmlElement.style.setProperty('--accent-button-text', accent);
+    htmlElement.style.setProperty('--accent', accent);
+    htmlElement.style.setProperty('--accent-strong', hover);
+  }
+
+  function applySavedBrandAccent() {
+    try {
+      const savedProfile = JSON.parse(localStorage.getItem('mundiBlogProfile') || '{}');
+      applyBrandAccent(savedProfile.accentColor);
+    } catch (error) {
+      // Ignore malformed local profile data and keep the default theme color.
+    }
+  }
+
+  window.applyMundiBrandAccent = applyBrandAccent;
+
   // ========================================================
   // Dynamic Feed & UI Language Filtering / i18n
   // ========================================================
@@ -335,6 +401,19 @@ document.addEventListener('DOMContentLoaded', () => {
       settings: "Settings",
       admin_panel: "Admin Panel",
       security: "Security",
+      change_password: "Change password",
+      password_description_short: "Update the password for your MundiBlog account.",
+      password_description_long: "Update the password for your MundiBlog account. Use a strong password that you do not use anywhere else.",
+      back_to_profile: "Back to profile",
+      current_password_label: "Current password",
+      new_password_label: "New password",
+      confirm_new_password_label: "Confirm new password",
+      password_min_hint: "Use at least 8 characters.",
+      update_password: "Update password",
+      password_min_error: "New password must be at least 8 characters.",
+      password_same_error: "New password must be different from current password.",
+      password_mismatch_error: "New passwords do not match.",
+      password_success: "Password updated successfully.",
       sign_out: "Sign Out",
       login: "Log in",
       what_on_mind: "What is on your mind?",
@@ -356,6 +435,25 @@ document.addEventListener('DOMContentLoaded', () => {
       see_all: "See all",
       view_profile: "View Profile",
       subscribe: "Subscribe",
+      profile_see_subscribers: "See subscribers",
+      profile_edit_profile: "Edit profile",
+      profile_notice_title: "Notifications",
+      profile_notice_empty: "You do not have any new notifications.",
+      profile_edit_title: "Edit Profile",
+      profile_done: "Done",
+      profile_name_label: "Name",
+      profile_handle_label: "Handle",
+      profile_edit_handle: "Edit",
+      profile_bio_label: "Bio",
+      profile_branding: "Branding",
+      profile_branding_desc: "Customize the look of your profile.",
+      profile_header_image: "Header image",
+      profile_header_drop: "Drop your header image here",
+      profile_header_hint: "At least 1344x256px - 3:2 to 21:4 aspect ratio",
+      profile_select_image: "Select image",
+      profile_accent_color: "Accent color",
+      profile_background_color: "Background color",
+      profile_none: "None",
       // Settings page
       settings_title: "Settings & Preferences",
       settings_desc: "Manage your interface, display language, and reading preferences on MundiBlog.",
@@ -399,6 +497,45 @@ document.addEventListener('DOMContentLoaded', () => {
       delete_confirm_reply: "Are you sure you want to delete this reply?",
       comment_edited: "(edited)",
       reset_demo: "Reset Demo Data",
+      my_posts_title: "My Articles",
+      my_posts_desc: "Manage drafts, published posts, and the AI translation status matrix for EN, VI, and ZH.",
+      new_post: "New post",
+      all_posts: "All posts",
+      drafts: "Drafts",
+      published: "Published",
+      total_posts: "Total posts",
+      translation_ready: "Translations ready",
+      translations_attention: "Need attention",
+      search_posts: "Search your posts...",
+      status_label: "Status",
+      title_label: "Title",
+      original_language: "Original language",
+      ai_translation_matrix: "AI translation matrix",
+      updated: "Updated",
+      reads: "Reads",
+      actions: "Actions",
+      open: "Open",
+      status_draft: "Draft",
+      status_published: "Published",
+      ai_status_ready: "Ready",
+      ai_status_processing: "Processing",
+      ai_status_missing: "Missing",
+      ai_status_failed: "Failed",
+      no_posts_found: "No posts match your filters.",
+      all_posts_tab: "All",
+      trash: "Trash",
+      translated_language: "Translated language",
+      all_languages: "All languages",
+      english: "English",
+      vietnamese: "Vietnamese",
+      chinese: "Chinese",
+      all_dates: "All dates",
+      all_categories: "All categories",
+      cat_ai_translation: "AI Translation",
+      cat_profile_branding: "Profile Branding",
+      cat_design_general: "Design",
+      cat_analytics: "Analytics",
+      cat_localization: "Localization",
       search_placeholder_modal: "Search people, publications, or topics...",
       recommended_people: "People & Publications",
       no_results: "No matching results found.",
@@ -433,7 +570,6 @@ document.addEventListener('DOMContentLoaded', () => {
       edit_category: "Edit Category",
       category_name: "Category Name",
       slug: "Slug",
-      actions: "Actions",
       status: "Status",
       role: "Role",
       active: "Active",
@@ -448,7 +584,6 @@ document.addEventListener('DOMContentLoaded', () => {
       col_actions: "Actions",
       status_translating: "Translating",
       status_completed: "Completed",
-      status_failed: "Failed",
       status_hidden: "Hidden",
       user_desc: "View user directory, filter by roles, and manage account statuses.",
       col_user: "User",
@@ -540,6 +675,19 @@ document.addEventListener('DOMContentLoaded', () => {
       settings: "Cài đặt",
       admin_panel: "Quản trị viên",
       security: "Bảo mật",
+      change_password: "Đổi mật khẩu",
+      password_description_short: "Cập nhật mật khẩu cho tài khoản MundiBlog của bạn.",
+      password_description_long: "Cập nhật mật khẩu cho tài khoản MundiBlog của bạn. Hãy dùng mật khẩu mạnh mà bạn không dùng ở nơi khác.",
+      back_to_profile: "Quay lại hồ sơ",
+      current_password_label: "Mật khẩu hiện tại",
+      new_password_label: "Mật khẩu mới",
+      confirm_new_password_label: "Xác nhận mật khẩu mới",
+      password_min_hint: "Sử dụng ít nhất 8 ký tự.",
+      update_password: "Cập nhật mật khẩu",
+      password_min_error: "Mật khẩu mới phải có ít nhất 8 ký tự.",
+      password_same_error: "Mật khẩu mới phải khác mật khẩu hiện tại.",
+      password_mismatch_error: "Mật khẩu mới không khớp.",
+      password_success: "Đã cập nhật mật khẩu thành công.",
       sign_out: "Đăng xuất",
       login: "Đăng nhập",
       what_on_mind: "Bạn đang nghĩ gì?",
@@ -561,6 +709,25 @@ document.addEventListener('DOMContentLoaded', () => {
       see_all: "Xem tất cả",
       view_profile: "Xem hồ sơ",
       subscribe: "Đăng ký",
+      profile_see_subscribers: "Xem người đăng ký",
+      profile_edit_profile: "Chỉnh sửa hồ sơ",
+      profile_notice_title: "Thông báo",
+      profile_notice_empty: "Bạn chưa có thông báo mới.",
+      profile_edit_title: "Chỉnh sửa hồ sơ",
+      profile_done: "Xong",
+      profile_name_label: "Tên",
+      profile_handle_label: "Tên người dùng",
+      profile_edit_handle: "Sửa",
+      profile_bio_label: "Tiểu sử",
+      profile_branding: "Thương hiệu",
+      profile_branding_desc: "Tùy chỉnh giao diện hồ sơ của bạn.",
+      profile_header_image: "Ảnh bìa",
+      profile_header_drop: "Thả ảnh bìa của bạn tại đây",
+      profile_header_hint: "Tối thiểu 1344x256px - tỷ lệ 3:2 đến 21:4",
+      profile_select_image: "Chọn ảnh",
+      profile_accent_color: "Màu nhấn",
+      profile_background_color: "Màu nền",
+      profile_none: "Không có",
       // Settings page
       settings_title: "Cài đặt & Tùy chọn",
       settings_desc: "Quản lý giao diện, ngôn ngữ hiển thị và cấu hình trải nghiệm đọc bài viết trên MundiBlog.",
@@ -604,6 +771,45 @@ document.addEventListener('DOMContentLoaded', () => {
       delete_confirm_reply: "Bạn có chắc muốn xóa câu trả lời này?",
       comment_edited: "(đã chỉnh sửa)",
       reset_demo: "Khôi phục dữ liệu mẫu",
+      my_posts_title: "Bài viết của tôi",
+      my_posts_desc: "Quản lý bài nháp, bài đã đăng và ma trận trạng thái dịch thuật AI cho EN, VI, ZH.",
+      new_post: "Bài viết mới",
+      all_posts: "Tất cả bài viết",
+      drafts: "Bài nháp",
+      published: "Đã đăng",
+      total_posts: "Tổng bài viết",
+      translation_ready: "Bản dịch sẵn sàng",
+      translations_attention: "Cần chú ý",
+      search_posts: "Tìm bài viết của bạn...",
+      status_label: "Trạng thái",
+      title_label: "Tiêu đề",
+      original_language: "Ngôn ngữ gốc",
+      ai_translation_matrix: "Ma trận dịch thuật AI",
+      updated: "Cập nhật",
+      reads: "Lượt đọc",
+      actions: "Thao tác",
+      open: "Mở",
+      status_draft: "Nháp",
+      status_published: "Đã đăng",
+      ai_status_ready: "Sẵn sàng",
+      ai_status_processing: "Đang xử lý",
+      ai_status_missing: "Thiếu",
+      ai_status_failed: "Lỗi dịch",
+      no_posts_found: "Không có bài viết nào phù hợp với bộ lọc của bạn.",
+      all_posts_tab: "Tất cả",
+      trash: "Thùng rác",
+      translated_language: "Ngôn ngữ dịch",
+      all_languages: "Tất cả ngôn ngữ",
+      english: "Tiếng Anh",
+      vietnamese: "Tiếng Việt",
+      chinese: "Tiếng Trung",
+      all_dates: "Tất cả ngày",
+      all_categories: "Tất cả danh mục",
+      cat_ai_translation: "Dịch thuật AI",
+      cat_profile_branding: "Thương hiệu hồ sơ",
+      cat_design_general: "Thiết kế",
+      cat_analytics: "Phân tích",
+      cat_localization: "Bản địa hóa",
       search_placeholder_modal: "Tìm kiếm tác giả, bài viết hoặc danh mục...",
       recommended_people: "Tác giả & Danh mục",
       no_results: "Không tìm thấy kết quả phù hợp.",
@@ -746,6 +952,19 @@ document.addEventListener('DOMContentLoaded', () => {
       settings: "设置",
       admin_panel: "管理后台",
       security: "安全设置",
+      change_password: "修改密码",
+      password_description_short: "更新你的 MundiBlog 账户密码。",
+      password_description_long: "更新你的 MundiBlog 账户密码。请使用你没有在其他地方使用过的强密码。",
+      back_to_profile: "返回个人资料",
+      current_password_label: "当前密码",
+      new_password_label: "新密码",
+      confirm_new_password_label: "确认新密码",
+      password_min_hint: "至少使用 8 个字符。",
+      update_password: "更新密码",
+      password_min_error: "新密码至少需要 8 个字符。",
+      password_same_error: "新密码必须不同于当前密码。",
+      password_mismatch_error: "两次输入的新密码不一致。",
+      password_success: "密码已成功更新。",
       sign_out: "退出登录",
       login: "登录",
       what_on_mind: "你想分享什么？",
@@ -767,6 +986,25 @@ document.addEventListener('DOMContentLoaded', () => {
       see_all: "查看全部",
       view_profile: "查看主页",
       subscribe: "关注",
+      profile_see_subscribers: "查看订阅者",
+      profile_edit_profile: "编辑个人资料",
+      profile_notice_title: "通知",
+      profile_notice_empty: "你还没有新通知。",
+      profile_edit_title: "编辑个人资料",
+      profile_done: "完成",
+      profile_name_label: "姓名",
+      profile_handle_label: "用户名",
+      profile_edit_handle: "编辑",
+      profile_bio_label: "简介",
+      profile_branding: "品牌",
+      profile_branding_desc: "自定义你的个人资料外观。",
+      profile_header_image: "头图",
+      profile_header_drop: "将头图拖放到这里",
+      profile_header_hint: "至少 1344x256px - 宽高比 3:2 到 21:4",
+      profile_select_image: "选择图片",
+      profile_accent_color: "强调色",
+      profile_background_color: "背景色",
+      profile_none: "无",
       // Settings page
       settings_title: "设置与偏好",
       settings_desc: "管理您的界面、显示语言和 MundiBlog 上的阅读偏好。",
@@ -810,6 +1048,45 @@ document.addEventListener('DOMContentLoaded', () => {
       delete_confirm_reply: "确定要删除此回复吗？",
       comment_edited: "(已编辑)",
       reset_demo: "恢复演示数据",
+      my_posts_title: "我的文章",
+      my_posts_desc: "管理草稿、已发布文章，以及 EN、VI、ZH 的 AI 翻译状态矩阵。",
+      new_post: "新文章",
+      all_posts: "全部文章",
+      drafts: "草稿",
+      published: "已发布",
+      total_posts: "文章总数",
+      translation_ready: "翻译已就绪",
+      translations_attention: "需要处理",
+      search_posts: "搜索你的文章...",
+      status_label: "状态",
+      title_label: "标题",
+      original_language: "原始语言",
+      ai_translation_matrix: "AI 翻译矩阵",
+      updated: "更新于",
+      reads: "阅读量",
+      actions: "操作",
+      open: "打开",
+      status_draft: "草稿",
+      status_published: "已发布",
+      ai_status_ready: "已完成",
+      ai_status_processing: "处理中",
+      ai_status_missing: "缺失",
+      ai_status_failed: "失败",
+      no_posts_found: "没有符合您筛选条件的文章。",
+      all_posts_tab: "全部",
+      trash: "回收站",
+      translated_language: "翻译语言",
+      all_languages: "所有语言",
+      english: "英语",
+      vietnamese: "越南语",
+      chinese: "中文",
+      all_dates: "所有日期",
+      all_categories: "所有类别",
+      cat_ai_translation: "AI翻译",
+      cat_profile_branding: "个人资料品牌",
+      cat_design_general: "设计",
+      cat_analytics: "分析",
+      cat_localization: "本地化",
       search_placeholder_modal: "搜索作者、文章或主题...",
       recommended_people: "作者与出版物",
       no_results: "未找到匹配的结果。",
