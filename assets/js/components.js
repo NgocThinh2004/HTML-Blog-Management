@@ -16,7 +16,7 @@ function initSharedSidebars() {
 
   const path = window.location.pathname.toLowerCase();
   let activePage = '';
-  if (path.includes('home.html') || path.endsWith('/guest/') || path.endsWith('/guest')) activePage = 'home';
+  if (path.includes('index.html') || path.endsWith('/guest/') || path.endsWith('/guest')) activePage = 'home';
   else if (path.includes('explore.html')) activePage = 'explore';
   else if (path.includes('post-detail.html')) activePage = 'post-detail';
   else if (path.includes('settings.html')) activePage = 'settings';
@@ -31,7 +31,7 @@ function initSharedSidebars() {
       <div>
         <!-- Substack Logo -->
         <div class="substack-logo-container">
-          <a href="home.html" class="text-decoration-none d-flex align-items-center gap-2">
+          <a href="index.html" class="text-decoration-none d-flex align-items-center gap-2">
             <i class="bi bi-bookmark-fill substack-logo"></i>
             <span class="fs-5 fw-bold text-main" style="letter-spacing: -0.02em;">MundiBlog</span>
           </a>
@@ -39,7 +39,7 @@ function initSharedSidebars() {
         
         <!-- Navigation menu -->
         <nav class="sidebar-nav">
-          <a href="home.html" class="sidebar-nav-item ${activePage === 'home' ? 'active' : ''}">
+          <a href="index.html" class="sidebar-nav-item ${activePage === 'home' ? 'active' : ''}">
             <i class="bi bi-house-door-fill"></i> <span data-i18n="home">Home</span>
           </a>
           <a href="#" class="sidebar-nav-item">
@@ -76,7 +76,7 @@ function initSharedSidebars() {
           </button>
           <ul class="dropdown-menu shadow border-light-subtle">
             <li><a class="dropdown-item py-2 ${activePage === 'settings' ? 'active' : ''}" href="settings.html"><i class="bi bi-gear me-2"></i> <span data-i18n="settings">Settings</span></a></li>
-            <li><a class="dropdown-item py-2" href="../admin/dashboard.html" id="adminPanelLink"><i class="bi bi-speedometer2 me-2"></i> <span data-i18n="admin_panel">Admin Panel</span></a></li>
+            <li><a class="dropdown-item py-2" href="../../admin/index.html" id="adminPanelLink"><i class="bi bi-speedometer2 me-2"></i> <span data-i18n="admin_panel">Admin Panel</span></a></li>
             <li><a class="dropdown-item py-2" href="change-password.html"><i class="bi bi-shield-lock me-2"></i> <span data-i18n="security">Security</span></a></li>
             <li><hr class="dropdown-divider"></li>
             <li><a class="dropdown-item py-2 text-danger" href="#" id="signOutBtn"><i class="bi bi-box-arrow-right me-2"></i> <span data-i18n="sign_out">Sign Out</span></a></li>
@@ -91,7 +91,7 @@ function initSharedSidebars() {
   if (mobileSidebarEl) {
     mobileSidebarEl.innerHTML = `
       <div class="offcanvas-header border-bottom">
-        <a href="home.html" class="text-decoration-none d-flex align-items-center gap-2">
+        <a href="index.html" class="text-decoration-none d-flex align-items-center gap-2">
           <i class="bi bi-bookmark-fill text-primary fs-4"></i>
           <span class="fs-5 fw-bold text-main" style="letter-spacing: -0.02em;">MundiBlog</span>
         </a>
@@ -107,7 +107,7 @@ function initSharedSidebars() {
         </div>
 
         <nav class="sidebar-nav mb-auto">
-          <a href="home.html" class="sidebar-nav-item ${activePage === 'home' ? 'active' : ''}"><i class="bi bi-house-door-fill"></i> <span data-i18n="home">Home</span></a>
+          <a href="index.html" class="sidebar-nav-item ${activePage === 'home' ? 'active' : ''}"><i class="bi bi-house-door-fill"></i> <span data-i18n="home">Home</span></a>
           <a href="#" class="sidebar-nav-item"><i class="bi bi-inbox"></i> <span data-i18n="inbox">Inbox</span></a>
           <a href="#" class="sidebar-nav-item"><i class="bi bi-heart"></i> <span data-i18n="liked_posts">Liked Posts</span></a>
           <a href="explore.html" class="sidebar-nav-item ${activePage === 'explore' ? 'active' : ''}"><i class="bi bi-compass-fill"></i> <span data-i18n="explore">Explore</span></a>
@@ -118,7 +118,7 @@ function initSharedSidebars() {
 
         <div class="border-top pt-3 mt-3">
           <a href="settings.html" class="sidebar-nav-item mb-2 ${activePage === 'settings' ? 'active' : ''}"><i class="bi bi-gear"></i> <span data-i18n="settings">Settings</span></a>
-          <a href="../admin/dashboard.html" class="sidebar-nav-item mb-2"><i class="bi bi-speedometer2"></i> <span data-i18n="admin_panel">Admin Panel</span></a>
+          <a href="../../admin/index.html" class="sidebar-nav-item mb-2"><i class="bi bi-speedometer2"></i> <span data-i18n="admin_panel">Admin Panel</span></a>
           <a href="change-password.html" class="sidebar-nav-item mb-2"><i class="bi bi-shield-lock"></i> <span data-i18n="security">Security</span></a>
           <a href="#" class="sidebar-nav-item text-danger"><i class="bi bi-box-arrow-right"></i> <span data-i18n="sign_out">Sign Out</span></a>
         </div>
@@ -209,6 +209,9 @@ function initSharedSidebars() {
   // 5. Apply translations to newly injected elements
   if (typeof window.applyUiTranslations === 'function') {
     window.applyUiTranslations();
+  }
+  if (typeof window.applyUserUI === 'function') {
+    window.applyUserUI();
   }
   if (typeof window.renderTrendingWidgets === 'function') {
     window.renderTrendingWidgets();

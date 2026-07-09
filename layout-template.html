@@ -32,13 +32,13 @@
         </button>
         
         <!-- Brand Logo for mobile -->
-        <a href="pages/guest/home.html" class="d-flex align-items-center text-decoration-none">
+        <a href="index.html" class="d-flex align-items-center text-decoration-none">
           <i class="bi bi-feather fs-4 text-primary me-2"></i>
           <span class="fs-5 fw-bold text-main">MundiBlog</span>
         </a>
         <div class="d-flex align-items-center ms-auto gap-2">
-          <a href="pages/guest/login.html" class="btn btn-primary btn-sm fw-medium px-3 rounded-pill"><i class="bi bi-plus-lg me-1"></i> <span data-i18n="create">Create</span></a>
-          <a href="pages/guest/profile.html" class="text-decoration-none">
+          <a href="login.html" class="btn btn-primary btn-sm fw-medium px-3 rounded-pill"><i class="bi bi-plus-lg me-1"></i> <span data-i18n="create">Create</span></a>
+          <a href="profile.html" class="text-decoration-none">
             <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=32&h=32" class="rounded-circle border" width="32" height="32" alt="Avatar">
           </a>
         </div>
@@ -53,7 +53,7 @@
         <div>
           <!-- Substack Logo -->
           <div class="substack-logo-container">
-            <a href="pages/guest/home.html" class="text-decoration-none d-flex align-items-center gap-2">
+            <a href="index.html" class="text-decoration-none d-flex align-items-center gap-2">
               <i class="bi bi-bookmark-fill substack-logo"></i>
               <span class="fs-5 fw-bold text-main" style="letter-spacing: -0.02em;">MundiBlog</span>
             </a>
@@ -61,7 +61,7 @@
           
           <!-- Navigation menu -->
           <nav class="sidebar-nav">
-            <a href="pages/guest/home.html" class="sidebar-nav-item active">
+            <a href="index.html" class="sidebar-nav-item active">
               <i class="bi bi-house-door-fill"></i> <span data-i18n="home">Home</span>
             </a>
             <a href="#" class="sidebar-nav-item">
@@ -70,18 +70,18 @@
             <a href="#" class="sidebar-nav-item">
               <i class="bi bi-heart"></i> <span data-i18n="liked_posts">Liked Posts</span>
             </a>
-            <a href="pages/guest/my-posts.html" class="sidebar-nav-item">
+            <a href="my-posts.html" class="sidebar-nav-item">
               <i class="bi bi-journal-text"></i> <span data-i18n="my_articles">My Articles</span>
             </a>
-            <a href="pages/guest/about.html" class="sidebar-nav-item">
+            <a href="about.html" class="sidebar-nav-item">
               <i class="bi bi-info-circle"></i> <span data-i18n="about">About</span>
             </a>
-            <a href="pages/guest/profile.html" class="sidebar-nav-item">
+            <a href="profile.html" class="sidebar-nav-item">
               <i class="bi bi-person"></i> <span data-i18n="profile">Profile</span>
             </a>
           </nav>
           
-          <a href="pages/guest/login.html" class="sidebar-create-btn">
+          <a href="login.html" class="sidebar-create-btn">
             <span data-i18n="create">Create</span> <i class="bi bi-plus-lg"></i>
           </a>
         </div>
@@ -94,9 +94,9 @@
               <span class="fw-medium" data-i18n="more">More</span>
             </button>
             <ul class="dropdown-menu shadow border-light-subtle">
-              <li><a class="dropdown-item py-2" href="pages/guest/settings.html"><i class="bi bi-gear me-2"></i> <span data-i18n="settings">Settings</span></a></li>
-              <li><a class="dropdown-item py-2" href="pages/admin/dashboard.html"><i class="bi bi-speedometer2 me-2"></i> <span data-i18n="admin_panel">Admin Panel</span></a></li>
-              <li><a class="dropdown-item py-2" href="pages/guest/change-password.html"><i class="bi bi-shield-lock me-2"></i> <span data-i18n="security">Security</span></a></li>
+              <li><a class="dropdown-item py-2" href="settings.html"><i class="bi bi-gear me-2"></i> <span data-i18n="settings">Settings</span></a></li>
+              <li><a class="dropdown-item py-2" href="admin/index.html"><i class="bi bi-speedometer2 me-2"></i> <span data-i18n="admin_panel">Admin Panel</span></a></li>
+              <li><a class="dropdown-item py-2" href="change-password.html"><i class="bi bi-shield-lock me-2"></i> <span data-i18n="security">Security</span></a></li>
               <li><hr class="dropdown-divider"></li>
               <li><a class="dropdown-item py-2 text-danger" href="#" id="signOutBtn"><i class="bi bi-box-arrow-right me-2"></i> <span data-i18n="sign_out">Sign Out</span></a></li>
             </ul>
@@ -160,7 +160,7 @@
         
         <!-- Footer links -->
         <div class="right-footer-links">
-          <a href="pages/guest/about.html">About</a> &bull; 
+          <a href="about.html">About</a> &bull; 
           <a href="#">Privacy</a> &bull; 
           <a href="#">Terms</a> &bull; 
           <a href="#">API</a> &bull; 
@@ -175,7 +175,7 @@
   <!-- MOBILE SIDEBAR / OFFCANVAS NAV (Fallback menu for small devices) -->
   <div class="offcanvas offcanvas-start" tabindex="-1" id="mobileSidebar" aria-labelledby="mobileSidebarLabel">
     <div class="offcanvas-header border-bottom">
-      <a href="pages/guest/home.html" class="text-decoration-none d-flex align-items-center gap-2">
+      <a href="index.html" class="text-decoration-none d-flex align-items-center gap-2">
         <i class="bi bi-bookmark-fill text-primary fs-4"></i>
         <span class="fs-5 fw-bold text-main" style="letter-spacing: -0.02em;">MundiBlog</span>
       </a>
@@ -186,12 +186,12 @@
       <div class="d-lg-none mb-3">
         <div class="right-search-box w-100">
           <i class="bi bi-search"></i>
-          <input type="text" id="sidebarSearchInput" placeholder="Search MundiBlog..." oninput="window.location.href='pages/guest/home.html?search=' + encodeURIComponent(this.value)" data-i18n="search_placeholder">
+          <input type="text" id="sidebarSearchInput" placeholder="Search MundiBlog..." oninput="window.location.href='home.html?search=' + encodeURIComponent(this.value)" data-i18n="search_placeholder">
         </div>
       </div>
 
       <nav class="sidebar-nav mb-3">
-        <a href="pages/guest/home.html" class="sidebar-nav-item active">
+        <a href="index.html" class="sidebar-nav-item active">
           <i class="bi bi-house-door-fill"></i> <span data-i18n="home">Home</span>
         </a>
         <a href="#" class="sidebar-nav-item">
@@ -200,26 +200,26 @@
         <a href="#" class="sidebar-nav-item">
           <i class="bi bi-heart"></i> <span data-i18n="liked_posts">Liked Posts</span>
         </a>
-        <a href="pages/guest/my-posts.html" class="sidebar-nav-item">
+        <a href="my-posts.html" class="sidebar-nav-item">
           <i class="bi bi-journal-text"></i> <span data-i18n="my_articles">My Articles</span>
         </a>
-        <a href="pages/guest/about.html" class="sidebar-nav-item">
+        <a href="about.html" class="sidebar-nav-item">
           <i class="bi bi-info-circle"></i> <span data-i18n="about">About</span>
         </a>
-        <a href="pages/guest/profile.html" class="sidebar-nav-item">
+        <a href="profile.html" class="sidebar-nav-item">
           <i class="bi bi-person"></i> <span data-i18n="profile">Profile</span>
         </a>
       </nav>
       
-      <a href="pages/guest/login.html" class="sidebar-create-btn mb-4">
+      <a href="login.html" class="sidebar-create-btn mb-4">
         <span data-i18n="create">Create</span> <i class="bi bi-plus-lg"></i>
       </a>
 
       <div class="mt-auto pt-3 border-top">
         <div class="d-flex flex-column gap-1">
-          <a class="sidebar-nav-item" href="pages/guest/settings.html"><i class="bi bi-gear"></i> <span data-i18n="settings">Settings</span></a>
-          <a class="sidebar-nav-item" href="pages/admin/dashboard.html"><i class="bi bi-speedometer2"></i> <span data-i18n="admin_panel">Admin Panel</span></a>
-          <a class="sidebar-nav-item" href="pages/guest/change-password.html"><i class="bi bi-shield-lock"></i> <span data-i18n="security">Security</span></a>
+          <a class="sidebar-nav-item" href="settings.html"><i class="bi bi-gear"></i> <span data-i18n="settings">Settings</span></a>
+          <a class="sidebar-nav-item" href="admin/index.html"><i class="bi bi-speedometer2"></i> <span data-i18n="admin_panel">Admin Panel</span></a>
+          <a class="sidebar-nav-item" href="change-password.html"><i class="bi bi-shield-lock"></i> <span data-i18n="security">Security</span></a>
           <a class="sidebar-nav-item text-danger" href="#" id="mobileSignOutBtn"><i class="bi bi-box-arrow-right"></i> <span data-i18n="sign_out">Sign Out</span></a>
         </div>
       </div>
