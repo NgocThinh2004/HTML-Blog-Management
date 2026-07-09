@@ -76,7 +76,7 @@ function initSharedSidebars() {
           </button>
           <ul class="dropdown-menu shadow border-light-subtle">
             <li><a class="dropdown-item py-2 ${activePage === 'settings' ? 'active' : ''}" href="settings.html"><i class="bi bi-gear me-2"></i> <span data-i18n="settings">Settings</span></a></li>
-            <li><a class="dropdown-item py-2" href="../../admin/index.html" id="adminPanelLink"><i class="bi bi-speedometer2 me-2"></i> <span data-i18n="admin_panel">Admin Panel</span></a></li>
+            <li><a class="dropdown-item py-2" href="admin/index.html" id="adminPanelLink"><i class="bi bi-speedometer2 me-2"></i> <span data-i18n="admin_panel">Admin Panel</span></a></li>
             <li><a class="dropdown-item py-2" href="change-password.html"><i class="bi bi-shield-lock me-2"></i> <span data-i18n="security">Security</span></a></li>
             <li><hr class="dropdown-divider"></li>
             <li><a class="dropdown-item py-2 text-danger" href="#" id="signOutBtn"><i class="bi bi-box-arrow-right me-2"></i> <span data-i18n="sign_out">Sign Out</span></a></li>
@@ -118,7 +118,7 @@ function initSharedSidebars() {
 
         <div class="border-top pt-3 mt-3">
           <a href="settings.html" class="sidebar-nav-item mb-2 ${activePage === 'settings' ? 'active' : ''}"><i class="bi bi-gear"></i> <span data-i18n="settings">Settings</span></a>
-          <a href="../../admin/index.html" class="sidebar-nav-item mb-2"><i class="bi bi-speedometer2"></i> <span data-i18n="admin_panel">Admin Panel</span></a>
+          <a href="admin/index.html" class="sidebar-nav-item mb-2"><i class="bi bi-speedometer2"></i> <span data-i18n="admin_panel">Admin Panel</span></a>
           <a href="change-password.html" class="sidebar-nav-item mb-2"><i class="bi bi-shield-lock"></i> <span data-i18n="security">Security</span></a>
           <a href="#" class="sidebar-nav-item text-danger"><i class="bi bi-box-arrow-right"></i> <span data-i18n="sign_out">Sign Out</span></a>
         </div>
