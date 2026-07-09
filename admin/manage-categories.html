@@ -15,10 +15,10 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
   <!-- Custom CSS (Standard Shared Assets) -->
-  <link rel="stylesheet" href="../../assets/css/variables.css">
-  <link rel="stylesheet" href="../../assets/css/base.css?v=5">
-  <link rel="stylesheet" href="../../assets/css/layouts.css">
-  <link rel="stylesheet" href="../../assets/css/components.css?v=5">
+<link rel="stylesheet" href="../assets/css/variables.css">
+  <link rel="stylesheet" href="../assets/css/base.css?v=5">
+  <link rel="stylesheet" href="../assets/css/layouts.css">
+  <link rel="stylesheet" href="../assets/css/components.css?v=5">
 
   <style>
     .admin-container {
@@ -102,7 +102,7 @@
         </button>
 
         <!-- Brand Logo for mobile -->
-        <a href="../guest/home.html" class="d-flex align-items-center text-decoration-none">
+        <a href="../index.html" class="d-flex align-items-center text-decoration-none">
           <i class="bi bi-bookmark-fill fs-4 text-primary me-2"></i>
           <span class="fs-5 fw-bold text-main">MundiBlog</span>
         </a>
@@ -117,7 +117,7 @@
         <div>
           <!-- Substack Logo -->
           <div class="substack-logo-container">
-            <a href="../guest/home.html" class="text-decoration-none d-flex align-items-center gap-2 flex-wrap">
+            <a href="../index.html" class="text-decoration-none d-flex align-items-center gap-2 flex-wrap">
               <i class="bi bi-bookmark-fill substack-logo"></i>
               <span class="fs-5 fw-bold text-main" style="letter-spacing: -0.02em;">MundiBlog</span>
               <span class="badge bg-primary-subtle text-primary border border-primary-subtle rounded-pill ms-1"
@@ -128,7 +128,7 @@
 
           <!-- Navigation menu -->
           <nav class="sidebar-nav">
-            <a href="dashboard.html" class="sidebar-nav-item">
+            <a href="index.html" class="sidebar-nav-item">
               <i class="bi bi-speedometer2"></i> <span data-i18n="admin_dashboard">Admin Dashboard</span>
             </a>
             <a href="manage-users.html" class="sidebar-nav-item">
@@ -145,7 +145,7 @@
 
         <!-- Bottom Section -->
         <div class="sidebar-footer-menu">
-          <a href="../guest/home.html" class="sidebar-nav-item mb-2">
+          <a href="../index.html" class="sidebar-nav-item mb-2">
             <i class="bi bi-arrow-left"></i> <span data-i18n="back_feed">Back to Feed</span>
           </a>
           <div class="dropdown">
@@ -156,9 +156,9 @@
               <span class="fw-medium" data-i18n="more">More</span>
             </button>
             <ul class="dropdown-menu shadow border-light-subtle">
-              <li><a class="dropdown-item py-2" href="../guest/settings.html?from=admin"><i class="bi bi-gear me-2"></i>
+              <li><a class="dropdown-item py-2" href="../settings.html?from=admin"><i class="bi bi-gear me-2"></i>
                   <span data-i18n="settings">Settings</span></a></li>
-              <li><a class="dropdown-item py-2" href="../owner/change-password.html"><i
+              <li><a class="dropdown-item py-2" href="../change-password.html"><i
                     class="bi bi-shield-lock me-2"></i> <span data-i18n="security">Security</span></a></li>
               <li>
                 <hr class="dropdown-divider">
@@ -206,6 +206,8 @@
                   <div class="item-main-title cat-title" data-i18n="cat_ai">Artificial Intelligence</div>
                   <div class="item-sub-info">
                     <span>Slug</span>: <code class="cat-slug" data-i18n="slug_ai">ai</code>
+                    <span class="item-sub-info-separator">•</span>
+                    <span data-i18n="created_date">Created:</span> <span>12 Oct 2023</span>
                   </div>
                 </div>
                 <div class="categories-right-actions">
@@ -214,14 +216,7 @@
                       <span class="badge bg-primary rounded-pill">2</span> <span data-i18n="posts_suffix">posts</span> <i class="bi bi-chevron-right text-muted small ms-1"></i>
                     </button>
                   </div>
-                  <div class="form-check form-switch p-0 m-0 d-flex align-items-center gap-2">
-                    <input class="form-check-input ms-0 cat-status-switch" type="checkbox" checked
-                      data-category="Artificial Intelligence">
-                    <span class="status-indicator">
-                      <span class="status-dot status-dot-active"></span>
-                      <span class="status-badge-text" data-i18n="active">Active</span>
-                    </span>
-                  </div>
+                  <label class="perfect-switch"><input class="perfect-switch-input cat-status-switch" type="checkbox" checked data-category="Artificial Intelligence"><div class="perfect-switch-track"><div class="perfect-switch-thumb"></div><span class="perfect-switch-text-on" data-i18n="active">Active</span><span class="perfect-switch-text-off" data-i18n="inactive">Inactive</span></div></label>
                   <div>
                     <button class="btn btn-sm btn-link text-primary p-1 me-2 btn-edit-cat"
                       onclick="editCategory(this)"><i class="bi bi-pencil"></i></button>
@@ -237,6 +232,8 @@
                   <div class="item-main-title cat-title" data-i18n="cat_backend">Backend Engineering</div>
                   <div class="item-sub-info">
                     <span>Slug</span>: <code class="cat-slug" data-i18n="slug_backend">backend</code>
+                    <span class="item-sub-info-separator">•</span>
+                    <span data-i18n="created_date">Created:</span> <span>05 Nov 2023</span>
                   </div>
                 </div>
                 <div class="categories-right-actions">
@@ -245,14 +242,7 @@
                       <span class="badge bg-primary rounded-pill">2</span> <span data-i18n="posts_suffix">posts</span> <i class="bi bi-chevron-right text-muted small ms-1"></i>
                     </button>
                   </div>
-                  <div class="form-check form-switch p-0 m-0 d-flex align-items-center gap-2">
-                    <input class="form-check-input ms-0 cat-status-switch" type="checkbox" checked
-                      data-category="Backend Engineering">
-                    <span class="status-indicator">
-                      <span class="status-dot status-dot-active"></span>
-                      <span class="status-badge-text" data-i18n="active">Active</span>
-                    </span>
-                  </div>
+                  <label class="perfect-switch"><input class="perfect-switch-input cat-status-switch" type="checkbox" checked data-category="Backend Engineering"><div class="perfect-switch-track"><div class="perfect-switch-thumb"></div><span class="perfect-switch-text-on" data-i18n="active">Active</span><span class="perfect-switch-text-off" data-i18n="inactive">Inactive</span></div></label>
                   <div>
                     <button class="btn btn-sm btn-link text-primary p-1 me-2 btn-edit-cat"
                       onclick="editCategory(this)"><i class="bi bi-pencil"></i></button>
@@ -268,6 +258,8 @@
                   <div class="item-main-title cat-title" data-i18n="cat_design">Design</div>
                   <div class="item-sub-info">
                     <span>Slug</span>: <code class="cat-slug" data-i18n="slug_design">design</code>
+                    <span class="item-sub-info-separator">•</span>
+                    <span data-i18n="created_date">Created:</span> <span>22 Jan 2024</span>
                   </div>
                 </div>
                 <div class="categories-right-actions">
@@ -276,14 +268,7 @@
                       <span class="badge bg-primary rounded-pill">1</span> <span data-i18n="posts_suffix">posts</span> <i class="bi bi-chevron-right text-muted small ms-1"></i>
                     </button>
                   </div>
-                  <div class="form-check form-switch p-0 m-0 d-flex align-items-center gap-2">
-                    <input class="form-check-input ms-0 cat-status-switch" type="checkbox" checked
-                      data-category="Design">
-                    <span class="status-indicator">
-                      <span class="status-dot status-dot-active"></span>
-                      <span class="status-badge-text" data-i18n="active">Active</span>
-                    </span>
-                  </div>
+                  <label class="perfect-switch"><input class="perfect-switch-input cat-status-switch" type="checkbox" checked data-category="Design"><div class="perfect-switch-track"><div class="perfect-switch-thumb"></div><span class="perfect-switch-text-on" data-i18n="active">Active</span><span class="perfect-switch-text-off" data-i18n="inactive">Inactive</span></div></label>
                   <div>
                     <button class="btn btn-sm btn-link text-primary p-1 me-2 btn-edit-cat"
                       onclick="editCategory(this)"><i class="bi bi-pencil"></i></button>
@@ -299,6 +284,8 @@
                   <div class="item-main-title cat-title">Frontend Development</div>
                   <div class="item-sub-info">
                     <span>Slug</span>: <code class="cat-slug">frontend</code>
+                    <span class="item-sub-info-separator">•</span>
+                    <span data-i18n="created_date">Created:</span> <span>15 Feb 2024</span>
                   </div>
                 </div>
                 <div class="categories-right-actions">
@@ -307,14 +294,7 @@
                       <span class="badge bg-primary rounded-pill">1</span> <span data-i18n="posts_suffix">posts</span> <i class="bi bi-chevron-right text-muted small ms-1"></i>
                     </button>
                   </div>
-                  <div class="form-check form-switch p-0 m-0 d-flex align-items-center gap-2">
-                    <input class="form-check-input ms-0 cat-status-switch" type="checkbox" checked
-                      data-category="Frontend Development">
-                    <span class="status-indicator">
-                      <span class="status-dot status-dot-active"></span>
-                      <span class="status-badge-text" data-i18n="active">Active</span>
-                    </span>
-                  </div>
+                  <label class="perfect-switch"><input class="perfect-switch-input cat-status-switch" type="checkbox" checked data-category="Frontend Development"><div class="perfect-switch-track"><div class="perfect-switch-thumb"></div><span class="perfect-switch-text-on" data-i18n="active">Active</span><span class="perfect-switch-text-off" data-i18n="inactive">Inactive</span></div></label>
                   <div>
                     <button class="btn btn-sm btn-link text-primary p-1 me-2 btn-edit-cat"
                       onclick="editCategory(this)"><i class="bi bi-pencil"></i></button>
@@ -330,6 +310,8 @@
                   <div class="item-main-title cat-title">Mobile Development</div>
                   <div class="item-sub-info">
                     <span>Slug</span>: <code class="cat-slug">mobile</code>
+                    <span class="item-sub-info-separator">•</span>
+                    <span data-i18n="created_date">Created:</span> <span>01 Mar 2024</span>
                   </div>
                 </div>
                 <div class="categories-right-actions">
@@ -338,14 +320,7 @@
                       <span class="badge bg-secondary-subtle text-secondary border px-2 py-1 rounded-pill">0</span> <span data-i18n="posts_suffix">posts</span> <i class="bi bi-chevron-right text-muted small ms-1"></i>
                     </button>
                   </div>
-                  <div class="form-check form-switch p-0 m-0 d-flex align-items-center gap-2">
-                    <input class="form-check-input ms-0 cat-status-switch" type="checkbox" checked
-                      data-category="Mobile Development">
-                    <span class="status-indicator">
-                      <span class="status-dot status-dot-active"></span>
-                      <span class="status-badge-text" data-i18n="active">Active</span>
-                    </span>
-                  </div>
+                  <label class="perfect-switch"><input class="perfect-switch-input cat-status-switch" type="checkbox" checked data-category="Mobile Development"><div class="perfect-switch-track"><div class="perfect-switch-thumb"></div><span class="perfect-switch-text-on" data-i18n="active">Active</span><span class="perfect-switch-text-off" data-i18n="inactive">Inactive</span></div></label>
                   <div>
                     <button class="btn btn-sm btn-link text-primary p-1 me-2 btn-edit-cat"
                       onclick="editCategory(this)"><i class="bi bi-pencil"></i></button>
@@ -361,6 +336,8 @@
                   <div class="item-main-title cat-title">Data Science</div>
                   <div class="item-sub-info">
                     <span>Slug</span>: <code class="cat-slug">data-science</code>
+                    <span class="item-sub-info-separator">•</span>
+                    <span data-i18n="created_date">Created:</span> <span>18 Mar 2024</span>
                   </div>
                 </div>
                 <div class="categories-right-actions">
@@ -369,14 +346,7 @@
                       <span class="badge bg-secondary-subtle text-secondary border px-2 py-1 rounded-pill">0</span> <span data-i18n="posts_suffix">posts</span> <i class="bi bi-chevron-right text-muted small ms-1"></i>
                     </button>
                   </div>
-                  <div class="form-check form-switch p-0 m-0 d-flex align-items-center gap-2">
-                    <input class="form-check-input ms-0 cat-status-switch" type="checkbox" checked
-                      data-category="Data Science">
-                    <span class="status-indicator">
-                      <span class="status-dot status-dot-active"></span>
-                      <span class="status-badge-text" data-i18n="active">Active</span>
-                    </span>
-                  </div>
+                  <label class="perfect-switch"><input class="perfect-switch-input cat-status-switch" type="checkbox" checked data-category="Data Science"><div class="perfect-switch-track"><div class="perfect-switch-thumb"></div><span class="perfect-switch-text-on" data-i18n="active">Active</span><span class="perfect-switch-text-off" data-i18n="inactive">Inactive</span></div></label>
                   <div>
                     <button class="btn btn-sm btn-link text-primary p-1 me-2 btn-edit-cat"
                       onclick="editCategory(this)"><i class="bi bi-pencil"></i></button>
@@ -392,6 +362,8 @@
                   <div class="item-main-title cat-title">Cybersecurity</div>
                   <div class="item-sub-info">
                     <span>Slug</span>: <code class="cat-slug">cybersecurity</code>
+                    <span class="item-sub-info-separator">•</span>
+                    <span data-i18n="created_date">Created:</span> <span>20 Mar 2024</span>
                   </div>
                 </div>
                 <div class="categories-right-actions">
@@ -400,14 +372,7 @@
                       <span class="badge bg-secondary-subtle text-secondary border px-2 py-1 rounded-pill">0</span> <span data-i18n="posts_suffix">posts</span> <i class="bi bi-chevron-right text-muted small ms-1"></i>
                     </button>
                   </div>
-                  <div class="form-check form-switch p-0 m-0 d-flex align-items-center gap-2">
-                    <input class="form-check-input ms-0 cat-status-switch" type="checkbox" checked
-                      data-category="Cybersecurity">
-                    <span class="status-indicator">
-                      <span class="status-dot status-dot-active"></span>
-                      <span class="status-badge-text" data-i18n="active">Active</span>
-                    </span>
-                  </div>
+                  <label class="perfect-switch"><input class="perfect-switch-input cat-status-switch" type="checkbox" checked data-category="Cybersecurity"><div class="perfect-switch-track"><div class="perfect-switch-thumb"></div><span class="perfect-switch-text-on" data-i18n="active">Active</span><span class="perfect-switch-text-off" data-i18n="inactive">Inactive</span></div></label>
                   <div>
                     <button class="btn btn-sm btn-link text-primary p-1 me-2 btn-edit-cat"
                       onclick="editCategory(this)"><i class="bi bi-pencil"></i></button>
@@ -501,7 +466,7 @@
   <!-- MOBILE SIDEBAR / OFFCANVAS -->
   <div class="offcanvas offcanvas-start" tabindex="-1" id="mobileSidebar" aria-labelledby="mobileSidebarLabel">
     <div class="offcanvas-header border-bottom">
-      <a href="../guest/home.html" class="text-decoration-none d-flex align-items-center gap-2">
+      <a href="../index.html" class="text-decoration-none d-flex align-items-center gap-2">
         <i class="bi bi-bookmark-fill text-primary fs-4"></i>
         <span class="fs-5 fw-bold text-main" style="letter-spacing: -0.02em;">MundiBlog</span>
       </a>
@@ -509,7 +474,7 @@
     </div>
     <div class="offcanvas-body d-flex flex-column p-3">
       <nav class="sidebar-nav mb-3">
-        <a href="dashboard.html" class="sidebar-nav-item">
+        <a href="index.html" class="sidebar-nav-item">
           <i class="bi bi-speedometer2"></i> <span data-i18n="admin_dashboard">Admin Dashboard</span>
         </a>
         <a href="manage-users.html" class="sidebar-nav-item">
@@ -525,9 +490,9 @@
 
       <div class="mt-auto pt-3 border-top">
         <div class="d-flex flex-column gap-1">
-          <a class="sidebar-nav-item" href="../guest/home.html"><i class="bi bi-arrow-left"></i> <span
+          <a class="sidebar-nav-item" href="../index.html"><i class="bi bi-arrow-left"></i> <span
               data-i18n="back_feed">Back to Feed</span></a>
-          <a class="sidebar-nav-item" href="../guest/settings.html?from=admin"><i class="bi bi-gear"></i> <span
+          <a class="sidebar-nav-item" href="../settings.html?from=admin"><i class="bi bi-gear"></i> <span
               data-i18n="settings">Settings</span></a>
           <a class="sidebar-nav-item text-danger" href="#" id="mobileSignOutBtn"><i class="bi bi-box-arrow-right"></i>
             <span data-i18n="sign_out">Sign Out</span></a>
@@ -564,14 +529,14 @@
       </div>
       <div class="list-group list-group-flush" id="ocCategoryPostsList">
         <!-- JS Mockup data -->
-        <a href="../guest/post-detail.html" class="list-group-item list-group-item-action p-4 border-bottom">
+        <a href="../post-detail.html" class="list-group-item list-group-item-action p-4 border-bottom">
           <h6 class="fw-bold mb-2 lh-base text-main" data-i18n="post_ai_1">Tương lai của Lập trình Tác tử AI năm 2026</h6>
           <div class="d-flex align-items-center gap-3 text-muted small">
             <span><i class="bi bi-person me-1"></i>Elena Rostova</span>
             <span><i class="bi bi-calendar3 me-1"></i>2h ago</span>
           </div>
         </a>
-        <a href="../guest/post-detail.html" class="list-group-item list-group-item-action p-4 border-bottom">
+        <a href="../post-detail.html" class="list-group-item list-group-item-action p-4 border-bottom">
           <h6 class="fw-bold mb-2 lh-base text-main" data-i18n="post_ai_2">Suy luận LLM thế hệ mới & Sử dụng Công cụ năm 2026</h6>
           <div class="d-flex align-items-center gap-3 text-muted small">
             <span><i class="bi bi-person me-1"></i>Sarah Connor</span>
@@ -585,7 +550,7 @@
   <!-- Bootstrap 5 JS Bundle -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <!-- Core Script -->
-  <script src="../../assets/js/core.js"></script>
+  <script src="../assets/js/core.js"></script>
 
   <script>
     document.addEventListener('DOMContentLoaded', () => {
@@ -660,19 +625,15 @@
               <div class="item-main-title cat-title">${catName}</div>
               <div class="item-sub-info">
                 <span>Slug</span>: <code class="cat-slug">${catSlug}</code>
-              </div>
+                    <span class="item-sub-info-separator">•</span>
+                    <span data-i18n="created_date">Created:</span> <span>12 Oct 2023</span>
+                  </div>
             </div>
             <div class="categories-right-actions">
               <div>
                 <span class="badge bg-secondary-subtle text-secondary border border-secondary-subtle px-2 py-1 rounded-pill">0 <span data-i18n="posts_suffix">posts</span></span>
               </div>
-              <div class="form-check form-switch p-0 m-0 d-flex align-items-center gap-2">
-                <input class="form-check-input ms-0 cat-status-switch" type="checkbox" checked data-category="${catName}">
-                <span class="status-indicator">
-                  <span class="status-dot status-dot-active"></span>
-                  <span class="status-badge-text" data-i18n="active">Active</span>
-                </span>
-              </div>
+              <label class="perfect-switch"><input class="perfect-switch-input cat-status-switch" type="checkbox" checked data-category="${catName}"><div class="perfect-switch-track"><div class="perfect-switch-thumb"></div><span class="perfect-switch-text-on" data-i18n="active">Active</span><span class="perfect-switch-text-off" data-i18n="inactive">Inactive</span></div></label>
               <div>
                 <button class="btn btn-sm btn-link text-primary p-1 me-2 btn-edit-cat" onclick="editCategory(this)"><i class="bi bi-pencil"></i></button>
                 <button class="btn btn-sm btn-link text-danger p-1" onclick="deleteCategory(this)"><i class="bi bi-trash"></i></button>
@@ -683,7 +644,11 @@
           tableBody.appendChild(newRow);
           addForm.reset();
           bootstrapModal.hide();
-          showToast(`Category <b>${catName}</b> created successfully!`);
+          const lang = localStorage.getItem('preferredLanguage') || 'en';
+          const msg = lang === 'vi' ? `Tạo danh mục <b>${catName}</b> thành công!` :
+                      lang === 'zh' ? `分类 <b>${catName}</b> 创建成功！` :
+                      `Category <b>${catName}</b> created successfully!`;
+          showToast(msg);
         }
       });
 
@@ -696,7 +661,11 @@
           `Are you sure you want to delete category "${catName}"?`;
         if (confirm(confirmMsg)) {
           row.remove();
-          showToast(`Category <b>${catName}</b> deleted.`);
+          const lang = localStorage.getItem('preferredLanguage') || 'en';
+          const msg = lang === 'vi' ? `Đã xóa danh mục <b>${catName}</b>.` :
+                      lang === 'zh' ? `分类 <b>${catName}</b> 已删除。` :
+                      `Category <b>${catName}</b> deleted.`;
+          showToast(msg);
         }
       };
 
@@ -706,22 +675,18 @@
           const sw = e.target;
           const catName = sw.getAttribute('data-category');
           const isChecked = sw.checked;
-          const indicator = sw.nextElementSibling;
-          const dot = indicator.querySelector('.status-dot');
-          const label = indicator.querySelector('.status-badge-text');
-
-          const currentLang = localStorage.getItem('preferredLanguage') || 'en';
+          const lang = localStorage.getItem('preferredLanguage') || 'en';
 
           if (isChecked) {
-            dot.className = 'status-dot status-dot-active';
-            label.setAttribute('data-i18n', 'active');
-            label.textContent = currentLang === 'vi' ? 'Hoạt động' : currentLang === 'zh' ? '活跃' : 'Active';
-            showToast(`Category <b>${catName}</b> is now visible.`);
+            const msg = lang === 'vi' ? `Danh mục <b>${catName}</b> hiện đang bật.` :
+                        lang === 'zh' ? `分类 <b>${catName}</b> 现已可见。` :
+                        `Category <b>${catName}</b> is now visible.`;
+            showToast(msg);
           } else {
-            dot.className = 'status-dot status-dot-banned';
-            label.setAttribute('data-i18n', 'status_hidden');
-            label.textContent = currentLang === 'vi' ? 'Tạm ẩn' : currentLang === 'zh' ? '已隐藏' : 'Hidden';
-            showToast(`Category <b>${catName}</b> is now hidden.`);
+            const msg = lang === 'vi' ? `Danh mục <b>${catName}</b> hiện đang tắt.` :
+                        lang === 'zh' ? `分类 <b>${catName}</b> 现已隐藏。` :
+                        `Category <b>${catName}</b> is now hidden.`;
+            showToast(msg);
           }
         }
       });
@@ -773,7 +738,11 @@
           catSlugEl.removeAttribute('data-i18n');
 
           editModal.hide();
-          showToast(`Category updated successfully to <b>${newName}</b>!`);
+          const lang = localStorage.getItem('preferredLanguage') || 'en';
+          const msg = lang === 'vi' ? `Đã cập nhật danh mục thành <b>${newName}</b>!` :
+                      lang === 'zh' ? `分类已成功更新为 <b>${newName}</b>！` :
+                      `Category updated successfully to <b>${newName}</b>!`;
+          showToast(msg);
         }
       });
       
@@ -832,7 +801,7 @@
           if (post.category === categoryName) {
             found = true;
             listEl.innerHTML += `
-              <a href="../guest/post-detail.html?id=${id}" class="list-group-item list-group-item-action p-4 border-bottom">
+              <a href="../post-detail.html?id=${id}" class="list-group-item list-group-item-action p-4 border-bottom">
                 <h6 class="fw-bold mb-2 lh-base text-main">${post.title_en || 'Untitled'}</h6>
                 <div class="d-flex align-items-center gap-3 text-muted small">
                   <span><i class="bi bi-person me-1"></i>${post.author_name}</span>
@@ -855,7 +824,7 @@
         localStorage.removeItem('currentUser');
         showToast('Signed out successfully! Redirecting...');
         setTimeout(() => {
-          window.location.href = '../guest/home.html';
+          window.location.href = '../index.html';
         }, 1000);
       };
 

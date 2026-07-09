@@ -15,10 +15,10 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
   <!-- Custom CSS (Standard Shared Assets) -->
-  <link rel="stylesheet" href="../../assets/css/variables.css">
-  <link rel="stylesheet" href="../../assets/css/base.css?v=5">
-  <link rel="stylesheet" href="../../assets/css/layouts.css">
-  <link rel="stylesheet" href="../../assets/css/components.css?v=5">
+<link rel="stylesheet" href="../assets/css/variables.css">
+  <link rel="stylesheet" href="../assets/css/base.css?v=5">
+  <link rel="stylesheet" href="../assets/css/layouts.css">
+  <link rel="stylesheet" href="../assets/css/components.css?v=5">
 
   <style>
     .admin-container {
@@ -126,7 +126,7 @@
         </button>
 
         <!-- Brand Logo for mobile -->
-        <a href="../guest/home.html" class="d-flex align-items-center text-decoration-none">
+        <a href="../index.html" class="d-flex align-items-center text-decoration-none">
           <i class="bi bi-bookmark-fill fs-4 text-primary me-2"></i>
           <span class="fs-5 fw-bold text-main">MundiBlog</span>
         </a>
@@ -141,7 +141,7 @@
         <div>
           <!-- Substack Logo -->
           <div class="substack-logo-container">
-            <a href="../guest/home.html" class="text-decoration-none d-flex align-items-center gap-2 flex-wrap">
+            <a href="../index.html" class="text-decoration-none d-flex align-items-center gap-2 flex-wrap">
               <i class="bi bi-bookmark-fill substack-logo"></i>
               <span class="fs-5 fw-bold text-main" style="letter-spacing: -0.02em;">MundiBlog</span>
               <span class="badge bg-primary-subtle text-primary border border-primary-subtle rounded-pill ms-1"
@@ -152,7 +152,7 @@
 
           <!-- Navigation menu -->
           <nav class="sidebar-nav">
-            <a href="dashboard.html" class="sidebar-nav-item">
+            <a href="index.html" class="sidebar-nav-item">
               <i class="bi bi-speedometer2"></i> <span data-i18n="admin_dashboard">Admin Dashboard</span>
             </a>
             <a href="manage-users.html" class="sidebar-nav-item active">
@@ -169,7 +169,7 @@
 
         <!-- Bottom Section -->
         <div class="sidebar-footer-menu">
-          <a href="../guest/home.html" class="sidebar-nav-item mb-2">
+          <a href="../index.html" class="sidebar-nav-item mb-2">
             <i class="bi bi-arrow-left"></i> <span data-i18n="back_feed">Back to Feed</span>
           </a>
           <div class="dropdown">
@@ -180,9 +180,9 @@
               <span class="fw-medium" data-i18n="more">More</span>
             </button>
             <ul class="dropdown-menu shadow border-light-subtle">
-              <li><a class="dropdown-item py-2" href="../guest/settings.html?from=admin"><i class="bi bi-gear me-2"></i>
+              <li><a class="dropdown-item py-2" href="../settings.html?from=admin"><i class="bi bi-gear me-2"></i>
                   <span data-i18n="settings">Settings</span></a></li>
-              <li><a class="dropdown-item py-2" href="../owner/change-password.html"><i
+              <li><a class="dropdown-item py-2" href="../change-password.html"><i
                     class="bi bi-shield-lock me-2"></i> <span data-i18n="security">Security</span></a></li>
               <li>
                 <hr class="dropdown-divider">
@@ -253,13 +253,14 @@
                   <div>
                     <span class="role-badge role-badge-admin" data-i18n="role_admin">Admin</span>
                   </div>
-                  <div class="form-check form-switch p-0 m-0 d-flex align-items-center gap-2">
-                    <input class="form-check-input ms-0 status-switch" type="checkbox" checked data-user="Minh Khang">
-                    <span class="status-indicator">
-                      <span class="status-dot status-dot-active"></span>
-                      <span class="status-badge-text" data-i18n="active">Active</span>
-                    </span>
-                  </div>
+                  <label class="perfect-switch">
+  <input class="perfect-switch-input status-switch" type="checkbox" checked data-user="Minh Khang">
+  <div class="perfect-switch-track">
+    <div class="perfect-switch-thumb"></div>
+    <span class="perfect-switch-text-on" data-i18n="active">Active</span>
+    <span class="perfect-switch-text-off" data-i18n="banned">Banned</span>
+  </div>
+</label>
                 </div>
               </div>
 
@@ -284,14 +285,15 @@
                   <div>
                     <span class="role-badge role-badge-member" data-i18n="role_member">Member</span>
                   </div>
-                  <div class="form-check form-switch p-0 m-0 d-flex align-items-center gap-2">
-                    <input class="form-check-input ms-0 status-switch" type="checkbox" checked
+                  <label class="perfect-switch">
+  <input class="perfect-switch-input status-switch" type="checkbox" checked
                       data-user="Elena Rostova">
-                    <span class="status-indicator">
-                      <span class="status-dot status-dot-active"></span>
-                      <span class="status-badge-text" data-i18n="active">Active</span>
-                    </span>
-                  </div>
+  <div class="perfect-switch-track">
+    <div class="perfect-switch-thumb"></div>
+    <span class="perfect-switch-text-on" data-i18n="active">Active</span>
+    <span class="perfect-switch-text-off" data-i18n="banned">Banned</span>
+  </div>
+</label>
                 </div>
               </div>
 
@@ -316,13 +318,14 @@
                   <div>
                     <span class="role-badge role-badge-member" data-i18n="role_member">Member</span>
                   </div>
-                  <div class="form-check form-switch p-0 m-0 d-flex align-items-center gap-2">
-                    <input class="form-check-input ms-0 status-switch" type="checkbox" checked data-user="Hồ Quốc Tuấn">
-                    <span class="status-indicator">
-                      <span class="status-dot status-dot-active"></span>
-                      <span class="status-badge-text" data-i18n="active">Active</span>
-                    </span>
-                  </div>
+                  <label class="perfect-switch">
+  <input class="perfect-switch-input status-switch" type="checkbox" checked data-user="Hồ Quốc Tuấn">
+  <div class="perfect-switch-track">
+    <div class="perfect-switch-thumb"></div>
+    <span class="perfect-switch-text-on" data-i18n="active">Active</span>
+    <span class="perfect-switch-text-off" data-i18n="banned">Banned</span>
+  </div>
+</label>
                 </div>
               </div>
 
@@ -347,13 +350,14 @@
                   <div>
                     <span class="role-badge role-badge-member" data-i18n="role_member">Member</span>
                   </div>
-                  <div class="form-check form-switch p-0 m-0 d-flex align-items-center gap-2">
-                    <input class="form-check-input ms-0 status-switch" type="checkbox" checked data-user="李明 (Li Ming)">
-                    <span class="status-indicator">
-                      <span class="status-dot status-dot-active"></span>
-                      <span class="status-badge-text" data-i18n="active">Active</span>
-                    </span>
-                  </div>
+                  <label class="perfect-switch">
+  <input class="perfect-switch-input status-switch" type="checkbox" checked data-user="李明 (Li Ming)">
+  <div class="perfect-switch-track">
+    <div class="perfect-switch-thumb"></div>
+    <span class="perfect-switch-text-on" data-i18n="active">Active</span>
+    <span class="perfect-switch-text-off" data-i18n="banned">Banned</span>
+  </div>
+</label>
                 </div>
               </div>
 
@@ -378,13 +382,14 @@
                   <div>
                     <span class="role-badge role-badge-member" data-i18n="role_member">Member</span>
                   </div>
-                  <div class="form-check form-switch p-0 m-0 d-flex align-items-center gap-2">
-                    <input class="form-check-input ms-0 status-switch" type="checkbox" data-user="Sarah Connor">
-                    <span class="status-indicator">
-                      <span class="status-dot status-dot-banned"></span>
-                      <span class="status-badge-text" data-i18n="banned">Banned</span>
-                    </span>
-                  </div>
+                  <label class="perfect-switch">
+  <input class="perfect-switch-input status-switch" type="checkbox" data-user="Sarah Connor">
+  <div class="perfect-switch-track">
+    <div class="perfect-switch-thumb"></div>
+    <span class="perfect-switch-text-on" data-i18n="active">Active</span>
+    <span class="perfect-switch-text-off" data-i18n="banned">Banned</span>
+  </div>
+</label>
                 </div>
               </div>
 
@@ -409,13 +414,14 @@
                   <div>
                     <span class="role-badge role-badge-member" data-i18n="role_member">Member</span>
                   </div>
-                  <div class="form-check form-switch p-0 m-0 d-flex align-items-center gap-2">
-                    <input class="form-check-input ms-0 status-switch" type="checkbox" checked data-user="Alex Rivera">
-                    <span class="status-indicator">
-                      <span class="status-dot status-dot-active"></span>
-                      <span class="status-badge-text" data-i18n="active">Active</span>
-                    </span>
-                  </div>
+                  <label class="perfect-switch">
+  <input class="perfect-switch-input status-switch" type="checkbox" checked data-user="Alex Rivera">
+  <div class="perfect-switch-track">
+    <div class="perfect-switch-thumb"></div>
+    <span class="perfect-switch-text-on" data-i18n="active">Active</span>
+    <span class="perfect-switch-text-off" data-i18n="banned">Banned</span>
+  </div>
+</label>
                 </div>
               </div>
 
@@ -440,13 +446,14 @@
                   <div>
                     <span class="role-badge role-badge-member" data-i18n="role_member">Member</span>
                   </div>
-                  <div class="form-check form-switch p-0 m-0 d-flex align-items-center gap-2">
-                    <input class="form-check-input ms-0 status-switch" type="checkbox" checked data-user="Maya Lin">
-                    <span class="status-indicator">
-                      <span class="status-dot status-dot-active"></span>
-                      <span class="status-badge-text" data-i18n="active">Active</span>
-                    </span>
-                  </div>
+                  <label class="perfect-switch">
+  <input class="perfect-switch-input status-switch" type="checkbox" checked data-user="Maya Lin">
+  <div class="perfect-switch-track">
+    <div class="perfect-switch-thumb"></div>
+    <span class="perfect-switch-text-on" data-i18n="active">Active</span>
+    <span class="perfect-switch-text-off" data-i18n="banned">Banned</span>
+  </div>
+</label>
                 </div>
               </div>
 
@@ -471,13 +478,14 @@
                   <div>
                     <span class="role-badge role-badge-member" data-i18n="role_member">Member</span>
                   </div>
-                  <div class="form-check form-switch p-0 m-0 d-flex align-items-center gap-2">
-                    <input class="form-check-input ms-0 status-switch" type="checkbox" checked data-user="Kenji Sato">
-                    <span class="status-indicator">
-                      <span class="status-dot status-dot-active"></span>
-                      <span class="status-badge-text" data-i18n="active">Active</span>
-                    </span>
-                  </div>
+                  <label class="perfect-switch">
+  <input class="perfect-switch-input status-switch" type="checkbox" checked data-user="Kenji Sato">
+  <div class="perfect-switch-track">
+    <div class="perfect-switch-thumb"></div>
+    <span class="perfect-switch-text-on" data-i18n="active">Active</span>
+    <span class="perfect-switch-text-off" data-i18n="banned">Banned</span>
+  </div>
+</label>
                 </div>
               </div>
 
@@ -502,13 +510,14 @@
                   <div>
                     <span class="role-badge role-badge-member" data-i18n="role_member">Member</span>
                   </div>
-                  <div class="form-check form-switch p-0 m-0 d-flex align-items-center gap-2">
-                    <input class="form-check-input ms-0 status-switch" type="checkbox" checked data-user="Vũ Thu Hà">
-                    <span class="status-indicator">
-                      <span class="status-dot status-dot-active"></span>
-                      <span class="status-badge-text" data-i18n="active">Active</span>
-                    </span>
-                  </div>
+                  <label class="perfect-switch">
+  <input class="perfect-switch-input status-switch" type="checkbox" checked data-user="Vũ Thu Hà">
+  <div class="perfect-switch-track">
+    <div class="perfect-switch-thumb"></div>
+    <span class="perfect-switch-text-on" data-i18n="active">Active</span>
+    <span class="perfect-switch-text-off" data-i18n="banned">Banned</span>
+  </div>
+</label>
                 </div>
               </div>
             </div>
@@ -559,7 +568,7 @@
   <!-- MOBILE SIDEBAR / OFFCANVAS -->
   <div class="offcanvas offcanvas-start" tabindex="-1" id="mobileSidebar" aria-labelledby="mobileSidebarLabel">
     <div class="offcanvas-header border-bottom">
-      <a href="../guest/home.html" class="text-decoration-none d-flex align-items-center gap-2">
+      <a href="../index.html" class="text-decoration-none d-flex align-items-center gap-2">
         <i class="bi bi-bookmark-fill text-primary fs-4"></i>
         <span class="fs-5 fw-bold text-main" style="letter-spacing: -0.02em;">MundiBlog</span>
       </a>
@@ -567,7 +576,7 @@
     </div>
     <div class="offcanvas-body d-flex flex-column p-3">
       <nav class="sidebar-nav mb-3">
-        <a href="dashboard.html" class="sidebar-nav-item">
+        <a href="index.html" class="sidebar-nav-item">
           <i class="bi bi-speedometer2"></i> <span data-i18n="admin_dashboard">Admin Dashboard</span>
         </a>
         <a href="manage-users.html" class="sidebar-nav-item active">
@@ -583,9 +592,9 @@
 
       <div class="mt-auto pt-3 border-top">
         <div class="d-flex flex-column gap-1">
-          <a class="sidebar-nav-item" href="../guest/home.html"><i class="bi bi-arrow-left"></i> <span
+          <a class="sidebar-nav-item" href="../index.html"><i class="bi bi-arrow-left"></i> <span
               data-i18n="back_feed">Back to Feed</span></a>
-          <a class="sidebar-nav-item" href="../guest/settings.html?from=admin"><i class="bi bi-gear"></i> <span
+          <a class="sidebar-nav-item" href="../settings.html?from=admin"><i class="bi bi-gear"></i> <span
               data-i18n="settings">Settings</span></a>
           <a class="sidebar-nav-item text-danger" href="#" id="mobileSignOutBtn"><i class="bi bi-box-arrow-right"></i>
             <span data-i18n="sign_out">Sign Out</span></a>
@@ -611,7 +620,7 @@
   <!-- Bootstrap 5 JS Bundle -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <!-- Core Script -->
-  <script src="../../assets/js/core.js?v=2"></script>
+  <script src="../assets/js/core.js?v=2"></script>
 
   <script>
     document.addEventListener('DOMContentLoaded', () => {
@@ -623,14 +632,13 @@
         toastMessage.innerHTML = `<i class="bi bi-check-circle-fill text-success fs-5"></i> ${msg}`;
         toast.show();
       };
-
       // Handle Offcanvas trigger on row click
       const userRows = document.querySelectorAll('.user-row');
       const userDetailOffcanvas = new bootstrap.Offcanvas(document.getElementById('userDetailOffcanvas'));
       userRows.forEach(row => {
         row.addEventListener('click', function(e) {
           // Ignore if clicking on switch or its label
-          if(e.target.closest('.form-check')) return;
+          if(e.target.closest('.form-check') || e.target.closest('.perfect-switch')) return;
           
           // Populate data
           const name = this.querySelector('.user-name').textContent;
@@ -680,31 +688,24 @@
       searchInput.addEventListener('input', filterUsers);
 
       // Handle Switch Toggle visually
-      const switches = document.querySelectorAll('.status-switch');
-      switches.forEach(sw => {
-        sw.addEventListener('change', function (e) {
-          e.stopPropagation(); // Prevent opening offcanvas when clicking switch
-          const container = this.closest('.users-right-actions');
-          const indicator = container.querySelector('.status-indicator');
-          const dot = indicator.querySelector('.status-dot');
-
-          const isChecked = this.checked;
-          const label = indicator.querySelector('.status-badge-text');
+      document.addEventListener('change', (e) => {
+        if (e.target.classList.contains('status-switch')) {
+          const isChecked = e.target.checked;
+          const userName = e.target.closest('.user-row').querySelector('.user-name').textContent;
           const currentLang = localStorage.getItem('preferredLanguage') || 'en';
-          const userName = this.closest('.user-row').querySelector('.user-name').textContent;
-
+          
           if (isChecked) {
-            dot.className = 'status-dot status-dot-active';
-            label.setAttribute('data-i18n', 'active');
-            label.textContent = currentLang === 'vi' ? 'Hoạt động' : currentLang === 'zh' ? '活跃' : 'Active';
-            showToast(`Unlocked account for: <b>${userName}</b>`);
+            const msg = currentLang === 'vi' ? 'Đã mở khóa tài khoản cho: <b>' + userName + '</b>' :
+                        currentLang === 'zh' ? '已解锁账号：<b>' + userName + '</b>' :
+                        'Unlocked account for: <b>' + userName + '</b>';
+            showToast(msg);
           } else {
-            dot.className = 'status-dot status-dot-banned';
-            label.setAttribute('data-i18n', 'banned');
-            label.textContent = currentLang === 'vi' ? 'Bị khóa' : currentLang === 'zh' ? '已封禁' : 'Banned';
-            showToast(`Banned account for: <b>${userName}</b>`);
+            const msg = currentLang === 'vi' ? 'Đã khóa tài khoản: <b>' + userName + '</b>' :
+                        currentLang === 'zh' ? '已封禁账号：<b>' + userName + '</b>' :
+                        'Banned account for: <b>' + userName + '</b>';
+            showToast(msg);
           }
-        });
+        }
       });
 
       // Sign out handler
@@ -713,7 +714,7 @@
         localStorage.removeItem('currentUser');
         showToast('Signed out successfully! Redirecting...');
         setTimeout(() => {
-          window.location.href = '../guest/home.html';
+          window.location.href = '../index.html';
         }, 1000);
       };
 

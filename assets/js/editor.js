@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const params = new URLSearchParams(window.location.search);
     const from = params.get('from');
     const aliases = {
-      home: 'home.html',
+      home: 'index.html',
       profile: 'profile.html',
       settings: 'settings.html'
     };
@@ -85,11 +85,11 @@ document.addEventListener('DOMContentLoaded', () => {
           return `${referrerPage}${referrerUrl.search}${referrerUrl.hash}`;
         }
       } catch (error) {
-        return 'home.html';
+        return 'index.html';
       }
     }
 
-    return 'home.html';
+    return 'index.html';
   }
 
   if (backLink) {

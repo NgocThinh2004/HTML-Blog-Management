@@ -1,4 +1,33 @@
 // ========================================================
+// SECURITY & ROUTING CHECKS
+// ========================================================
+(function() {
+  const currentUserJson = localStorage.getItem('currentUser');
+  let user = null;
+  try {
+    user = currentUserJson ? JSON.parse(currentUserJson) : null;
+  } catch(e) {
+    localStorage.removeItem('currentUser');
+  }
+  const path = window.location.pathname.toLowerCase();
+  
+  if (path.includes('/admin/')) {
+    if (!user || user.role !== 'admin') {
+      // If we are in /admin/, home is at ../index.html
+      window.location.replace('../index.html');
+      return;
+    }
+  }
+  
+  if (path.includes('/create-post.html')) {
+    if (!user) {
+      window.location.replace('login.html');
+      return;
+    }
+  }
+})();
+
+// ========================================================
 // Global Posts Data (Accessible across all pages for Live Search)
 // ========================================================
 window.globalPostsData = {
@@ -394,6 +423,8 @@ document.addEventListener('DOMContentLoaded', () => {
   // ========================================================
   const uiTranslations = {
     en: {
+      on: "On",
+      off: "Off",
       home: "Home",
       inbox: "Inbox",
       liked_posts: "Liked Posts",
@@ -419,6 +450,10 @@ document.addEventListener('DOMContentLoaded', () => {
       password_mismatch_error: "New passwords do not match.",
       password_success: "Password updated successfully.",
       sign_out: "Sign Out",
+      active: "Active",
+      inactive: "Inactive",
+      created_date: "Created:",
+      default: "Default",
       login: "Log in",
       what_on_mind: "What is on your mind?",
       for_you: "For you",
@@ -668,6 +703,8 @@ document.addEventListener('DOMContentLoaded', () => {
       post_ai_2: "Next-Gen LLM Reasoning & Tool Use in 2026"
     },
     vi: {
+      on: "Bật",
+      off: "Tắt",
       home: "Trang chủ",
       inbox: "Hộp thư",
       liked_posts: "Bài đã thích",
@@ -693,6 +730,10 @@ document.addEventListener('DOMContentLoaded', () => {
       password_mismatch_error: "Mật khẩu mới không khớp.",
       password_success: "Đã cập nhật mật khẩu thành công.",
       sign_out: "Đăng xuất",
+      active: "Bật",
+      inactive: "Tắt",
+      created_date: "Ngày tạo:",
+      default: "Mặc định",
       login: "Đăng nhập",
       what_on_mind: "Bạn đang nghĩ gì?",
       for_you: "Dành cho bạn",
@@ -945,6 +986,9 @@ document.addEventListener('DOMContentLoaded', () => {
       post_ai_2: "Suy luận LLM thế hệ mới & Sử dụng Công cụ năm 2026"
     },
     zh: {
+      on: "开启",
+      off: "关闭",
+      inactive: "关闭",
       home: "首页",
       inbox: "收件箱",
       liked_posts: "喜欢的文章",
@@ -1730,154 +1774,157 @@ document.addEventListener('DOMContentLoaded', () => {
   // PATH & ROUTING RESOLUTION FOR STATIC WORKSPACE
   // ========================================================
   const path = window.location.pathname;
-  let loginUrl = 'pages/guest/login.html';
-  let writeUrl = 'pages/owner/create-post.html';
-  let homeUrl = 'pages/guest/home.html';
+  let loginUrl = 'login.html';
+  let writeUrl = 'create-post.html';
+  let homeUrl = 'index.html';
 
-  if (path.includes('/pages/guest/')) {
-    loginUrl = 'login.html';
-    writeUrl = '../owner/create-post.html';
-    homeUrl = 'home.html';
-  } else if (path.includes('/pages/admin/')) {
-    loginUrl = '../guest/login.html';
-    writeUrl = '../owner/create-post.html';
-    homeUrl = '../guest/home.html';
-  } else if (path.includes('/pages/owner/')) {
-    loginUrl = '../guest/login.html';
-    writeUrl = 'create-post.html';
-    homeUrl = '../guest/home.html';
+  if (path.includes('/admin/')) {
+    loginUrl = '../login.html';
+    writeUrl = '../create-post.html';
+    homeUrl = '../index.html';
   }
 
   // ========================================================
   // SESSION STATE & DYNAMIC ROLE-BASED UI MANAGEMENT
   // ========================================================
-  const currentUserJson = localStorage.getItem('currentUser');
-  const isAdmin = currentUserJson && JSON.parse(currentUserJson).role === 'admin';
+  window.applyUserUI = function() {
+    const currentUserJson = localStorage.getItem('currentUser');
+    let user = null;
+    let isAdmin = false;
+    try {
+      if (currentUserJson) {
+        user = JSON.parse(currentUserJson);
+        isAdmin = user && user.role === 'admin';
+      }
+    } catch(e) {
+      localStorage.removeItem('currentUser');
+    }
 
-  // 1. Dynamic Profile & Feed Avatar Syncing
-  const defaultPlaceholder = `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23b0bac5"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/></svg>`;
+    // 1. Dynamic Profile & Feed Avatar Syncing
+    const defaultPlaceholder = `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23b0bac5"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/></svg>`;
 
-  if (currentUserJson) {
-    const user = JSON.parse(currentUserJson);
-    if (user.avatar) {
-      // A. Replace Profile nav item icon or update existing profile image with user avatar
-      document.querySelectorAll('a[href*="profile.html"]').forEach(link => {
-        const existingImg = link.querySelector('img');
-        if (existingImg) {
-          existingImg.src = user.avatar;
-          existingImg.style.removeProperty('opacity');
-        } else {
-          const icon = link.querySelector('i.bi-person') || link.querySelector('i.bi-person-fill');
-          if (icon) {
-            const img = document.createElement('img');
-            img.src = user.avatar;
-            img.className = 'rounded-circle border';
-            img.style.width = '20px';
-            img.style.height = '20px';
-            img.style.objectFit = 'cover';
-            img.style.marginRight = '0.95rem';
-            img.alt = user.name || 'Avatar';
-            icon.replaceWith(img);
+    if (user) {
+      if (user.avatar) {
+        document.querySelectorAll('a[href*="profile.html"]').forEach(link => {
+          const existingImg = link.querySelector('img');
+          if (existingImg) {
+            existingImg.src = user.avatar;
+            existingImg.style.removeProperty('opacity');
+          } else {
+            const icon = link.querySelector('i.bi-person') || link.querySelector('i.bi-person-fill');
+            if (icon) {
+              const img = document.createElement('img');
+              img.src = user.avatar;
+              img.className = 'rounded-circle border';
+              img.style.width = '20px';
+              img.style.height = '20px';
+              img.style.objectFit = 'cover';
+              img.style.marginRight = '0.95rem';
+              img.alt = user.name || 'Avatar';
+              icon.replaceWith(img);
+            }
           }
+        });
+        const draftAvatar = document.getElementById('quickDraftAvatar');
+        if (draftAvatar) {
+          draftAvatar.src = user.avatar;
+          draftAvatar.style.removeProperty('opacity');
+          draftAvatar.style.display = 'block';
         }
+      }
+    } else {
+      document.querySelectorAll('a[href*="profile.html"] img.rounded-circle').forEach(img => {
+        img.src = defaultPlaceholder;
+        img.style.opacity = '0.6';
       });
-      // B. Update Quick Draft Avatar on Feed
       const draftAvatar = document.getElementById('quickDraftAvatar');
       if (draftAvatar) {
-        draftAvatar.src = user.avatar;
-        draftAvatar.style.removeProperty('opacity');
+        draftAvatar.style.display = 'none';
       }
     }
-  } else {
-    // If not logged in, set to grey silhouette placeholder
-    document.querySelectorAll('a[href*="profile.html"] img.rounded-circle').forEach(img => {
-      img.src = defaultPlaceholder;
-      img.style.opacity = '0.6';
+
+    // 2. Hide / Show Admin Panel link based on role
+    document.querySelectorAll('a[href*="admin/"]').forEach(link => {
+      if (!isAdmin) {
+        link.style.setProperty('display', 'none', 'important');
+        const parentLi = link.closest('li');
+        if (parentLi) {
+          parentLi.style.setProperty('display', 'none', 'important');
+        }
+      } else {
+        link.style.removeProperty('display');
+        const parentLi = link.closest('li');
+        if (parentLi) parentLi.style.removeProperty('display');
+      }
     });
-    const draftAvatar = document.getElementById('quickDraftAvatar');
-    if (draftAvatar) {
-      draftAvatar.src = defaultPlaceholder;
-      draftAvatar.style.opacity = '0.6';
+
+    // 3. Handle Sign Out vs Log in Menu Toggles
+    function handleSignOut(e) {
+      e.preventDefault();
+      localStorage.removeItem('currentUser');
+      const currentLang = localStorage.getItem('preferredLanguage') || 'en';
+      const msg = currentLang === 'vi' ? 'Đăng xuất thành công!' :
+        currentLang === 'zh' ? '登出成功！' :
+          'Signed out successfully!';
+      alert(msg);
+      window.location.href = homeUrl;
     }
-  }
 
-  // 2. Hide / Show Admin Panel link based on role
-  document.querySelectorAll('a[href*="admin/"]').forEach(link => {
-    if (!isAdmin) {
-      link.style.setProperty('display', 'none', 'important');
-      const parentLi = link.closest('li');
-      if (parentLi) {
-        parentLi.style.setProperty('display', 'none', 'important');
-      }
-    } else {
-      link.style.removeProperty('display');
-      const parentLi = link.closest('li');
-      if (parentLi) parentLi.style.removeProperty('display');
-    }
-  });
-
-  // 3. Handle Sign Out vs Log in Menu Toggles
-  function handleSignOut(e) {
-    e.preventDefault();
-    localStorage.removeItem('currentUser');
-    const currentLang = localStorage.getItem('preferredLanguage') || 'en';
-    const msg = currentLang === 'vi' ? 'Đăng xuất thành công!' :
-      currentLang === 'zh' ? '登出成功！' :
-        'Signed out successfully!';
-    alert(msg);
-    window.location.href = homeUrl;
-  }
-
-  const signOutLinks = document.querySelectorAll('#signOutBtn, #mobileSignOutBtn');
-  signOutLinks.forEach(link => {
-    if (currentUserJson) {
-      link.style.removeProperty('display');
-      link.classList.add('text-danger');
-      link.innerHTML = `<i class="bi bi-box-arrow-right me-2"></i> <span data-i18n="sign_out">Sign Out</span>`;
-      link.addEventListener('click', handleSignOut);
-    } else {
-      link.classList.remove('text-danger');
-      link.innerHTML = `<i class="bi bi-box-arrow-in-right me-2"></i> <span data-i18n="login">Log in</span>`;
-      link.setAttribute('href', loginUrl);
+    const signOutLinks = document.querySelectorAll('#signOutBtn, #mobileSignOutBtn');
+    signOutLinks.forEach(link => {
+      // Clean previous listeners
       const clone = link.cloneNode(true);
       link.replaceWith(clone);
+    });
+
+    document.querySelectorAll('#signOutBtn, #mobileSignOutBtn').forEach(link => {
+      if (currentUserJson) {
+        link.style.removeProperty('display');
+        link.classList.add('text-danger');
+        link.innerHTML = `<i class="bi bi-box-arrow-right me-2"></i> <span data-i18n="sign_out">Sign Out</span>`;
+        link.addEventListener('click', handleSignOut);
+      } else {
+        link.classList.remove('text-danger');
+        link.innerHTML = `<i class="bi bi-box-arrow-in-right me-2"></i> <span data-i18n="login">Log in</span>`;
+        link.setAttribute('href', loginUrl);
+      }
+    });
+
+    if (typeof applyUiTranslations === 'function') {
+      applyUiTranslations();
     }
-  });
 
-  // Re-translate dynamic auth links
-  if (typeof applyUiTranslations === 'function') {
-    applyUiTranslations();
-  }
-
-  // 4. Intercept Write post actions if not logged in
-  document.querySelectorAll('a[href*="create-post.html"]').forEach(btn => {
-    btn.addEventListener('click', (e) => {
-      if (!localStorage.getItem('currentUser')) {
-        e.preventDefault();
-        const lang = localStorage.getItem('preferredLanguage') || 'en';
-        const msg = lang === 'vi' ? 'Vui lòng đăng nhập trước khi viết bài!' :
-          lang === 'zh' ? '请先登录以撰写文章！' :
-            'Please log in first to write a post!';
-        alert(msg);
-        window.location.href = loginUrl;
-      }
+    // 4. Intercept Write post actions if not logged in
+    document.querySelectorAll('a[href*="create-post.html"]').forEach(btn => {
+      const newBtn = btn.cloneNode(true);
+      btn.replaceWith(newBtn);
     });
-  });
-
-  const quickDraftCard = document.getElementById('quickDraftCard');
-  if (quickDraftCard) {
-    quickDraftCard.addEventListener('click', (e) => {
-      if (!localStorage.getItem('currentUser')) {
-        e.preventDefault();
-        const lang = localStorage.getItem('preferredLanguage') || 'en';
-        const msg = lang === 'vi' ? 'Vui lòng đăng nhập trước khi viết bài!' :
-          lang === 'zh' ? '请先登录以撰写文章！' :
-            'Please log in first to write a post!';
-        alert(msg);
-        window.location.href = loginUrl;
-      }
+    
+    document.querySelectorAll('a[href*="create-post.html"]').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        if (!localStorage.getItem('currentUser')) {
+          e.preventDefault();
+          window.location.href = loginUrl;
+        }
+      });
     });
-  }
+
+    const quickDraftCard = document.getElementById('quickDraftCard');
+    if (quickDraftCard) {
+      quickDraftCard.style.display = 'flex';
+      quickDraftCard.onclick = (e) => {
+        if (!localStorage.getItem('currentUser')) {
+          e.preventDefault();
+          window.location.href = loginUrl;
+        } else {
+          window.location.href = writeUrl;
+        }
+      };
+    }
+  };
+  
+  // Call once immediately
+  window.applyUserUI();
 
   // ========================================================
   // LOGIN FORM CONTROLLER
@@ -1955,7 +2002,7 @@ document.addEventListener('DOMContentLoaded', () => {
           avatar: matchedUser.avatar
         }));
         alertDiv.classList.add('d-none');
-        window.location.href = 'home.html';
+        window.location.href = 'index.html';
       } else {
         alertDiv.classList.remove('d-none');
         alertText.textContent = 'Invalid email or password!';

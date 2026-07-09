@@ -14,17 +14,35 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
   
   <!-- Custom CSS (Standard Shared Assets) -->
-  <link rel="stylesheet" href="../../assets/css/variables.css">
-  <link rel="stylesheet" href="../../assets/css/base.css?v=5">
-  <link rel="stylesheet" href="../../assets/css/layouts.css?v=4">
-  <link rel="stylesheet" href="../../assets/css/components.css?v=5">
+<link rel="stylesheet" href="assets/css/variables.css">
+  <link rel="stylesheet" href="assets/css/base.css?v=5">
+  <link rel="stylesheet" href="assets/css/layouts.css?v=4">
+  <link rel="stylesheet" href="assets/css/components.css?v=5">
 </head>
 <body class="auth-body">
+  
+  <!-- Top Right Controls -->
+  <div class="position-absolute top-0 end-0 p-3 d-flex align-items-center gap-2" style="z-index: 1050;">
+    <div class="dropdown">
+      <button class="btn btn-sm btn-outline-secondary dropdown-toggle d-flex align-items-center gap-1" type="button" id="authLangDropdown" data-bs-toggle="dropdown" aria-expanded="false" style="border-radius: 8px;">
+        <i class="bi bi-translate text-primary"></i> <span id="currentLangLabel" class="fw-medium">EN</span>
+      </button>
+      <ul class="dropdown-menu dropdown-menu-end shadow border" aria-labelledby="authLangDropdown" style="min-width: 130px; border-radius: 12px;">
+        <li><a class="dropdown-item fw-medium auth-lang-select" href="#" data-lang="en">English (EN)</a></li>
+        <li><a class="dropdown-item fw-medium auth-lang-select" href="#" data-lang="vi">Tiếng Việt (VI)</a></li>
+        <li><a class="dropdown-item fw-medium auth-lang-select" href="#" data-lang="zh">中文 (ZH)</a></li>
+      </ul>
+    </div>
+    <button class="btn btn-sm btn-outline-secondary d-flex align-items-center justify-content-center" id="themeToggle" style="width: 31px; height: 31px; border-radius: 8px;" aria-label="Toggle theme">
+      <i class="bi bi-moon-stars-fill" id="themeIcon"></i>
+    </button>
+  </div>
+
   <div class="auth-container">
     <div class="auth-card shadow-sm border">
       <!-- Header Logo / Title -->
       <div class="auth-header text-center mb-4">
-        <a href="home.html" class="auth-logo d-inline-flex align-items-center gap-2 text-decoration-none">
+        <a href="index.html" class="auth-logo d-inline-flex align-items-center gap-2 text-decoration-none">
           <i class="bi bi-bookmark-fill text-primary fs-3"></i>
           <span class="fs-4 fw-bold text-main">MundiBlog</span>
         </a>
@@ -41,8 +59,8 @@
         <div class="mb-3">
           <label for="loginEmail" class="form-label font-medium small" data-i18n="col_email">Email</label>
           <div class="input-group">
-            <span class="input-group-text bg-transparent border-end-0 text-muted"><i class="bi bi-envelope"></i></span>
-            <input type="email" id="loginEmail" class="form-control border-start-0 ps-0" placeholder="name@example.com" required>
+            <span class="input-group-text bg-transparent border-end-0 text-muted py-2"><i class="bi bi-envelope"></i></span>
+            <input type="email" id="loginEmail" class="form-control border-start-0 py-2" placeholder="name@example.com" required>
           </div>
         </div>
         
@@ -51,9 +69,9 @@
             <label for="loginPassword" class="form-label font-medium small mb-0" data-i18n="password">Password</label>
           </div>
           <div class="input-group">
-            <span class="input-group-text bg-transparent border-end-0 text-muted"><i class="bi bi-lock"></i></span>
-            <input type="password" id="loginPassword" class="form-control border-start-0 border-end-0 ps-0" placeholder="••••••••" required>
-            <button type="button" class="btn border border-start-0 text-muted bg-transparent" id="togglePasswordBtn" aria-label="Toggle password visibility">
+            <span class="input-group-text bg-transparent border-end-0 text-muted py-2"><i class="bi bi-lock"></i></span>
+            <input type="password" id="loginPassword" class="form-control border-start-0 border-end-0 py-2" placeholder="••••••••" required>
+            <button type="button" class="btn border border-start-0 text-muted bg-transparent py-2" id="togglePasswordBtn" aria-label="Toggle password visibility">
               <i class="bi bi-eye"></i>
             </button>
           </div>
@@ -87,6 +105,23 @@
   <!-- Bootstrap 5 JS Bundle -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <!-- Core Script containing theme & language simulation -->
-  <script src="../../assets/js/core.js?v=4"></script>
+<script src="assets/js/core.js?v=4"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const currentLang = localStorage.getItem('preferredLanguage') || 'en';
+      document.getElementById('currentLangLabel').textContent = currentLang.toUpperCase();
+      
+      document.querySelectorAll('.auth-lang-select').forEach(item => {
+        item.addEventListener('click', (e) => {
+          e.preventDefault();
+          const lang = e.currentTarget.getAttribute('data-lang');
+          localStorage.setItem('preferredLanguage', lang);
+          document.getElementById('currentLangLabel').textContent = lang.toUpperCase();
+          if(window.applyUiTranslations) window.applyUiTranslations(lang);
+        });
+      });
+    });
+  </script>
 </body>
 </html>
