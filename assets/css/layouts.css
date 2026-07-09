@@ -202,7 +202,7 @@ body {
 .sidebar-create-btn {
   background-color: var(--primary-color) !important;
   border-color: var(--primary-color) !important;
-  color: #ffffff !important;
+  color: var(--accent-contrast, #ffffff) !important;
   border-radius: 99px !important;
   padding: 0.65rem 1.5rem !important;
   font-weight: 600 !important;

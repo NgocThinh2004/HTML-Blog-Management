@@ -1330,7 +1330,7 @@ select.form-select-sm {
 .sidebar-create-btn {
   background-color: var(--primary-color, #ff6c1f) !important;
   border-color: var(--primary-color, #ff6c1f) !important;
-  color: #ffffff !important;
+  color: var(--accent-contrast, #ffffff) !important;
   border-radius: 99px !important;
   padding: 0.65rem 1.5rem !important;
   font-weight: 600 !important;
@@ -1349,7 +1349,7 @@ select.form-select-sm {
 .sidebar-create-btn:hover {
   background-color: var(--primary-hover, #e55a00) !important;
   border-color: var(--primary-hover, #e55a00) !important;
-  color: #ffffff !important;
+  color: var(--accent-contrast, #ffffff) !important;
 }
 
 .sidebar-footer-menu {
