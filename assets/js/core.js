@@ -365,13 +365,17 @@ document.addEventListener('DOMContentLoaded', () => {
     const accent = normalizeHex(accentColor);
     if (!accent) return;
 
-    const hover = shiftColor(accent, getRelativeLuminance(accent) > 0.58 ? -0.18 : 0.16);
+    const luminance = getRelativeLuminance(accent);
+    const hover = shiftColor(accent, luminance > 0.58 ? -0.18 : 0.16);
+    const contrast = luminance > 0.58 ? '#141616' : '#ffffff';
+    
     htmlElement.style.setProperty('--primary-color', accent);
     htmlElement.style.setProperty('--primary-hover', hover);
     htmlElement.style.setProperty('--accent-button-bg', colorToRgba(accent, 0.1));
     htmlElement.style.setProperty('--accent-button-text', accent);
     htmlElement.style.setProperty('--accent', accent);
     htmlElement.style.setProperty('--accent-strong', hover);
+    htmlElement.style.setProperty('--accent-contrast', contrast);
   }
 
   function applySavedBrandAccent() {

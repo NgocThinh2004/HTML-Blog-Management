@@ -464,6 +464,36 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!button) return;
       button.classList.toggle('is-muted', !document.queryCommandEnabled(command));
     });
+    
+    let activeAlign = 'justifyLeft';
+    ['justifyCenter', 'justifyRight', 'justifyFull'].forEach(command => {
+      const button = toolbar.querySelector(`[data-align-command="${command}"]`);
+      if (!button) return;
+      const isActive = document.queryCommandState(command);
+      button.classList.toggle('is-selected', isActive);
+      if (isActive) activeAlign = command;
+    });
+    
+    // Left align is default, so if nothing else is active, left is active.
+    const leftBtn = toolbar.querySelector('[data-align-command="justifyLeft"]');
+    if (leftBtn) {
+      leftBtn.classList.toggle('is-selected', activeAlign === 'justifyLeft');
+    }
+    
+    // Update the trigger icon
+    const alignTrigger = toolbar.querySelector('.align-menu')?.previousElementSibling;
+    if (alignTrigger) {
+      const svgPaths = {
+        justifyLeft: '<path d="M21 6H3"></path><path d="M15 12H3"></path><path d="M17 18H3"></path>',
+        justifyCenter: '<path d="M21 6H3"></path><path d="M17 12H7"></path><path d="M19 18H5"></path>',
+        justifyRight: '<path d="M21 6H3"></path><path d="M21 12H9"></path><path d="M21 18H7"></path>',
+        justifyFull: '<path d="M21 6H3"></path><path d="M21 12H3"></path><path d="M21 18H3"></path>'
+      };
+      const svg = alignTrigger.querySelector('svg');
+      if (svg && svgPaths[activeAlign]) {
+        svg.innerHTML = svgPaths[activeAlign];
+      }
+    }
 
     const baselineFormat = syncBaseline ? getBaselineFormat() : activeBaselineFormat;
     updateBaselineUi(baselineFormat);
@@ -1249,6 +1279,39 @@ document.addEventListener('DOMContentLoaded', () => {
   });
   editor.addEventListener('input', () => setSaveState(false));
   editor.addEventListener('focus', saveSelection);
+
+  editor.addEventListener('keydown', (event) => {
+    if (event.key === 'Backspace' || event.key === 'Delete') {
+      const selection = window.getSelection();
+      if (!selection || !selection.rangeCount || !selection.isCollapsed) return;
+      
+      const range = selection.getRangeAt(0);
+      let node = range.startContainer;
+      if (node.nodeType === 3) node = node.parentElement;
+      
+      const block = node.closest('.editor-callout, .editor-pull-quote, .editor-button-block, .editor-widget, .editor-poetry');
+      
+      // If the block is essentially empty and user presses backspace/delete, remove the block
+      if (block && block.textContent.trim() === '') {
+        event.preventDefault();
+        block.remove();
+        
+        // Ensure editor isn't completely empty
+        if (!editor.innerHTML.trim() || editor.innerHTML === '<br>') {
+          editor.innerHTML = '<p><br></p>';
+        }
+        
+        // Place cursor at the end
+        const newRange = document.createRange();
+        newRange.selectNodeContents(editor);
+        newRange.collapse(false);
+        selection.removeAllRanges();
+        selection.addRange(newRange);
+        
+        setSaveState(false);
+      }
+    }
+  });
 
   [titleInput, subtitleInput].forEach(input => {
     if (!input) return;

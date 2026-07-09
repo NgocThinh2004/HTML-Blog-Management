@@ -80,7 +80,7 @@ img {
 .btn-primary {
   background-color: var(--primary-color) !important;
   border-color: var(--primary-color) !important;
-  color: #ffffff !important;
+  color: var(--accent-contrast, #ffffff) !important;
 }
 
 .btn-primary:hover,
@@ -88,7 +88,7 @@ img {
 .btn-primary:active {
   background-color: var(--primary-hover) !important;
   border-color: var(--primary-hover) !important;
-  color: #ffffff !important;
+  color: var(--accent-contrast, #ffffff) !important;
 }
 
 .btn-outline-primary {
@@ -98,7 +98,7 @@ img {
 
 .btn-outline-primary:hover {
   background-color: var(--primary-color) !important;
-  color: #ffffff !important;
+  color: var(--accent-contrast, #ffffff) !important;
 }
 
 /* Focus outline overrides */
