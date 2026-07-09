@@ -539,16 +539,32 @@
     }
 
     function checkAuthOrSimulate() {
-      let currentUser = localStorage.getItem('currentUser');
-      if (!currentUser) {
+      let currentUserStr = localStorage.getItem('currentUser');
+      if (!currentUserStr) {
         const proceed = confirm('Bạn cần đăng nhập để bình luận hoặc trả lời! Bạn có muốn đăng nhập nhanh (Simulate Login) với tên "Hồ Quốc Tuấn" không?');
         if (proceed) {
           localStorage.setItem('currentUser', 'Hồ Quốc Tuấn');
-          return 'Hồ Quốc Tuấn';
+          return { name: 'Hồ Quốc Tuấn', avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=40&h=40" };
         }
         return null;
       }
-      return currentUser;
+      if (currentUserStr.startsWith('{')) {
+        try {
+          const userObj = JSON.parse(currentUserStr);
+          return { name: userObj.name, avatar: userObj.avatar || "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=40&h=40" };
+        } catch(e) {
+          return { name: currentUserStr, avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=40&h=40" };
+        }
+      }
+      return { name: currentUserStr, avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=40&h=40" };
+    }
+
+    function parseUserName(userStr) {
+      if (!userStr) return '';
+      if (userStr.startsWith && userStr.startsWith('{')) {
+        try { return JSON.parse(userStr).name; } catch(e) {}
+      }
+      return userStr;
     }
 
     function renderComments(postId) {
@@ -575,7 +591,8 @@
       const dict = (window.uiTranslations && window.uiTranslations[currentLang]) || (window.uiTranslations && window.uiTranslations.en) || {};
       const translateLabel = dict.translate_comment || "Dịch";
       const originalLabel = dict.show_original || "Hiển thị nội dung gốc";
-      const currentUser = localStorage.getItem('currentUser') || 'Hồ Quốc Tuấn';
+      const currentUserStr = localStorage.getItem('currentUser');
+      const currentUser = parseUserName(currentUserStr) || 'Hồ Quốc Tuấn';
       const post = window.globalPostsData[postId] || window.globalPostsData["1"];
       const isPostAuthor = (post.author_name === currentUser);
 
@@ -585,7 +602,10 @@
         if (root.replies && root.replies.length > 0) {
           repliesHtml += `<div class="comment-reply-list">`;
           root.replies.forEach(rep => {
-            const tagHtml = (rep.replyTo && rep.replyTo !== root.author) ? `<span class="text-primary fw-semibold">@${rep.replyTo}</span> ` : '';
+            const repReplyToName = parseUserName(rep.replyTo);
+            const repAuthorName = parseUserName(rep.author);
+            const rootAuthorName = parseUserName(root.author);
+            const tagHtml = (repReplyToName && repReplyToName !== rootAuthorName) ? `<span class="text-primary fw-semibold">@${repReplyToName}</span> ` : '';
             
             let repTranslateBtnHtml = "";
             if (rep.lang && rep.lang !== currentLang) {
@@ -605,7 +625,7 @@
             }
 
             let repOwnerActionsHtml = "";
-            if (rep.author === currentUser) {
+            if (repAuthorName === currentUser) {
               repOwnerActionsHtml = `
                 <button class="btn-reply text-secondary ms-3" onclick="editComment(${root.id}, ${rep.id}, true)"><i class="bi bi-pencil-square me-1"></i><span data-i18n="edit">${dict.edit || "Sửa"}</span></button>
                 <button class="btn-reply text-danger ms-3" onclick="deleteComment(${root.id}, ${rep.id}, true)"><i class="bi bi-trash me-1"></i><span data-i18n="delete">${dict.delete || "Xóa"}</span></button>
@@ -620,16 +640,16 @@
               <div class="comment-reply-card" id="comment-${rep.id}">
                 <div class="d-flex align-items-center gap-2 mb-1">
                   <img src="${rep.avatar}" class="rounded-circle" width="28" height="28" alt="User">
-                  <span class="fw-bold fs-6">${rep.author}</span>
+                  <span class="fw-bold fs-6">${repAuthorName}</span>
                   <span class="text-muted small ms-auto">${typeof window.formatTimestampI18n === 'function' ? window.formatTimestampI18n(rep.time) : rep.time}</span>
                 </div>
                 <p class="mb-1 text-secondary comment-content-text" style="font-size: 0.95rem;">${tagHtml}${rep.content}</p>
                 ${repTranslateBtnHtml}
                 <div class="d-flex align-items-center flex-wrap">
-                  <button class="btn-reply" onclick="openReplyBox(${root.id}, '${rep.author}', true)"><i class="bi bi-reply-fill me-1"></i><span data-i18n="reply">Reply</span></button>
+                  <button class="btn-reply" onclick="openReplyBox(${root.id}, '${repAuthorName}', true)"><i class="bi bi-reply-fill me-1"></i><span data-i18n="reply">Reply</span></button>
                   ${repOwnerActionsHtml}
                 </div>
-                <div id="reply-box-child-${root.id}-${rep.author.replace(/\s+/g, '')}"></div>
+                <div id="reply-box-child-${root.id}-${repAuthorName.replace(/\s+/g, '')}"></div>
                 <div id="edit-box-child-${root.id}-${rep.id}"></div>
               </div>
             `;
@@ -637,6 +657,7 @@
           repliesHtml += `</div>`;
         }
 
+        const rootAuthorName = parseUserName(root.author);
         let rootTranslateBtnHtml = "";
         if (root.lang && root.lang !== currentLang) {
           const translatedText = window.getCommentTranslation ? window.getCommentTranslation(root, currentLang) : ("[Dịch]: " + root.content);
@@ -655,7 +676,7 @@
         }
 
         let rootOwnerActionsHtml = "";
-        if (root.author === currentUser) {
+        if (rootAuthorName === currentUser) {
           rootOwnerActionsHtml = `
             <button class="btn-reply text-secondary ms-3" onclick="editComment(${root.id}, null, false)"><i class="bi bi-pencil-square me-1"></i><span data-i18n="edit">${dict.edit || "Sửa"}</span></button>
             <button class="btn-reply text-danger ms-3" onclick="deleteComment(${root.id}, null, false)"><i class="bi bi-trash me-1"></i><span data-i18n="delete">${dict.delete || "Xóa"}</span></button>
@@ -670,13 +691,13 @@
           <div class="comment-card" id="comment-${root.id}">
             <div class="d-flex align-items-center gap-2 mb-2">
               <img src="${root.avatar}" class="rounded-circle" width="36" height="36" alt="User">
-              <span class="fw-bold fs-6">${root.author}</span>
+              <span class="fw-bold fs-6">${rootAuthorName}</span>
               <span class="text-muted small ms-auto">${typeof window.formatTimestampI18n === 'function' ? window.formatTimestampI18n(root.time) : root.time}</span>
             </div>
             <p class="mb-1 text-secondary comment-content-text">${root.content}</p>
             ${rootTranslateBtnHtml}
             <div class="d-flex align-items-center flex-wrap">
-              <button class="btn-reply" onclick="openReplyBox(${root.id}, '${root.author}', false)"><i class="bi bi-reply-fill me-1"></i><span data-i18n="reply">Reply</span></button>
+              <button class="btn-reply" onclick="openReplyBox(${root.id}, '${rootAuthorName}', false)"><i class="bi bi-reply-fill me-1"></i><span data-i18n="reply">Reply</span></button>
               ${rootOwnerActionsHtml}
             </div>
             <div id="reply-box-root-${root.id}"></div>
@@ -723,7 +744,11 @@
     }
 
     function submitReply(rootId, replyToName) {
-      const user = localStorage.getItem('currentUser') || 'Hồ Quốc Tuấn';
+      const userObj = checkAuthOrSimulate();
+      if (!userObj) return;
+      const userName = userObj.name || userObj;
+      const userAvatar = userObj.avatar || "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=40&h=40";
+
       const inputEl = document.getElementById(`input-reply-${rootId}`);
       if (!inputEl || !inputEl.value.trim()) {
         alert('Vui lòng nhập nội dung trả lời!');
@@ -739,8 +764,8 @@
         if (!rootComment.replies) rootComment.replies = [];
         rootComment.replies.push({
           id: Date.now(),
-          author: user,
-          avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=40&h=40",
+          author: userName,
+          avatar: userAvatar,
           time: "Vừa xong",
           content: inputEl.value.trim(),
           lang: localStorage.getItem('preferredLanguage') || "vi",
@@ -754,8 +779,10 @@
     }
 
     function postNewComment() {
-      const user = checkAuthOrSimulate();
-      if (!user) return;
+      const userObj = checkAuthOrSimulate();
+      if (!userObj) return;
+      const userName = userObj.name || userObj;
+      const userAvatar = userObj.avatar || "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=40&h=40";
 
       const inputEl = document.getElementById('newCommentInput');
       if (!inputEl || !inputEl.value.trim()) {
@@ -769,8 +796,8 @@
 
       comments.unshift({
         id: Date.now(),
-        author: user,
-        avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=40&h=40",
+        author: userName,
+        avatar: userAvatar,
         time: "Vừa xong",
         content: inputEl.value.trim(),
         lang: localStorage.getItem('preferredLanguage') || "vi",
@@ -790,7 +817,8 @@
       let comments = getCommentsForPost(postId);
       const currentLang = localStorage.getItem('preferredLanguage') || 'en';
       const dict = (window.uiTranslations && window.uiTranslations[currentLang]) || (window.uiTranslations && window.uiTranslations.en) || {};
-      const currentUser = localStorage.getItem('currentUser') || 'Hồ Quốc Tuấn';
+      const currentUserStr = localStorage.getItem('currentUser');
+      const currentUser = parseUserName(currentUserStr) || 'Hồ Quốc Tuấn';
       const post = window.globalPostsData[postId] || window.globalPostsData["1"];
       const isPostAuthor = (post.author_name === currentUser);
 
@@ -801,7 +829,7 @@
         if (!targetRep) return;
 
         // Kiểm tra quyền: Chỉ tác giả comment hoặc chủ bài viết mới được xóa
-        if (targetRep.author !== currentUser && !isPostAuthor) {
+        if (parseUserName(targetRep.author) !== currentUser && !isPostAuthor) {
           alert("Bạn không có quyền xóa bình luận này! Chỉ tác giả bình luận hoặc chủ bài viết mới có quyền xóa.");
           return;
         }
@@ -818,7 +846,7 @@
         if (!targetRoot) return;
 
         // Kiểm tra quyền: Chỉ tác giả comment hoặc chủ bài viết mới được xóa
-        if (targetRoot.author !== currentUser && !isPostAuthor) {
+        if (parseUserName(targetRoot.author) !== currentUser && !isPostAuthor) {
           alert("Bạn không có quyền xóa bình luận này! Chỉ tác giả bình luận hoặc chủ bài viết mới có quyền xóa.");
           return;
         }
@@ -840,7 +868,8 @@
       const urlParams = new URLSearchParams(window.location.search);
       const postId = urlParams.get('id') || "1";
       const comments = getCommentsForPost(postId);
-      const currentUser = localStorage.getItem('currentUser') || 'Hồ Quốc Tuấn';
+      const currentUserStr = localStorage.getItem('currentUser');
+      const currentUser = parseUserName(currentUserStr) || 'Hồ Quốc Tuấn';
       
       let targetComment = null;
       if (isChild) {
@@ -852,7 +881,7 @@
       if (!targetComment) return;
 
       // Kiểm tra quyền: Chỉ tác giả bình luận mới có quyền Sửa
-      if (targetComment.author !== currentUser) {
+      if (parseUserName(targetComment.author) !== currentUser) {
         alert("Bạn chỉ có quyền chỉnh sửa bình luận do chính bạn viết!");
         return;
       }
@@ -893,7 +922,8 @@
       const urlParams = new URLSearchParams(window.location.search);
       const postId = urlParams.get('id') || "1";
       const comments = getCommentsForPost(postId);
-      const currentUser = localStorage.getItem('currentUser') || 'Hồ Quốc Tuấn';
+      const currentUserStr = localStorage.getItem('currentUser');
+      const currentUser = parseUserName(currentUserStr) || 'Hồ Quốc Tuấn';
       
       let targetComment = null;
       if (isChild) {
@@ -904,7 +934,7 @@
       }
 
       if (targetComment) {
-        if (targetComment.author !== currentUser) {
+        if (parseUserName(targetComment.author) !== currentUser) {
           alert("Bạn chỉ có quyền chỉnh sửa bình luận do chính bạn viết!");
           return;
         }
