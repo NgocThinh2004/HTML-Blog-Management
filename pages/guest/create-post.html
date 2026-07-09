@@ -1,0 +1,454 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create post | MundiBlog</title>
+    <link rel="stylesheet" href="../../assets/css/styles.css">
+  </head>
+  <body class="editor-page" data-page="create-post">
+    <header class="editor-topbar" aria-label="Post actions">
+      <a class="back-link" href="home.html" aria-label="Back to previous page" data-back-link>
+        <span aria-hidden="true"></span>
+      </a>
+      <button class="save-state" id="saveButton" type="button" aria-live="polite">
+        <span data-save-label>Save</span>
+      </button>
+      <div class="editor-topbar-spacer"></div>
+      <button class="btn btn-light" type="button" data-preview-button>Preview</button>
+      <button class="btn btn-accent" type="button">Continue</button>
+    </header>
+
+    <nav class="editor-toolbar" aria-label="Writing toolbar">
+      <input class="hidden-file-input" id="editorImageInput" type="file" accept="image/*">
+
+      <div class="toolbar-group" aria-label="History">
+        <button class="tool-btn icon-tool" type="button" data-command="undo" aria-label="Undo">
+          <svg class="tool-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 14 4 9l5-5"></path><path d="M4 9h10a6 6 0 0 1 0 12h-1"></path></svg>
+        </button>
+        <button class="tool-btn icon-tool is-muted" type="button" data-command="redo" aria-label="Redo">
+          <svg class="tool-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="m15 14 5-5-5-5"></path><path d="M20 9H10a6 6 0 0 0 0 12h1"></path></svg>
+        </button>
+      </div>
+
+      <div class="toolbar-group" aria-label="Text style">
+        <div class="tool-menu">
+          <button class="tool-btn tool-label-btn" type="button" data-menu-trigger aria-expanded="false">
+            Style <span class="tool-caret" aria-hidden="true"></span>
+          </button>
+          <div class="tool-menu-panel style-menu">
+            <button class="tool-menu-item is-selected" type="button" data-format-block="p">
+              <span class="style-icon">P</span><span>Normal text</span><span class="menu-check" aria-hidden="true"></span>
+            </button>
+            <button class="tool-menu-item" type="button" data-format-block="h1">
+              <span class="style-icon">H1</span><span>Heading 1</span><span class="menu-check" aria-hidden="true"></span>
+            </button>
+            <button class="tool-menu-item" type="button" data-format-block="h2">
+              <span class="style-icon">H2</span><span>Heading 2</span><span class="menu-check" aria-hidden="true"></span>
+            </button>
+            <button class="tool-menu-item" type="button" data-format-block="h3">
+              <span class="style-icon">H3</span><span>Heading 3</span><span class="menu-check" aria-hidden="true"></span>
+            </button>
+            <button class="tool-menu-item" type="button" data-format-block="h4">
+              <span class="style-icon">H4</span><span>Heading 4</span><span class="menu-check" aria-hidden="true"></span>
+            </button>
+            <button class="tool-menu-item" type="button" data-format-block="h5">
+              <span class="style-icon">H5</span><span>Heading 5</span><span class="menu-check" aria-hidden="true"></span>
+            </button>
+            <button class="tool-menu-item" type="button" data-format-block="h6">
+              <span class="style-icon">H6</span><span>Heading 6</span><span class="menu-check" aria-hidden="true"></span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="toolbar-group" aria-label="Inline formatting">
+        <button class="tool-btn" type="button" data-command="bold" aria-label="Bold"><strong>B</strong></button>
+        <button class="tool-btn" type="button" data-command="italic" aria-label="Italic"><em>I</em></button>
+        <button class="tool-btn" type="button" data-command="strikeThrough" aria-label="Strikethrough"><s>S</s></button>
+        <button class="tool-btn icon-tool" type="button" data-inline-code aria-label="Inline code">
+          <svg class="tool-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="m18 16 4-4-4-4"></path><path d="m6 8-4 4 4 4"></path></svg>
+        </button>
+        <div class="tool-menu">
+          <button class="tool-btn tool-underline-red" type="button" data-menu-trigger aria-expanded="false" aria-label="Text color">
+            T
+          </button>
+          <div class="tool-menu-panel color-menu" data-color-menu="text">
+            <button class="color-none" type="button" data-apply-color="text" data-color="">
+              <span class="slash" aria-hidden="true"></span>
+              <span>None</span>
+            </button>
+            <div class="color-grid" aria-label="Text colors">
+              <button class="color-swatch" type="button" data-apply-color="text" data-color="#b80000" style="--swatch:#b80000" aria-label="Dark red"></button>
+              <button class="color-swatch" type="button" data-apply-color="text" data-color="#ff1212" style="--swatch:#ff1212" aria-label="Red"></button>
+              <button class="color-swatch" type="button" data-apply-color="text" data-color="#ff9900" style="--swatch:#ff9900" aria-label="Orange"></button>
+              <button class="color-swatch" type="button" data-apply-color="text" data-color="#fff200" style="--swatch:#fff200" aria-label="Yellow"></button>
+              <button class="color-swatch" type="button" data-apply-color="text" data-color="#00e62e" style="--swatch:#00e62e" aria-label="Green"></button>
+              <button class="color-swatch" type="button" data-apply-color="text" data-color="#00c8c8" style="--swatch:#00c8c8" aria-label="Cyan"></button>
+              <button class="color-swatch" type="button" data-apply-color="text" data-color="#3d7be0" style="--swatch:#3d7be0" aria-label="Blue"></button>
+              <button class="color-swatch" type="button" data-apply-color="text" data-color="#0014ff" style="--swatch:#0014ff" aria-label="Deep blue"></button>
+              <button class="color-swatch" type="button" data-apply-color="text" data-color="#8a00ff" style="--swatch:#8a00ff" aria-label="Purple"></button>
+              <button class="color-swatch" type="button" data-apply-color="text" data-color="#ff00e5" style="--swatch:#ff00e5" aria-label="Magenta"></button>
+              <button class="color-swatch" type="button" data-apply-color="text" data-color="#e8aaa0" style="--swatch:#e8aaa0" aria-label="Soft red"></button>
+              <button class="color-swatch" type="button" data-apply-color="text" data-color="#efc5ca" style="--swatch:#efc5ca" aria-label="Soft pink"></button>
+              <button class="color-swatch" type="button" data-apply-color="text" data-color="#f6dcc0" style="--swatch:#f6dcc0" aria-label="Soft orange"></button>
+              <button class="color-swatch" type="button" data-apply-color="text" data-color="#ffedbe" style="--swatch:#ffedbe" aria-label="Soft yellow"></button>
+              <button class="color-swatch" type="button" data-apply-color="text" data-color="#c9e2c8" style="--swatch:#c9e2c8" aria-label="Soft green"></button>
+              <button class="color-swatch" type="button" data-apply-color="text" data-color="#c7e3e7" style="--swatch:#c7e3e7" aria-label="Soft cyan"></button>
+              <button class="color-swatch" type="button" data-apply-color="text" data-color="#bdd0ef" style="--swatch:#bdd0ef" aria-label="Soft blue"></button>
+              <button class="color-swatch" type="button" data-apply-color="text" data-color="#cdddf1" style="--swatch:#cdddf1" aria-label="Light blue"></button>
+              <button class="color-swatch" type="button" data-apply-color="text" data-color="#cbc1df" style="--swatch:#cbc1df" aria-label="Soft purple"></button>
+              <button class="color-swatch" type="button" data-apply-color="text" data-color="#ddbfd1" style="--swatch:#ddbfd1" aria-label="Soft magenta"></button>
+              <button class="color-swatch" type="button" data-apply-color="text" data-color="#e47762" style="--swatch:#e47762" aria-label="Coral"></button>
+              <button class="color-swatch" type="button" data-apply-color="text" data-color="#e69295" style="--swatch:#e69295" aria-label="Rose"></button>
+              <button class="color-swatch" type="button" data-apply-color="text" data-color="#f3bd7f" style="--swatch:#f3bd7f" aria-label="Peach"></button>
+              <button class="color-swatch" type="button" data-apply-color="text" data-color="#f8d875" style="--swatch:#f8d875" aria-label="Gold"></button>
+              <button class="color-swatch" type="button" data-apply-color="text" data-color="#a7cf9c" style="--swatch:#a7cf9c" aria-label="Sage"></button>
+              <button class="color-swatch" type="button" data-apply-color="text" data-color="#8ec6bf" style="--swatch:#8ec6bf" aria-label="Teal"></button>
+              <button class="color-swatch" type="button" data-apply-color="text" data-color="#8db8ed" style="--swatch:#8db8ed" aria-label="Sky"></button>
+              <button class="color-swatch" type="button" data-apply-color="text" data-color="#8ebcdd" style="--swatch:#8ebcdd" aria-label="Light sky"></button>
+              <button class="color-swatch" type="button" data-apply-color="text" data-color="#a899cf" style="--swatch:#a899cf" aria-label="Lavender"></button>
+              <button class="color-swatch" type="button" data-apply-color="text" data-color="#cf97b2" style="--swatch:#cf97b2" aria-label="Mauve"></button>
+            </div>
+            <span class="color-theme-label">THEME</span>
+            <div class="theme-row">
+              <button class="color-swatch theme-swatch" type="button" data-apply-color="text" data-color="#ff5c1a" style="--swatch:#ff5c1a" aria-label="Theme orange"></button>
+              <button class="color-swatch theme-swatch" type="button" data-apply-color="text" data-color="#ff5c1a" style="--swatch:#ff5c1a" aria-label="Theme accent"></button>
+            </div>
+          </div>
+        </div>
+        <div class="tool-menu">
+          <button class="tool-btn tool-underline-yellow" type="button" data-menu-trigger aria-expanded="false" aria-label="Highlight color">
+            <svg class="tool-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 11-6 6v3h9l3-3"></path><path d="m22 12-7.5 7.5-8-8L14 4z"></path></svg>
+          </button>
+          <div class="tool-menu-panel color-menu" data-color-menu="highlight">
+            <button class="color-none" type="button" data-apply-color="highlight" data-color="">
+              <span class="slash" aria-hidden="true"></span>
+              <span>None</span>
+            </button>
+            <div class="color-grid" aria-label="Highlight colors">
+              <button class="color-swatch" type="button" data-apply-color="highlight" data-color="#b80000" style="--swatch:#b80000" aria-label="Dark red"></button>
+              <button class="color-swatch" type="button" data-apply-color="highlight" data-color="#ff1212" style="--swatch:#ff1212" aria-label="Red"></button>
+              <button class="color-swatch" type="button" data-apply-color="highlight" data-color="#ff9900" style="--swatch:#ff9900" aria-label="Orange"></button>
+              <button class="color-swatch" type="button" data-apply-color="highlight" data-color="#fff200" style="--swatch:#fff200" aria-label="Yellow"></button>
+              <button class="color-swatch" type="button" data-apply-color="highlight" data-color="#00e62e" style="--swatch:#00e62e" aria-label="Green"></button>
+              <button class="color-swatch" type="button" data-apply-color="highlight" data-color="#00c8c8" style="--swatch:#00c8c8" aria-label="Cyan"></button>
+              <button class="color-swatch" type="button" data-apply-color="highlight" data-color="#3d7be0" style="--swatch:#3d7be0" aria-label="Blue"></button>
+              <button class="color-swatch" type="button" data-apply-color="highlight" data-color="#0014ff" style="--swatch:#0014ff" aria-label="Deep blue"></button>
+              <button class="color-swatch" type="button" data-apply-color="highlight" data-color="#8a00ff" style="--swatch:#8a00ff" aria-label="Purple"></button>
+              <button class="color-swatch" type="button" data-apply-color="highlight" data-color="#ff00e5" style="--swatch:#ff00e5" aria-label="Magenta"></button>
+              <button class="color-swatch" type="button" data-apply-color="highlight" data-color="#e8aaa0" style="--swatch:#e8aaa0" aria-label="Soft red"></button>
+              <button class="color-swatch" type="button" data-apply-color="highlight" data-color="#efc5ca" style="--swatch:#efc5ca" aria-label="Soft pink"></button>
+              <button class="color-swatch" type="button" data-apply-color="highlight" data-color="#f6dcc0" style="--swatch:#f6dcc0" aria-label="Soft orange"></button>
+              <button class="color-swatch" type="button" data-apply-color="highlight" data-color="#ffedbe" style="--swatch:#ffedbe" aria-label="Soft yellow"></button>
+              <button class="color-swatch" type="button" data-apply-color="highlight" data-color="#c9e2c8" style="--swatch:#c9e2c8" aria-label="Soft green"></button>
+              <button class="color-swatch" type="button" data-apply-color="highlight" data-color="#c7e3e7" style="--swatch:#c7e3e7" aria-label="Soft cyan"></button>
+              <button class="color-swatch" type="button" data-apply-color="highlight" data-color="#bdd0ef" style="--swatch:#bdd0ef" aria-label="Soft blue"></button>
+              <button class="color-swatch" type="button" data-apply-color="highlight" data-color="#cdddf1" style="--swatch:#cdddf1" aria-label="Light blue"></button>
+              <button class="color-swatch" type="button" data-apply-color="highlight" data-color="#cbc1df" style="--swatch:#cbc1df" aria-label="Soft purple"></button>
+              <button class="color-swatch" type="button" data-apply-color="highlight" data-color="#ddbfd1" style="--swatch:#ddbfd1" aria-label="Soft magenta"></button>
+              <button class="color-swatch" type="button" data-apply-color="highlight" data-color="#e47762" style="--swatch:#e47762" aria-label="Coral"></button>
+              <button class="color-swatch" type="button" data-apply-color="highlight" data-color="#e69295" style="--swatch:#e69295" aria-label="Rose"></button>
+              <button class="color-swatch" type="button" data-apply-color="highlight" data-color="#f3bd7f" style="--swatch:#f3bd7f" aria-label="Peach"></button>
+              <button class="color-swatch" type="button" data-apply-color="highlight" data-color="#f8d875" style="--swatch:#f8d875" aria-label="Gold"></button>
+              <button class="color-swatch" type="button" data-apply-color="highlight" data-color="#a7cf9c" style="--swatch:#a7cf9c" aria-label="Sage"></button>
+              <button class="color-swatch" type="button" data-apply-color="highlight" data-color="#8ec6bf" style="--swatch:#8ec6bf" aria-label="Teal"></button>
+              <button class="color-swatch" type="button" data-apply-color="highlight" data-color="#8db8ed" style="--swatch:#8db8ed" aria-label="Sky"></button>
+              <button class="color-swatch" type="button" data-apply-color="highlight" data-color="#8ebcdd" style="--swatch:#8ebcdd" aria-label="Light sky"></button>
+              <button class="color-swatch" type="button" data-apply-color="highlight" data-color="#a899cf" style="--swatch:#a899cf" aria-label="Lavender"></button>
+              <button class="color-swatch" type="button" data-apply-color="highlight" data-color="#cf97b2" style="--swatch:#cf97b2" aria-label="Mauve"></button>
+            </div>
+            <span class="color-theme-label">THEME</span>
+            <div class="theme-row">
+              <button class="color-swatch theme-swatch" type="button" data-apply-color="highlight" data-color="#ff5c1a" style="--swatch:#ff5c1a" aria-label="Theme orange"></button>
+              <button class="color-swatch theme-swatch" type="button" data-apply-color="highlight" data-color="#ff5c1a" style="--swatch:#ff5c1a" aria-label="Theme accent"></button>
+            </div>
+          </div>
+        </div>
+        <div class="tool-menu">
+          <button class="tool-btn baseline-trigger" type="button" data-menu-trigger aria-expanded="false" aria-label="Baseline options">
+            <span class="baseline-mark" data-baseline-label>A</span>
+            <span class="tool-caret" aria-hidden="true"></span>
+          </button>
+          <div class="tool-menu-panel text-menu">
+            <button class="tool-menu-item is-selected" type="button" data-inline-format="normal">
+              <span class="style-icon">A</span><span>Normal</span><span class="menu-check" aria-hidden="true"></span>
+            </button>
+            <button class="tool-menu-item" type="button" data-inline-format="superscript">
+              <span class="style-icon">x<sup>2</sup></span><span>Superscript</span><span class="menu-check" aria-hidden="true"></span>
+            </button>
+            <button class="tool-menu-item" type="button" data-inline-format="subscript">
+              <span class="style-icon">x<sub>2</sub></span><span>Subscript</span><span class="menu-check" aria-hidden="true"></span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="toolbar-group" aria-label="Insert media">
+        <button class="tool-btn icon-tool" type="button" data-command="createLink" aria-label="Insert link">
+          <svg class="tool-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
+        </button>
+        <button class="tool-btn icon-tool" type="button" data-insert-media="image" aria-label="Insert image">
+          <svg class="tool-svg" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"></rect><circle cx="9" cy="9" r="2"></circle><path d="m21 15-3.1-3.1a2 2 0 0 0-2.8 0L6 21"></path></svg>
+        </button>
+        <button class="tool-btn icon-tool" type="button" data-insert-media="audio" aria-label="Insert audio">
+          <svg class="tool-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 18v-6a9 9 0 0 1 18 0v6"></path><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3z"></path><path d="M3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"></path></svg>
+        </button>
+        <button class="tool-btn icon-tool" type="button" data-insert-media="video" aria-label="Insert video">
+          <svg class="tool-svg" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="7" width="13" height="10" rx="2"></rect><path d="m16 11 5-3v8l-5-3z"></path></svg>
+        </button>
+        <div class="tool-menu">
+          <button class="tool-btn icon-tool" type="button" data-menu-trigger aria-expanded="false" aria-label="Insert quote" title="Insert quote">
+            <svg class="tool-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15a4 4 0 0 1-4 4H7l-4 4V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"></path><path d="M8 9h8"></path><path d="M8 13h5"></path></svg>
+          </button>
+          <div class="tool-menu-panel quote-menu">
+            <button class="tool-menu-item quote-menu-item" type="button" data-insert-quote="block">Block quote</button>
+            <button class="tool-menu-item quote-menu-item" type="button" data-insert-quote="pull">Pull quote</button>
+            <button class="tool-menu-item quote-menu-item" type="button" data-insert-quote="callout">Callout block</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="toolbar-group" aria-label="Lists and alignment">
+        <button class="tool-btn icon-tool" type="button" data-command="insertUnorderedList" aria-label="Bullet list">
+          <svg class="tool-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 6h13"></path><path d="M8 12h13"></path><path d="M8 18h13"></path><path d="M3 6h.01"></path><path d="M3 12h.01"></path><path d="M3 18h.01"></path></svg>
+        </button>
+        <button class="tool-btn icon-tool" type="button" data-command="insertOrderedList" aria-label="Numbered list">
+          <svg class="tool-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M10 6h11"></path><path d="M10 12h11"></path><path d="M10 18h11"></path><path d="M4 6h1v4"></path><path d="M4 10h2"></path><path d="M6 18H4c0-1 2-2 2-3s-1-1.5-2-1"></path></svg>
+        </button>
+        <div class="tool-menu">
+          <button class="tool-btn icon-tool has-caret" type="button" data-menu-trigger aria-expanded="false" aria-label="Alignment">
+            <svg class="tool-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 6H3"></path><path d="M15 12H3"></path><path d="M17 18H3"></path></svg>
+            <span class="tool-caret" aria-hidden="true"></span>
+          </button>
+          <div class="tool-menu-panel align-menu align-right">
+            <button class="tool-menu-item is-selected" type="button" data-align-command="justifyLeft">
+              <svg class="menu-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 6H3"></path><path d="M15 12H3"></path><path d="M17 18H3"></path></svg>
+              <span>Left</span>
+              <span class="menu-check" aria-hidden="true"></span>
+            </button>
+            <button class="tool-menu-item" type="button" data-align-command="justifyCenter">
+              <svg class="menu-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 6H3"></path><path d="M17 12H7"></path><path d="M19 18H5"></path></svg>
+              <span>Center</span>
+              <span class="menu-check" aria-hidden="true"></span>
+            </button>
+            <button class="tool-menu-item" type="button" data-align-command="justifyRight">
+              <svg class="menu-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 6H3"></path><path d="M21 12H9"></path><path d="M21 18H7"></path></svg>
+              <span>Right</span>
+              <span class="menu-check" aria-hidden="true"></span>
+            </button>
+            <button class="tool-menu-item" type="button" data-align-command="justifyFull">
+              <svg class="menu-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 6H3"></path><path d="M21 12H3"></path><path d="M21 18H3"></path></svg>
+              <span>Justify</span>
+              <span class="menu-check" aria-hidden="true"></span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="toolbar-group" aria-label="Blocks">
+        <div class="tool-menu">
+          <button class="tool-btn tool-label-btn block-menu-trigger" type="button" data-menu-trigger aria-expanded="false">
+            Button <span class="tool-caret" aria-hidden="true"></span>
+          </button>
+          <div class="tool-menu-panel button-menu align-right">
+            <button class="tool-menu-item button-menu-item" type="button" data-insert-button="subscribe">Subscribe</button>
+            <button class="tool-menu-item button-menu-item" type="button" data-insert-button="subscribe-caption">Subscribe w/ caption</button>
+            <span class="tool-menu-divider" aria-hidden="true"></span>
+            <button class="tool-menu-item button-menu-item" type="button" data-insert-button="share-post">Share post</button>
+            <button class="tool-menu-item button-menu-item" type="button" data-insert-button="share-post-caption">Share post w/ caption</button>
+            <button class="tool-menu-item button-menu-item" type="button" data-insert-button="share-publication">Share publication</button>
+            <span class="tool-menu-divider" aria-hidden="true"></span>
+            <button class="tool-menu-item button-menu-item" type="button" data-insert-button="leave-comment">Leave a comment</button>
+            <button class="tool-menu-item button-menu-item" type="button" data-insert-button="send-message">Send a message</button>
+            <span class="tool-menu-divider" aria-hidden="true"></span>
+            <button class="tool-menu-item button-menu-item" type="button" data-insert-button="custom">Custom...</button>
+            <button class="tool-menu-item button-menu-item" type="button" data-insert-button="more">More...</button>
+          </div>
+        </div>
+        <div class="tool-menu">
+          <button class="tool-btn tool-label-btn block-menu-trigger" type="button" data-menu-trigger aria-expanded="false">
+            Template <span class="tool-caret" aria-hidden="true"></span>
+          </button>
+          <div class="tool-menu-panel template-menu align-right">
+            <button class="tool-menu-item template-menu-item template-help" type="button" data-template-action="help">What is a template?</button>
+            <span class="tool-menu-divider" aria-hidden="true"></span>
+            <button class="tool-menu-item template-menu-item template-new" type="button" data-insert-template="new"><span class="template-plus" aria-hidden="true">+</span><span>New template</span></button>
+          </div>
+        </div>
+        <div class="tool-menu">
+          <button class="tool-btn tool-label-btn block-menu-trigger" type="button" data-menu-trigger aria-expanded="false">
+            More <span class="tool-caret" aria-hidden="true"></span>
+          </button>
+          <div class="tool-menu-panel more-menu align-right">
+            <button class="tool-menu-item more-menu-item" type="button" data-insert-more="code-block"><span class="more-icon">{}</span><span>Code block</span></button>
+            <button class="tool-menu-item more-menu-item" type="button" data-insert-more="divider"><span class="more-icon">-</span><span>Divider</span></button>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <main class="editor-main editor-main-full">
+      <section class="compose-pane" aria-label="Post editor">
+        <div class="compose-inner">
+          <label class="sr-only" for="postTitle">Title</label>
+          <input class="title-input" id="postTitle" type="text" placeholder="Title" autocomplete="off">
+
+          <label class="sr-only" for="postSubtitle">Subtitle</label>
+          <input class="subtitle-input" id="postSubtitle" type="text" placeholder="Add a subtitle..." autocomplete="off">
+
+          <div class="author-row" aria-label="Authors" data-author-row>
+            <span class="language-chip" data-author-chip="Alone">
+              <span>Alone</span>
+              <button class="chip-remove" type="button" aria-label="Remove author"></button>
+            </span>
+            <div class="author-add-wrap">
+              <button class="chip-add" type="button" aria-label="Add author" data-author-menu-trigger aria-expanded="false">+</button>
+              <div class="author-menu" data-author-menu>
+                <button class="author-menu-item" type="button" data-author-name="Hoang Quoc Tuan">Hoang Quoc Tuan</button>
+                <button class="author-menu-item" type="button" data-author-name="Hoang Anh">Hoang Anh</button>
+                <button class="author-menu-item" type="button" data-author-name="Minh Anh">Minh Anh</button>
+                <span class="author-menu-divider" aria-hidden="true"></span>
+                <button class="author-menu-item" type="button" data-author-action="custom">Custom author...</button>
+              </div>
+            </div>
+          </div>
+
+          <label class="sr-only" for="postBody">Post body</label>
+          <div class="rich-editor" id="postBody" contenteditable="true" data-placeholder="Start writing..." aria-label="Post body"></div>
+        </div>
+      </section>
+    </main>
+
+    <div class="preview-modal" role="dialog" aria-modal="true" aria-label="Post preview" data-preview-modal hidden>
+      <div class="preview-modal-backdrop" data-preview-close></div>
+      <section class="preview-modal-panel">
+        <header class="preview-topbar" aria-label="Preview controls">
+          <div class="preview-topbar-controls">
+            <div class="preview-mode-toggle" role="tablist" aria-label="Preview size">
+              <button class="preview-mode-btn" type="button" role="tab" aria-selected="false" data-preview-mode="mobile">Mobile</button>
+              <button class="preview-mode-btn is-active" type="button" role="tab" aria-selected="true" data-preview-mode="desktop">Desktop</button>
+            </div>
+          </div>
+
+          <div class="preview-topbar-actions">
+            <button class="btn btn-light" type="button" data-share-preview>Share</button>
+            <button class="btn btn-accent" type="button" data-preview-close>Done</button>
+          </div>
+        </header>
+
+        <main class="preview-stage" aria-label="Post preview">
+          <section class="preview-device is-desktop" data-preview-device>
+            <div class="preview-browser-bar" aria-hidden="true">
+              <div class="preview-window-dots">
+                <span></span>
+                <span></span>
+                <span></span>
+              </div>
+              <div class="preview-address">
+                <span class="preview-lock"></span>
+                <span>mundiblog.local/preview</span>
+              </div>
+              <span class="preview-plus">+</span>
+            </div>
+
+            <div class="preview-site-shell">
+              <header class="preview-site-header">
+                <span class="preview-brand-mark" aria-hidden="true"></span>
+                <strong>MundiBlog</strong>
+                <nav class="preview-site-actions" aria-label="Preview actions">
+                  <button type="button" aria-label="Search" data-unsupported-btn>
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m16 16 4 4"></path></svg>
+                  </button>
+                  <button type="button" aria-label="Comments" data-unsupported-btn>
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15a4 4 0 0 1-4 4H8l-5 4V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"></path></svg>
+                  </button>
+                  <button type="button" aria-label="Notifications" data-unsupported-btn>
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"></path><path d="M10 21h4"></path></svg>
+                  </button>
+                </nav>
+              </header>
+
+              <article class="preview-article">
+                <div class="preview-category-badge-wrap">
+                  <span class="preview-category-badge">Technology</span>
+                </div>
+
+                <h1 data-preview-title>Untitled post</h1>
+                <p class="preview-subtitle" data-preview-subtitle hidden></p>
+
+                <div class="preview-author-row">
+                  <span class="preview-avatar" data-preview-avatar>A</span>
+                  <div class="preview-author-meta">
+                    <strong data-preview-author>Alone</strong>
+                    <time data-preview-date>JUL 07, 2026</time>
+                  </div>
+                </div>
+
+                <div class="preview-post-body" data-preview-body>
+                  <p>No content yet.</p>
+                </div>
+
+                <div class="preview-engagement-row" aria-hidden="true">
+                  <button type="button" class="preview-action-btn" aria-label="Like">
+                    <svg viewBox="0 0 24 24"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"></path></svg>
+                    <span>0</span>
+                  </button>
+                  <button type="button" class="preview-action-btn" aria-label="Comment">
+                    <svg viewBox="0 0 24 24"><path d="M21 15a4 4 0 0 1-4 4H8l-5 4V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"></path></svg>
+                    <span>0</span>
+                  </button>
+                  <button type="button" class="preview-action-btn ms-auto" aria-label="Share">
+                    <svg viewBox="0 0 24 24"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path><polyline points="16 6 12 2 8 6"></polyline><line x1="12" y1="2" x2="12" y2="15"></line></svg>
+                  </button>
+                </div>
+              </article>
+            </div>
+          </section>
+          
+          <aside class="preview-sidebar">
+            <div class="preview-lang-box">
+              <div class="preview-lang-header">
+                Ngôn ngữ <span class="caret-icon"></span>
+              </div>
+              <div class="preview-lang-body">
+                <label for="previewLanguageSelect" class="form-label" style="font-size: 0.85rem; font-weight: 600;">Ngôn ngữ của bài viết này</label>
+                <select id="previewLanguageSelect" class="form-select form-select-sm mb-4" data-preview-language style="width: 100%;">
+                  <option value="original">Original</option>
+                  <option value="en">English</option>
+                  <option value="vi">Tiếng Việt</option>
+                  <option value="zh">中文</option>
+                </select>
+                
+                <div class="preview-translate-section">
+                  <div class="translate-section-header">
+                    <strong>Dịch tài liệu này</strong>
+                  </div>
+                  <div class="translate-section-body">
+                    <table class="translate-table">
+                      <thead>
+                        <tr>
+                          <th>Ngôn ngữ</th>
+                          <th>Trạng thái</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td style="color: #666;">English</td>
+                          <td><span class="preview-translation-status" data-preview-translation-status>Original</span></td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </aside>
+        </main>
+      </section>
+    </div>
+
+    <script src="../../assets/js/core.js" charset="UTF-8"></script>
+    <script src="../../assets/js/editor.js" charset="UTF-8"></script>
+  </body>
+</html>
