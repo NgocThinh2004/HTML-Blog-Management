@@ -869,15 +869,15 @@ button {
 }
 
 .tool-underline-red::after {
-  background: #e22134;
+  background: var(--underline-color, #e22134);
 }
 
 .tool-underline-yellow::after {
-  background: #f0cf5a;
+  background: var(--underline-color, #f0cf5a);
 }
 
 .tool-underline-dark::after {
-  background: #343838;
+  background: var(--underline-color, #343838);
 }
 
 .baseline-trigger {
@@ -1209,7 +1209,7 @@ button {
 
 .theme-row {
   display: flex;
-  gap: 32px;
+  gap: 6px;
 }
 
 .theme-swatch {
