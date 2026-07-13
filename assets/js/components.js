@@ -64,23 +64,23 @@ function initSharedSidebars() {
       <!-- Bottom Section: More Dropdown -->
       <div class="sidebar-footer-menu">
         <div class="sidebar-controls mb-2">
-          <!-- Theme Switch and Language -->
-          <div class="d-flex align-items-center justify-content-center gap-2 px-1 mb-2">
-            <div class="dropdown">
-              <button class="btn btn-sm btn-outline-secondary d-flex align-items-center justify-content-center p-0" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="width: 34px; height: 34px; border-radius: 8px; border-color: var(--border-color);">
-                <img src="https://flagcdn.com/w20/gb.png" width="20" height="15" id="sidebarLangFlag" style="border-radius:2px; object-fit: cover;" alt="Language">
+            <!-- Theme Switch and Language -->
+            <div class="d-flex align-items-center justify-content-start gap-2 ps-3 pe-2 mb-2">
+              <div class="dropdown">
+                <button class="btn btn-sm btn-outline-secondary d-flex align-items-center justify-content-center p-0" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="width: 38px; height: 38px; border-radius: 8px; border-color: var(--border-color);">
+                  <img src="https://flagcdn.com/w20/gb.png" width="24" height="18" id="sidebarLangFlag" style="border-radius:2px; object-fit: cover;" alt="Language">
+                </button>
+                <ul class="dropdown-menu shadow border-light-subtle" style="min-width: 120px; border-radius: 12px; font-size: 14px;">
+                  <li><a class="dropdown-item py-1.5 fw-medium global-lang-select" href="#" data-lang="en"><img src="https://flagcdn.com/w20/gb.png" width="18" alt="English" class="me-2" style="border-radius:2px;"> English</a></li>
+                  <li><a class="dropdown-item py-1.5 fw-medium global-lang-select" href="#" data-lang="vi"><img src="https://flagcdn.com/w20/vn.png" width="18" alt="Tiếng Việt" class="me-2" style="border-radius:2px;"> Tiếng Việt</a></li>
+                  <li><a class="dropdown-item py-1.5 fw-medium global-lang-select" href="#" data-lang="zh"><img src="https://flagcdn.com/w20/cn.png" width="18" alt="中文" class="me-2" style="border-radius:2px;"> 中文</a></li>
+                </ul>
+              </div>
+              <button class="btn btn-sm btn-outline-secondary d-flex align-items-center justify-content-center p-0" id="sidebarThemeToggle" style="width: 38px; height: 38px; border-radius: 8px; border-color: var(--border-color); color: var(--text-main);" aria-label="Toggle theme">
+                <i class="bi bi-moon-fill" id="sidebarThemeIcon" style="font-size: 17px;"></i>
               </button>
-              <ul class="dropdown-menu shadow border-light-subtle" style="min-width: 120px; border-radius: 12px; font-size: 14px;">
-                <li><a class="dropdown-item py-1.5 fw-medium global-lang-select" href="#" data-lang="en"><img src="https://flagcdn.com/w20/gb.png" width="18" alt="English" class="me-2" style="border-radius:2px;"> English</a></li>
-                <li><a class="dropdown-item py-1.5 fw-medium global-lang-select" href="#" data-lang="vi"><img src="https://flagcdn.com/w20/vn.png" width="18" alt="Tiếng Việt" class="me-2" style="border-radius:2px;"> Tiếng Việt</a></li>
-                <li><a class="dropdown-item py-1.5 fw-medium global-lang-select" href="#" data-lang="zh"><img src="https://flagcdn.com/w20/cn.png" width="18" alt="中文" class="me-2" style="border-radius:2px;"> 中文</a></li>
-              </ul>
             </div>
-            <button class="btn btn-sm btn-outline-secondary d-flex align-items-center justify-content-center p-0" id="sidebarThemeToggle" style="width: 34px; height: 34px; border-radius: 8px; border-color: var(--border-color); color: var(--text-main);" aria-label="Toggle theme">
-              <i class="bi bi-moon-fill" id="sidebarThemeIcon" style="font-size: 15px;"></i>
-            </button>
           </div>
-        </div>
         <div class="dropdown">
           <button class="btn btn-link text-decoration-none text-main d-flex align-items-center gap-2 p-1.5 w-100 border-0 text-start" type="button" data-bs-toggle="dropdown" aria-expanded="false">
             <i class="bi bi-list fs-5"></i>
@@ -241,6 +241,12 @@ function initSharedSidebars() {
   }
   if (typeof window.renderTrendingWidgets === 'function') {
     window.renderTrendingWidgets();
+  }
+
+  // The sidebars above are rendered dynamically, so restore the persisted
+  // language after injection instead of leaving their flags at the EN default.
+  if (typeof window.updateGlobalFlags === 'function') {
+    window.updateGlobalFlags(localStorage.getItem('preferredLanguage') || 'en');
   }
 }
 

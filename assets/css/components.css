@@ -1537,9 +1537,9 @@ select.form-select-sm {
 }
 .perfect-switch-track {
   position: relative;
-  width: 76px; /* Fixed width prevents any jumping */
+  width: 44px; /* Standard clean width */
   height: 24px;
-  background-color: #d1d5db; /* Inactive Gray */
+  background-color: var(--border-color); /* Match theme */
   border-radius: 99px;
   transition: background-color 0.3s ease;
 }
@@ -1570,29 +1570,7 @@ select.form-select-sm {
 
 /* The Text */
 .perfect-switch-text-on, .perfect-switch-text-off {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 0.65rem;
-  font-weight: 600;
-  color: white;
-  white-space: nowrap;
-  transition: opacity 0.2s ease;
-  z-index: 1;
-}
-.perfect-switch-text-on {
-  left: 8px;
-  opacity: 0;
-}
-.perfect-switch-text-off {
-  right: 8px;
-  opacity: 1;
-}
-.perfect-switch-input:checked + .perfect-switch-track .perfect-switch-text-on {
-  opacity: 1;
-}
-.perfect-switch-input:checked + .perfect-switch-track .perfect-switch-text-off {
-  opacity: 0;
+  display: none !important;
 }
 
 /* Sidebar Control Item (Matches .sidebar-nav-item padding and alignment) */

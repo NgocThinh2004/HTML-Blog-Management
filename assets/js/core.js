@@ -352,34 +352,7 @@ document.addEventListener('DOMContentLoaded', () => {
       e.preventDefault();
       const lang = langSelect.getAttribute('data-lang');
       localStorage.setItem('preferredLanguage', lang);
-      
-      const sidebarCurrentLang = document.getElementById('sidebarCurrentLang');
-      if (sidebarCurrentLang) {
-        sidebarCurrentLang.textContent = lang.toUpperCase();
-      }
-      const mobileCurrentLang = document.getElementById('mobileCurrentLang');
-      if (mobileCurrentLang) {
-        mobileCurrentLang.textContent = lang.toUpperCase();
-      }
-      const currentLangLabel = document.getElementById('currentLangLabel');
-      if (currentLangLabel) {
-        currentLangLabel.textContent = lang.toUpperCase();
-      }
-      
-      // Update flag images if they exist
-      const flagMap = { 'en': 'gb', 'vi': 'vn', 'zh': 'cn' };
-      const flagImg = document.getElementById('currentLangFlag');
-      if (flagImg) {
-        flagImg.src = 'https://flagcdn.com/w20/' + (flagMap[lang] || 'gb') + '.png';
-      }
-      const sidebarFlagImg = document.getElementById('sidebarLangFlag');
-      if (sidebarFlagImg) {
-        sidebarFlagImg.src = 'https://flagcdn.com/w20/' + (flagMap[lang] || 'gb') + '.png';
-      }
-      const mobileFlagImg = document.getElementById('mobileLangFlag');
-      if (mobileFlagImg) {
-        mobileFlagImg.src = 'https://flagcdn.com/w20/' + (flagMap[lang] || 'gb') + '.png';
-      }
+      window.updateGlobalFlags(lang);
       
       if(window.applyUiTranslations) window.applyUiTranslations(lang);
       if(window.applyLanguageFilter) window.applyLanguageFilter(lang);
@@ -447,6 +420,60 @@ document.addEventListener('DOMContentLoaded', () => {
       htmlElement.setAttribute('data-bs-theme', activeTheme);
       localStorage.setItem('theme', activeTheme);
       updateThemeIcon(activeTheme);
+    }
+  });
+
+  window.updateGlobalFlags = function(lang) {
+    const languages = {
+      en: { flag: 'gb', name: 'English' },
+      vi: { flag: 'vn', name: 'Tiếng Việt' },
+      zh: { flag: 'cn', name: '中文' }
+    };
+    const currentLang = languages[lang] ? lang : 'en';
+    const language = languages[currentLang];
+
+    // querySelectorAll is intentional: a few layouts contain desktop/mobile
+    // language controls at the same time, and every visible flag must stay synced.
+    const flags = ['currentLangFlag', 'sidebarLangFlag', 'mobileLangFlag'];
+    flags.forEach(id => {
+      document.querySelectorAll(`[id="${id}"]`).forEach(el => {
+        el.src = `https://flagcdn.com/w20/${language.flag}.png`;
+        el.alt = language.name;
+        el.title = language.name;
+      });
+    });
+    const labels = ['sidebarCurrentLang', 'mobileCurrentLang', 'currentLangLabel'];
+    labels.forEach(id => {
+      document.querySelectorAll(`[id="${id}"]`).forEach(el => {
+        el.textContent = currentLang.toUpperCase();
+      });
+    });
+
+    document.querySelectorAll('.global-lang-select').forEach(option => {
+      const isActive = option.getAttribute('data-lang') === currentLang;
+      option.classList.toggle('active', isActive);
+      option.setAttribute('aria-current', isActive ? 'true' : 'false');
+    });
+  };
+
+  // Apply the persisted language after all static controls on the page exist.
+  window.updateGlobalFlags(localStorage.getItem('preferredLanguage') || 'en');
+
+  window.updateGlobalTheme = function(theme) {
+    htmlElement.setAttribute('data-bs-theme', theme);
+    updateThemeIcon(theme);
+  };
+
+  window.addEventListener('storage', (e) => {
+    if (e.key === 'preferredLanguage') {
+      const lang = e.newValue || 'en';
+      window.updateGlobalFlags(lang);
+      if (window.applyUiTranslations) window.applyUiTranslations(lang);
+      if (window.applyLanguageFilter) window.applyLanguageFilter(lang);
+    }
+    if (e.key === 'theme') {
+      const theme = e.newValue || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      window.updateGlobalTheme(theme);
     }
   });
 
@@ -881,9 +908,9 @@ document.addEventListener('DOMContentLoaded', () => {
       settings_desc: "Quản lý giao diện, ngôn ngữ hiển thị và cấu hình trải nghiệm đọc bài viết trên MundiBlog.",
       appearance_title: "Chế độ Giao diện",
       appearance_desc: "Chọn chế độ màu sáng hoặc tối phù hợp với môi trường và bảo vệ thị lực của bạn khi đọc bài đăng.",
-      theme_light: "Sáng (Light)",
+      theme_light: "Sáng",
       theme_light_sub: "Giao diện giấy trắng chuẩn Substack",
-      theme_dark: "Tối (Dark)",
+      theme_dark: "Tối",
       theme_dark_sub: "Dễ chịu trong môi trường thiếu sáng",
       lang_title: "Ngôn ngữ Bảng tin & UI",
       lang_desc: "Chọn ngôn ngữ mặc định của bạn. Bảng tin (Home Feed) và giao diện sẽ hiển thị bằng ngôn ngữ được chọn.",
@@ -1163,9 +1190,9 @@ document.addEventListener('DOMContentLoaded', () => {
       settings_desc: "管理您的界面、显示语言和 MundiBlog 上的阅读偏好。",
       appearance_title: "外观与主题",
       appearance_desc: "选择适合您环境的明亮或黑暗主题，在阅读文章时保护您的视力。",
-      theme_light: "明亮 (Light)",
+      theme_light: "明亮",
       theme_light_sub: "简洁整洁的白纸风格",
-      theme_dark: "黑暗 (Dark)",
+      theme_dark: "黑暗",
       theme_dark_sub: "在低光环境中舒适阅读",
       lang_title: "动态与界面语言",
       lang_desc: "选择您的默认语言。主页动态和界面将自动以您选择的语言显示。",
