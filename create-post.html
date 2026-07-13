@@ -16,7 +16,7 @@
       </button>
       <div class="editor-topbar-spacer"></div>
       <button class="btn btn-light" type="button" data-preview-button>Preview</button>
-      <button class="btn btn-accent" type="button">Continue</button>
+      <button class="btn btn-white" type="button" data-publish-button>Continue</button>
     </header>
 
     <nav class="editor-toolbar" aria-label="Writing toolbar">
@@ -333,7 +333,7 @@
 
           <div class="preview-topbar-actions">
             <button class="btn btn-light" type="button" data-share-preview>Share</button>
-            <button class="btn btn-accent" type="button" data-preview-close>Done</button>
+            <button class="btn btn-white" type="button" data-preview-close>Done</button>
           </div>
         </header>
 
@@ -405,46 +405,57 @@
               </article>
             </div>
           </section>
-          
-          <aside class="preview-sidebar">
-            <div class="preview-lang-box">
-              <div class="preview-lang-header">
-                Ngôn ngữ <span class="caret-icon"></span>
-              </div>
-              <div class="preview-lang-body">
-                <label for="previewLanguageSelect" class="form-label" style="font-size: 0.85rem; font-weight: 600;">Ngôn ngữ của bài viết này</label>
-                <select id="previewLanguageSelect" class="form-select form-select-sm mb-4" data-preview-language style="width: 100%;">
-                  <option value="original">Original</option>
-                  <option value="en">English</option>
-                  <option value="vi">Tiếng Việt</option>
-                  <option value="zh">中文</option>
-                </select>
-                
-                <div class="preview-translate-section">
-                  <div class="translate-section-header">
-                    <strong>Dịch tài liệu này</strong>
-                  </div>
-                  <div class="translate-section-body">
-                    <table class="translate-table">
-                      <thead>
-                        <tr>
-                          <th>Ngôn ngữ</th>
-                          <th>Trạng thái</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr>
-                          <td style="color: #666;">English</td>
-                          <td><span class="preview-translation-status" data-preview-translation-status>Original</span></td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </aside>
+
         </main>
+      </section>
+    </div>
+
+    <!-- Publish Modal -->
+    <div class="publish-modal" role="dialog" aria-modal="true" aria-label="Publish post" data-publish-modal hidden>
+      <div class="publish-modal-backdrop" data-publish-close></div>
+      <section class="publish-modal-panel fb-style-modal">
+        <header class="publish-modal-header">
+          <h2 class="publish-modal-title">Tùy chọn đăng bài</h2>
+          <button class="publish-modal-close" type="button" aria-label="Close" data-publish-close>
+            <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+          </button>
+        </header>
+        
+        <main class="publish-modal-body">
+          <div class="publish-form-group">
+            <h3 class="fb-modal-heading">Ngôn ngữ được phép dịch</h3>
+            <p class="publish-form-desc">Chọn các ngôn ngữ mà bài viết này có thể được người đọc dịch sang.</p>
+            <div class="publish-checkbox-group">
+              <label class="publish-checkbox-label"><input type="checkbox" name="allow_translate" value="en" checked> English</label>
+              <label class="publish-checkbox-label"><input type="checkbox" name="allow_translate" value="vi" checked> Tiếng Việt</label>
+              <label class="publish-checkbox-label"><input type="checkbox" name="allow_translate" value="zh" checked> 中文 (Chinese)</label>
+            </div>
+          </div>
+        </main>
+
+        <footer class="publish-modal-footer publish-modal-footer-centered">
+          <button class="btn fb-btn-primary fb-btn-full" type="button" data-publish-action="publish">Đăng</button>
+        </footer>
+      </section>
+    </div>
+
+    <!-- Draft Confirm Modal -->
+    <div class="draft-confirm-modal" role="dialog" aria-modal="true" aria-label="Confirm draft" data-draft-modal hidden>
+      <div class="draft-confirm-backdrop" data-draft-close></div>
+      <section class="draft-confirm-panel">
+        <header class="draft-confirm-header">
+          <h2 class="draft-confirm-title">Lưu bài viết này làm bản nháp?</h2>
+          <button class="draft-confirm-close" type="button" aria-label="Close" data-draft-close>
+            <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+          </button>
+        </header>
+        <main class="draft-confirm-body">
+          <p>Nếu bỏ bây giờ, bạn sẽ mất bài viết này.</p>
+        </main>
+        <footer class="draft-confirm-footer">
+          <button class="btn fb-btn-text-light" type="button" data-draft-action="discard">Xóa bản nháp</button>
+          <button class="btn fb-btn-primary" type="button" data-draft-action="save">Lưu làm bản nháp</button>
+        </footer>
       </section>
     </div>
 

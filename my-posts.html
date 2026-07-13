@@ -1,20 +1,21 @@
 <!DOCTYPE html>
-<html lang="en" data-bs-theme="light">
+
+<html data-bs-theme="light" lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>My Articles | MundiBlog</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.2.3/css/flag-icons.min.css">
-  <link rel="stylesheet" href="assets/css/variables.css">
-  <link rel="stylesheet" href="assets/css/base.css?v=5">
-  <link rel="stylesheet" href="assets/css/layouts.css?v=4">
-  <link rel="stylesheet" href="assets/css/components.css?v=5">
-  <style>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>My Articles | MundiBlog</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet"/>
+<link href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.2.3/css/flag-icons.min.css" rel="stylesheet"/>
+<link href="assets/css/variables.css" rel="stylesheet"/>
+<link href="assets/css/base.css?v=5" rel="stylesheet"/>
+<link href="assets/css/layouts.css?v=4" rel="stylesheet"/>
+<link href="assets/css/components.css?v=5" rel="stylesheet"/>
+<style>
     .substack-logo-container {
       padding: 0.5rem 0.75rem 1.5rem 0.75rem;
     }
@@ -547,439 +548,805 @@
   </style>
 </head>
 <body>
-  <div class="app-wrapper">
-    <header class="app-header">
-      <div class="header-container">
-        <button class="btn btn-link d-lg-none me-2 text-reset p-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#mobileSidebar" aria-controls="mobileSidebar">
-          <i class="bi bi-list fs-3"></i>
-        </button>
-        <a href="index.html" class="d-flex align-items-center text-decoration-none">
-          <i class="bi bi-feather fs-4 text-primary me-2"></i>
-          <span class="fs-5 fw-bold text-main">MundiBlog</span>
-        </a>
-        <div class="d-flex align-items-center ms-auto gap-2">
-          <a href="create-post.html?from=my-posts.html" class="btn btn-primary btn-sm fw-medium px-3 rounded-pill"><i class="bi bi-plus-lg me-1"></i> <span data-i18n="create">Create</span></a>
-          <a href="profile.html" class="text-decoration-none">
-            <span class="rounded-circle border text-white fw-bold" style="display: inline-grid; place-items: center; width: 32px; height: 32px; background: var(--primary-color);">A</span>
-          </a>
-        </div>
-      </div>
-    </header>
-
-    <main class="app-main-content no-right-panel">
-      <aside class="left-sidebar">
-        <div>
-          <div class="substack-logo-container">
-            <a href="index.html" class="text-decoration-none d-flex align-items-center gap-2">
-              <i class="bi bi-bookmark-fill substack-logo"></i>
-              <span class="fs-5 fw-bold text-main" style="letter-spacing: -0.02em;">MundiBlog</span>
-            </a>
-          </div>
-
-          <nav class="sidebar-nav">
-            <a href="index.html" class="sidebar-nav-item">
-              <i class="bi bi-house-door"></i> <span data-i18n="home">Home</span>
-            </a>
-            <a href="#" class="sidebar-nav-item">
-              <i class="bi bi-inbox"></i> <span data-i18n="inbox">Inbox</span>
-            </a>
-            <a href="#" class="sidebar-nav-item">
-              <i class="bi bi-heart"></i> <span data-i18n="liked_posts">Liked Posts</span>
-            </a>
-            <a href="my-posts.html" class="sidebar-nav-item active" aria-current="page">
-              <i class="bi bi-journal-text"></i> <span data-i18n="my_articles">My Articles</span>
-            </a>
-            <a href="about.html" class="sidebar-nav-item">
-              <i class="bi bi-info-circle"></i> <span data-i18n="about">About</span>
-            </a>
-            <a href="profile.html" class="sidebar-nav-item">
-              <i class="bi bi-person"></i> <span data-i18n="profile">Profile</span>
-            </a>
-          </nav>
-
-          <a href="create-post.html?new=1" class="sidebar-create-btn" data-create-from-my-posts>
-            <span data-i18n="create">Create</span> <i class="bi bi-plus-lg"></i>
-          </a>
-        </div>
-
-        <div class="sidebar-footer-menu">
-          <div class="dropdown">
-            <button class="btn btn-link text-decoration-none text-main d-flex align-items-center gap-2 p-1.5 w-100 border-0 text-start" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-              <i class="bi bi-list fs-5"></i>
-              <span class="fw-medium" data-i18n="more">More</span>
-            </button>
-            <ul class="dropdown-menu shadow border-light-subtle">
-              <li><a class="dropdown-item py-2" href="settings.html"><i class="bi bi-gear me-2"></i> <span data-i18n="settings">Settings</span></a></li>
-              <li><a class="dropdown-item py-2" href="admin/index.html"><i class="bi bi-speedometer2 me-2"></i> <span data-i18n="admin_panel">Admin Panel</span></a></li>
-              <li><a class="dropdown-item py-2" href="change-password.html"><i class="bi bi-shield-lock me-2"></i> <span data-i18n="security">Security</span></a></li>
-              <li><hr class="dropdown-divider"></li>
-              <li><a class="dropdown-item py-2 text-danger" href="#" id="signOutBtn"><i class="bi bi-box-arrow-right me-2"></i> <span data-i18n="sign_out">Sign Out</span></a></li>
-            </ul>
-          </div>
-        </div>
-      </aside>
-
-      <div class="center-feed" style="max-width: 100%; align-items: stretch;">
-        <section class="my-posts-workspace">
-          <header class="my-posts-top">
-            <h1 data-i18n="my_posts_title">My Articles</h1>
-          </header>
-
-          <div class="posts-toolbar">
-            <div class="toolbar-main-row">
-              <div class="toolbar-links-stack">
-                <div class="status-tabs" role="tablist" aria-label="Post status filters">
-                  <button class="status-tab is-active" type="button" data-filter="all"><span data-i18n="all_posts_tab">All</span> (<span data-count-all>5</span>)</button>
-                  <button class="status-tab" type="button" data-filter="draft"><span data-i18n="drafts">Drafts</span> (<span data-count-drafts>2</span>)</button>
-                  <button class="status-tab" type="button" data-filter="published"><span data-i18n="published">Published</span> (<span data-count-published>3</span>)</button>
-                  <button class="status-tab" type="button" data-filter="trash"><span data-i18n="trash">Trash</span> (<span data-count-trash>1</span>)</button>
-                </div>
-              </div>
-
-              <div class="toolbar-actions">
-                <label class="post-search">
-                  <i class="bi bi-search"></i>
-                  <input type="search" data-post-search data-i18n="search_posts" placeholder="Search your posts...">
-                </label>
-              </div>
-            </div>
-
-            <div class="toolbar-filter-row">
-              <div class="filter-actions">
-                <select class="admin-select" data-language-filter aria-label="Filter by language">
-                  <option value="all" data-i18n="all_languages">All languages</option>
-                  <option value="en" data-i18n="english">English</option>
-                  <option value="vi" data-i18n="vietnamese">Vietnamese</option>
-                  <option value="zh" data-i18n="chinese">Chinese</option>
-                </select>
-                <select class="admin-select" aria-label="Filter by date">
-                  <option value="all" data-i18n="all_dates">All dates</option>
-                  <option value="2026-07">July 2026</option>
-                  <option value="2026-06">June 2026</option>
-                </select>
-                <select class="admin-select" data-category-filter aria-label="Filter by category">
-                  <option value="all" data-i18n="all_categories">All categories</option>
-                  <option value="ai translation" data-i18n="cat_ai_translation">AI Translation</option>
-                  <option value="profile branding" data-i18n="cat_profile_branding">Profile Branding</option>
-                  <option value="design" data-i18n="cat_design_general">Design</option>
-                  <option value="analytics" data-i18n="cat_analytics">Analytics</option>
-                  <option value="localization" data-i18n="cat_localization">Localization</option>
-                </select>
-                <span class="items-count" data-visible-count>5 items</span>
-              </div>
-            </div>
-          </div>
-
-          <div id="bulkActionToolbar" class="bulk-action-toolbar" hidden>
-            <span class="bulk-count"><span id="bulkSelectedCount">0</span> selected</span>
-            <div class="bulk-actions">
-              <button class="command-btn btn-sm text-success" id="bulkRestoreBtn" hidden><i class="bi bi-arrow-counterclockwise"></i> <span data-i18n="restore_selected">Restore Selected</span></button>
-              <button class="command-btn btn-sm text-danger" id="bulkDeleteBtn"><i class="bi bi-trash"></i> <span data-i18n="delete_selected">Delete Selected</span></button>
-            </div>
-          </div>
-
-          <div class="posts-table-panel">
-            <div class="posts-table-scroll">
-              <table class="posts-table">
-                <thead>
-                  <tr>
-                    <th class="select-col" scope="col"><input class="row-check" type="checkbox" data-select-all aria-label="Select all posts"></th>
-                    <th scope="col" data-i18n="title_label">Title</th>
-                    <th scope="col" data-i18n="status_label">Status</th>
-                    <th scope="col" data-i18n="original_language">Original language</th>
-                    <th scope="col" data-i18n="translated_language">Translated language</th>
-                    <th scope="col" data-i18n="updated">Updated</th>
-                    <th scope="col" data-i18n="reads">Reads</th>
-                    <th scope="col" data-i18n="actions">Actions</th>
-                  </tr>
-                </thead>
-                <tbody data-post-table-body>
-                  <tr data-status="published" data-category="ai translation" data-language="en" data-search="building ai assisted multilingual workflows localization translation">
-                    <td class="select-col"><input class="row-check" type="checkbox" aria-label="Select Building AI-assisted multilingual workflows"></td>
-                    <td class="post-title-cell">
-                      <strong>Building AI-assisted multilingual workflows</strong>
-                      <span data-i18n="cat_ai_translation">AI Translation</span>
-
-                    </td>
-                    <td><span class="status-badge is-published"><i class="bi bi-check2-circle"></i><span data-i18n="status_published">Published</span></span></td>
-                    <td><span class="language-badge"><i class="fi fi-us rounded-1"></i> EN</span></td>
-                    <td>
-                      <span class="language-badge" style="background: rgba(13, 110, 253, 0.12); color: #0d6efd;"><i class="fi fi-vn rounded-1"></i> VI</span>
-                      <span class="language-badge" style="background: rgba(13, 110, 253, 0.12); color: #0d6efd;"><i class="fi fi-cn rounded-1"></i> ZH</span>
-                    </td>
-                    <td>Jul 07, 2026</td>
-                    <td>3,412</td>
-                    <td>
-                      <div class="action-group">
-                        <a class="action-btn" href="post-detail.html?id=5" title="Open"><i class="bi bi-box-arrow-up-right"></i></a>
-                        <a class="action-btn" href="create-post.html?edit=1&from=my-posts.html" title="Edit"><i class="bi bi-pencil"></i></a>
-                        <a class="action-btn text-danger" href="#" title="Trash"><i class="bi bi-trash"></i></a>
-                      </div>
-                    </td>
-                  </tr>
-
-                  <tr data-status="draft" data-category="profile branding" data-language="en" data-search="product notes mundiblog profiles draft branding profile">
-                    <td class="select-col"><input class="row-check" type="checkbox" aria-label="Select Product notes for MundiBlog profiles"></td>
-                    <td class="post-title-cell">
-                      <strong>Product notes for MundiBlog profiles</strong>
-                      <span data-i18n="cat_profile_branding">Profile Branding</span>
-
-                    </td>
-                    <td><span class="status-badge is-draft"><i class="bi bi-file-earmark-text"></i><span data-i18n="status_draft">Draft</span></span></td>
-                    <td><span class="language-badge"><i class="fi fi-us rounded-1"></i> EN</span></td>
-                    <td><span class="text-muted small">-</span></td>
-                    <td>Jul 06, 2026</td>
-                    <td>0</td>
-                    <td>
-                      <div class="action-group">
-                        <a class="action-btn" href="create-post.html?edit=2" title="Open"><i class="bi bi-box-arrow-up-right"></i></a>
-                        <a class="action-btn" href="create-post.html?edit=2&from=my-posts.html" title="Edit"><i class="bi bi-pencil"></i></a>
-                        <a class="action-btn text-danger" href="#" title="Trash"><i class="bi bi-trash"></i></a>
-                      </div>
-                    </td>
-                  </tr>
-
-                  <tr data-status="published" data-category="design" data-language="vi" data-search="profile design guide vietnamese ui avatar bio">
-                    <td class="select-col"><input class="row-check" type="checkbox" aria-label="Select Profile design guide for creators"></td>
-                    <td class="post-title-cell">
-                      <strong>Profile design guide for creators</strong>
-                      <span data-i18n="cat_design_general">Design</span>
-
-                    </td>
-                    <td><span class="status-badge is-published"><i class="bi bi-check2-circle"></i><span data-i18n="status_published">Published</span></span></td>
-                    <td><span class="language-badge"><i class="fi fi-vn rounded-1"></i> VI</span></td>
-                    <td><span class="language-badge" style="background: rgba(13, 110, 253, 0.12); color: #0d6efd;"><i class="fi fi-us rounded-1"></i> EN</span></td>
-                    <td>Jul 05, 2026</td>
-                    <td>1,129</td>
-                    <td>
-                      <div class="action-group">
-                        <a class="action-btn" href="post-detail.html?id=6" title="Open"><i class="bi bi-box-arrow-up-right"></i></a>
-                        <a class="action-btn" href="create-post.html?from=my-posts.html" title="Edit"><i class="bi bi-pencil"></i></a>
-                        <a class="action-btn text-danger" href="#" title="Trash"><i class="bi bi-trash"></i></a>
-                      </div>
-                    </td>
-                  </tr>
-
-                  <tr data-status="draft" data-category="analytics" data-language="en" data-search="creator analytics weekly recap metrics draft">
-                    <td class="select-col"><input class="row-check" type="checkbox" aria-label="Select Creator analytics weekly recap"></td>
-                    <td class="post-title-cell">
-                      <strong>Creator analytics weekly recap</strong>
-                      <span data-i18n="cat_analytics">Analytics</span>
-
-                    </td>
-                    <td><span class="status-badge is-draft"><i class="bi bi-file-earmark-text"></i><span data-i18n="status_draft">Draft</span></span></td>
-                    <td><span class="language-badge"><i class="fi fi-us rounded-1"></i> EN</span></td>
-                    <td><span class="text-muted small">-</span></td>
-                    <td>Jul 03, 2026</td>
-                    <td>0</td>
-                    <td>
-                      <div class="action-group">
-                        <a class="action-btn" href="create-post.html?from=my-posts.html" title="Open"><i class="bi bi-box-arrow-up-right"></i></a>
-                        <a class="action-btn" href="create-post.html?from=my-posts.html" title="Edit"><i class="bi bi-pencil"></i></a>
-                        <a class="action-btn text-danger" href="#" title="Trash"><i class="bi bi-trash"></i></a>
-                      </div>
-                    </td>
-                  </tr>
-
-                  <tr data-status="published" data-category="localization" data-language="en" data-search="ai translation qa checklist localization review">
-                    <td class="select-col"><input class="row-check" type="checkbox" aria-label="Select AI translation QA checklist"></td>
-                    <td class="post-title-cell">
-                      <strong>AI translation QA checklist</strong>
-                      <span data-i18n="cat_localization">Localization</span>
-
-                    </td>
-                    <td><span class="status-badge is-published"><i class="bi bi-check2-circle"></i><span data-i18n="status_published">Published</span></span></td>
-                    <td><span class="language-badge"><i class="fi fi-us rounded-1"></i> EN</span></td>
-                    <td><span class="language-badge" style="background: rgba(13, 110, 253, 0.12); color: #0d6efd;"><i class="fi fi-vn rounded-1"></i> VI</span></td>
-                    <td>Jun 29, 2026</td>
-                    <td>842</td>
-                    <td>
-                      <div class="action-group">
-                        <a class="action-btn" href="post-detail.html?id=4" title="Open"><i class="bi bi-box-arrow-up-right"></i></a>
-                        <a class="action-btn" href="create-post.html?from=my-posts.html" title="Edit"><i class="bi bi-pencil"></i></a>
-                        <a class="action-btn text-danger" href="#" title="Trash"><i class="bi bi-trash"></i></a>
-                      </div>
-                    </td>
-                  </tr>
-
-                  <tr data-status="trash" data-category="design" data-language="vi" data-search="old homepage layout archived trash">
-                    <td class="select-col"><input class="row-check" type="checkbox" aria-label="Select Old homepage layout notes"></td>
-                    <td class="post-title-cell">
-                      <strong>Old homepage layout notes</strong>
-                      <span data-i18n="cat_design_general">Design</span>
-                    </td>
-                    <td><span class="status-badge is-trash"><i class="bi bi-trash3"></i><span>Trash</span></span></td>
-                    <td><span class="language-badge"><i class="fi fi-vn rounded-1"></i> VI</span></td>
-                    <td><span class="text-muted small">-</span></td>
-                    <td>Jun 21, 2026</td>
-                    <td>218</td>
-                    <td>
-                      <div class="action-group">
-                        <a class="action-btn" href="create-post.html?from=my-posts.html" title="Restore"><i class="bi bi-arrow-counterclockwise"></i></a>
-                        <a class="action-btn text-danger" href="#" title="Delete"><i class="bi bi-trash3"></i></a>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr data-status="published" data-category="analytics" data-language="en" data-search="monthly active users growth 2026 q2">
-                    <td class="select-col"><input class="row-check" type="checkbox" aria-label="Select Monthly active users growth"></td>
-                    <td class="post-title-cell">
-                      <strong>Monthly active users growth Q2</strong>
-                      <span data-i18n="cat_analytics">Analytics</span>
-                    </td>
-                    <td><span class="status-badge is-published"><i class="bi bi-check2-circle"></i><span data-i18n="status_published">Published</span></span></td>
-                    <td><span class="language-badge"><i class="fi fi-us rounded-1"></i> EN</span></td>
-                    <td><span class="text-muted small">-</span></td>
-                    <td>Jul 08, 2026</td>
-                    <td>5,102</td>
-                    <td>
-                      <div class="action-group">
-                        <a class="action-btn" href="#" title="Open"><i class="bi bi-box-arrow-up-right"></i></a>
-                        <a class="action-btn" href="#" title="Edit"><i class="bi bi-pencil"></i></a>
-                        <a class="action-btn text-danger" href="#" title="Trash"><i class="bi bi-trash"></i></a>
-                      </div>
-                    </td>
-                  </tr>
-                  
-                  <tr data-status="draft" data-category="design" data-language="vi" data-search="typography principles for readability vietnam fonts">
-                    <td class="select-col"><input class="row-check" type="checkbox" aria-label="Select Typography principles"></td>
-                    <td class="post-title-cell">
-                      <strong>Typography principles for readability</strong>
-                      <span data-i18n="cat_design_general">Design</span>
-                    </td>
-                    <td><span class="status-badge is-draft"><i class="bi bi-file-earmark-text"></i><span data-i18n="status_draft">Draft</span></span></td>
-                    <td><span class="language-badge"><i class="fi fi-vn rounded-1"></i> VI</span></td>
-                    <td><span class="text-muted small">-</span></td>
-                    <td>Jul 09, 2026</td>
-                    <td>0</td>
-                    <td>
-                      <div class="action-group">
-                        <a class="action-btn" href="#" title="Open"><i class="bi bi-box-arrow-up-right"></i></a>
-                        <a class="action-btn" href="#" title="Edit"><i class="bi bi-pencil"></i></a>
-                        <a class="action-btn text-danger" href="#" title="Trash"><i class="bi bi-trash"></i></a>
-                      </div>
-                    </td>
-                  </tr>
-                  
-                  <tr data-status="published" data-category="profile branding" data-language="en" data-search="color theory in personal branding psychology">
-                    <td class="select-col"><input class="row-check" type="checkbox" aria-label="Select Color theory in branding"></td>
-                    <td class="post-title-cell">
-                      <strong>Color theory in personal branding</strong>
-                      <span data-i18n="cat_profile_branding">Profile Branding</span>
-                    </td>
-                    <td><span class="status-badge is-published"><i class="bi bi-check2-circle"></i><span data-i18n="status_published">Published</span></span></td>
-                    <td><span class="language-badge"><i class="fi fi-us rounded-1"></i> EN</span></td>
-                    <td><span class="language-badge" style="background: rgba(13, 110, 253, 0.12); color: #0d6efd;"><i class="fi fi-cn rounded-1"></i> ZH</span></td>
-                    <td>Jul 01, 2026</td>
-                    <td>8,433</td>
-                    <td>
-                      <div class="action-group">
-                        <a class="action-btn" href="#" title="Open"><i class="bi bi-box-arrow-up-right"></i></a>
-                        <a class="action-btn" href="#" title="Edit"><i class="bi bi-pencil"></i></a>
-                        <a class="action-btn text-danger" href="#" title="Trash"><i class="bi bi-trash"></i></a>
-                      </div>
-                    </td>
-                  </tr>
-
-                  <tr data-status="draft" data-category="localization" data-language="zh" data-search="translating idioms context translation chinese">
-                    <td class="select-col"><input class="row-check" type="checkbox" aria-label="Select Translating idioms"></td>
-                    <td class="post-title-cell">
-                      <strong>Translating idioms with AI context</strong>
-                      <span data-i18n="cat_localization">Localization</span>
-                    </td>
-                    <td><span class="status-badge is-draft"><i class="bi bi-file-earmark-text"></i><span data-i18n="status_draft">Draft</span></span></td>
-                    <td><span class="language-badge"><i class="fi fi-cn rounded-1"></i> ZH</span></td>
-                    <td><span class="text-muted small">-</span></td>
-                    <td>Jun 28, 2026</td>
-                    <td>0</td>
-                    <td>
-                      <div class="action-group">
-                        <a class="action-btn" href="#" title="Open"><i class="bi bi-box-arrow-up-right"></i></a>
-                        <a class="action-btn" href="#" title="Edit"><i class="bi bi-pencil"></i></a>
-                        <a class="action-btn text-danger" href="#" title="Trash"><i class="bi bi-trash"></i></a>
-                      </div>
-                    </td>
-                  </tr>
-                  
-                  <tr data-status="trash" data-category="ai translation" data-language="en" data-search="old api endpoints migration deprecated trash">
-                    <td class="select-col"><input class="row-check" type="checkbox" aria-label="Select Old API endpoints"></td>
-                    <td class="post-title-cell">
-                      <strong>Old translation API endpoints (Deprecated)</strong>
-                      <span data-i18n="cat_ai_translation">AI Translation</span>
-                    </td>
-                    <td><span class="status-badge is-trash"><i class="bi bi-trash3"></i><span>Trash</span></span></td>
-                    <td><span class="language-badge"><i class="fi fi-us rounded-1"></i> EN</span></td>
-                    <td><span class="text-muted small">-</span></td>
-                    <td>May 15, 2026</td>
-                    <td>1,024</td>
-                    <td>
-                      <div class="action-group">
-                        <a class="action-btn" href="#" title="Restore"><i class="bi bi-arrow-counterclockwise"></i></a>
-                        <a class="action-btn text-danger" href="#" title="Delete"><i class="bi bi-trash3"></i></a>
-                      </div>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-            <div class="empty-state" data-empty-state>
-              <i class="bi bi-search"></i>
-              <strong data-i18n="no_posts_found">No posts match your filters.</strong>
-            </div>
-          </div>
-        </section>
-      </div>
-    </main>
-  </div>
-
-  <div class="offcanvas offcanvas-start" tabindex="-1" id="mobileSidebar" aria-labelledby="mobileSidebarLabel">
-    <div class="offcanvas-header border-bottom">
-      <a href="index.html" class="text-decoration-none d-flex align-items-center gap-2">
-        <i class="bi bi-bookmark-fill text-primary fs-4"></i>
-        <span class="fs-5 fw-bold text-main" style="letter-spacing: -0.02em;">MundiBlog</span>
-      </a>
-      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-    </div>
-    <div class="offcanvas-body d-flex flex-column p-3">
-      <nav class="sidebar-nav mb-3">
-        <a href="index.html" class="sidebar-nav-item">
-          <i class="bi bi-house-door"></i> <span data-i18n="home">Home</span>
-        </a>
-        <a href="#" class="sidebar-nav-item">
-          <i class="bi bi-inbox"></i> <span data-i18n="inbox">Inbox</span>
-        </a>
-        <a href="#" class="sidebar-nav-item">
-          <i class="bi bi-heart"></i> <span data-i18n="liked_posts">Liked Posts</span>
-        </a>
-        <a href="my-posts.html" class="sidebar-nav-item active" aria-current="page">
-          <i class="bi bi-journal-text"></i> <span data-i18n="my_articles">My Articles</span>
-        </a>
-        <a href="about.html" class="sidebar-nav-item">
-          <i class="bi bi-info-circle"></i> <span data-i18n="about">About</span>
-        </a>
-        <a href="profile.html" class="sidebar-nav-item">
-          <i class="bi bi-person"></i> <span data-i18n="profile">Profile</span>
-        </a>
-      </nav>
-
-      <a href="create-post.html?new=1" class="sidebar-create-btn mb-4" data-create-from-my-posts>
-        <span data-i18n="create">Create</span> <i class="bi bi-plus-lg"></i>
-      </a>
-
-      <div class="mt-auto pt-3 border-top">
-        <div class="d-flex flex-column gap-1">
-          <a class="sidebar-nav-item" href="settings.html"><i class="bi bi-gear"></i> <span data-i18n="settings">Settings</span></a>
-          <a class="sidebar-nav-item" href="admin/index.html"><i class="bi bi-speedometer2"></i> <span data-i18n="admin_panel">Admin Panel</span></a>
-          <a class="sidebar-nav-item" href="change-password.html"><i class="bi bi-shield-lock"></i> <span data-i18n="security">Security</span></a>
-          <a class="sidebar-nav-item text-danger" href="#" id="mobileSignOutBtn"><i class="bi bi-box-arrow-right"></i> <span data-i18n="sign_out">Sign Out</span></a>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<div class="app-wrapper">
+<header class="app-header">
+<div class="header-container">
+<button aria-controls="mobileSidebar" class="btn btn-link d-lg-none me-2 text-reset p-0" data-bs-target="#mobileSidebar" data-bs-toggle="offcanvas" type="button">
+<i class="bi bi-list fs-3"></i>
+</button>
+<a class="d-flex align-items-center text-decoration-none" href="index.html">
+<i class="bi bi-feather fs-4 text-primary me-2"></i>
+<span class="fs-5 fw-bold text-main">MundiBlog</span>
+</a>
+<div class="d-flex align-items-center ms-auto gap-2">
+<a class="btn btn-primary btn-sm fw-medium px-3 rounded-pill" href="create-post.html?from=my-posts.html"><i class="bi bi-plus-lg me-1"></i> <span data-i18n="create">Create</span></a>
+<a class="text-decoration-none" href="profile.html">
+<span class="rounded-circle border text-white fw-bold" style="display: inline-grid; place-items: center; width: 32px; height: 32px; background: var(--primary-color);">A</span>
+</a>
+</div>
+</div>
+</header>
+<main class="app-main-content no-right-panel">
+<aside class="left-sidebar">
+<div>
+<div class="substack-logo-container">
+<a class="text-decoration-none d-flex align-items-center gap-2" href="index.html">
+<i class="bi bi-bookmark-fill substack-logo"></i>
+<span class="fs-5 fw-bold text-main" style="letter-spacing: -0.02em;">MundiBlog</span>
+</a>
+</div>
+<nav class="sidebar-nav">
+<a class="sidebar-nav-item" href="index.html">
+<i class="bi bi-house-door"></i> <span data-i18n="home">Home</span>
+</a>
+<a class="sidebar-nav-item" href="#">
+<i class="bi bi-inbox"></i> <span data-i18n="inbox">Inbox</span>
+</a>
+<a class="sidebar-nav-item" href="#">
+<i class="bi bi-heart"></i> <span data-i18n="liked_posts">Liked Posts</span>
+</a>
+<a aria-current="page" class="sidebar-nav-item active" href="my-posts.html">
+<i class="bi bi-journal-text"></i> <span data-i18n="my_articles">My Articles</span>
+</a>
+<a class="sidebar-nav-item" href="about.html">
+<i class="bi bi-info-circle"></i> <span data-i18n="about">About</span>
+</a>
+<a class="sidebar-nav-item" href="profile.html">
+<i class="bi bi-person"></i> <span data-i18n="profile">Profile</span>
+</a>
+</nav>
+<a class="sidebar-create-btn" data-create-from-my-posts="" href="create-post.html?new=1">
+<span data-i18n="create">Create</span> <i class="bi bi-plus-lg"></i>
+</a>
+</div>
+<div class="sidebar-footer-menu">
+<div class="dropdown">
+<button aria-expanded="false" class="btn btn-link text-decoration-none text-main d-flex align-items-center gap-2 p-1.5 w-100 border-0 text-start" data-bs-toggle="dropdown" type="button">
+<i class="bi bi-list fs-5"></i>
+<span class="fw-medium" data-i18n="more">More</span>
+</button>
+<ul class="dropdown-menu shadow border-light-subtle">
+<li><a class="dropdown-item py-2" href="settings.html"><i class="bi bi-gear me-2"></i> <span data-i18n="settings">Settings</span></a></li>
+<li><a class="dropdown-item py-2" href="admin/index.html"><i class="bi bi-speedometer2 me-2"></i> <span data-i18n="admin_panel">Admin Panel</span></a></li>
+<li><a class="dropdown-item py-2" href="change-password.html"><i class="bi bi-shield-lock me-2"></i> <span data-i18n="security">Security</span></a></li>
+<li><hr class="dropdown-divider"/></li>
+<li><a class="dropdown-item py-2 text-danger" href="#" id="signOutBtn"><i class="bi bi-box-arrow-right me-2"></i> <span data-i18n="sign_out">Sign Out</span></a></li>
+</ul>
+</div>
+</div>
+</aside>
+<div class="center-feed" style="max-width: 100%; align-items: stretch;">
+<section class="my-posts-workspace">
+<header class="my-posts-top">
+<h1 data-i18n="my_posts_title">My Articles</h1>
+</header>
+<div class="posts-toolbar">
+<div class="toolbar-main-row">
+<div class="toolbar-links-stack">
+<div aria-label="Post status filters" class="status-tabs" role="tablist">
+<button class="status-tab is-active" data-filter="all" type="button"><span data-i18n="all_posts_tab">All</span> (<span data-count-all="">5</span>)</button>
+<button class="status-tab" data-filter="draft" type="button"><span data-i18n="drafts">Drafts</span> (<span data-count-drafts="">2</span>)</button>
+<button class="status-tab" data-filter="published" type="button"><span data-i18n="published">Published</span> (<span data-count-published="">3</span>)</button>
+<button class="status-tab" data-filter="trash" type="button"><span data-i18n="trash">Trash</span> (<span data-count-trash="">1</span>)</button>
+</div>
+</div>
+<div class="toolbar-actions">
+<label class="post-search">
+<i class="bi bi-search"></i>
+<input data-i18n="search_posts" data-post-search="" placeholder="Search your posts..." type="search"/>
+</label>
+</div>
+</div>
+<div class="toolbar-filter-row">
+<div class="filter-actions">
+<select aria-label="Filter by language" class="admin-select" data-language-filter="">
+<option data-i18n="all_languages" value="all">All languages</option>
+<option data-i18n="english" value="en">English</option>
+<option data-i18n="vietnamese" value="vi">Vietnamese</option>
+<option data-i18n="chinese" value="zh">Chinese</option>
+</select>
+<select aria-label="Filter by date" class="admin-select">
+<option data-i18n="all_dates" value="all">All dates</option>
+<option value="2026-07">July 2026</option>
+<option value="2026-06">June 2026</option>
+</select>
+<select aria-label="Filter by category" class="admin-select" data-category-filter="">
+<option data-i18n="all_categories" value="all">All categories</option>
+<option data-i18n="cat_ai_translation" value="ai translation">AI Translation</option>
+<option data-i18n="cat_profile_branding" value="profile branding">Profile Branding</option>
+<option data-i18n="cat_design_general" value="design">Design</option>
+<option data-i18n="cat_analytics" value="analytics">Analytics</option>
+<option data-i18n="cat_localization" value="localization">Localization</option>
+</select>
+<span class="items-count" data-visible-count="">5 items</span>
+</div>
+</div>
+</div>
+<div class="bulk-action-toolbar" hidden="" id="bulkActionToolbar">
+<span class="bulk-count"><span id="bulkSelectedCount">0</span> selected</span>
+<div class="bulk-actions">
+<button class="command-btn btn-sm text-success" hidden="" id="bulkRestoreBtn"><i class="bi bi-arrow-counterclockwise"></i> <span data-i18n="restore_selected">Restore Selected</span></button>
+<button class="command-btn btn-sm text-danger" id="bulkDeleteBtn"><i class="bi bi-trash"></i> <span data-i18n="delete_selected">Delete Selected</span></button>
+</div>
+</div>
+<div class="posts-table-panel">
+<div class="posts-table-scroll">
+<table class="posts-table">
+<thead>
+<tr>
+<th class="select-col" scope="col"><input aria-label="Select all posts" class="row-check" data-select-all="" type="checkbox"/></th>
+<th data-i18n="title_label" scope="col">Title</th>
+<th data-i18n="status_label" scope="col">Status</th>
+<th data-i18n="original_language" scope="col">Original language</th>
+<th data-i18n="translated_language" scope="col">Translated language</th>
+<th data-i18n="updated" scope="col">Updated</th>
+<th data-i18n="reads" scope="col">Reads</th>
+<th data-i18n="actions" scope="col">Actions</th>
+</tr>
+</thead>
+<tbody data-post-table-body="">
+<tr data-category="ai translation" data-language="en" data-search="building ai assisted multilingual workflows localization translation" data-status="published">
+<td class="select-col"><input aria-label="Select Building AI-assisted multilingual workflows" class="row-check" type="checkbox"/></td>
+<td class="post-title-cell">
+<strong>Building AI-assisted multilingual workflows</strong>
+<span data-i18n="cat_ai_translation">AI Translation</span>
+</td>
+<td>
+<div class="dropdown">
+<span aria-expanded="false" class="status-badge is-published dropdown-toggle" data-bs-toggle="dropdown" role="button" style="cursor: pointer;"><i class="bi bi-check2-circle"></i><span data-i18n="status_published">Published</span></span>
+<ul class="dropdown-menu shadow-sm" style="font-size: 0.85rem; min-width: 120px;">
+<li><a class="dropdown-item d-flex align-items-center gap-2" href="#"><i class="bi bi-check2-circle text-success"></i> Published</a></li>
+<li><a class="dropdown-item d-flex align-items-center gap-2" href="#"><i class="bi bi-file-earmark-text text-warning"></i> Draft</a></li>
+<li><a class="dropdown-item d-flex align-items-center gap-2 text-danger" href="#"><i class="bi bi-trash3"></i> Trash</a></li>
+</ul>
+</div>
+</td>
+<td><span class="language-badge"><i class="fi fi-us rounded-1"></i> EN</span></td>
+<td>
+<div class="dropdown">
+<div aria-expanded="false" class="w-100" data-bs-toggle="dropdown" role="button" style="cursor: pointer; min-height: 28px; display: flex; align-items: center;">
+<span class="language-badge" style="background: rgba(13, 110, 253, 0.12); color: #0d6efd;"><i class="fi fi-vn rounded-1"></i> VI</span>
+<span class="language-badge" style="background: rgba(13, 110, 253, 0.12); color: #0d6efd;"><i class="fi fi-cn rounded-1"></i> ZH</span>
+</div>
+<ul class="dropdown-menu shadow-sm px-2 py-2" onclick="event.stopPropagation()" style="font-size: 0.85rem; min-width: 150px;">
+<li><h6 class="dropdown-header px-1 py-0 mb-2">Ngôn ngữ dịch</h6></li>
+<li>
+<div class="form-check form-switch mb-1">
+<input class="form-check-input" id="langEn_3d34fb44" type="checkbox"/>
+<label class="form-check-label d-flex align-items-center gap-2" for="langEn_3d34fb44"><i class="fi fi-us"></i> English</label>
+</div>
+</li>
+<li>
+<div class="form-check form-switch mb-1">
+<input checked="" class="form-check-input" id="langVi_3d34fb44" type="checkbox"/>
+<label class="form-check-label d-flex align-items-center gap-2" for="langVi_3d34fb44"><i class="fi fi-vn"></i> Tiếng Việt</label>
+</div>
+</li>
+<li>
+<div class="form-check form-switch mb-0">
+<input checked="" class="form-check-input" id="langZh_3d34fb44" type="checkbox"/>
+<label class="form-check-label d-flex align-items-center gap-2" for="langZh_3d34fb44"><i class="fi fi-cn"></i> Chinese</label>
+</div>
+</li>
+</ul>
+</div>
+</td>
+<td>Jul 07, 2026</td>
+<td>3,412</td>
+<td>
+<div class="action-group">
+<a class="action-btn" href="post-detail.html?id=5" title="Open"><i class="bi bi-box-arrow-up-right"></i></a>
+<a class="action-btn" href="create-post.html?edit=1&amp;from=my-posts.html" title="Edit"><i class="bi bi-pencil"></i></a>
+<a class="action-btn text-danger" href="#" title="Trash"><i class="bi bi-trash"></i></a>
+</div>
+</td>
+</tr>
+<tr data-category="profile branding" data-language="en" data-search="product notes mundiblog profiles draft branding profile" data-status="draft">
+<td class="select-col"><input aria-label="Select Product notes for MundiBlog profiles" class="row-check" type="checkbox"/></td>
+<td class="post-title-cell">
+<strong>Product notes for MundiBlog profiles</strong>
+<span data-i18n="cat_profile_branding">Profile Branding</span>
+</td>
+<td>
+<div class="dropdown">
+<span aria-expanded="false" class="status-badge is-draft dropdown-toggle" data-bs-toggle="dropdown" role="button" style="cursor: pointer;"><i class="bi bi-file-earmark-text"></i><span data-i18n="status_draft">Draft</span></span>
+<ul class="dropdown-menu shadow-sm" style="font-size: 0.85rem; min-width: 120px;">
+<li><a class="dropdown-item d-flex align-items-center gap-2" href="#"><i class="bi bi-check2-circle text-success"></i> Published</a></li>
+<li><a class="dropdown-item d-flex align-items-center gap-2" href="#"><i class="bi bi-file-earmark-text text-warning"></i> Draft</a></li>
+<li><a class="dropdown-item d-flex align-items-center gap-2 text-danger" href="#"><i class="bi bi-trash3"></i> Trash</a></li>
+</ul>
+</div>
+</td>
+<td><span class="language-badge"><i class="fi fi-us rounded-1"></i> EN</span></td>
+<td>
+<div class="dropdown">
+<div aria-expanded="false" class="w-100" data-bs-toggle="dropdown" role="button" style="cursor: pointer; min-height: 28px; display: flex; align-items: center;">
+<span class="text-muted small">-</span>
+</div>
+<ul class="dropdown-menu shadow-sm px-2 py-2" onclick="event.stopPropagation()" style="font-size: 0.85rem; min-width: 150px;">
+<li><h6 class="dropdown-header px-1 py-0 mb-2">Ngôn ngữ dịch</h6></li>
+<li>
+<div class="form-check form-switch mb-1">
+<input class="form-check-input" id="langEn_3a34d557" type="checkbox"/>
+<label class="form-check-label d-flex align-items-center gap-2" for="langEn_3a34d557"><i class="fi fi-us"></i> English</label>
+</div>
+</li>
+<li>
+<div class="form-check form-switch mb-1">
+<input checked="" class="form-check-input" id="langVi_3a34d557" type="checkbox"/>
+<label class="form-check-label d-flex align-items-center gap-2" for="langVi_3a34d557"><i class="fi fi-vn"></i> Tiếng Việt</label>
+</div>
+</li>
+<li>
+<div class="form-check form-switch mb-0">
+<input checked="" class="form-check-input" id="langZh_3a34d557" type="checkbox"/>
+<label class="form-check-label d-flex align-items-center gap-2" for="langZh_3a34d557"><i class="fi fi-cn"></i> Chinese</label>
+</div>
+</li>
+</ul>
+</div>
+</td>
+<td>Jul 06, 2026</td>
+<td>0</td>
+<td>
+<div class="action-group">
+<a class="action-btn" href="create-post.html?edit=2" title="Open"><i class="bi bi-box-arrow-up-right"></i></a>
+<a class="action-btn" href="create-post.html?edit=2&amp;from=my-posts.html" title="Edit"><i class="bi bi-pencil"></i></a>
+<a class="action-btn text-danger" href="#" title="Trash"><i class="bi bi-trash"></i></a>
+</div>
+</td>
+</tr>
+<tr data-category="design" data-language="vi" data-search="profile design guide vietnamese ui avatar bio" data-status="published">
+<td class="select-col"><input aria-label="Select Profile design guide for creators" class="row-check" type="checkbox"/></td>
+<td class="post-title-cell">
+<strong>Profile design guide for creators</strong>
+<span data-i18n="cat_design_general">Design</span>
+</td>
+<td>
+<div class="dropdown">
+<span aria-expanded="false" class="status-badge is-published dropdown-toggle" data-bs-toggle="dropdown" role="button" style="cursor: pointer;"><i class="bi bi-check2-circle"></i><span data-i18n="status_published">Published</span></span>
+<ul class="dropdown-menu shadow-sm" style="font-size: 0.85rem; min-width: 120px;">
+<li><a class="dropdown-item d-flex align-items-center gap-2" href="#"><i class="bi bi-check2-circle text-success"></i> Published</a></li>
+<li><a class="dropdown-item d-flex align-items-center gap-2" href="#"><i class="bi bi-file-earmark-text text-warning"></i> Draft</a></li>
+<li><a class="dropdown-item d-flex align-items-center gap-2 text-danger" href="#"><i class="bi bi-trash3"></i> Trash</a></li>
+</ul>
+</div>
+</td>
+<td><span class="language-badge"><i class="fi fi-vn rounded-1"></i> VI</span></td>
+<td>
+<div class="dropdown">
+<div aria-expanded="false" class="w-100" data-bs-toggle="dropdown" role="button" style="cursor: pointer; min-height: 28px; display: flex; align-items: center;">
+<span class="language-badge" style="background: rgba(13, 110, 253, 0.12); color: #0d6efd;"><i class="fi fi-us rounded-1"></i> EN</span>
+</div>
+<ul class="dropdown-menu shadow-sm px-2 py-2" onclick="event.stopPropagation()" style="font-size: 0.85rem; min-width: 150px;">
+<li><h6 class="dropdown-header px-1 py-0 mb-2">Ngôn ngữ dịch</h6></li>
+<li>
+<div class="form-check form-switch mb-1">
+<input class="form-check-input" id="langEn_7b65f5a2" type="checkbox"/>
+<label class="form-check-label d-flex align-items-center gap-2" for="langEn_7b65f5a2"><i class="fi fi-us"></i> English</label>
+</div>
+</li>
+<li>
+<div class="form-check form-switch mb-1">
+<input checked="" class="form-check-input" id="langVi_7b65f5a2" type="checkbox"/>
+<label class="form-check-label d-flex align-items-center gap-2" for="langVi_7b65f5a2"><i class="fi fi-vn"></i> Tiếng Việt</label>
+</div>
+</li>
+<li>
+<div class="form-check form-switch mb-0">
+<input checked="" class="form-check-input" id="langZh_7b65f5a2" type="checkbox"/>
+<label class="form-check-label d-flex align-items-center gap-2" for="langZh_7b65f5a2"><i class="fi fi-cn"></i> Chinese</label>
+</div>
+</li>
+</ul>
+</div>
+</td>
+<td>Jul 05, 2026</td>
+<td>1,129</td>
+<td>
+<div class="action-group">
+<a class="action-btn" href="post-detail.html?id=6" title="Open"><i class="bi bi-box-arrow-up-right"></i></a>
+<a class="action-btn" href="create-post.html?from=my-posts.html" title="Edit"><i class="bi bi-pencil"></i></a>
+<a class="action-btn text-danger" href="#" title="Trash"><i class="bi bi-trash"></i></a>
+</div>
+</td>
+</tr>
+<tr data-category="analytics" data-language="en" data-search="creator analytics weekly recap metrics draft" data-status="draft">
+<td class="select-col"><input aria-label="Select Creator analytics weekly recap" class="row-check" type="checkbox"/></td>
+<td class="post-title-cell">
+<strong>Creator analytics weekly recap</strong>
+<span data-i18n="cat_analytics">Analytics</span>
+</td>
+<td>
+<div class="dropdown">
+<span aria-expanded="false" class="status-badge is-draft dropdown-toggle" data-bs-toggle="dropdown" role="button" style="cursor: pointer;"><i class="bi bi-file-earmark-text"></i><span data-i18n="status_draft">Draft</span></span>
+<ul class="dropdown-menu shadow-sm" style="font-size: 0.85rem; min-width: 120px;">
+<li><a class="dropdown-item d-flex align-items-center gap-2" href="#"><i class="bi bi-check2-circle text-success"></i> Published</a></li>
+<li><a class="dropdown-item d-flex align-items-center gap-2" href="#"><i class="bi bi-file-earmark-text text-warning"></i> Draft</a></li>
+<li><a class="dropdown-item d-flex align-items-center gap-2 text-danger" href="#"><i class="bi bi-trash3"></i> Trash</a></li>
+</ul>
+</div>
+</td>
+<td><span class="language-badge"><i class="fi fi-us rounded-1"></i> EN</span></td>
+<td>
+<div class="dropdown">
+<div aria-expanded="false" class="w-100" data-bs-toggle="dropdown" role="button" style="cursor: pointer; min-height: 28px; display: flex; align-items: center;">
+<span class="text-muted small">-</span>
+</div>
+<ul class="dropdown-menu shadow-sm px-2 py-2" onclick="event.stopPropagation()" style="font-size: 0.85rem; min-width: 150px;">
+<li><h6 class="dropdown-header px-1 py-0 mb-2">Ngôn ngữ dịch</h6></li>
+<li>
+<div class="form-check form-switch mb-1">
+<input class="form-check-input" id="langEn_18c774ef" type="checkbox"/>
+<label class="form-check-label d-flex align-items-center gap-2" for="langEn_18c774ef"><i class="fi fi-us"></i> English</label>
+</div>
+</li>
+<li>
+<div class="form-check form-switch mb-1">
+<input checked="" class="form-check-input" id="langVi_18c774ef" type="checkbox"/>
+<label class="form-check-label d-flex align-items-center gap-2" for="langVi_18c774ef"><i class="fi fi-vn"></i> Tiếng Việt</label>
+</div>
+</li>
+<li>
+<div class="form-check form-switch mb-0">
+<input checked="" class="form-check-input" id="langZh_18c774ef" type="checkbox"/>
+<label class="form-check-label d-flex align-items-center gap-2" for="langZh_18c774ef"><i class="fi fi-cn"></i> Chinese</label>
+</div>
+</li>
+</ul>
+</div>
+</td>
+<td>Jul 03, 2026</td>
+<td>0</td>
+<td>
+<div class="action-group">
+<a class="action-btn" href="create-post.html?from=my-posts.html" title="Open"><i class="bi bi-box-arrow-up-right"></i></a>
+<a class="action-btn" href="create-post.html?from=my-posts.html" title="Edit"><i class="bi bi-pencil"></i></a>
+<a class="action-btn text-danger" href="#" title="Trash"><i class="bi bi-trash"></i></a>
+</div>
+</td>
+</tr>
+<tr data-category="localization" data-language="en" data-search="ai translation qa checklist localization review" data-status="published">
+<td class="select-col"><input aria-label="Select AI translation QA checklist" class="row-check" type="checkbox"/></td>
+<td class="post-title-cell">
+<strong>AI translation QA checklist</strong>
+<span data-i18n="cat_localization">Localization</span>
+</td>
+<td>
+<div class="dropdown">
+<span aria-expanded="false" class="status-badge is-published dropdown-toggle" data-bs-toggle="dropdown" role="button" style="cursor: pointer;"><i class="bi bi-check2-circle"></i><span data-i18n="status_published">Published</span></span>
+<ul class="dropdown-menu shadow-sm" style="font-size: 0.85rem; min-width: 120px;">
+<li><a class="dropdown-item d-flex align-items-center gap-2" href="#"><i class="bi bi-check2-circle text-success"></i> Published</a></li>
+<li><a class="dropdown-item d-flex align-items-center gap-2" href="#"><i class="bi bi-file-earmark-text text-warning"></i> Draft</a></li>
+<li><a class="dropdown-item d-flex align-items-center gap-2 text-danger" href="#"><i class="bi bi-trash3"></i> Trash</a></li>
+</ul>
+</div>
+</td>
+<td><span class="language-badge"><i class="fi fi-us rounded-1"></i> EN</span></td>
+<td>
+<div class="dropdown">
+<div aria-expanded="false" class="w-100" data-bs-toggle="dropdown" role="button" style="cursor: pointer; min-height: 28px; display: flex; align-items: center;">
+<span class="language-badge" style="background: rgba(13, 110, 253, 0.12); color: #0d6efd;"><i class="fi fi-vn rounded-1"></i> VI</span>
+</div>
+<ul class="dropdown-menu shadow-sm px-2 py-2" onclick="event.stopPropagation()" style="font-size: 0.85rem; min-width: 150px;">
+<li><h6 class="dropdown-header px-1 py-0 mb-2">Ngôn ngữ dịch</h6></li>
+<li>
+<div class="form-check form-switch mb-1">
+<input class="form-check-input" id="langEn_ed1f0783" type="checkbox"/>
+<label class="form-check-label d-flex align-items-center gap-2" for="langEn_ed1f0783"><i class="fi fi-us"></i> English</label>
+</div>
+</li>
+<li>
+<div class="form-check form-switch mb-1">
+<input checked="" class="form-check-input" id="langVi_ed1f0783" type="checkbox"/>
+<label class="form-check-label d-flex align-items-center gap-2" for="langVi_ed1f0783"><i class="fi fi-vn"></i> Tiếng Việt</label>
+</div>
+</li>
+<li>
+<div class="form-check form-switch mb-0">
+<input checked="" class="form-check-input" id="langZh_ed1f0783" type="checkbox"/>
+<label class="form-check-label d-flex align-items-center gap-2" for="langZh_ed1f0783"><i class="fi fi-cn"></i> Chinese</label>
+</div>
+</li>
+</ul>
+</div>
+</td>
+<td>Jun 29, 2026</td>
+<td>842</td>
+<td>
+<div class="action-group">
+<a class="action-btn" href="post-detail.html?id=4" title="Open"><i class="bi bi-box-arrow-up-right"></i></a>
+<a class="action-btn" href="create-post.html?from=my-posts.html" title="Edit"><i class="bi bi-pencil"></i></a>
+<a class="action-btn text-danger" href="#" title="Trash"><i class="bi bi-trash"></i></a>
+</div>
+</td>
+</tr>
+<tr data-category="design" data-language="vi" data-search="old homepage layout archived trash" data-status="trash">
+<td class="select-col"><input aria-label="Select Old homepage layout notes" class="row-check" type="checkbox"/></td>
+<td class="post-title-cell">
+<strong>Old homepage layout notes</strong>
+<span data-i18n="cat_design_general">Design</span>
+</td>
+<td>
+<div class="dropdown">
+<span aria-expanded="false" class="status-badge is-trash dropdown-toggle" data-bs-toggle="dropdown" role="button" style="cursor: pointer;"><i class="bi bi-trash3"></i><span>Trash</span></span>
+<ul class="dropdown-menu shadow-sm" style="font-size: 0.85rem; min-width: 120px;">
+<li><a class="dropdown-item d-flex align-items-center gap-2" href="#"><i class="bi bi-check2-circle text-success"></i> Published</a></li>
+<li><a class="dropdown-item d-flex align-items-center gap-2" href="#"><i class="bi bi-file-earmark-text text-warning"></i> Draft</a></li>
+<li><a class="dropdown-item d-flex align-items-center gap-2 text-danger" href="#"><i class="bi bi-trash3"></i> Trash</a></li>
+</ul>
+</div>
+</td>
+<td><span class="language-badge"><i class="fi fi-vn rounded-1"></i> VI</span></td>
+<td>
+<div class="dropdown">
+<div aria-expanded="false" class="w-100" data-bs-toggle="dropdown" role="button" style="cursor: pointer; min-height: 28px; display: flex; align-items: center;">
+<span class="text-muted small">-</span>
+</div>
+<ul class="dropdown-menu shadow-sm px-2 py-2" onclick="event.stopPropagation()" style="font-size: 0.85rem; min-width: 150px;">
+<li><h6 class="dropdown-header px-1 py-0 mb-2">Ngôn ngữ dịch</h6></li>
+<li>
+<div class="form-check form-switch mb-1">
+<input class="form-check-input" id="langEn_09dd0573" type="checkbox"/>
+<label class="form-check-label d-flex align-items-center gap-2" for="langEn_09dd0573"><i class="fi fi-us"></i> English</label>
+</div>
+</li>
+<li>
+<div class="form-check form-switch mb-1">
+<input checked="" class="form-check-input" id="langVi_09dd0573" type="checkbox"/>
+<label class="form-check-label d-flex align-items-center gap-2" for="langVi_09dd0573"><i class="fi fi-vn"></i> Tiếng Việt</label>
+</div>
+</li>
+<li>
+<div class="form-check form-switch mb-0">
+<input checked="" class="form-check-input" id="langZh_09dd0573" type="checkbox"/>
+<label class="form-check-label d-flex align-items-center gap-2" for="langZh_09dd0573"><i class="fi fi-cn"></i> Chinese</label>
+</div>
+</li>
+</ul>
+</div>
+</td>
+<td>Jun 21, 2026</td>
+<td>218</td>
+<td>
+<div class="action-group">
+<a class="action-btn" href="create-post.html?from=my-posts.html" title="Restore"><i class="bi bi-arrow-counterclockwise"></i></a>
+<a class="action-btn text-danger" href="#" title="Delete"><i class="bi bi-trash3"></i></a>
+</div>
+</td>
+</tr>
+<tr data-category="analytics" data-language="en" data-search="monthly active users growth 2026 q2" data-status="published">
+<td class="select-col"><input aria-label="Select Monthly active users growth" class="row-check" type="checkbox"/></td>
+<td class="post-title-cell">
+<strong>Monthly active users growth Q2</strong>
+<span data-i18n="cat_analytics">Analytics</span>
+</td>
+<td>
+<div class="dropdown">
+<span aria-expanded="false" class="status-badge is-published dropdown-toggle" data-bs-toggle="dropdown" role="button" style="cursor: pointer;"><i class="bi bi-check2-circle"></i><span data-i18n="status_published">Published</span></span>
+<ul class="dropdown-menu shadow-sm" style="font-size: 0.85rem; min-width: 120px;">
+<li><a class="dropdown-item d-flex align-items-center gap-2" href="#"><i class="bi bi-check2-circle text-success"></i> Published</a></li>
+<li><a class="dropdown-item d-flex align-items-center gap-2" href="#"><i class="bi bi-file-earmark-text text-warning"></i> Draft</a></li>
+<li><a class="dropdown-item d-flex align-items-center gap-2 text-danger" href="#"><i class="bi bi-trash3"></i> Trash</a></li>
+</ul>
+</div>
+</td>
+<td><span class="language-badge"><i class="fi fi-us rounded-1"></i> EN</span></td>
+<td>
+<div class="dropdown">
+<div aria-expanded="false" class="w-100" data-bs-toggle="dropdown" role="button" style="cursor: pointer; min-height: 28px; display: flex; align-items: center;">
+<span class="text-muted small">-</span>
+</div>
+<ul class="dropdown-menu shadow-sm px-2 py-2" onclick="event.stopPropagation()" style="font-size: 0.85rem; min-width: 150px;">
+<li><h6 class="dropdown-header px-1 py-0 mb-2">Ngôn ngữ dịch</h6></li>
+<li>
+<div class="form-check form-switch mb-1">
+<input class="form-check-input" id="langEn_e3081dd1" type="checkbox"/>
+<label class="form-check-label d-flex align-items-center gap-2" for="langEn_e3081dd1"><i class="fi fi-us"></i> English</label>
+</div>
+</li>
+<li>
+<div class="form-check form-switch mb-1">
+<input checked="" class="form-check-input" id="langVi_e3081dd1" type="checkbox"/>
+<label class="form-check-label d-flex align-items-center gap-2" for="langVi_e3081dd1"><i class="fi fi-vn"></i> Tiếng Việt</label>
+</div>
+</li>
+<li>
+<div class="form-check form-switch mb-0">
+<input checked="" class="form-check-input" id="langZh_e3081dd1" type="checkbox"/>
+<label class="form-check-label d-flex align-items-center gap-2" for="langZh_e3081dd1"><i class="fi fi-cn"></i> Chinese</label>
+</div>
+</li>
+</ul>
+</div>
+</td>
+<td>Jul 08, 2026</td>
+<td>5,102</td>
+<td>
+<div class="action-group">
+<a class="action-btn" href="#" title="Open"><i class="bi bi-box-arrow-up-right"></i></a>
+<a class="action-btn" href="#" title="Edit"><i class="bi bi-pencil"></i></a>
+<a class="action-btn text-danger" href="#" title="Trash"><i class="bi bi-trash"></i></a>
+</div>
+</td>
+</tr>
+<tr data-category="design" data-language="vi" data-search="typography principles for readability vietnam fonts" data-status="draft">
+<td class="select-col"><input aria-label="Select Typography principles" class="row-check" type="checkbox"/></td>
+<td class="post-title-cell">
+<strong>Typography principles for readability</strong>
+<span data-i18n="cat_design_general">Design</span>
+</td>
+<td>
+<div class="dropdown">
+<span aria-expanded="false" class="status-badge is-draft dropdown-toggle" data-bs-toggle="dropdown" role="button" style="cursor: pointer;"><i class="bi bi-file-earmark-text"></i><span data-i18n="status_draft">Draft</span></span>
+<ul class="dropdown-menu shadow-sm" style="font-size: 0.85rem; min-width: 120px;">
+<li><a class="dropdown-item d-flex align-items-center gap-2" href="#"><i class="bi bi-check2-circle text-success"></i> Published</a></li>
+<li><a class="dropdown-item d-flex align-items-center gap-2" href="#"><i class="bi bi-file-earmark-text text-warning"></i> Draft</a></li>
+<li><a class="dropdown-item d-flex align-items-center gap-2 text-danger" href="#"><i class="bi bi-trash3"></i> Trash</a></li>
+</ul>
+</div>
+</td>
+<td><span class="language-badge"><i class="fi fi-vn rounded-1"></i> VI</span></td>
+<td>
+<div class="dropdown">
+<div aria-expanded="false" class="w-100" data-bs-toggle="dropdown" role="button" style="cursor: pointer; min-height: 28px; display: flex; align-items: center;">
+<span class="text-muted small">-</span>
+</div>
+<ul class="dropdown-menu shadow-sm px-2 py-2" onclick="event.stopPropagation()" style="font-size: 0.85rem; min-width: 150px;">
+<li><h6 class="dropdown-header px-1 py-0 mb-2">Ngôn ngữ dịch</h6></li>
+<li>
+<div class="form-check form-switch mb-1">
+<input class="form-check-input" id="langEn_f107cac4" type="checkbox"/>
+<label class="form-check-label d-flex align-items-center gap-2" for="langEn_f107cac4"><i class="fi fi-us"></i> English</label>
+</div>
+</li>
+<li>
+<div class="form-check form-switch mb-1">
+<input checked="" class="form-check-input" id="langVi_f107cac4" type="checkbox"/>
+<label class="form-check-label d-flex align-items-center gap-2" for="langVi_f107cac4"><i class="fi fi-vn"></i> Tiếng Việt</label>
+</div>
+</li>
+<li>
+<div class="form-check form-switch mb-0">
+<input checked="" class="form-check-input" id="langZh_f107cac4" type="checkbox"/>
+<label class="form-check-label d-flex align-items-center gap-2" for="langZh_f107cac4"><i class="fi fi-cn"></i> Chinese</label>
+</div>
+</li>
+</ul>
+</div>
+</td>
+<td>Jul 09, 2026</td>
+<td>0</td>
+<td>
+<div class="action-group">
+<a class="action-btn" href="#" title="Open"><i class="bi bi-box-arrow-up-right"></i></a>
+<a class="action-btn" href="#" title="Edit"><i class="bi bi-pencil"></i></a>
+<a class="action-btn text-danger" href="#" title="Trash"><i class="bi bi-trash"></i></a>
+</div>
+</td>
+</tr>
+<tr data-category="profile branding" data-language="en" data-search="color theory in personal branding psychology" data-status="published">
+<td class="select-col"><input aria-label="Select Color theory in branding" class="row-check" type="checkbox"/></td>
+<td class="post-title-cell">
+<strong>Color theory in personal branding</strong>
+<span data-i18n="cat_profile_branding">Profile Branding</span>
+</td>
+<td>
+<div class="dropdown">
+<span aria-expanded="false" class="status-badge is-published dropdown-toggle" data-bs-toggle="dropdown" role="button" style="cursor: pointer;"><i class="bi bi-check2-circle"></i><span data-i18n="status_published">Published</span></span>
+<ul class="dropdown-menu shadow-sm" style="font-size: 0.85rem; min-width: 120px;">
+<li><a class="dropdown-item d-flex align-items-center gap-2" href="#"><i class="bi bi-check2-circle text-success"></i> Published</a></li>
+<li><a class="dropdown-item d-flex align-items-center gap-2" href="#"><i class="bi bi-file-earmark-text text-warning"></i> Draft</a></li>
+<li><a class="dropdown-item d-flex align-items-center gap-2 text-danger" href="#"><i class="bi bi-trash3"></i> Trash</a></li>
+</ul>
+</div>
+</td>
+<td><span class="language-badge"><i class="fi fi-us rounded-1"></i> EN</span></td>
+<td>
+<div class="dropdown">
+<div aria-expanded="false" class="w-100" data-bs-toggle="dropdown" role="button" style="cursor: pointer; min-height: 28px; display: flex; align-items: center;">
+<span class="language-badge" style="background: rgba(13, 110, 253, 0.12); color: #0d6efd;"><i class="fi fi-cn rounded-1"></i> ZH</span>
+</div>
+<ul class="dropdown-menu shadow-sm px-2 py-2" onclick="event.stopPropagation()" style="font-size: 0.85rem; min-width: 150px;">
+<li><h6 class="dropdown-header px-1 py-0 mb-2">Ngôn ngữ dịch</h6></li>
+<li>
+<div class="form-check form-switch mb-1">
+<input class="form-check-input" id="langEn_580bdef3" type="checkbox"/>
+<label class="form-check-label d-flex align-items-center gap-2" for="langEn_580bdef3"><i class="fi fi-us"></i> English</label>
+</div>
+</li>
+<li>
+<div class="form-check form-switch mb-1">
+<input checked="" class="form-check-input" id="langVi_580bdef3" type="checkbox"/>
+<label class="form-check-label d-flex align-items-center gap-2" for="langVi_580bdef3"><i class="fi fi-vn"></i> Tiếng Việt</label>
+</div>
+</li>
+<li>
+<div class="form-check form-switch mb-0">
+<input checked="" class="form-check-input" id="langZh_580bdef3" type="checkbox"/>
+<label class="form-check-label d-flex align-items-center gap-2" for="langZh_580bdef3"><i class="fi fi-cn"></i> Chinese</label>
+</div>
+</li>
+</ul>
+</div>
+</td>
+<td>Jul 01, 2026</td>
+<td>8,433</td>
+<td>
+<div class="action-group">
+<a class="action-btn" href="#" title="Open"><i class="bi bi-box-arrow-up-right"></i></a>
+<a class="action-btn" href="#" title="Edit"><i class="bi bi-pencil"></i></a>
+<a class="action-btn text-danger" href="#" title="Trash"><i class="bi bi-trash"></i></a>
+</div>
+</td>
+</tr>
+<tr data-category="localization" data-language="zh" data-search="translating idioms context translation chinese" data-status="draft">
+<td class="select-col"><input aria-label="Select Translating idioms" class="row-check" type="checkbox"/></td>
+<td class="post-title-cell">
+<strong>Translating idioms with AI context</strong>
+<span data-i18n="cat_localization">Localization</span>
+</td>
+<td>
+<div class="dropdown">
+<span aria-expanded="false" class="status-badge is-draft dropdown-toggle" data-bs-toggle="dropdown" role="button" style="cursor: pointer;"><i class="bi bi-file-earmark-text"></i><span data-i18n="status_draft">Draft</span></span>
+<ul class="dropdown-menu shadow-sm" style="font-size: 0.85rem; min-width: 120px;">
+<li><a class="dropdown-item d-flex align-items-center gap-2" href="#"><i class="bi bi-check2-circle text-success"></i> Published</a></li>
+<li><a class="dropdown-item d-flex align-items-center gap-2" href="#"><i class="bi bi-file-earmark-text text-warning"></i> Draft</a></li>
+<li><a class="dropdown-item d-flex align-items-center gap-2 text-danger" href="#"><i class="bi bi-trash3"></i> Trash</a></li>
+</ul>
+</div>
+</td>
+<td><span class="language-badge"><i class="fi fi-cn rounded-1"></i> ZH</span></td>
+<td>
+<div class="dropdown">
+<div aria-expanded="false" class="w-100" data-bs-toggle="dropdown" role="button" style="cursor: pointer; min-height: 28px; display: flex; align-items: center;">
+<span class="text-muted small">-</span>
+</div>
+<ul class="dropdown-menu shadow-sm px-2 py-2" onclick="event.stopPropagation()" style="font-size: 0.85rem; min-width: 150px;">
+<li><h6 class="dropdown-header px-1 py-0 mb-2">Ngôn ngữ dịch</h6></li>
+<li>
+<div class="form-check form-switch mb-1">
+<input class="form-check-input" id="langEn_742e5f9d" type="checkbox"/>
+<label class="form-check-label d-flex align-items-center gap-2" for="langEn_742e5f9d"><i class="fi fi-us"></i> English</label>
+</div>
+</li>
+<li>
+<div class="form-check form-switch mb-1">
+<input checked="" class="form-check-input" id="langVi_742e5f9d" type="checkbox"/>
+<label class="form-check-label d-flex align-items-center gap-2" for="langVi_742e5f9d"><i class="fi fi-vn"></i> Tiếng Việt</label>
+</div>
+</li>
+<li>
+<div class="form-check form-switch mb-0">
+<input checked="" class="form-check-input" id="langZh_742e5f9d" type="checkbox"/>
+<label class="form-check-label d-flex align-items-center gap-2" for="langZh_742e5f9d"><i class="fi fi-cn"></i> Chinese</label>
+</div>
+</li>
+</ul>
+</div>
+</td>
+<td>Jun 28, 2026</td>
+<td>0</td>
+<td>
+<div class="action-group">
+<a class="action-btn" href="#" title="Open"><i class="bi bi-box-arrow-up-right"></i></a>
+<a class="action-btn" href="#" title="Edit"><i class="bi bi-pencil"></i></a>
+<a class="action-btn text-danger" href="#" title="Trash"><i class="bi bi-trash"></i></a>
+</div>
+</td>
+</tr>
+<tr data-category="ai translation" data-language="en" data-search="old api endpoints migration deprecated trash" data-status="trash">
+<td class="select-col"><input aria-label="Select Old API endpoints" class="row-check" type="checkbox"/></td>
+<td class="post-title-cell">
+<strong>Old translation API endpoints (Deprecated)</strong>
+<span data-i18n="cat_ai_translation">AI Translation</span>
+</td>
+<td>
+<div class="dropdown">
+<span aria-expanded="false" class="status-badge is-trash dropdown-toggle" data-bs-toggle="dropdown" role="button" style="cursor: pointer;"><i class="bi bi-trash3"></i><span>Trash</span></span>
+<ul class="dropdown-menu shadow-sm" style="font-size: 0.85rem; min-width: 120px;">
+<li><a class="dropdown-item d-flex align-items-center gap-2" href="#"><i class="bi bi-check2-circle text-success"></i> Published</a></li>
+<li><a class="dropdown-item d-flex align-items-center gap-2" href="#"><i class="bi bi-file-earmark-text text-warning"></i> Draft</a></li>
+<li><a class="dropdown-item d-flex align-items-center gap-2 text-danger" href="#"><i class="bi bi-trash3"></i> Trash</a></li>
+</ul>
+</div>
+</td>
+<td><span class="language-badge"><i class="fi fi-us rounded-1"></i> EN</span></td>
+<td>
+<div class="dropdown">
+<div aria-expanded="false" class="w-100" data-bs-toggle="dropdown" role="button" style="cursor: pointer; min-height: 28px; display: flex; align-items: center;">
+<span class="text-muted small">-</span>
+</div>
+<ul class="dropdown-menu shadow-sm px-2 py-2" onclick="event.stopPropagation()" style="font-size: 0.85rem; min-width: 150px;">
+<li><h6 class="dropdown-header px-1 py-0 mb-2">Ngôn ngữ dịch</h6></li>
+<li>
+<div class="form-check form-switch mb-1">
+<input class="form-check-input" id="langEn_5a6f181c" type="checkbox"/>
+<label class="form-check-label d-flex align-items-center gap-2" for="langEn_5a6f181c"><i class="fi fi-us"></i> English</label>
+</div>
+</li>
+<li>
+<div class="form-check form-switch mb-1">
+<input checked="" class="form-check-input" id="langVi_5a6f181c" type="checkbox"/>
+<label class="form-check-label d-flex align-items-center gap-2" for="langVi_5a6f181c"><i class="fi fi-vn"></i> Tiếng Việt</label>
+</div>
+</li>
+<li>
+<div class="form-check form-switch mb-0">
+<input checked="" class="form-check-input" id="langZh_5a6f181c" type="checkbox"/>
+<label class="form-check-label d-flex align-items-center gap-2" for="langZh_5a6f181c"><i class="fi fi-cn"></i> Chinese</label>
+</div>
+</li>
+</ul>
+</div>
+</td>
+<td>May 15, 2026</td>
+<td>1,024</td>
+<td>
+<div class="action-group">
+<a class="action-btn" href="#" title="Restore"><i class="bi bi-arrow-counterclockwise"></i></a>
+<a class="action-btn text-danger" href="#" title="Delete"><i class="bi bi-trash3"></i></a>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="empty-state" data-empty-state="">
+<i class="bi bi-search"></i>
+<strong data-i18n="no_posts_found">No posts match your filters.</strong>
+</div>
+</div>
+</section>
+</div>
+</main>
+</div>
+<div aria-labelledby="mobileSidebarLabel" class="offcanvas offcanvas-start" id="mobileSidebar" tabindex="-1">
+<div class="offcanvas-header border-bottom">
+<a class="text-decoration-none d-flex align-items-center gap-2" href="index.html">
+<i class="bi bi-bookmark-fill text-primary fs-4"></i>
+<span class="fs-5 fw-bold text-main" style="letter-spacing: -0.02em;">MundiBlog</span>
+</a>
+<button aria-label="Close" class="btn-close" data-bs-dismiss="offcanvas" type="button"></button>
+</div>
+<div class="offcanvas-body d-flex flex-column p-3">
+<nav class="sidebar-nav mb-3">
+<a class="sidebar-nav-item" href="index.html">
+<i class="bi bi-house-door"></i> <span data-i18n="home">Home</span>
+</a>
+<a class="sidebar-nav-item" href="#">
+<i class="bi bi-inbox"></i> <span data-i18n="inbox">Inbox</span>
+</a>
+<a class="sidebar-nav-item" href="#">
+<i class="bi bi-heart"></i> <span data-i18n="liked_posts">Liked Posts</span>
+</a>
+<a aria-current="page" class="sidebar-nav-item active" href="my-posts.html">
+<i class="bi bi-journal-text"></i> <span data-i18n="my_articles">My Articles</span>
+</a>
+<a class="sidebar-nav-item" href="about.html">
+<i class="bi bi-info-circle"></i> <span data-i18n="about">About</span>
+</a>
+<a class="sidebar-nav-item" href="profile.html">
+<i class="bi bi-person"></i> <span data-i18n="profile">Profile</span>
+</a>
+</nav>
+<a class="sidebar-create-btn mb-4" data-create-from-my-posts="" href="create-post.html?new=1">
+<span data-i18n="create">Create</span> <i class="bi bi-plus-lg"></i>
+</a>
+<div class="mt-auto pt-3 border-top">
+<div class="d-flex flex-column gap-1">
+<a class="sidebar-nav-item" href="settings.html"><i class="bi bi-gear"></i> <span data-i18n="settings">Settings</span></a>
+<a class="sidebar-nav-item" href="admin/index.html"><i class="bi bi-speedometer2"></i> <span data-i18n="admin_panel">Admin Panel</span></a>
+<a class="sidebar-nav-item" href="change-password.html"><i class="bi bi-shield-lock"></i> <span data-i18n="security">Security</span></a>
+<a class="sidebar-nav-item text-danger" href="#" id="mobileSignOutBtn"><i class="bi bi-box-arrow-right"></i> <span data-i18n="sign_out">Sign Out</span></a>
+</div>
+</div>
+</div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="assets/js/core.js?v=4"></script>
-  <script src="assets/js/components.js"></script>
-  <script>
+<script src="assets/js/components.js"></script>
+<script>
     document.addEventListener('DOMContentLoaded', () => {
       let rows = Array.from(document.querySelectorAll('[data-post-table-body] tr'));
       const filterButtons = Array.from(document.querySelectorAll('[data-filter]'));
@@ -1216,6 +1583,99 @@
             applyFilters();
           }
         }
+      });
+
+      
+      // Handle Status Dropdown interactions
+      document.querySelectorAll('td:nth-child(3) .dropdown-menu').forEach(menu => {
+        menu.addEventListener('click', (e) => {
+          e.preventDefault();
+          const item = e.target.closest('.dropdown-item');
+          if (!item) return;
+
+          const tr = item.closest('tr');
+          const toggleBtn = item.closest('.dropdown').querySelector('.dropdown-toggle');
+          
+          let newStatus = '';
+          let newClass = '';
+          let newIcon = '';
+          let newText = '';
+
+          if (item.textContent.includes('Published')) {
+            newStatus = 'published';
+            newClass = 'status-badge is-published dropdown-toggle';
+            newIcon = '<i class="bi bi-check2-circle"></i>';
+            newText = '<span data-i18n="status_published">Published</span>';
+          } else if (item.textContent.includes('Draft')) {
+            newStatus = 'draft';
+            newClass = 'status-badge is-draft dropdown-toggle';
+            newIcon = '<i class="bi bi-file-earmark-text"></i>';
+            newText = '<span data-i18n="status_draft">Draft</span>';
+          } else if (item.textContent.includes('Trash')) {
+            newStatus = 'trash';
+            newClass = 'status-badge is-trash dropdown-toggle';
+            newIcon = '<i class="bi bi-trash3"></i>';
+            newText = '<span>Trash</span>';
+          }
+
+          if (newStatus) {
+            tr.dataset.status = newStatus;
+            toggleBtn.className = newClass;
+            toggleBtn.innerHTML = newIcon + newText;
+            
+            // Update action column
+            const actionCell = tr.querySelector('td:last-child .action-group');
+            if (actionCell) {
+              if (newStatus === 'trash') {
+                actionCell.innerHTML = `
+                  <a class="action-btn" href="#" title="Restore"><i class="bi bi-arrow-counterclockwise"></i></a>
+                  <a class="action-btn text-danger" href="#" title="Delete"><i class="bi bi-trash3"></i></a>
+                `;
+              } else {
+                actionCell.innerHTML = `
+                  <a class="action-btn" href="create-post.html?from=my-posts.html" title="Open"><i class="bi bi-box-arrow-up-right"></i></a>
+                  <a class="action-btn" href="create-post.html?from=my-posts.html" title="Edit"><i class="bi bi-pencil"></i></a>
+                  <a class="action-btn text-danger" href="#" title="Trash"><i class="bi bi-trash"></i></a>
+                `;
+              }
+            }
+            updateSummary();
+            applyFilters();
+          }
+        });
+      });
+
+      // Handle Language Dropdown interactions
+      document.querySelectorAll('td:nth-child(5) .dropdown-menu').forEach(menu => {
+        menu.addEventListener('change', (e) => {
+          if (!e.target.classList.contains('form-check-input')) return;
+          
+          const dropdown = e.target.closest('.dropdown');
+          const toggleDiv = dropdown.querySelector('[data-bs-toggle="dropdown"]');
+          const checkboxes = dropdown.querySelectorAll('.form-check-input');
+          
+          let badgesHtml = '';
+          checkboxes.forEach(cb => {
+            if (cb.checked) {
+              const label = cb.nextElementSibling;
+              const text = label.textContent.trim();
+              
+              if (text.includes('English')) {
+                badgesHtml += '<span class="language-badge" style="background: rgba(13, 110, 253, 0.12); color: #0d6efd;"><i class="fi fi-us rounded-1"></i> EN</span>\n';
+              } else if (text.includes('Tiếng Việt')) {
+                badgesHtml += '<span class="language-badge" style="background: rgba(13, 110, 253, 0.12); color: #0d6efd;"><i class="fi fi-vn rounded-1"></i> VI</span>\n';
+              } else if (text.includes('Chinese')) {
+                badgesHtml += '<span class="language-badge" style="background: rgba(13, 110, 253, 0.12); color: #0d6efd;"><i class="fi fi-cn rounded-1"></i> ZH</span>\n';
+              }
+            }
+          });
+          
+          if (!badgesHtml) {
+            badgesHtml = '<span class="text-muted small">-</span>';
+          }
+          
+          toggleDiv.innerHTML = badgesHtml;
+        });
       });
 
       updateSummary();

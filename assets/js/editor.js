@@ -9,7 +9,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const saveButton = document.getElementById('saveButton');
   const saveLabel = saveButton ? saveButton.querySelector('[data-save-label]') : null;
   const previewButton = document.querySelector('[data-preview-button]');
-  const continueButton = document.querySelector('.editor-topbar .btn-accent');
+  const continueButton = document.querySelector('[data-publish-button]');
+  const publishModal = document.querySelector('[data-publish-modal]');
+  const draftConfirmModal = document.querySelector('[data-draft-modal]');
   const authorRow = document.querySelector('[data-author-row]');
   const previewModal = document.querySelector('[data-preview-modal]');
   const previewDevice = previewModal ? previewModal.querySelector('[data-preview-device]') : null;
@@ -828,6 +830,32 @@ document.addEventListener('DOMContentLoaded', () => {
     if (closeButton) closeButton.focus({ preventScroll: true });
   }
 
+  function closePublishModal() {
+    if (!publishModal) return;
+    publishModal.hidden = true;
+    document.body.classList.remove('publish-modal-open');
+  }
+
+  function openPublishModal(event) {
+    if (event) event.preventDefault();
+    if (!publishModal) return;
+    
+    publishModal.hidden = false;
+    document.body.classList.add('publish-modal-open');
+  }
+
+  function closeDraftConfirmModal() {
+    if (!draftConfirmModal) return;
+    draftConfirmModal.hidden = true;
+    document.body.classList.remove('draft-modal-open');
+  }
+
+  function openDraftConfirmModal() {
+    if (!draftConfirmModal) return;
+    draftConfirmModal.hidden = false;
+    document.body.classList.add('draft-modal-open');
+  }
+
   function handleLink() {
     const url = prompt('Enter the link URL:');
     if (!url) return;
@@ -1147,6 +1175,55 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  if (publishModal) {
+    publishModal.addEventListener('click', (event) => {
+      const target = event.target instanceof Element ? event.target : event.target.parentElement;
+      if (!target) return;
+
+      if (target.closest('[data-publish-close]')) {
+        closePublishModal();
+        openDraftConfirmModal();
+        return;
+      }
+      
+      const actionButton = target.closest('[data-publish-action]');
+      if (actionButton) {
+        const action = actionButton.dataset.publishAction;
+        if (action === 'publish') {
+          // In real implementation, submit the form to the backend
+          closePublishModal();
+        } else if (action === 'draft') {
+          closePublishModal();
+        }
+      }
+    });
+  }
+
+  if (draftConfirmModal) {
+    draftConfirmModal.addEventListener('click', (event) => {
+      const target = event.target instanceof Element ? event.target : event.target.parentElement;
+      if (!target) return;
+
+      if (target.closest('[data-draft-close]')) {
+        closeDraftConfirmModal();
+        return;
+      }
+
+      const actionButton = target.closest('[data-draft-action]');
+      if (actionButton) {
+        const action = actionButton.dataset.draftAction;
+        if (action === 'discard') {
+          closeDraftConfirmModal();
+          window.location.href = getGuestBackHref(); // Redirect to home/previous page
+        } else if (action === 'save') {
+          saveDraft();
+          closeDraftConfirmModal();
+          window.location.href = getGuestBackHref(); // Redirect to home/previous page
+        }
+      }
+    });
+  }
+
   editor.addEventListener('click', (event) => {
     const target = event.target instanceof Element ? event.target : event.target.parentElement;
     if (!target) return;
@@ -1264,6 +1341,16 @@ document.addEventListener('DOMContentLoaded', () => {
   document.addEventListener('keydown', (event) => {
     if (event.key === 'Escape' && previewModal && !previewModal.hidden) {
       closePreview();
+      return;
+    }
+    if (event.key === 'Escape' && publishModal && !publishModal.hidden) {
+      closePublishModal();
+      openDraftConfirmModal();
+      return;
+    }
+    if (event.key === 'Escape' && draftConfirmModal && !draftConfirmModal.hidden) {
+      closeDraftConfirmModal();
+      return;
     }
   });
 
@@ -1321,9 +1408,9 @@ document.addEventListener('DOMContentLoaded', () => {
   if (saveButton) saveButton.addEventListener('click', saveDraft);
   if (previewButton) previewButton.addEventListener('click', openPreview);
   if (continueButton) {
-    continueButton.addEventListener('click', () => {
+    continueButton.addEventListener('click', (e) => {
       saveDraft();
-      alert('Draft saved. Continue flow is ready for the next publishing step.');
+      openPublishModal(e);
     });
   }
 
