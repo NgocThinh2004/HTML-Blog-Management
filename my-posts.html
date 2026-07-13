@@ -424,6 +424,11 @@
       background: rgba(220, 38, 38, 0.12);
     }
 
+    .status-badge.is-pending {
+      color: #0dcaf0;
+      background: rgba(13, 202, 240, 0.12);
+    }
+
     .language-badge {
       color: var(--text-main);
       background: color-mix(in srgb, var(--bg-body) 86%, var(--text-main) 14%);
@@ -691,46 +696,9 @@
 <strong>Building AI-assisted multilingual workflows</strong>
 <span data-i18n="cat_ai_translation">AI Translation</span>
 </td>
-<td>
-<div class="dropdown">
-<span aria-expanded="false" class="status-badge is-published dropdown-toggle" data-bs-toggle="dropdown" role="button" style="cursor: pointer;"><i class="bi bi-check2-circle"></i><span data-i18n="status_published">Published</span></span>
-<ul class="dropdown-menu shadow-sm" style="font-size: 0.85rem; min-width: 120px;">
-<li><a class="dropdown-item d-flex align-items-center gap-2" href="#"><i class="bi bi-check2-circle text-success"></i> Published</a></li>
-<li><a class="dropdown-item d-flex align-items-center gap-2" href="#"><i class="bi bi-file-earmark-text text-warning"></i> Draft</a></li>
-<li><a class="dropdown-item d-flex align-items-center gap-2 text-danger" href="#"><i class="bi bi-trash3"></i> Trash</a></li>
-</ul>
-</div>
-</td>
+<td><span class="status-badge is-published"><i class="bi bi-check2-circle"></i><span data-i18n="status_published">Published</span></span></td>
 <td><span class="language-badge"><i class="fi fi-us rounded-1"></i> EN</span></td>
-<td>
-<div class="dropdown">
-<div aria-expanded="false" class="w-100" data-bs-toggle="dropdown" role="button" style="cursor: pointer; min-height: 28px; display: flex; align-items: center;">
-<span class="language-badge" style="background: rgba(13, 110, 253, 0.12); color: #0d6efd;"><i class="fi fi-vn rounded-1"></i> VI</span>
-<span class="language-badge" style="background: rgba(13, 110, 253, 0.12); color: #0d6efd;"><i class="fi fi-cn rounded-1"></i> ZH</span>
-</div>
-<ul class="dropdown-menu shadow-sm px-2 py-2" onclick="event.stopPropagation()" style="font-size: 0.85rem; min-width: 150px;">
-<li><h6 class="dropdown-header px-1 py-0 mb-2">Ngôn ngữ dịch</h6></li>
-<li>
-<div class="form-check form-switch mb-1">
-<input class="form-check-input" id="langEn_3d34fb44" type="checkbox"/>
-<label class="form-check-label d-flex align-items-center gap-2" for="langEn_3d34fb44"><i class="fi fi-us"></i> English</label>
-</div>
-</li>
-<li>
-<div class="form-check form-switch mb-1">
-<input checked="" class="form-check-input" id="langVi_3d34fb44" type="checkbox"/>
-<label class="form-check-label d-flex align-items-center gap-2" for="langVi_3d34fb44"><i class="fi fi-vn"></i> Tiếng Việt</label>
-</div>
-</li>
-<li>
-<div class="form-check form-switch mb-0">
-<input checked="" class="form-check-input" id="langZh_3d34fb44" type="checkbox"/>
-<label class="form-check-label d-flex align-items-center gap-2" for="langZh_3d34fb44"><i class="fi fi-cn"></i> Chinese</label>
-</div>
-</li>
-</ul>
-</div>
-</td>
+<td><span class="language-badge" style="background: rgba(13, 110, 253, 0.12); color: #0d6efd;"><i class="fi fi-vn rounded-1"></i> VI</span> <span class="language-badge" style="background: rgba(13, 110, 253, 0.12); color: #0d6efd;"><i class="fi fi-cn rounded-1"></i> ZH</span> </td>
 <td>Jul 07, 2026</td>
 <td>3,412</td>
 <td>
@@ -741,51 +709,15 @@
 </div>
 </td>
 </tr>
-<tr data-category="profile branding" data-language="en" data-search="product notes mundiblog profiles draft branding profile" data-status="draft">
+<tr data-category="profile branding" data-language="en" data-search="product notes mundiblog profiles draft branding profile" data-status="pending">
 <td class="select-col"><input aria-label="Select Product notes for MundiBlog profiles" class="row-check" type="checkbox"/></td>
 <td class="post-title-cell">
 <strong>Product notes for MundiBlog profiles</strong>
 <span data-i18n="cat_profile_branding">Profile Branding</span>
 </td>
-<td>
-<div class="dropdown">
-<span aria-expanded="false" class="status-badge is-draft dropdown-toggle" data-bs-toggle="dropdown" role="button" style="cursor: pointer;"><i class="bi bi-file-earmark-text"></i><span data-i18n="status_draft">Draft</span></span>
-<ul class="dropdown-menu shadow-sm" style="font-size: 0.85rem; min-width: 120px;">
-<li><a class="dropdown-item d-flex align-items-center gap-2" href="#"><i class="bi bi-check2-circle text-success"></i> Published</a></li>
-<li><a class="dropdown-item d-flex align-items-center gap-2" href="#"><i class="bi bi-file-earmark-text text-warning"></i> Draft</a></li>
-<li><a class="dropdown-item d-flex align-items-center gap-2 text-danger" href="#"><i class="bi bi-trash3"></i> Trash</a></li>
-</ul>
-</div>
-</td>
+<td><span class="status-badge is-pending"><i class="bi bi-hourglass-split"></i><span data-i18n="status_pending">Pending</span></span></td>
 <td><span class="language-badge"><i class="fi fi-us rounded-1"></i> EN</span></td>
-<td>
-<div class="dropdown">
-<div aria-expanded="false" class="w-100" data-bs-toggle="dropdown" role="button" style="cursor: pointer; min-height: 28px; display: flex; align-items: center;">
-<span class="text-muted small">-</span>
-</div>
-<ul class="dropdown-menu shadow-sm px-2 py-2" onclick="event.stopPropagation()" style="font-size: 0.85rem; min-width: 150px;">
-<li><h6 class="dropdown-header px-1 py-0 mb-2">Ngôn ngữ dịch</h6></li>
-<li>
-<div class="form-check form-switch mb-1">
-<input class="form-check-input" id="langEn_3a34d557" type="checkbox"/>
-<label class="form-check-label d-flex align-items-center gap-2" for="langEn_3a34d557"><i class="fi fi-us"></i> English</label>
-</div>
-</li>
-<li>
-<div class="form-check form-switch mb-1">
-<input checked="" class="form-check-input" id="langVi_3a34d557" type="checkbox"/>
-<label class="form-check-label d-flex align-items-center gap-2" for="langVi_3a34d557"><i class="fi fi-vn"></i> Tiếng Việt</label>
-</div>
-</li>
-<li>
-<div class="form-check form-switch mb-0">
-<input checked="" class="form-check-input" id="langZh_3a34d557" type="checkbox"/>
-<label class="form-check-label d-flex align-items-center gap-2" for="langZh_3a34d557"><i class="fi fi-cn"></i> Chinese</label>
-</div>
-</li>
-</ul>
-</div>
-</td>
+<td><span class="text-muted small">-</span> </td>
 <td>Jul 06, 2026</td>
 <td>0</td>
 <td>
@@ -802,45 +734,9 @@
 <strong>Profile design guide for creators</strong>
 <span data-i18n="cat_design_general">Design</span>
 </td>
-<td>
-<div class="dropdown">
-<span aria-expanded="false" class="status-badge is-published dropdown-toggle" data-bs-toggle="dropdown" role="button" style="cursor: pointer;"><i class="bi bi-check2-circle"></i><span data-i18n="status_published">Published</span></span>
-<ul class="dropdown-menu shadow-sm" style="font-size: 0.85rem; min-width: 120px;">
-<li><a class="dropdown-item d-flex align-items-center gap-2" href="#"><i class="bi bi-check2-circle text-success"></i> Published</a></li>
-<li><a class="dropdown-item d-flex align-items-center gap-2" href="#"><i class="bi bi-file-earmark-text text-warning"></i> Draft</a></li>
-<li><a class="dropdown-item d-flex align-items-center gap-2 text-danger" href="#"><i class="bi bi-trash3"></i> Trash</a></li>
-</ul>
-</div>
-</td>
+<td><span class="status-badge is-published"><i class="bi bi-check2-circle"></i><span data-i18n="status_published">Published</span></span></td>
 <td><span class="language-badge"><i class="fi fi-vn rounded-1"></i> VI</span></td>
-<td>
-<div class="dropdown">
-<div aria-expanded="false" class="w-100" data-bs-toggle="dropdown" role="button" style="cursor: pointer; min-height: 28px; display: flex; align-items: center;">
-<span class="language-badge" style="background: rgba(13, 110, 253, 0.12); color: #0d6efd;"><i class="fi fi-us rounded-1"></i> EN</span>
-</div>
-<ul class="dropdown-menu shadow-sm px-2 py-2" onclick="event.stopPropagation()" style="font-size: 0.85rem; min-width: 150px;">
-<li><h6 class="dropdown-header px-1 py-0 mb-2">Ngôn ngữ dịch</h6></li>
-<li>
-<div class="form-check form-switch mb-1">
-<input class="form-check-input" id="langEn_7b65f5a2" type="checkbox"/>
-<label class="form-check-label d-flex align-items-center gap-2" for="langEn_7b65f5a2"><i class="fi fi-us"></i> English</label>
-</div>
-</li>
-<li>
-<div class="form-check form-switch mb-1">
-<input checked="" class="form-check-input" id="langVi_7b65f5a2" type="checkbox"/>
-<label class="form-check-label d-flex align-items-center gap-2" for="langVi_7b65f5a2"><i class="fi fi-vn"></i> Tiếng Việt</label>
-</div>
-</li>
-<li>
-<div class="form-check form-switch mb-0">
-<input checked="" class="form-check-input" id="langZh_7b65f5a2" type="checkbox"/>
-<label class="form-check-label d-flex align-items-center gap-2" for="langZh_7b65f5a2"><i class="fi fi-cn"></i> Chinese</label>
-</div>
-</li>
-</ul>
-</div>
-</td>
+<td><span class="language-badge" style="background: rgba(13, 110, 253, 0.12); color: #0d6efd;"><i class="fi fi-us rounded-1"></i> EN</span> </td>
 <td>Jul 05, 2026</td>
 <td>1,129</td>
 <td>
@@ -857,45 +753,9 @@
 <strong>Creator analytics weekly recap</strong>
 <span data-i18n="cat_analytics">Analytics</span>
 </td>
-<td>
-<div class="dropdown">
-<span aria-expanded="false" class="status-badge is-draft dropdown-toggle" data-bs-toggle="dropdown" role="button" style="cursor: pointer;"><i class="bi bi-file-earmark-text"></i><span data-i18n="status_draft">Draft</span></span>
-<ul class="dropdown-menu shadow-sm" style="font-size: 0.85rem; min-width: 120px;">
-<li><a class="dropdown-item d-flex align-items-center gap-2" href="#"><i class="bi bi-check2-circle text-success"></i> Published</a></li>
-<li><a class="dropdown-item d-flex align-items-center gap-2" href="#"><i class="bi bi-file-earmark-text text-warning"></i> Draft</a></li>
-<li><a class="dropdown-item d-flex align-items-center gap-2 text-danger" href="#"><i class="bi bi-trash3"></i> Trash</a></li>
-</ul>
-</div>
-</td>
+<td><span class="status-badge is-draft"><i class="bi bi-file-earmark-text"></i><span data-i18n="status_draft">Draft</span></span></td>
 <td><span class="language-badge"><i class="fi fi-us rounded-1"></i> EN</span></td>
-<td>
-<div class="dropdown">
-<div aria-expanded="false" class="w-100" data-bs-toggle="dropdown" role="button" style="cursor: pointer; min-height: 28px; display: flex; align-items: center;">
-<span class="text-muted small">-</span>
-</div>
-<ul class="dropdown-menu shadow-sm px-2 py-2" onclick="event.stopPropagation()" style="font-size: 0.85rem; min-width: 150px;">
-<li><h6 class="dropdown-header px-1 py-0 mb-2">Ngôn ngữ dịch</h6></li>
-<li>
-<div class="form-check form-switch mb-1">
-<input class="form-check-input" id="langEn_18c774ef" type="checkbox"/>
-<label class="form-check-label d-flex align-items-center gap-2" for="langEn_18c774ef"><i class="fi fi-us"></i> English</label>
-</div>
-</li>
-<li>
-<div class="form-check form-switch mb-1">
-<input checked="" class="form-check-input" id="langVi_18c774ef" type="checkbox"/>
-<label class="form-check-label d-flex align-items-center gap-2" for="langVi_18c774ef"><i class="fi fi-vn"></i> Tiếng Việt</label>
-</div>
-</li>
-<li>
-<div class="form-check form-switch mb-0">
-<input checked="" class="form-check-input" id="langZh_18c774ef" type="checkbox"/>
-<label class="form-check-label d-flex align-items-center gap-2" for="langZh_18c774ef"><i class="fi fi-cn"></i> Chinese</label>
-</div>
-</li>
-</ul>
-</div>
-</td>
+<td><span class="text-muted small">-</span> </td>
 <td>Jul 03, 2026</td>
 <td>0</td>
 <td>
@@ -912,45 +772,9 @@
 <strong>AI translation QA checklist</strong>
 <span data-i18n="cat_localization">Localization</span>
 </td>
-<td>
-<div class="dropdown">
-<span aria-expanded="false" class="status-badge is-published dropdown-toggle" data-bs-toggle="dropdown" role="button" style="cursor: pointer;"><i class="bi bi-check2-circle"></i><span data-i18n="status_published">Published</span></span>
-<ul class="dropdown-menu shadow-sm" style="font-size: 0.85rem; min-width: 120px;">
-<li><a class="dropdown-item d-flex align-items-center gap-2" href="#"><i class="bi bi-check2-circle text-success"></i> Published</a></li>
-<li><a class="dropdown-item d-flex align-items-center gap-2" href="#"><i class="bi bi-file-earmark-text text-warning"></i> Draft</a></li>
-<li><a class="dropdown-item d-flex align-items-center gap-2 text-danger" href="#"><i class="bi bi-trash3"></i> Trash</a></li>
-</ul>
-</div>
-</td>
+<td><span class="status-badge is-published"><i class="bi bi-check2-circle"></i><span data-i18n="status_published">Published</span></span></td>
 <td><span class="language-badge"><i class="fi fi-us rounded-1"></i> EN</span></td>
-<td>
-<div class="dropdown">
-<div aria-expanded="false" class="w-100" data-bs-toggle="dropdown" role="button" style="cursor: pointer; min-height: 28px; display: flex; align-items: center;">
-<span class="language-badge" style="background: rgba(13, 110, 253, 0.12); color: #0d6efd;"><i class="fi fi-vn rounded-1"></i> VI</span>
-</div>
-<ul class="dropdown-menu shadow-sm px-2 py-2" onclick="event.stopPropagation()" style="font-size: 0.85rem; min-width: 150px;">
-<li><h6 class="dropdown-header px-1 py-0 mb-2">Ngôn ngữ dịch</h6></li>
-<li>
-<div class="form-check form-switch mb-1">
-<input class="form-check-input" id="langEn_ed1f0783" type="checkbox"/>
-<label class="form-check-label d-flex align-items-center gap-2" for="langEn_ed1f0783"><i class="fi fi-us"></i> English</label>
-</div>
-</li>
-<li>
-<div class="form-check form-switch mb-1">
-<input checked="" class="form-check-input" id="langVi_ed1f0783" type="checkbox"/>
-<label class="form-check-label d-flex align-items-center gap-2" for="langVi_ed1f0783"><i class="fi fi-vn"></i> Tiếng Việt</label>
-</div>
-</li>
-<li>
-<div class="form-check form-switch mb-0">
-<input checked="" class="form-check-input" id="langZh_ed1f0783" type="checkbox"/>
-<label class="form-check-label d-flex align-items-center gap-2" for="langZh_ed1f0783"><i class="fi fi-cn"></i> Chinese</label>
-</div>
-</li>
-</ul>
-</div>
-</td>
+<td><span class="language-badge" style="background: rgba(13, 110, 253, 0.12); color: #0d6efd;"><i class="fi fi-vn rounded-1"></i> VI</span> </td>
 <td>Jun 29, 2026</td>
 <td>842</td>
 <td>
@@ -967,45 +791,9 @@
 <strong>Old homepage layout notes</strong>
 <span data-i18n="cat_design_general">Design</span>
 </td>
-<td>
-<div class="dropdown">
-<span aria-expanded="false" class="status-badge is-trash dropdown-toggle" data-bs-toggle="dropdown" role="button" style="cursor: pointer;"><i class="bi bi-trash3"></i><span>Trash</span></span>
-<ul class="dropdown-menu shadow-sm" style="font-size: 0.85rem; min-width: 120px;">
-<li><a class="dropdown-item d-flex align-items-center gap-2" href="#"><i class="bi bi-check2-circle text-success"></i> Published</a></li>
-<li><a class="dropdown-item d-flex align-items-center gap-2" href="#"><i class="bi bi-file-earmark-text text-warning"></i> Draft</a></li>
-<li><a class="dropdown-item d-flex align-items-center gap-2 text-danger" href="#"><i class="bi bi-trash3"></i> Trash</a></li>
-</ul>
-</div>
-</td>
+<td><span class="status-badge is-trash"><i class="bi bi-trash3"></i><span data-i18n="status_trash">Trash</span></span></td>
 <td><span class="language-badge"><i class="fi fi-vn rounded-1"></i> VI</span></td>
-<td>
-<div class="dropdown">
-<div aria-expanded="false" class="w-100" data-bs-toggle="dropdown" role="button" style="cursor: pointer; min-height: 28px; display: flex; align-items: center;">
-<span class="text-muted small">-</span>
-</div>
-<ul class="dropdown-menu shadow-sm px-2 py-2" onclick="event.stopPropagation()" style="font-size: 0.85rem; min-width: 150px;">
-<li><h6 class="dropdown-header px-1 py-0 mb-2">Ngôn ngữ dịch</h6></li>
-<li>
-<div class="form-check form-switch mb-1">
-<input class="form-check-input" id="langEn_09dd0573" type="checkbox"/>
-<label class="form-check-label d-flex align-items-center gap-2" for="langEn_09dd0573"><i class="fi fi-us"></i> English</label>
-</div>
-</li>
-<li>
-<div class="form-check form-switch mb-1">
-<input checked="" class="form-check-input" id="langVi_09dd0573" type="checkbox"/>
-<label class="form-check-label d-flex align-items-center gap-2" for="langVi_09dd0573"><i class="fi fi-vn"></i> Tiếng Việt</label>
-</div>
-</li>
-<li>
-<div class="form-check form-switch mb-0">
-<input checked="" class="form-check-input" id="langZh_09dd0573" type="checkbox"/>
-<label class="form-check-label d-flex align-items-center gap-2" for="langZh_09dd0573"><i class="fi fi-cn"></i> Chinese</label>
-</div>
-</li>
-</ul>
-</div>
-</td>
+<td><span class="text-muted small">-</span> </td>
 <td>Jun 21, 2026</td>
 <td>218</td>
 <td>
@@ -1021,45 +809,9 @@
 <strong>Monthly active users growth Q2</strong>
 <span data-i18n="cat_analytics">Analytics</span>
 </td>
-<td>
-<div class="dropdown">
-<span aria-expanded="false" class="status-badge is-published dropdown-toggle" data-bs-toggle="dropdown" role="button" style="cursor: pointer;"><i class="bi bi-check2-circle"></i><span data-i18n="status_published">Published</span></span>
-<ul class="dropdown-menu shadow-sm" style="font-size: 0.85rem; min-width: 120px;">
-<li><a class="dropdown-item d-flex align-items-center gap-2" href="#"><i class="bi bi-check2-circle text-success"></i> Published</a></li>
-<li><a class="dropdown-item d-flex align-items-center gap-2" href="#"><i class="bi bi-file-earmark-text text-warning"></i> Draft</a></li>
-<li><a class="dropdown-item d-flex align-items-center gap-2 text-danger" href="#"><i class="bi bi-trash3"></i> Trash</a></li>
-</ul>
-</div>
-</td>
+<td><span class="status-badge is-published"><i class="bi bi-check2-circle"></i><span data-i18n="status_published">Published</span></span></td>
 <td><span class="language-badge"><i class="fi fi-us rounded-1"></i> EN</span></td>
-<td>
-<div class="dropdown">
-<div aria-expanded="false" class="w-100" data-bs-toggle="dropdown" role="button" style="cursor: pointer; min-height: 28px; display: flex; align-items: center;">
-<span class="text-muted small">-</span>
-</div>
-<ul class="dropdown-menu shadow-sm px-2 py-2" onclick="event.stopPropagation()" style="font-size: 0.85rem; min-width: 150px;">
-<li><h6 class="dropdown-header px-1 py-0 mb-2">Ngôn ngữ dịch</h6></li>
-<li>
-<div class="form-check form-switch mb-1">
-<input class="form-check-input" id="langEn_e3081dd1" type="checkbox"/>
-<label class="form-check-label d-flex align-items-center gap-2" for="langEn_e3081dd1"><i class="fi fi-us"></i> English</label>
-</div>
-</li>
-<li>
-<div class="form-check form-switch mb-1">
-<input checked="" class="form-check-input" id="langVi_e3081dd1" type="checkbox"/>
-<label class="form-check-label d-flex align-items-center gap-2" for="langVi_e3081dd1"><i class="fi fi-vn"></i> Tiếng Việt</label>
-</div>
-</li>
-<li>
-<div class="form-check form-switch mb-0">
-<input checked="" class="form-check-input" id="langZh_e3081dd1" type="checkbox"/>
-<label class="form-check-label d-flex align-items-center gap-2" for="langZh_e3081dd1"><i class="fi fi-cn"></i> Chinese</label>
-</div>
-</li>
-</ul>
-</div>
-</td>
+<td><span class="text-muted small">-</span> </td>
 <td>Jul 08, 2026</td>
 <td>5,102</td>
 <td>
@@ -1076,45 +828,9 @@
 <strong>Typography principles for readability</strong>
 <span data-i18n="cat_design_general">Design</span>
 </td>
-<td>
-<div class="dropdown">
-<span aria-expanded="false" class="status-badge is-draft dropdown-toggle" data-bs-toggle="dropdown" role="button" style="cursor: pointer;"><i class="bi bi-file-earmark-text"></i><span data-i18n="status_draft">Draft</span></span>
-<ul class="dropdown-menu shadow-sm" style="font-size: 0.85rem; min-width: 120px;">
-<li><a class="dropdown-item d-flex align-items-center gap-2" href="#"><i class="bi bi-check2-circle text-success"></i> Published</a></li>
-<li><a class="dropdown-item d-flex align-items-center gap-2" href="#"><i class="bi bi-file-earmark-text text-warning"></i> Draft</a></li>
-<li><a class="dropdown-item d-flex align-items-center gap-2 text-danger" href="#"><i class="bi bi-trash3"></i> Trash</a></li>
-</ul>
-</div>
-</td>
+<td><span class="status-badge is-draft"><i class="bi bi-file-earmark-text"></i><span data-i18n="status_draft">Draft</span></span></td>
 <td><span class="language-badge"><i class="fi fi-vn rounded-1"></i> VI</span></td>
-<td>
-<div class="dropdown">
-<div aria-expanded="false" class="w-100" data-bs-toggle="dropdown" role="button" style="cursor: pointer; min-height: 28px; display: flex; align-items: center;">
-<span class="text-muted small">-</span>
-</div>
-<ul class="dropdown-menu shadow-sm px-2 py-2" onclick="event.stopPropagation()" style="font-size: 0.85rem; min-width: 150px;">
-<li><h6 class="dropdown-header px-1 py-0 mb-2">Ngôn ngữ dịch</h6></li>
-<li>
-<div class="form-check form-switch mb-1">
-<input class="form-check-input" id="langEn_f107cac4" type="checkbox"/>
-<label class="form-check-label d-flex align-items-center gap-2" for="langEn_f107cac4"><i class="fi fi-us"></i> English</label>
-</div>
-</li>
-<li>
-<div class="form-check form-switch mb-1">
-<input checked="" class="form-check-input" id="langVi_f107cac4" type="checkbox"/>
-<label class="form-check-label d-flex align-items-center gap-2" for="langVi_f107cac4"><i class="fi fi-vn"></i> Tiếng Việt</label>
-</div>
-</li>
-<li>
-<div class="form-check form-switch mb-0">
-<input checked="" class="form-check-input" id="langZh_f107cac4" type="checkbox"/>
-<label class="form-check-label d-flex align-items-center gap-2" for="langZh_f107cac4"><i class="fi fi-cn"></i> Chinese</label>
-</div>
-</li>
-</ul>
-</div>
-</td>
+<td><span class="text-muted small">-</span> </td>
 <td>Jul 09, 2026</td>
 <td>0</td>
 <td>
@@ -1131,45 +847,9 @@
 <strong>Color theory in personal branding</strong>
 <span data-i18n="cat_profile_branding">Profile Branding</span>
 </td>
-<td>
-<div class="dropdown">
-<span aria-expanded="false" class="status-badge is-published dropdown-toggle" data-bs-toggle="dropdown" role="button" style="cursor: pointer;"><i class="bi bi-check2-circle"></i><span data-i18n="status_published">Published</span></span>
-<ul class="dropdown-menu shadow-sm" style="font-size: 0.85rem; min-width: 120px;">
-<li><a class="dropdown-item d-flex align-items-center gap-2" href="#"><i class="bi bi-check2-circle text-success"></i> Published</a></li>
-<li><a class="dropdown-item d-flex align-items-center gap-2" href="#"><i class="bi bi-file-earmark-text text-warning"></i> Draft</a></li>
-<li><a class="dropdown-item d-flex align-items-center gap-2 text-danger" href="#"><i class="bi bi-trash3"></i> Trash</a></li>
-</ul>
-</div>
-</td>
+<td><span class="status-badge is-published"><i class="bi bi-check2-circle"></i><span data-i18n="status_published">Published</span></span></td>
 <td><span class="language-badge"><i class="fi fi-us rounded-1"></i> EN</span></td>
-<td>
-<div class="dropdown">
-<div aria-expanded="false" class="w-100" data-bs-toggle="dropdown" role="button" style="cursor: pointer; min-height: 28px; display: flex; align-items: center;">
-<span class="language-badge" style="background: rgba(13, 110, 253, 0.12); color: #0d6efd;"><i class="fi fi-cn rounded-1"></i> ZH</span>
-</div>
-<ul class="dropdown-menu shadow-sm px-2 py-2" onclick="event.stopPropagation()" style="font-size: 0.85rem; min-width: 150px;">
-<li><h6 class="dropdown-header px-1 py-0 mb-2">Ngôn ngữ dịch</h6></li>
-<li>
-<div class="form-check form-switch mb-1">
-<input class="form-check-input" id="langEn_580bdef3" type="checkbox"/>
-<label class="form-check-label d-flex align-items-center gap-2" for="langEn_580bdef3"><i class="fi fi-us"></i> English</label>
-</div>
-</li>
-<li>
-<div class="form-check form-switch mb-1">
-<input checked="" class="form-check-input" id="langVi_580bdef3" type="checkbox"/>
-<label class="form-check-label d-flex align-items-center gap-2" for="langVi_580bdef3"><i class="fi fi-vn"></i> Tiếng Việt</label>
-</div>
-</li>
-<li>
-<div class="form-check form-switch mb-0">
-<input checked="" class="form-check-input" id="langZh_580bdef3" type="checkbox"/>
-<label class="form-check-label d-flex align-items-center gap-2" for="langZh_580bdef3"><i class="fi fi-cn"></i> Chinese</label>
-</div>
-</li>
-</ul>
-</div>
-</td>
+<td><span class="language-badge" style="background: rgba(13, 110, 253, 0.12); color: #0d6efd;"><i class="fi fi-cn rounded-1"></i> ZH</span> </td>
 <td>Jul 01, 2026</td>
 <td>8,433</td>
 <td>
@@ -1186,45 +866,9 @@
 <strong>Translating idioms with AI context</strong>
 <span data-i18n="cat_localization">Localization</span>
 </td>
-<td>
-<div class="dropdown">
-<span aria-expanded="false" class="status-badge is-draft dropdown-toggle" data-bs-toggle="dropdown" role="button" style="cursor: pointer;"><i class="bi bi-file-earmark-text"></i><span data-i18n="status_draft">Draft</span></span>
-<ul class="dropdown-menu shadow-sm" style="font-size: 0.85rem; min-width: 120px;">
-<li><a class="dropdown-item d-flex align-items-center gap-2" href="#"><i class="bi bi-check2-circle text-success"></i> Published</a></li>
-<li><a class="dropdown-item d-flex align-items-center gap-2" href="#"><i class="bi bi-file-earmark-text text-warning"></i> Draft</a></li>
-<li><a class="dropdown-item d-flex align-items-center gap-2 text-danger" href="#"><i class="bi bi-trash3"></i> Trash</a></li>
-</ul>
-</div>
-</td>
+<td><span class="status-badge is-draft"><i class="bi bi-file-earmark-text"></i><span data-i18n="status_draft">Draft</span></span></td>
 <td><span class="language-badge"><i class="fi fi-cn rounded-1"></i> ZH</span></td>
-<td>
-<div class="dropdown">
-<div aria-expanded="false" class="w-100" data-bs-toggle="dropdown" role="button" style="cursor: pointer; min-height: 28px; display: flex; align-items: center;">
-<span class="text-muted small">-</span>
-</div>
-<ul class="dropdown-menu shadow-sm px-2 py-2" onclick="event.stopPropagation()" style="font-size: 0.85rem; min-width: 150px;">
-<li><h6 class="dropdown-header px-1 py-0 mb-2">Ngôn ngữ dịch</h6></li>
-<li>
-<div class="form-check form-switch mb-1">
-<input class="form-check-input" id="langEn_742e5f9d" type="checkbox"/>
-<label class="form-check-label d-flex align-items-center gap-2" for="langEn_742e5f9d"><i class="fi fi-us"></i> English</label>
-</div>
-</li>
-<li>
-<div class="form-check form-switch mb-1">
-<input checked="" class="form-check-input" id="langVi_742e5f9d" type="checkbox"/>
-<label class="form-check-label d-flex align-items-center gap-2" for="langVi_742e5f9d"><i class="fi fi-vn"></i> Tiếng Việt</label>
-</div>
-</li>
-<li>
-<div class="form-check form-switch mb-0">
-<input checked="" class="form-check-input" id="langZh_742e5f9d" type="checkbox"/>
-<label class="form-check-label d-flex align-items-center gap-2" for="langZh_742e5f9d"><i class="fi fi-cn"></i> Chinese</label>
-</div>
-</li>
-</ul>
-</div>
-</td>
+<td><span class="text-muted small">-</span> </td>
 <td>Jun 28, 2026</td>
 <td>0</td>
 <td>
@@ -1241,45 +885,9 @@
 <strong>Old translation API endpoints (Deprecated)</strong>
 <span data-i18n="cat_ai_translation">AI Translation</span>
 </td>
-<td>
-<div class="dropdown">
-<span aria-expanded="false" class="status-badge is-trash dropdown-toggle" data-bs-toggle="dropdown" role="button" style="cursor: pointer;"><i class="bi bi-trash3"></i><span>Trash</span></span>
-<ul class="dropdown-menu shadow-sm" style="font-size: 0.85rem; min-width: 120px;">
-<li><a class="dropdown-item d-flex align-items-center gap-2" href="#"><i class="bi bi-check2-circle text-success"></i> Published</a></li>
-<li><a class="dropdown-item d-flex align-items-center gap-2" href="#"><i class="bi bi-file-earmark-text text-warning"></i> Draft</a></li>
-<li><a class="dropdown-item d-flex align-items-center gap-2 text-danger" href="#"><i class="bi bi-trash3"></i> Trash</a></li>
-</ul>
-</div>
-</td>
+<td><span class="status-badge is-trash"><i class="bi bi-trash3"></i><span data-i18n="status_trash">Trash</span></span></td>
 <td><span class="language-badge"><i class="fi fi-us rounded-1"></i> EN</span></td>
-<td>
-<div class="dropdown">
-<div aria-expanded="false" class="w-100" data-bs-toggle="dropdown" role="button" style="cursor: pointer; min-height: 28px; display: flex; align-items: center;">
-<span class="text-muted small">-</span>
-</div>
-<ul class="dropdown-menu shadow-sm px-2 py-2" onclick="event.stopPropagation()" style="font-size: 0.85rem; min-width: 150px;">
-<li><h6 class="dropdown-header px-1 py-0 mb-2">Ngôn ngữ dịch</h6></li>
-<li>
-<div class="form-check form-switch mb-1">
-<input class="form-check-input" id="langEn_5a6f181c" type="checkbox"/>
-<label class="form-check-label d-flex align-items-center gap-2" for="langEn_5a6f181c"><i class="fi fi-us"></i> English</label>
-</div>
-</li>
-<li>
-<div class="form-check form-switch mb-1">
-<input checked="" class="form-check-input" id="langVi_5a6f181c" type="checkbox"/>
-<label class="form-check-label d-flex align-items-center gap-2" for="langVi_5a6f181c"><i class="fi fi-vn"></i> Tiếng Việt</label>
-</div>
-</li>
-<li>
-<div class="form-check form-switch mb-0">
-<input checked="" class="form-check-input" id="langZh_5a6f181c" type="checkbox"/>
-<label class="form-check-label d-flex align-items-center gap-2" for="langZh_5a6f181c"><i class="fi fi-cn"></i> Chinese</label>
-</div>
-</li>
-</ul>
-</div>
-</td>
+<td><span class="text-muted small">-</span> </td>
 <td>May 15, 2026</td>
 <td>1,024</td>
 <td>
@@ -1478,7 +1086,7 @@
               row.dataset.status = 'trash';
               const statusCell = row.querySelector('td:nth-child(3)');
               if (statusCell) {
-                statusCell.innerHTML = '<span class="status-badge is-trash"><i class="bi bi-trash3"></i><span>Trash</span></span>';
+                statusCell.innerHTML = '<span class="status-badge is-trash"><i class="bi bi-trash3"></i><span data-i18n="status_trash">Trash</span></span>';
               }
               const actionCell = row.querySelector('td:last-child .action-group');
               if (actionCell) {
@@ -1533,7 +1141,7 @@
           const row = trashBtn.closest('tr');
           if (row) {
             if (row.dataset.status === 'trash') {
-              if (confirm('Bạn có chắc chắn muốn xóa vĩnh viễn bài viết này?')) {
+              if (confirm((window.uiTranslations && window.uiTranslations[localStorage.getItem('preferredLanguage') || 'en'] ? window.uiTranslations[localStorage.getItem('preferredLanguage') || 'en']['confirm_delete_permanent'] : 'Are you sure you want to permanently delete this post?'))) {
                 row.remove();
                 rows = Array.from(document.querySelectorAll('[data-post-table-body] tr'));
                 rowChecks = Array.from(document.querySelectorAll('[data-post-table-body] .row-check'));
@@ -1541,11 +1149,11 @@
                 applyFilters();
               }
             } else {
-              if (confirm('Bạn có muốn chuyển bài viết này vào thùng rác?')) {
+              if (confirm((window.uiTranslations && window.uiTranslations[localStorage.getItem('preferredLanguage') || 'en'] ? window.uiTranslations[localStorage.getItem('preferredLanguage') || 'en']['confirm_trash'] : 'Do you want to move this post to trash?'))) {
                 row.dataset.status = 'trash';
                 const statusCell = row.querySelector('td:nth-child(3)');
                 if (statusCell) {
-                  statusCell.innerHTML = '<span class="status-badge is-trash"><i class="bi bi-trash3"></i><span>Trash</span></span>';
+                  statusCell.innerHTML = '<span class="status-badge is-trash"><i class="bi bi-trash3"></i><span data-i18n="status_trash">Trash</span></span>';
                 }
                 const actionCell = row.querySelector('td:last-child .action-group');
                 if (actionCell) {
@@ -1584,101 +1192,7 @@
           }
         }
       });
-
-      
-      // Handle Status Dropdown interactions
-      document.querySelectorAll('td:nth-child(3) .dropdown-menu').forEach(menu => {
-        menu.addEventListener('click', (e) => {
-          e.preventDefault();
-          const item = e.target.closest('.dropdown-item');
-          if (!item) return;
-
-          const tr = item.closest('tr');
-          const toggleBtn = item.closest('.dropdown').querySelector('.dropdown-toggle');
-          
-          let newStatus = '';
-          let newClass = '';
-          let newIcon = '';
-          let newText = '';
-
-          if (item.textContent.includes('Published')) {
-            newStatus = 'published';
-            newClass = 'status-badge is-published dropdown-toggle';
-            newIcon = '<i class="bi bi-check2-circle"></i>';
-            newText = '<span data-i18n="status_published">Published</span>';
-          } else if (item.textContent.includes('Draft')) {
-            newStatus = 'draft';
-            newClass = 'status-badge is-draft dropdown-toggle';
-            newIcon = '<i class="bi bi-file-earmark-text"></i>';
-            newText = '<span data-i18n="status_draft">Draft</span>';
-          } else if (item.textContent.includes('Trash')) {
-            newStatus = 'trash';
-            newClass = 'status-badge is-trash dropdown-toggle';
-            newIcon = '<i class="bi bi-trash3"></i>';
-            newText = '<span>Trash</span>';
-          }
-
-          if (newStatus) {
-            tr.dataset.status = newStatus;
-            toggleBtn.className = newClass;
-            toggleBtn.innerHTML = newIcon + newText;
-            
-            // Update action column
-            const actionCell = tr.querySelector('td:last-child .action-group');
-            if (actionCell) {
-              if (newStatus === 'trash') {
-                actionCell.innerHTML = `
-                  <a class="action-btn" href="#" title="Restore"><i class="bi bi-arrow-counterclockwise"></i></a>
-                  <a class="action-btn text-danger" href="#" title="Delete"><i class="bi bi-trash3"></i></a>
-                `;
-              } else {
-                actionCell.innerHTML = `
-                  <a class="action-btn" href="create-post.html?from=my-posts.html" title="Open"><i class="bi bi-box-arrow-up-right"></i></a>
-                  <a class="action-btn" href="create-post.html?from=my-posts.html" title="Edit"><i class="bi bi-pencil"></i></a>
-                  <a class="action-btn text-danger" href="#" title="Trash"><i class="bi bi-trash"></i></a>
-                `;
-              }
-            }
-            updateSummary();
-            applyFilters();
-          }
-        });
-      });
-
-      // Handle Language Dropdown interactions
-      document.querySelectorAll('td:nth-child(5) .dropdown-menu').forEach(menu => {
-        menu.addEventListener('change', (e) => {
-          if (!e.target.classList.contains('form-check-input')) return;
-          
-          const dropdown = e.target.closest('.dropdown');
-          const toggleDiv = dropdown.querySelector('[data-bs-toggle="dropdown"]');
-          const checkboxes = dropdown.querySelectorAll('.form-check-input');
-          
-          let badgesHtml = '';
-          checkboxes.forEach(cb => {
-            if (cb.checked) {
-              const label = cb.nextElementSibling;
-              const text = label.textContent.trim();
-              
-              if (text.includes('English')) {
-                badgesHtml += '<span class="language-badge" style="background: rgba(13, 110, 253, 0.12); color: #0d6efd;"><i class="fi fi-us rounded-1"></i> EN</span>\n';
-              } else if (text.includes('Tiếng Việt')) {
-                badgesHtml += '<span class="language-badge" style="background: rgba(13, 110, 253, 0.12); color: #0d6efd;"><i class="fi fi-vn rounded-1"></i> VI</span>\n';
-              } else if (text.includes('Chinese')) {
-                badgesHtml += '<span class="language-badge" style="background: rgba(13, 110, 253, 0.12); color: #0d6efd;"><i class="fi fi-cn rounded-1"></i> ZH</span>\n';
-              }
-            }
-          });
-          
-          if (!badgesHtml) {
-            badgesHtml = '<span class="text-muted small">-</span>';
-          }
-          
-          toggleDiv.innerHTML = badgesHtml;
-        });
-      });
-
-      updateSummary();
+updateSummary();
       applyFilters();
     });
   </script>
