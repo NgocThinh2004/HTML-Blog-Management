@@ -86,6 +86,41 @@
     .center-feed>* {
       max-width: 100% !important;
     }
+
+    .admin-container { max-width: 1280px; }
+    .category-table-wrap { overflow-x: auto; border: 1px solid var(--border-color); border-radius: 12px; background: var(--bg-panel); }
+    .category-directory { min-width: 900px; margin: 0; }
+    .category-directory thead th { padding: .85rem 1rem; color: var(--text-muted); background: var(--border-light); border-bottom: 1px solid var(--border-color); font-size: .78rem; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; white-space: nowrap; }
+    .category-directory tbody td { padding: 1rem; color: var(--text-main); border-bottom-color: var(--border-color); vertical-align: middle; }
+    .category-directory tbody tr { transition: background-color .15s ease; }
+    .category-directory tbody tr:hover { background: var(--border-light); cursor: pointer; }
+    .category-directory tbody tr:focus-visible { outline: 2px solid var(--primary-color); outline-offset: -2px; }
+    .category-name-cell { display: flex; align-items: center; gap: .75rem; min-width: 230px; }
+    .category-icon { width: 38px; height: 38px; display: inline-flex; align-items: center; justify-content: center; flex: 0 0 38px; border-radius: 10px; color: var(--primary-color); background: var(--accent-button-bg); }
+    .category-title { font-weight: 650; color: var(--text-main); }
+    .category-description { max-width: 260px; overflow: hidden; color: var(--text-muted); font-size: .78rem; text-overflow: ellipsis; white-space: nowrap; }
+    .slug-code { display: inline-flex; align-items: center; padding: .3rem .55rem; border-radius: 6px; color: #c11574; background: #fdf2fa; font-size: .78rem; }
+    [data-bs-theme="dark"] .slug-code { color: #faa7e0; background: #3b1530; }
+    .post-count-btn { min-width: 92px; display: inline-flex; align-items: center; justify-content: center; gap: .4rem; border-color: var(--border-color); color: var(--text-main); background: var(--bg-panel); }
+    .category-status { display: inline-flex; align-items: center; gap: .35rem; padding: .3rem .65rem; border-radius: 999px; font-size: .78rem; font-weight: 600; white-space: nowrap; }
+    .category-status.active { color: #067647; background: #ecfdf3; }
+    .category-status.inactive { color: #b42318; background: #fef3f2; }
+    [data-bs-theme="dark"] .category-status.active { color: #75e0a7; background: #123525; }
+    [data-bs-theme="dark"] .category-status.inactive { color: #fda29b; background: #3b1717; }
+    .category-actions { display: flex; align-items: center; justify-content: center; gap: .25rem; }
+    .category-action-btn { width: 34px; height: 34px; display: inline-flex; align-items: center; justify-content: center; border-radius: 8px; }
+    .category-results { color: var(--text-muted); font-size: .85rem; }
+    .category-empty { padding: 3.5rem 1rem !important; text-align: center; color: var(--text-muted) !important; }
+    .slug-preview { display: flex; align-items: center; gap: .5rem; }
+    .slug-adjusted { color: #b54708 !important; }
+    .modal .form-control, .modal .form-select { background-color: var(--bg-body); border-color: var(--border-color); color: var(--text-main); }
+    .btn-primary { background-color: var(--primary-color); border-color: var(--primary-color); }
+    .btn-primary:hover { background-color: var(--primary-hover); border-color: var(--primary-hover); }
+
+    @media (max-width: 767px) {
+      .admin-container { padding: 1.25rem 0; }
+      .admin-header { padding-inline: .25rem; }
+    }
   </style>
 </head>
 
@@ -117,11 +152,13 @@
         <div>
           <!-- Substack Logo -->
           <div class="substack-logo-container">
-            <a href="../index.html" class="text-decoration-none d-flex align-items-center gap-2 flex-wrap">
-              <i class="bi bi-bookmark-fill substack-logo"></i>
-              <span class="fs-5 fw-bold text-main" style="letter-spacing: -0.02em;">MundiBlog</span>
-              <span class="badge bg-primary-subtle text-primary border border-primary-subtle rounded-pill ms-1"
-                style="font-size: 0.68rem !important; padding: 0.15rem 0.4rem !important; font-weight: 600;"
+            <a href="../index.html" class="text-decoration-none d-flex flex-column align-items-start gap-1">
+              <div class="d-flex align-items-center gap-2">
+                <i class="bi bi-bookmark-fill substack-logo"></i>
+                <span class="fs-5 fw-bold text-main" style="letter-spacing: -0.02em;">MundiBlog</span>
+              </div>
+              <span class="badge bg-primary-subtle text-primary border border-primary-subtle rounded-pill"
+                style="font-size: 0.68rem !important; padding: 0.15rem 0.5rem !important; font-weight: 600; margin-left: 2px;"
                 data-i18n="admin_panel">Admin Panel</span>
             </a>
           </div>
@@ -134,6 +171,9 @@
             <a href="manage-users.html" class="sidebar-nav-item">
               <i class="bi bi-people"></i> <span data-i18n="manage_users">Manage Users</span>
             </a>
+            <a href="manage-posts.html" class="sidebar-nav-item">
+              <i class="bi bi-file-earmark-check"></i> <span data-i18n="manage_posts">Manage Posts</span>
+            </a>
             <a href="manage-categories.html" class="sidebar-nav-item active">
               <i class="bi bi-tags"></i> <span data-i18n="manage_categories">Manage Categories</span>
             </a>
@@ -144,10 +184,29 @@
         </div>
 
         <!-- Bottom Section -->
-        <div class="sidebar-footer-menu">
-          <a href="../index.html" class="sidebar-nav-item mb-2">
-            <i class="bi bi-arrow-left"></i> <span data-i18n="back_feed">Back to Feed</span>
-          </a>
+
+<div class="sidebar-footer-menu">
+
+                    <!-- Sidebar Controls (Theme & Language) -->
+          <div class="sidebar-controls mb-2">
+            <!-- Theme Switch and Language -->
+            <div class="d-flex align-items-center justify-content-start gap-2 ps-3 pe-2 mb-2">
+              <div class="dropdown">
+                <button class="btn btn-sm btn-outline-secondary d-flex align-items-center justify-content-center p-0" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="width: 38px; height: 38px; border-radius: 8px; border-color: var(--border-color);">
+                  <img src="https://flagcdn.com/w20/gb.png" width="24" height="18" id="sidebarLangFlag" style="border-radius:2px; object-fit: cover;" alt="Language">
+                </button>
+                <ul class="dropdown-menu shadow border-light-subtle" style="min-width: 120px; border-radius: 12px; font-size: 14px;">
+                  <li><a class="dropdown-item py-1.5 fw-medium global-lang-select" href="#" data-lang="en"><img src="https://flagcdn.com/w20/gb.png" width="18" alt="English" class="me-2" style="border-radius:2px;"> English</a></li>
+                  <li><a class="dropdown-item py-1.5 fw-medium global-lang-select" href="#" data-lang="vi"><img src="https://flagcdn.com/w20/vn.png" width="18" alt="Tiếng Việt" class="me-2" style="border-radius:2px;"> Tiếng Việt</a></li>
+                  <li><a class="dropdown-item py-1.5 fw-medium global-lang-select" href="#" data-lang="zh"><img src="https://flagcdn.com/w20/cn.png" width="18" alt="中文" class="me-2" style="border-radius:2px;"> 中文</a></li>
+                </ul>
+              </div>
+              <button class="btn btn-sm btn-outline-secondary d-flex align-items-center justify-content-center p-0" id="sidebarThemeToggle" style="width: 38px; height: 38px; border-radius: 8px; border-color: var(--border-color); color: var(--text-main);" aria-label="Toggle theme">
+                <i class="bi bi-moon-fill" id="sidebarThemeIcon" style="font-size: 17px;"></i>
+              </button>
+            </div>
+          </div>
+
           <div class="dropdown">
             <button
               class="btn btn-link text-decoration-none text-main d-flex align-items-center gap-2 p-1.5 w-100 border-0 text-start"
@@ -156,10 +215,9 @@
               <span class="fw-medium" data-i18n="more">More</span>
             </button>
             <ul class="dropdown-menu shadow border-light-subtle">
+              <li><a class="dropdown-item py-2" href="../index.html"><i class="bi bi-arrow-left me-2"></i> <span data-i18n="back_feed">Back to Feed</span></a></li>
               <li><a class="dropdown-item py-2" href="../settings.html?from=admin"><i class="bi bi-gear me-2"></i>
                   <span data-i18n="settings">Settings</span></a></li>
-              <li><a class="dropdown-item py-2" href="../change-password.html"><i
-                    class="bi bi-shield-lock me-2"></i> <span data-i18n="security">Security</span></a></li>
               <li>
                 <hr class="dropdown-divider">
               </li>
@@ -197,9 +255,28 @@
             </div>
           </div>
 
-          <!-- CATEGORIES TABLE CARD -->
-          <div class="admin-card-clean">
-            <div class="substack-list" id="categoryTableBody">
+          <div class="category-results mb-2 px-1" id="categoryResultCount" aria-live="polite"></div>
+
+          <!-- CATEGORIES TABLE -->
+          <div class="category-table-wrap">
+            <table class="table category-directory align-middle" aria-label="Category directory">
+              <thead>
+                <tr>
+                  <th scope="col" data-cat-key="category">Category</th>
+                  <th scope="col" data-i18n="slug">Slug</th>
+                  <th scope="col" data-cat-key="created">Created</th>
+                  <th scope="col" data-i18n="col_posts_count">Total Posts</th>
+                  <th scope="col" data-i18n="status">Status</th>
+                  <th scope="col" class="text-center" data-i18n="col_actions">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="categoryTableBody"></tbody>
+            </table>
+          </div>
+
+          <!-- Legacy list retained only as a static fallback -->
+          <div class="admin-card-clean d-none" aria-hidden="true">
+            <div class="substack-list" id="legacyCategoryTableBody">
               <!-- Item 1 -->
               <div class="substack-list-item category-row">
                 <div class="item-title-block">
@@ -406,12 +483,18 @@
                 Name</label>
               <input type="text" class="form-control" id="inputCategoryName" placeholder="Enter category name..."
                 required autocomplete="off" data-i18n="cat_name_placeholder">
+              <div class="invalid-feedback" data-cat-key="name_required">Please enter a category name.</div>
+            </div>
+            <div class="mb-3">
+              <label for="inputCategoryDescription" class="form-label fw-semibold text-main" data-cat-key="description">Description</label>
+              <textarea class="form-control" id="inputCategoryDescription" rows="3" maxlength="180" data-cat-placeholder="description_placeholder" placeholder="Briefly describe this category..."></textarea>
             </div>
             <div class="mb-1">
               <label for="inputCategorySlug" class="form-label fw-semibold text-main" data-i18n="slug">Slug</label>
               <input type="text" class="form-control bg-body-secondary" id="inputCategorySlug"
                 placeholder="Slug automatically generated..." readonly data-i18n="slug_auto_placeholder">
               <div class="form-text text-muted" data-i18n="slug_help">URLs will use this slug to route categories.</div>
+              <div class="form-text" id="addSlugUniqueHelp" data-cat-key="slug_unique_help">If the slug already exists, a number will be added automatically.</div>
             </div>
           </div>
           <div class="modal-footer border-top">
@@ -444,12 +527,27 @@
                 Name</label>
               <input type="text" class="form-control" id="editCategoryName" placeholder="Enter category name..."
                 required autocomplete="off" data-i18n="cat_name_placeholder">
+              <div class="invalid-feedback" data-cat-key="name_required">Please enter a category name.</div>
+            </div>
+            <div class="mb-3">
+              <label for="editCategoryDescription" class="form-label fw-semibold text-main" data-cat-key="description">Description</label>
+              <textarea class="form-control" id="editCategoryDescription" rows="3" maxlength="180" data-cat-placeholder="description_placeholder" placeholder="Briefly describe this category..."></textarea>
             </div>
             <div class="mb-1">
               <label for="editCategorySlug" class="form-label fw-semibold text-main" data-i18n="slug">Slug</label>
               <input type="text" class="form-control bg-body-secondary" id="editCategorySlug"
                 placeholder="Slug automatically generated..." readonly data-i18n="slug_auto_placeholder">
               <div class="form-text text-muted" data-i18n="slug_help">URLs will use this slug to route categories.</div>
+              <div class="form-text" id="editSlugUniqueHelp" data-cat-key="slug_unique_help">If the slug already exists, a number will be added automatically.</div>
+            </div>
+            <div class="mt-3 d-flex align-items-center justify-content-between rounded-3 border p-3">
+              <div>
+                <div class="fw-semibold text-main" data-cat-key="category_status">Category status</div>
+                <div class="small text-muted" data-cat-key="status_help">Show this category on the feed.</div>
+              </div>
+              <div class="form-check form-switch m-0">
+                <input class="form-check-input" type="checkbox" role="switch" id="editCategoryStatus">
+              </div>
             </div>
           </div>
           <div class="modal-footer border-top">
@@ -480,6 +578,9 @@
         <a href="manage-users.html" class="sidebar-nav-item">
           <i class="bi bi-people"></i> <span data-i18n="manage_users">Manage Users</span>
         </a>
+        <a href="manage-posts.html" class="sidebar-nav-item">
+          <i class="bi bi-file-earmark-check"></i> <span data-i18n="manage_posts">Manage Posts</span>
+        </a>
         <a href="manage-categories.html" class="sidebar-nav-item active">
           <i class="bi bi-tags"></i> <span data-i18n="manage_categories">Manage Categories</span>
         </a>
@@ -502,7 +603,7 @@
   </div>
 
   <!-- TOAST NOTIFICATION CONTAINER -->
-  <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 1100;">
+  <div class="position-fixed top-0 end-0 p-3" style="z-index: 1100;">
     <div id="adminToast" class="toast align-items-center text-bg-dark border-0 shadow-lg rounded-4" role="alert"
       aria-live="assertive" aria-atomic="true">
       <div class="d-flex">
@@ -552,7 +653,7 @@
   <!-- Core Script -->
   <script src="../assets/js/core.js"></script>
 
-  <script>
+  <script type="text/plain" id="legacyCategoryManagementScript">
     document.addEventListener('DOMContentLoaded', () => {
       const toastEl = document.getElementById('adminToast');
       const toast = new bootstrap.Toast(toastEl, { delay: 3000 });
@@ -833,6 +934,241 @@
 
       const mobileSignOutBtn = document.getElementById('mobileSignOutBtn');
       if (mobileSignOutBtn) mobileSignOutBtn.addEventListener('click', handleSignOut);
+    });
+  </script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const storageKey = 'admin_categories_v2';
+      const seedCategories = [
+        { id: 'C1001', name: 'Artificial Intelligence', slug: 'ai', description: 'AI, machine learning, and emerging intelligent technologies.', created: '2023-10-12', active: true, fallbackPosts: 3 },
+        { id: 'C1002', name: 'Backend Engineering', slug: 'backend', description: 'Server-side development, APIs, databases, and architecture.', created: '2023-11-05', active: true, fallbackPosts: 4 },
+        { id: 'C1003', name: 'Design', slug: 'design', description: 'UI/UX, product design, and creative workflows.', created: '2024-01-22', active: true, fallbackPosts: 5 },
+        { id: 'C1004', name: 'Frontend Development', slug: 'frontend', description: 'Modern web interfaces, frameworks, and browser technologies.', created: '2024-02-15', active: true, fallbackPosts: 1 },
+        { id: 'C1005', name: 'Mobile Development', slug: 'mobile', description: 'Native and cross-platform mobile application development.', created: '2024-03-01', active: true, fallbackPosts: 1 },
+        { id: 'C1006', name: 'Data Science', slug: 'data-science', description: 'Data analysis, visualization, and predictive modeling.', created: '2024-03-18', active: true, fallbackPosts: 0 },
+        { id: 'C1007', name: 'Cybersecurity', slug: 'cybersecurity', description: 'Application security, privacy, and online safety.', created: '2024-04-02', active: true, fallbackPosts: 0 }
+      ];
+      const defaultCategoryTranslations = {
+        C1001: { en: { name: 'Artificial Intelligence', slug: 'ai' }, vi: { name: 'Trí tuệ nhân tạo (AI)', slug: 'tri-tue-nhan-tao' }, zh: { name: '人工智能 (AI)', slug: 'ren-gong-zhi-neng' } },
+        C1002: { en: { name: 'Backend Engineering', slug: 'backend' }, vi: { name: 'Kỹ thuật Backend', slug: 'ky-thuat-backend' }, zh: { name: '后端工程', slug: 'hou-duan-gong-cheng' } },
+        C1003: { en: { name: 'Design', slug: 'design' }, vi: { name: 'Thiết kế UI/UX', slug: 'thiet-ke-ui-ux' }, zh: { name: '设计 (Design)', slug: 'ui-ux-she-ji' } },
+        C1004: { en: { name: 'Frontend Development', slug: 'frontend' }, vi: { name: 'Lập trình Frontend', slug: 'lap-trinh-frontend' }, zh: { name: '前端开发', slug: 'qian-duan-kai-fa' } },
+        C1005: { en: { name: 'Mobile Development', slug: 'mobile' }, vi: { name: 'Lập trình Mobile', slug: 'lap-trinh-mobile' }, zh: { name: '移动开发', slug: 'yi-dong-kai-fa' } },
+        C1006: { en: { name: 'Data Science', slug: 'data-science' }, vi: { name: 'Khoa học Dữ liệu', slug: 'khoa-hoc-du-lieu' }, zh: { name: '数据科学', slug: 'shu-ju-ke-xue' } },
+        C1007: { en: { name: 'Cybersecurity', slug: 'cybersecurity' }, vi: { name: 'An ninh mạng', slug: 'an-ninh-mang' }, zh: { name: '网络安全', slug: 'wang-luo-an-quan' } }
+      };
+      const pageText = {
+        en: { category: 'Category', created: 'Created', description: 'Description', description_placeholder: 'Briefly describe this category...', name_required: 'Please enter a category name.', slug_unique_help: 'If the slug already exists, a number will be added automatically.', slug_adjusted: 'This slug already exists. The available slug {slug} will be used.', category_status: 'Category status', status_help: 'Show this category on the feed.', shown: '{shown} of {total} categories', active: 'Active', inactive: 'Inactive', posts: 'posts', edit: 'Edit', delete: 'Delete', no_results: 'No categories found', no_results_help: 'Try another search term.', created_msg: 'Category <b>{name}</b> was created.', updated_msg: 'Category <b>{name}</b> was updated.', deleted_msg: 'Category <b>{name}</b> was deleted.', status_msg: 'Category <b>{name}</b> is now {status}.', delete_confirm: 'Delete category "{name}"?', no_posts: 'No posts found in this category.', open_edit: 'Open editor for {name}' },
+        vi: { category: 'Danh mục', created: 'Ngày tạo', description: 'Mô tả', description_placeholder: 'Mô tả ngắn về danh mục...', name_required: 'Vui lòng nhập tên danh mục.', slug_unique_help: 'Nếu đường dẫn đã tồn tại, hệ thống sẽ tự động thêm số ở cuối.', slug_adjusted: 'Đường dẫn này đã tồn tại. Hệ thống sẽ dùng {slug}.', category_status: 'Trạng thái danh mục', status_help: 'Hiển thị danh mục này trên bảng tin.', shown: '{shown} / {total} danh mục', active: 'Hoạt động', inactive: 'Đã ẩn', posts: 'bài viết', edit: 'Chỉnh sửa', delete: 'Xóa', no_results: 'Không tìm thấy danh mục', no_results_help: 'Hãy thử từ khóa khác.', created_msg: 'Đã tạo danh mục <b>{name}</b>.', updated_msg: 'Đã cập nhật danh mục <b>{name}</b>.', deleted_msg: 'Đã xóa danh mục <b>{name}</b>.', status_msg: 'Danh mục <b>{name}</b> hiện {status}.', delete_confirm: 'Xóa danh mục "{name}"?', no_posts: 'Không tìm thấy bài viết trong danh mục này.', open_edit: 'Mở chỉnh sửa danh mục {name}' },
+        zh: { category: '分类', created: '创建日期', description: '描述', description_placeholder: '简要描述此分类...', name_required: '请输入分类名称。', slug_unique_help: '如果路径已存在，系统会自动在末尾添加数字。', slug_adjusted: '该路径已存在，将使用可用路径 {slug}。', category_status: '分类状态', status_help: '在动态中显示此分类。', shown: '{shown} / {total} 个分类', active: '启用', inactive: '已隐藏', posts: '篇文章', edit: '编辑', delete: '删除', no_results: '未找到分类', no_results_help: '请尝试其他关键词。', created_msg: '已创建分类 <b>{name}</b>。', updated_msg: '已更新分类 <b>{name}</b>。', deleted_msg: '已删除分类 <b>{name}</b>。', status_msg: '分类 <b>{name}</b> 当前为{status}。', delete_confirm: '删除分类“{name}”吗？', no_posts: '此分类中没有文章。', open_edit: '打开 {name} 的编辑器' }
+      };
+
+      let categories;
+      try { categories = JSON.parse(localStorage.getItem(storageKey)) || seedCategories; } catch (_) { categories = seedCategories; }
+      categories = categories.map(category => ({
+        ...category,
+        translations: {
+          ...(defaultCategoryTranslations[category.id] || {}),
+          ...(category.translations || {})
+        }
+      }));
+      let currentLang = localStorage.getItem('preferredLanguage') || 'en';
+      let editingId = null;
+      let openPostsCategoryId = null;
+      const t = (key, values = {}) => ((pageText[currentLang] || pageText.en)[key] || pageText.en[key] || key).replace(/\{(\w+)\}/g, (_, name) => values[name] ?? '');
+      const escapeHtml = value => String(value ?? '').replace(/[&<>'"]/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[char]));
+      const categoryTranslation = (category, lang = currentLang) => category.translations?.[lang] || category.translations?.en || { name: category.name, slug: category.slug };
+      const hasPostTranslation = (post, lang = currentLang) => {
+        const supported = String(post.supported_langs || '').split(',').map(code => code.trim());
+        return supported.includes(lang) && Boolean(String(post[`title_${lang}`] || '').trim());
+      };
+      const persist = () => localStorage.setItem(storageKey, JSON.stringify(categories));
+      const formatDate = value => new Intl.DateTimeFormat(currentLang === 'vi' ? 'vi-VN' : currentLang === 'zh' ? 'zh-CN' : 'en-US', { year: 'numeric', month: 'short', day: '2-digit' }).format(new Date(`${value}T00:00:00`));
+      const tableBody = document.getElementById('categoryTableBody');
+      const searchInput = document.getElementById('categorySearchInput');
+      const addForm = document.getElementById('addCategoryForm');
+      const editForm = document.getElementById('editCategoryForm');
+      const addName = document.getElementById('inputCategoryName');
+      const addSlug = document.getElementById('inputCategorySlug');
+      const addDescription = document.getElementById('inputCategoryDescription');
+      const editName = document.getElementById('editCategoryName');
+      const editSlug = document.getElementById('editCategorySlug');
+      const editDescription = document.getElementById('editCategoryDescription');
+      const editStatus = document.getElementById('editCategoryStatus');
+      const addModal = bootstrap.Modal.getOrCreateInstance(document.getElementById('addCategoryModal'));
+      const editModal = bootstrap.Modal.getOrCreateInstance(document.getElementById('editCategoryModal'));
+      const postsOffcanvasElement = document.getElementById('categoryPostsOffcanvas');
+      const postsOffcanvas = bootstrap.Offcanvas.getOrCreateInstance(postsOffcanvasElement);
+      const toast = new bootstrap.Toast(document.getElementById('adminToast'), { delay: 2600 });
+
+      function showToast(message) {
+        document.getElementById('toastMessage').innerHTML = `<i class="bi bi-check-circle-fill text-success fs-5"></i><span>${message}</span>`;
+        toast.show();
+      }
+
+      function generateSlug(value) {
+        return String(value || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[đĐ]/g, 'd').toLowerCase().trim().replace(/\s+/g, '-').replace(/[^\p{Letter}\p{Number}-]+/gu, '').replace(/-+/g, '-').replace(/^-|-$/g, '') || 'category';
+      }
+
+      function uniqueSlug(base, ignoreId = null) {
+        const used = new Set(categories.filter(category => category.id !== ignoreId).map(category => categoryTranslation(category).slug.toLowerCase()));
+        if (!used.has(base.toLowerCase())) return base;
+        let suffix = 2;
+        while (used.has(`${base}-${suffix}`.toLowerCase())) suffix += 1;
+        return `${base}-${suffix}`;
+      }
+
+      function updateSlugPreview(name, input, help, ignoreId = null) {
+        const base = generateSlug(name);
+        const available = uniqueSlug(base, ignoreId);
+        input.value = available;
+        const adjusted = available !== base;
+        help.textContent = adjusted ? t('slug_adjusted', { slug: available }) : t('slug_unique_help');
+        help.classList.toggle('slug-adjusted', adjusted);
+      }
+
+      function postCount(category) {
+        if (!window.globalPostsData) return category.fallbackPosts || 0;
+        return Object.values(window.globalPostsData).filter(post => post.category === category.name && hasPostTranslation(post)).length;
+      }
+
+      function visibleCategories() {
+        const query = searchInput.value.trim().toLocaleLowerCase();
+        return categories.filter(category => {
+          const translated = categoryTranslation(category);
+          return !query || `${translated.name} ${translated.slug} ${category.description || ''}`.toLocaleLowerCase().includes(query);
+        });
+      }
+
+      function renderTable() {
+        const visible = visibleCategories();
+        document.getElementById('categoryResultCount').textContent = t('shown', { shown: visible.length, total: categories.length });
+        if (!visible.length) {
+          tableBody.innerHTML = `<tr><td colspan="6" class="category-empty"><i class="bi bi-search fs-3 d-block mb-2"></i><strong>${t('no_results')}</strong><div class="small mt-1">${t('no_results_help')}</div></td></tr>`;
+          return;
+        }
+        tableBody.innerHTML = visible.map(category => {
+          const count = postCount(category);
+          const translated = categoryTranslation(category);
+          return `<tr class="category-table-row" tabindex="0" data-category-id="${escapeHtml(category.id)}" aria-label="${escapeHtml(t('open_edit', { name: translated.name }))}">
+            <td><div class="category-name-cell"><span class="category-icon"><i class="bi bi-tag"></i></span><div class="min-w-0"><div class="category-title">${escapeHtml(translated.name)}</div><div class="category-description">${escapeHtml(category.description || '')}</div></div></div></td>
+            <td><code class="slug-code">/${escapeHtml(translated.slug)}</code></td>
+            <td class="text-muted text-nowrap">${formatDate(category.created)}</td>
+            <td><button class="btn btn-sm rounded-pill post-count-btn category-posts-btn" type="button" data-category-id="${escapeHtml(category.id)}"><span class="badge rounded-pill text-bg-warning">${count}</span>${t('posts')}<i class="bi bi-chevron-right"></i></button></td>
+            <td><label class="category-status-control d-inline-flex align-items-center gap-2 mb-0"><input class="form-check-input category-status-toggle mt-0" type="checkbox" ${category.active ? 'checked' : ''} data-category-id="${escapeHtml(category.id)}" aria-label="${t('status_help')}"><span class="category-status ${category.active ? 'active' : 'inactive'}"><i class="bi bi-circle-fill" style="font-size:.42rem"></i>${t(category.active ? 'active' : 'inactive')}</span></label></td>
+            <td><div class="category-actions"><button class="btn btn-sm btn-light border category-action-btn category-edit-btn" type="button" data-category-id="${escapeHtml(category.id)}" title="${t('edit')}"><i class="bi bi-pencil"></i></button><button class="btn btn-sm btn-outline-danger category-action-btn category-delete-btn" type="button" data-category-id="${escapeHtml(category.id)}" title="${t('delete')}"><i class="bi bi-trash"></i></button></div></td>
+          </tr>`;
+        }).join('');
+      }
+
+      function openEditor(id) {
+        const category = categories.find(item => item.id === id);
+        if (!category) return;
+        const translated = categoryTranslation(category);
+        editingId = id;
+        editName.value = translated.name;
+        editSlug.value = translated.slug;
+        editDescription.value = category.description || '';
+        editStatus.checked = category.active;
+        document.getElementById('editSlugUniqueHelp').textContent = t('slug_unique_help');
+        document.getElementById('editSlugUniqueHelp').classList.remove('slug-adjusted');
+        editForm.classList.remove('was-validated');
+        editModal.show();
+      }
+
+      function showCategoryPosts(id) {
+        const category = categories.find(item => item.id === id);
+        if (!category) return;
+        const translated = categoryTranslation(category);
+        openPostsCategoryId = id;
+        document.getElementById('ocCategoryName').textContent = translated.name;
+        const list = document.getElementById('ocCategoryPostsList');
+        const matching = window.globalPostsData ? Object.entries(window.globalPostsData).filter(([, post]) => post.category === category.name && hasPostTranslation(post)) : [];
+        list.innerHTML = matching.length ? matching.map(([postId, post]) => `<a href="../post-detail.html?id=${encodeURIComponent(postId)}&lang=${encodeURIComponent(currentLang)}" class="list-group-item list-group-item-action p-4 border-bottom"><h6 class="fw-bold mb-2 text-main">${escapeHtml(post[`title_${currentLang}`])}</h6><div class="text-muted small"><i class="bi bi-person me-1"></i>${escapeHtml(post.author_name || '')}</div></a>`).join('') : `<div class="p-4 text-center text-muted">${t('no_posts')}</div>`;
+        postsOffcanvas.show();
+      }
+
+      function applyPageLanguage(lang) {
+        currentLang = pageText[lang] ? lang : 'en';
+        document.querySelectorAll('[data-cat-key]').forEach(element => { element.textContent = t(element.dataset.catKey); });
+        document.querySelectorAll('[data-cat-placeholder]').forEach(element => { element.placeholder = t(element.dataset.catPlaceholder); });
+        renderTable();
+        if (editingId && document.getElementById('editCategoryModal').classList.contains('show')) openEditor(editingId);
+        if (openPostsCategoryId && postsOffcanvasElement.classList.contains('show')) showCategoryPosts(openPostsCategoryId);
+      }
+
+      addName.addEventListener('input', () => updateSlugPreview(addName.value, addSlug, document.getElementById('addSlugUniqueHelp')));
+      editName.addEventListener('input', () => updateSlugPreview(editName.value, editSlug, document.getElementById('editSlugUniqueHelp'), editingId));
+      searchInput.addEventListener('input', renderTable);
+
+      addForm.addEventListener('submit', event => {
+        event.preventDefault();
+        if (!addForm.checkValidity()) { addForm.classList.add('was-validated'); return; }
+        const name = addName.value.trim();
+        const slug = uniqueSlug(generateSlug(name));
+        const category = { id: `C${Date.now()}`, name, slug, translations: { [currentLang]: { name, slug } }, description: addDescription.value.trim(), created: new Date().toISOString().slice(0, 10), active: true, fallbackPosts: 0 };
+        categories.push(category); persist(); renderTable(); addForm.reset(); addForm.classList.remove('was-validated'); addModal.hide(); showToast(t('created_msg', { name: escapeHtml(name) }));
+      });
+
+      editForm.addEventListener('submit', event => {
+        event.preventDefault();
+        const category = categories.find(item => item.id === editingId);
+        if (!category || !editForm.checkValidity()) { editForm.classList.add('was-validated'); return; }
+        const translatedName = editName.value.trim();
+        const translatedSlug = uniqueSlug(generateSlug(translatedName), category.id);
+        category.translations = category.translations || {};
+        category.translations[currentLang] = { name: translatedName, slug: translatedSlug };
+        category.description = editDescription.value.trim();
+        category.active = editStatus.checked;
+        persist(); renderTable(); editModal.hide(); showToast(t('updated_msg', { name: escapeHtml(translatedName) }));
+      });
+
+      tableBody.addEventListener('click', async event => {
+        const postsButton = event.target.closest('.category-posts-btn');
+        const editButton = event.target.closest('.category-edit-btn');
+        const deleteButton = event.target.closest('.category-delete-btn');
+        const statusControl = event.target.closest('.category-status-control');
+        if (postsButton) { event.stopPropagation(); showCategoryPosts(postsButton.dataset.categoryId); return; }
+        if (editButton) { event.stopPropagation(); openEditor(editButton.dataset.categoryId); return; }
+        if (deleteButton) {
+          event.stopPropagation();
+          const category = categories.find(item => item.id === deleteButton.dataset.categoryId);
+          const translated = category ? categoryTranslation(category) : null;
+          if (category && await window.confirmDestructive({
+            message: t('delete_confirm', { name: translated.name }),
+            confirmText: t('delete')
+          })) {
+            categories = categories.filter(item => item.id !== category.id);
+            persist();
+            renderTable();
+            showToast(t('deleted_msg', { name: escapeHtml(translated.name) }));
+          }
+          return;
+        }
+        if (statusControl) { event.stopPropagation(); return; }
+        const row = event.target.closest('.category-table-row');
+        if (row) openEditor(row.dataset.categoryId);
+      });
+      tableBody.addEventListener('change', event => {
+        const toggle = event.target.closest('.category-status-toggle');
+        if (!toggle) return;
+        event.stopPropagation();
+        const category = categories.find(item => item.id === toggle.dataset.categoryId);
+        if (!category) return;
+        category.active = toggle.checked; persist(); renderTable(); showToast(t('status_msg', { name: escapeHtml(categoryTranslation(category).name), status: t(category.active ? 'active' : 'inactive').toLowerCase() }));
+      });
+      tableBody.addEventListener('keydown', event => {
+        if ((event.key === 'Enter' || event.key === ' ') && event.target.matches('.category-table-row')) { event.preventDefault(); openEditor(event.target.dataset.categoryId); }
+      });
+
+      document.getElementById('addCategoryModal').addEventListener('show.bs.modal', () => { addForm.reset(); addForm.classList.remove('was-validated'); updateSlugPreview('', addSlug, document.getElementById('addSlugUniqueHelp')); });
+      document.addEventListener('click', event => { const option = event.target.closest('.global-lang-select'); if (option) applyPageLanguage(option.dataset.lang || 'en'); });
+      window.addEventListener('storage', event => { if (event.key === 'preferredLanguage') applyPageLanguage(event.newValue || 'en'); });
+      const signOut = event => { event.preventDefault(); localStorage.removeItem('currentUser'); window.location.href = '../index.html'; };
+      document.getElementById('signOutBtn')?.addEventListener('click', signOut);
+      document.getElementById('mobileSignOutBtn')?.addEventListener('click', signOut);
+      persist(); applyPageLanguage(currentLang);
     });
   </script>
 </body>

@@ -587,14 +587,8 @@
 <a class="sidebar-nav-item" href="#">
 <i class="bi bi-inbox"></i> <span data-i18n="inbox">Inbox</span>
 </a>
-<a class="sidebar-nav-item" href="#">
-<i class="bi bi-heart"></i> <span data-i18n="liked_posts">Liked Posts</span>
-</a>
 <a aria-current="page" class="sidebar-nav-item active" href="my-posts.html">
 <i class="bi bi-journal-text"></i> <span data-i18n="my_articles">My Articles</span>
-</a>
-<a class="sidebar-nav-item" href="about.html">
-<i class="bi bi-info-circle"></i> <span data-i18n="about">About</span>
 </a>
 <a class="sidebar-nav-item" href="profile.html">
 <i class="bi bi-person"></i> <span data-i18n="profile">Profile</span>
@@ -604,7 +598,29 @@
 <span data-i18n="create">Create</span> <i class="bi bi-plus-lg"></i>
 </a>
 </div>
+
 <div class="sidebar-footer-menu">
+
+          <!-- Sidebar Controls (Theme & Language) -->
+          <div class="sidebar-controls mb-2">
+            <!-- Theme Switch and Language -->
+            <div class="d-flex align-items-center justify-content-start gap-2 ps-3 pe-2 mb-2">
+              <div class="dropdown">
+                <button class="btn btn-sm btn-outline-secondary d-flex align-items-center justify-content-center p-0" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="width: 38px; height: 38px; border-radius: 8px; border-color: var(--border-color);">
+                  <img src="https://flagcdn.com/w20/gb.png" width="24" height="18" id="sidebarLangFlag" style="border-radius:2px; object-fit: cover;" alt="Language">
+                </button>
+                <ul class="dropdown-menu shadow border-light-subtle" style="min-width: 120px; border-radius: 12px; font-size: 14px;">
+                  <li><a class="dropdown-item py-1.5 fw-medium global-lang-select" href="#" data-lang="en"><img src="https://flagcdn.com/w20/gb.png" width="18" alt="English" class="me-2" style="border-radius:2px;"> English</a></li>
+                  <li><a class="dropdown-item py-1.5 fw-medium global-lang-select" href="#" data-lang="vi"><img src="https://flagcdn.com/w20/vn.png" width="18" alt="Tiếng Việt" class="me-2" style="border-radius:2px;"> Tiếng Việt</a></li>
+                  <li><a class="dropdown-item py-1.5 fw-medium global-lang-select" href="#" data-lang="zh"><img src="https://flagcdn.com/w20/cn.png" width="18" alt="中文" class="me-2" style="border-radius:2px;"> 中文</a></li>
+                </ul>
+              </div>
+              <button class="btn btn-sm btn-outline-secondary d-flex align-items-center justify-content-center p-0" id="sidebarThemeToggle" style="width: 38px; height: 38px; border-radius: 8px; border-color: var(--border-color); color: var(--text-main);" aria-label="Toggle theme">
+                <i class="bi bi-moon-fill" id="sidebarThemeIcon" style="font-size: 17px;"></i>
+              </button>
+            </div>
+          </div>
+
 <div class="dropdown">
 <button aria-expanded="false" class="btn btn-link text-decoration-none text-main d-flex align-items-center gap-2 p-1.5 w-100 border-0 text-start" data-bs-toggle="dropdown" type="button">
 <i class="bi bi-list fs-5"></i>
@@ -613,7 +629,6 @@
 <ul class="dropdown-menu shadow border-light-subtle">
 <li><a class="dropdown-item py-2" href="settings.html"><i class="bi bi-gear me-2"></i> <span data-i18n="settings">Settings</span></a></li>
 <li><a class="dropdown-item py-2" href="admin/index.html"><i class="bi bi-speedometer2 me-2"></i> <span data-i18n="admin_panel">Admin Panel</span></a></li>
-<li><a class="dropdown-item py-2" href="change-password.html"><i class="bi bi-shield-lock me-2"></i> <span data-i18n="security">Security</span></a></li>
 <li><hr class="dropdown-divider"/></li>
 <li><a class="dropdown-item py-2 text-danger" href="#" id="signOutBtn"><i class="bi bi-box-arrow-right me-2"></i> <span data-i18n="sign_out">Sign Out</span></a></li>
 </ul>
@@ -925,14 +940,8 @@
 <a class="sidebar-nav-item" href="#">
 <i class="bi bi-inbox"></i> <span data-i18n="inbox">Inbox</span>
 </a>
-<a class="sidebar-nav-item" href="#">
-<i class="bi bi-heart"></i> <span data-i18n="liked_posts">Liked Posts</span>
-</a>
 <a aria-current="page" class="sidebar-nav-item active" href="my-posts.html">
 <i class="bi bi-journal-text"></i> <span data-i18n="my_articles">My Articles</span>
-</a>
-<a class="sidebar-nav-item" href="about.html">
-<i class="bi bi-info-circle"></i> <span data-i18n="about">About</span>
 </a>
 <a class="sidebar-nav-item" href="profile.html">
 <i class="bi bi-person"></i> <span data-i18n="profile">Profile</span>
@@ -945,7 +954,6 @@
 <div class="d-flex flex-column gap-1">
 <a class="sidebar-nav-item" href="settings.html"><i class="bi bi-gear"></i> <span data-i18n="settings">Settings</span></a>
 <a class="sidebar-nav-item" href="admin/index.html"><i class="bi bi-speedometer2"></i> <span data-i18n="admin_panel">Admin Panel</span></a>
-<a class="sidebar-nav-item" href="change-password.html"><i class="bi bi-shield-lock"></i> <span data-i18n="security">Security</span></a>
 <a class="sidebar-nav-item text-danger" href="#" id="mobileSignOutBtn"><i class="bi bi-box-arrow-right"></i> <span data-i18n="sign_out">Sign Out</span></a>
 </div>
 </div>
@@ -1072,16 +1080,25 @@
       });
 
       // Handle bulk actions
-      document.getElementById('bulkDeleteBtn')?.addEventListener('click', () => {
+      document.getElementById('bulkDeleteBtn')?.addEventListener('click', async () => {
         const checkedRows = rowChecks.filter(check => check.checked && !check.closest('tr')?.hidden).map(check => check.closest('tr'));
         if (checkedRows.length === 0) return;
 
         if (activeFilter === 'trash') {
-          if (confirm(`Bạn có chắc chắn muốn xóa vĩnh viễn ${checkedRows.length} bài viết này?`)) {
+          if (await window.confirmDestructive({ message: `Bạn có chắc chắn muốn xóa vĩnh viễn ${checkedRows.length} bài viết này?` })) {
             checkedRows.forEach(row => row.remove());
           }
         } else {
-          if (confirm(`Bạn có muốn chuyển ${checkedRows.length} bài viết này vào thùng rác?`)) {
+          const currentLang = localStorage.getItem('preferredLanguage') || 'en';
+          const trashMessage = currentLang === 'vi'
+            ? `Bạn có muốn chuyển ${checkedRows.length} bài viết này vào thùng rác?`
+            : currentLang === 'zh'
+              ? `要将这 ${checkedRows.length} 篇文章移至回收站吗？`
+              : `Do you want to move these ${checkedRows.length} posts to trash?`;
+          if (await window.confirmDestructive({
+            variant: 'trash',
+            message: trashMessage
+          })) {
             checkedRows.forEach(row => {
               row.dataset.status = 'trash';
               const statusCell = row.querySelector('td:nth-child(3)');
@@ -1134,14 +1151,14 @@
       });
 
       // Handle row actions (Delete / Restore)
-      document.body.addEventListener('click', (e) => {
+      document.body.addEventListener('click', async (e) => {
         const trashBtn = e.target.closest('.action-btn.text-danger');
         if (trashBtn) {
           e.preventDefault();
           const row = trashBtn.closest('tr');
           if (row) {
             if (row.dataset.status === 'trash') {
-              if (confirm((window.uiTranslations && window.uiTranslations[localStorage.getItem('preferredLanguage') || 'en'] ? window.uiTranslations[localStorage.getItem('preferredLanguage') || 'en']['confirm_delete_permanent'] : 'Are you sure you want to permanently delete this post?'))) {
+              if (await window.confirmDestructive({ message: (window.uiTranslations && window.uiTranslations[localStorage.getItem('preferredLanguage') || 'en'] ? window.uiTranslations[localStorage.getItem('preferredLanguage') || 'en']['confirm_delete_permanent'] : 'Are you sure you want to permanently delete this post?') })) {
                 row.remove();
                 rows = Array.from(document.querySelectorAll('[data-post-table-body] tr'));
                 rowChecks = Array.from(document.querySelectorAll('[data-post-table-body] .row-check'));
@@ -1149,7 +1166,10 @@
                 applyFilters();
               }
             } else {
-              if (confirm((window.uiTranslations && window.uiTranslations[localStorage.getItem('preferredLanguage') || 'en'] ? window.uiTranslations[localStorage.getItem('preferredLanguage') || 'en']['confirm_trash'] : 'Do you want to move this post to trash?'))) {
+              if (await window.confirmDestructive({
+                variant: 'trash',
+                message: (window.uiTranslations && window.uiTranslations[localStorage.getItem('preferredLanguage') || 'en'] ? window.uiTranslations[localStorage.getItem('preferredLanguage') || 'en']['confirm_trash'] : 'Do you want to move this post to trash?')
+              })) {
                 row.dataset.status = 'trash';
                 const statusCell = row.querySelector('td:nth-child(3)');
                 if (statusCell) {
