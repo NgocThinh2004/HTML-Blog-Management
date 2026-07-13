@@ -318,6 +318,65 @@ window.globalPostsData = {
   }
 };
 
+// Shared destructive confirmation dialog used across the site.
+window.confirmDestructive = function(options = {}) {
+  return new Promise(resolve => {
+    const lang = localStorage.getItem('preferredLanguage') || 'en';
+    const defaults = {
+      en: { title: 'Confirm deletion', message: 'Are you sure you want to delete this item?', warning: 'This action cannot be undone.', cancel: 'Cancel', confirm: 'Delete permanently', input: 'Type the item name to confirm:' },
+      vi: { title: 'Xác nhận xóa', message: 'Bạn có chắc chắn muốn xóa mục này?', warning: 'Hành động này không thể hoàn tác.', cancel: 'Hủy bỏ', confirm: 'Xóa vĩnh viễn', input: 'Nhập chính xác tên để xác nhận:' },
+      zh: { title: '确认删除', message: '确定要删除此项目吗？', warning: '此操作无法撤销。', cancel: '取消', confirm: '永久删除', input: '请输入准确名称以确认：' }
+    };
+    const trashDefaults = {
+      en: { title: 'Move to trash', message: 'Do you want to move this item to trash?', warning: 'You can restore it later from the trash.', cancel: 'Cancel', confirm: 'Move to trash', input: 'Type the item name to confirm:' },
+      vi: { title: 'Chuyển vào thùng rác', message: 'Bạn có muốn chuyển mục này vào thùng rác?', warning: 'Bạn có thể khôi phục lại mục này từ thùng rác.', cancel: 'Hủy bỏ', confirm: 'Chuyển vào thùng rác', input: 'Nhập chính xác tên để xác nhận:' },
+      zh: { title: '移至回收站', message: '要将此项目移至回收站吗？', warning: '稍后可以从回收站恢复此项目。', cancel: '取消', confirm: '移至回收站', input: '请输入准确名称以确认：' }
+    };
+    const copySet = options.variant === 'trash' ? trashDefaults : defaults;
+    const copy = copySet[lang] || copySet.en;
+    let element = document.getElementById('sharedDestructiveModal');
+    if (!element) {
+      element = document.createElement('div');
+      element.id = 'sharedDestructiveModal';
+      element.className = 'modal fade destructive-confirm-modal';
+      element.tabIndex = -1;
+      element.innerHTML = `<div class="modal-dialog modal-dialog-centered"><div class="modal-content shadow-lg"><div class="modal-header border-0 pb-0"><button class="btn-close ms-auto" type="button" data-bs-dismiss="modal" aria-label="Close"></button></div><div class="modal-body text-center px-4 pt-1 pb-4"><div class="destructive-confirm-icon mb-3"><i class="bi bi-trash3-fill"></i></div><h4 class="fw-bold text-main mb-2" data-shared-delete-title></h4><p class="text-muted mb-3" data-shared-delete-message></p><div class="destructive-confirm-warning text-start mb-3"><i class="bi bi-exclamation-triangle-fill me-2"></i><span data-shared-delete-warning></span></div><div class="text-start d-none" data-shared-delete-input-wrap><label class="form-label small fw-semibold text-main" data-shared-delete-input-label></label><input class="form-control" type="text" data-shared-delete-input autocomplete="off"></div></div><div class="modal-footer border-0 px-4 pb-4 pt-0"><button class="btn btn-light rounded-pill px-4" type="button" data-bs-dismiss="modal" data-shared-delete-cancel></button><button class="btn btn-primary rounded-pill px-4" type="button" data-shared-delete-confirm></button></div></div></div>`;
+      document.body.appendChild(element);
+    }
+    const modal = bootstrap.Modal.getOrCreateInstance(element);
+    const requiredText = options.requireText || '';
+    const inputWrap = element.querySelector('[data-shared-delete-input-wrap]');
+    const input = element.querySelector('[data-shared-delete-input]');
+    const confirmButton = element.querySelector('[data-shared-delete-confirm]');
+    element.querySelector('[data-shared-delete-title]').textContent = options.title || copy.title;
+    element.querySelector('[data-shared-delete-message]').textContent = options.message || copy.message;
+    element.querySelector('[data-shared-delete-warning]').textContent = options.warning || copy.warning;
+    element.querySelector('[data-shared-delete-cancel]').textContent = options.cancelText || copy.cancel;
+    element.querySelector('[data-shared-delete-input-label]').textContent = options.inputLabel || copy.input;
+    confirmButton.textContent = options.confirmText || copy.confirm;
+    inputWrap.classList.toggle('d-none', !requiredText);
+    input.value = '';
+    confirmButton.disabled = Boolean(requiredText);
+    const sync = () => { confirmButton.disabled = Boolean(requiredText) && input.value !== requiredText; };
+    input.addEventListener('input', sync);
+    let settled = false;
+    const finish = value => {
+      if (settled) return;
+      settled = true;
+      input.removeEventListener('input', sync);
+      confirmButton.removeEventListener('click', approve);
+      element.removeEventListener('hidden.bs.modal', dismiss);
+      resolve(value);
+    };
+    const approve = () => { finish(true); modal.hide(); };
+    const dismiss = () => finish(false);
+    confirmButton.addEventListener('click', approve, { once: true });
+    element.addEventListener('hidden.bs.modal', dismiss, { once: true });
+    modal.show();
+    if (requiredText) element.addEventListener('shown.bs.modal', () => input.focus(), { once: true });
+  });
+};
+
 document.addEventListener('DOMContentLoaded', () => {
   // ========================================================
   // Theme Toggle Mechanism (Circle button)
@@ -370,6 +429,7 @@ document.addEventListener('DOMContentLoaded', () => {
       htmlElement.setAttribute('data-bs-theme', activeTheme);
       localStorage.setItem('theme', activeTheme);
       updateThemeIcon(activeTheme);
+      applySavedBrandAccent();
     });
   }
 
@@ -462,6 +522,7 @@ document.addEventListener('DOMContentLoaded', () => {
   window.updateGlobalTheme = function(theme) {
     htmlElement.setAttribute('data-bs-theme', theme);
     updateThemeIcon(theme);
+    applySavedBrandAccent();
   };
 
   window.addEventListener('storage', (e) => {
@@ -522,14 +583,23 @@ document.addEventListener('DOMContentLoaded', () => {
     const accent = normalizeHex(accentColor);
     if (!accent) return;
 
-    const luminance = getRelativeLuminance(accent);
-    const hover = shiftColor(accent, luminance > 0.58 ? -0.18 : 0.16);
-    const contrast = luminance > 0.58 ? '#141616' : '#ffffff';
+    const sourceLuminance = getRelativeLuminance(accent);
+    const isDarkTheme = htmlElement.getAttribute('data-bs-theme') === 'dark';
+    const needsLightCanvasContrast = !isDarkTheme && sourceLuminance > 0.92;
+    const needsDarkCanvasContrast = isDarkTheme && sourceLuminance < 0.08;
+    const uiAccent = needsLightCanvasContrast ? '#59636F' : needsDarkCanvasContrast ? '#AAB2BD' : accent;
+    const borderAccent = needsLightCanvasContrast ? '#98A2B3' : needsDarkCanvasContrast ? '#667085' : accent;
+    const hover = needsLightCanvasContrast ? '#F2F4F7' : shiftColor(accent, sourceLuminance > 0.58 ? -0.18 : 0.16);
+    const contrast = sourceLuminance > 0.58 ? '#141616' : '#ffffff';
     
+    htmlElement.dataset.accentContrast = needsLightCanvasContrast ? 'light-on-light' : needsDarkCanvasContrast ? 'dark-on-dark' : 'normal';
+    htmlElement.style.setProperty('--brand-accent-color', accent);
     htmlElement.style.setProperty('--primary-color', accent);
     htmlElement.style.setProperty('--primary-hover', hover);
-    htmlElement.style.setProperty('--accent-button-bg', colorToRgba(accent, 0.1));
-    htmlElement.style.setProperty('--accent-button-text', accent);
+    htmlElement.style.setProperty('--accent-ui-color', uiAccent);
+    htmlElement.style.setProperty('--accent-border-color', borderAccent);
+    htmlElement.style.setProperty('--accent-button-bg', needsLightCanvasContrast ? '#FFFFFF' : colorToRgba(accent, isDarkTheme ? 0.16 : 0.1));
+    htmlElement.style.setProperty('--accent-button-text', uiAccent);
     htmlElement.style.setProperty('--accent', accent);
     htmlElement.style.setProperty('--accent-strong', hover);
     htmlElement.style.setProperty('--accent-contrast', contrast);
@@ -2172,6 +2242,44 @@ document.addEventListener('DOMContentLoaded', () => {
   // Call once immediately
   window.applyUserUI();
 
+  const getAuthValidationCopy = () => {
+    const lang = localStorage.getItem('preferredLanguage') || 'en';
+    const copy = {
+      en: {
+        required: 'This field is required.', name: 'Full name must contain at least 2 characters.',
+        email: 'Please enter a valid email address.', password: 'Password must contain at least 8 characters.',
+        confirm: 'Please confirm your password.', mismatch: 'Passwords do not match.',
+        duplicate: 'This email address is already registered.', credentials: 'Invalid email or password.'
+      },
+      vi: {
+        required: 'Vui lòng nhập thông tin này.', name: 'Họ tên phải có ít nhất 2 ký tự.',
+        email: 'Vui lòng nhập đúng định dạng email.', password: 'Mật khẩu phải có ít nhất 8 ký tự.',
+        confirm: 'Vui lòng nhập lại mật khẩu.', mismatch: 'Mật khẩu nhập lại không khớp.',
+        duplicate: 'Email này đã được đăng ký.', credentials: 'Email hoặc mật khẩu không chính xác.'
+      },
+      zh: {
+        required: '请填写此字段。', name: '姓名至少需要 2 个字符。',
+        email: '请输入有效的电子邮件地址。', password: '密码至少需要 8 个字符。',
+        confirm: '请再次输入密码。', mismatch: '两次输入的密码不一致。',
+        duplicate: '该电子邮件地址已注册。', credentials: '电子邮件或密码不正确。'
+      }
+    };
+    return copy[lang] || copy.en;
+  };
+  const setAuthFieldError = (inputId, errorId, message) => {
+    const input = document.getElementById(inputId);
+    const error = document.getElementById(errorId);
+    input?.classList.toggle('is-invalid', Boolean(message));
+    if (error) {
+      error.textContent = message || '';
+      error.classList.toggle('is-visible', Boolean(message));
+    }
+  };
+  const clearAuthFieldOnInput = (inputId, errorId) => {
+    document.getElementById(inputId)?.addEventListener('input', () => setAuthFieldError(inputId, errorId, ''));
+  };
+  const isValidEmail = email => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+
   // ========================================================
   // LOGIN FORM CONTROLLER
   // ========================================================
@@ -2179,6 +2287,8 @@ document.addEventListener('DOMContentLoaded', () => {
   if (loginForm) {
     const toggleBtn = document.getElementById('togglePasswordBtn');
     const pwdInput = document.getElementById('loginPassword');
+    clearAuthFieldOnInput('loginEmail', 'loginEmailError');
+    clearAuthFieldOnInput('loginPassword', 'loginPasswordError');
     if (toggleBtn && pwdInput) {
       toggleBtn.addEventListener('click', () => {
         const isPwd = pwdInput.type === 'password';
@@ -2212,10 +2322,16 @@ document.addEventListener('DOMContentLoaded', () => {
       const password = document.getElementById('loginPassword').value;
       const alertDiv = document.getElementById('authAlert');
       const alertText = document.getElementById('authAlertText');
-
-      if (!email || !password) {
-        alertDiv.classList.remove('d-none');
-        alertText.textContent = 'Please fill in all fields!';
+      const copy = getAuthValidationCopy();
+      setAuthFieldError('loginEmail', 'loginEmailError', '');
+      setAuthFieldError('loginPassword', 'loginPasswordError', '');
+      alertDiv.classList.add('d-none');
+      let isValid = true;
+      if (!email) { setAuthFieldError('loginEmail', 'loginEmailError', copy.required); isValid = false; }
+      else if (!isValidEmail(email)) { setAuthFieldError('loginEmail', 'loginEmailError', copy.email); isValid = false; }
+      if (!password) { setAuthFieldError('loginPassword', 'loginPasswordError', copy.required); isValid = false; }
+      if (!isValid) {
+        loginForm.querySelector('.is-invalid')?.focus();
         return;
       }
 
@@ -2253,7 +2369,7 @@ document.addEventListener('DOMContentLoaded', () => {
           : 'index.html';
       } else {
         alertDiv.classList.remove('d-none');
-        alertText.textContent = 'Invalid email or password!';
+        alertText.textContent = copy.credentials;
       }
     });
   }
@@ -2267,6 +2383,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const pwd2 = document.getElementById('regConfirmPassword');
     const toggle1 = document.getElementById('togglePasswordBtn1');
     const toggle2 = document.getElementById('togglePasswordBtn2');
+    clearAuthFieldOnInput('regName', 'regNameError');
+    clearAuthFieldOnInput('regEmail', 'regEmailError');
+    clearAuthFieldOnInput('regPassword', 'regPasswordError');
+    clearAuthFieldOnInput('regConfirmPassword', 'regConfirmPasswordError');
 
     if (toggle1 && pwd1) {
       toggle1.addEventListener('click', () => {
@@ -2290,23 +2410,23 @@ document.addEventListener('DOMContentLoaded', () => {
       const password = document.getElementById('regPassword').value;
       const confirmPwd = document.getElementById('regConfirmPassword').value;
       const alertDiv = document.getElementById('authAlert');
-      const alertText = document.getElementById('authAlertText');
-
-      if (!name || !email || !password || !confirmPwd) {
-        alertDiv.classList.remove('d-none');
-        alertText.textContent = 'Please fill in all fields!';
-        return;
-      }
-
-      if (password.length < 6) {
-        alertDiv.classList.remove('d-none');
-        alertText.textContent = 'Password must be at least 6 characters!';
-        return;
-      }
-
-      if (password !== confirmPwd) {
-        alertDiv.classList.remove('d-none');
-        alertText.textContent = 'Passwords do not match!';
+      const copy = getAuthValidationCopy();
+      ['regName', 'regEmail', 'regPassword', 'regConfirmPassword'].forEach(id => {
+        const errorId = `${id}Error`;
+        setAuthFieldError(id, errorId, '');
+      });
+      alertDiv.classList.add('d-none');
+      let isValid = true;
+      if (!name) { setAuthFieldError('regName', 'regNameError', copy.required); isValid = false; }
+      else if (name.length < 2) { setAuthFieldError('regName', 'regNameError', copy.name); isValid = false; }
+      if (!email) { setAuthFieldError('regEmail', 'regEmailError', copy.required); isValid = false; }
+      else if (!isValidEmail(email)) { setAuthFieldError('regEmail', 'regEmailError', copy.email); isValid = false; }
+      if (!password) { setAuthFieldError('regPassword', 'regPasswordError', copy.required); isValid = false; }
+      else if (password.length < 8) { setAuthFieldError('regPassword', 'regPasswordError', copy.password); isValid = false; }
+      if (!confirmPwd) { setAuthFieldError('regConfirmPassword', 'regConfirmPasswordError', copy.confirm); isValid = false; }
+      else if (password !== confirmPwd) { setAuthFieldError('regConfirmPassword', 'regConfirmPasswordError', copy.mismatch); isValid = false; }
+      if (!isValid) {
+        registerForm.querySelector('.is-invalid')?.focus();
         return;
       }
 
@@ -2316,8 +2436,8 @@ document.addEventListener('DOMContentLoaded', () => {
         email.toLowerCase() === 'elena@mundiblog.com';
 
       if (emailExists) {
-        alertDiv.classList.remove('d-none');
-        alertText.textContent = 'Email is already registered!';
+        setAuthFieldError('regEmail', 'regEmailError', copy.duplicate);
+        document.getElementById('regEmail')?.focus();
         return;
       }
 

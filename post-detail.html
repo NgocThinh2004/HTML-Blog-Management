@@ -819,7 +819,7 @@
       renderComments(postId);
     }
 
-    function deleteComment(rootId, repId, isChild) {
+    async function deleteComment(rootId, repId, isChild) {
       const urlParams = new URLSearchParams(window.location.search);
       const postId = urlParams.get('id') || "1";
       let comments = getCommentsForPost(postId);
@@ -843,7 +843,7 @@
         }
 
         const confirmMsg = dict.delete_confirm_reply || "Bạn có chắc muốn xóa câu trả lời này?";
-        if (!confirm(confirmMsg)) return;
+        if (!await window.confirmDestructive({ message: confirmMsg })) return;
         
         // Xóa bình luận con: Chỉ xóa chính xác câu phản hồi đó khỏi danh sách replies
         root.replies = root.replies.filter(r => r.id !== repId);
@@ -860,7 +860,7 @@
         }
 
         const confirmMsg = dict.delete_confirm_root || "Bạn có chắc muốn xóa bình luận này? Toàn bộ các bình luận phản hồi bên trong cũng sẽ bị xóa theo!";
-        if (!confirm(confirmMsg)) return;
+        if (!await window.confirmDestructive({ message: confirmMsg })) return;
         
         // Nếu là comment gốc mà bị xóa thì toàn bộ comment con cũng bị xóa theo (vì replies nằm trong root)
         comments = comments.filter(c => c.id !== rootId);

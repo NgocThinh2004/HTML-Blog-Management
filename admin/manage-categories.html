@@ -603,7 +603,7 @@
   </div>
 
   <!-- TOAST NOTIFICATION CONTAINER -->
-  <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 1100;">
+  <div class="position-fixed top-0 end-0 p-3" style="z-index: 1100;">
     <div id="adminToast" class="toast align-items-center text-bg-dark border-0 shadow-lg rounded-4" role="alert"
       aria-live="assertive" aria-atomic="true">
       <div class="d-flex">
@@ -1124,7 +1124,7 @@
         persist(); renderTable(); editModal.hide(); showToast(t('updated_msg', { name: escapeHtml(translatedName) }));
       });
 
-      tableBody.addEventListener('click', event => {
+      tableBody.addEventListener('click', async event => {
         const postsButton = event.target.closest('.category-posts-btn');
         const editButton = event.target.closest('.category-edit-btn');
         const deleteButton = event.target.closest('.category-delete-btn');
@@ -1135,7 +1135,15 @@
           event.stopPropagation();
           const category = categories.find(item => item.id === deleteButton.dataset.categoryId);
           const translated = category ? categoryTranslation(category) : null;
-          if (category && confirm(t('delete_confirm', { name: translated.name }))) { categories = categories.filter(item => item.id !== category.id); persist(); renderTable(); showToast(t('deleted_msg', { name: escapeHtml(translated.name) })); }
+          if (category && await window.confirmDestructive({
+            message: t('delete_confirm', { name: translated.name }),
+            confirmText: t('delete')
+          })) {
+            categories = categories.filter(item => item.id !== category.id);
+            persist();
+            renderTable();
+            showToast(t('deleted_msg', { name: escapeHtml(translated.name) }));
+          }
           return;
         }
         if (statusControl) { event.stopPropagation(); return; }

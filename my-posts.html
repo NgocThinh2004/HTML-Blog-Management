@@ -1080,16 +1080,25 @@
       });
 
       // Handle bulk actions
-      document.getElementById('bulkDeleteBtn')?.addEventListener('click', () => {
+      document.getElementById('bulkDeleteBtn')?.addEventListener('click', async () => {
         const checkedRows = rowChecks.filter(check => check.checked && !check.closest('tr')?.hidden).map(check => check.closest('tr'));
         if (checkedRows.length === 0) return;
 
         if (activeFilter === 'trash') {
-          if (confirm(`Bạn có chắc chắn muốn xóa vĩnh viễn ${checkedRows.length} bài viết này?`)) {
+          if (await window.confirmDestructive({ message: `Bạn có chắc chắn muốn xóa vĩnh viễn ${checkedRows.length} bài viết này?` })) {
             checkedRows.forEach(row => row.remove());
           }
         } else {
-          if (confirm(`Bạn có muốn chuyển ${checkedRows.length} bài viết này vào thùng rác?`)) {
+          const currentLang = localStorage.getItem('preferredLanguage') || 'en';
+          const trashMessage = currentLang === 'vi'
+            ? `Bạn có muốn chuyển ${checkedRows.length} bài viết này vào thùng rác?`
+            : currentLang === 'zh'
+              ? `要将这 ${checkedRows.length} 篇文章移至回收站吗？`
+              : `Do you want to move these ${checkedRows.length} posts to trash?`;
+          if (await window.confirmDestructive({
+            variant: 'trash',
+            message: trashMessage
+          })) {
             checkedRows.forEach(row => {
               row.dataset.status = 'trash';
               const statusCell = row.querySelector('td:nth-child(3)');
@@ -1142,14 +1151,14 @@
       });
 
       // Handle row actions (Delete / Restore)
-      document.body.addEventListener('click', (e) => {
+      document.body.addEventListener('click', async (e) => {
         const trashBtn = e.target.closest('.action-btn.text-danger');
         if (trashBtn) {
           e.preventDefault();
           const row = trashBtn.closest('tr');
           if (row) {
             if (row.dataset.status === 'trash') {
-              if (confirm((window.uiTranslations && window.uiTranslations[localStorage.getItem('preferredLanguage') || 'en'] ? window.uiTranslations[localStorage.getItem('preferredLanguage') || 'en']['confirm_delete_permanent'] : 'Are you sure you want to permanently delete this post?'))) {
+              if (await window.confirmDestructive({ message: (window.uiTranslations && window.uiTranslations[localStorage.getItem('preferredLanguage') || 'en'] ? window.uiTranslations[localStorage.getItem('preferredLanguage') || 'en']['confirm_delete_permanent'] : 'Are you sure you want to permanently delete this post?') })) {
                 row.remove();
                 rows = Array.from(document.querySelectorAll('[data-post-table-body] tr'));
                 rowChecks = Array.from(document.querySelectorAll('[data-post-table-body] .row-check'));
@@ -1157,7 +1166,10 @@
                 applyFilters();
               }
             } else {
-              if (confirm((window.uiTranslations && window.uiTranslations[localStorage.getItem('preferredLanguage') || 'en'] ? window.uiTranslations[localStorage.getItem('preferredLanguage') || 'en']['confirm_trash'] : 'Do you want to move this post to trash?'))) {
+              if (await window.confirmDestructive({
+                variant: 'trash',
+                message: (window.uiTranslations && window.uiTranslations[localStorage.getItem('preferredLanguage') || 'en'] ? window.uiTranslations[localStorage.getItem('preferredLanguage') || 'en']['confirm_trash'] : 'Do you want to move this post to trash?')
+              })) {
                 row.dataset.status = 'trash';
                 const statusCell = row.querySelector('td:nth-child(3)');
                 if (statusCell) {

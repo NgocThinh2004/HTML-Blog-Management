@@ -1509,10 +1509,149 @@ select.form-select-sm {
 }
 
 /* Admin Toast Fix */
-#adminToast {
-  max-width: max-content !important;
-  width: auto !important;
+#adminToast,
+#settingsToast {
+  width: min(420px, calc(100vw - 2rem)) !important;
+  max-width: 420px !important;
 }
+
+#adminToast > .d-flex,
+#settingsToast > .d-flex {
+  display: block !important;
+  position: relative;
+}
+
+#adminToast .toast-body,
+#settingsToast .toast-body {
+  display: block !important;
+  width: 100%;
+  padding: 0.9rem 3rem 0.9rem 1rem;
+  line-height: 1.4;
+}
+
+#adminToast .toast-body > i,
+#settingsToast .toast-body > i {
+  display: inline-block;
+  margin-right: 0.45rem;
+  vertical-align: -0.12em;
+}
+
+#adminToast .toast-body > span,
+#settingsToast .toast-body > span {
+  display: inline;
+}
+
+#adminToast .btn-close,
+#settingsToast .btn-close {
+  position: absolute;
+  top: 50%;
+  right: 0.8rem;
+  margin: 0 !important;
+  transform: translateY(-50%);
+}
+
+.destructive-confirm-modal .modal-content {
+  background: var(--bg-panel);
+  border: 1px solid var(--border-color) !important;
+  border-radius: 22px !important;
+}
+
+.destructive-confirm-icon {
+  width: 64px;
+  height: 64px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  color: var(--primary-color);
+  background: var(--accent-button-bg);
+  font-size: 1.75rem;
+}
+
+.destructive-confirm-warning {
+  padding: 0.9rem 1rem;
+  color: var(--primary-color);
+  background: var(--accent-button-bg);
+  border-radius: 10px;
+  font-size: 0.875rem;
+}
+
+/* Keep a white accent visually white while preserving contrast on light pages. */
+[data-accent-contrast="light-on-light"] .bi-bookmark-fill.text-primary,
+[data-accent-contrast="light-on-light"] .sidebar-nav-item.active i,
+[data-accent-contrast="light-on-light"] .featured-posts-icon i,
+[data-accent-contrast="light-on-light"] .featured-posts-empty i,
+[data-accent-contrast="light-on-light"] .featured-post-metrics .bi-eye-fill,
+[data-accent-contrast="light-on-light"] .stat-icon i,
+[data-accent-contrast="light-on-light"] .category-icon i,
+[data-accent-contrast="light-on-light"] .destructive-confirm-icon i {
+  color: var(--primary-color) !important;
+  filter: drop-shadow(0 0 1px #344054) drop-shadow(0 1px 1px rgba(16, 24, 40, 0.35));
+}
+
+[data-accent-contrast="light-on-light"] .stat-icon,
+[data-accent-contrast="light-on-light"] .featured-posts-icon,
+[data-accent-contrast="light-on-light"] .category-icon,
+[data-accent-contrast="light-on-light"] .destructive-confirm-icon,
+[data-accent-contrast="light-on-light"] .destructive-confirm-warning {
+  border: 1px solid var(--accent-border-color);
+  background: #f8f9fa;
+}
+
+[data-accent-contrast="light-on-light"] .destructive-confirm-warning {
+  color: var(--accent-ui-color);
+}
+
+[data-accent-contrast="light-on-light"] .chart-bar {
+  background-color: var(--primary-color);
+  border: 1px solid #d0d5dd;
+  box-shadow: 0 1px 2px rgba(16, 24, 40, 0.08);
+}
+
+[data-accent-contrast="light-on-light"] .chart-bar:hover {
+  background-color: var(--primary-hover);
+  border-color: var(--accent-border-color);
+}
+
+[data-accent-contrast="light-on-light"] .featured-post-item:hover,
+[data-accent-contrast="light-on-light"] .select-option-card.active {
+  border-color: var(--accent-border-color) !important;
+}
+
+[data-accent-contrast="light-on-light"] .featured-posts-list {
+  scrollbar-color: var(--accent-border-color) transparent;
+}
+
+[data-accent-contrast="light-on-light"] .featured-posts-list::-webkit-scrollbar-thumb {
+  background: var(--accent-border-color);
+}
+
+[data-accent-contrast="light-on-light"] .form-check-input:checked {
+  background-color: var(--primary-color) !important;
+  border-color: var(--accent-border-color) !important;
+  box-shadow: inset 0 0 0 2px var(--accent-ui-color);
+}
+
+[data-accent-contrast="light-on-light"] .perfect-switch-input:checked + .perfect-switch-track {
+  background-color: var(--primary-color);
+  border: 1px solid var(--accent-border-color);
+}
+
+[data-accent-contrast="light-on-light"] .perfect-switch-input:checked + .perfect-switch-track .perfect-switch-thumb {
+  background-color: var(--accent-ui-color);
+}
+
+.auth-field-error {
+  display: none;
+  margin-top: 0.35rem;
+  color: var(--bs-danger);
+  font-size: 0.78rem;
+}
+
+.auth-field-error.is-visible { display: block; }
+.auth-card .form-control.is-invalid { border-color: var(--bs-danger) !important; }
+.auth-card .input-group:has(.form-control.is-invalid) .input-group-text,
+.auth-card .input-group:has(.form-control.is-invalid) .btn { border-color: var(--bs-danger) !important; }
 
 /* iOS Style Switch */
 

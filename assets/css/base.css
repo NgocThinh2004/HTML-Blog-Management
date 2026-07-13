@@ -16,7 +16,7 @@ a {
 }
 
 a:hover {
-  color: var(--primary-color);
+  color: var(--accent-ui-color, var(--primary-color));
 }
 
 h1,
@@ -58,7 +58,7 @@ img {
    BOOTSTRAP 5 UTILITY OVERRIDES (Fixes blue defaults)
    ========================================================== */
 .text-primary {
-  color: var(--primary-color) !important;
+  color: var(--accent-ui-color, var(--primary-color)) !important;
 }
 
 .bg-primary {
@@ -79,7 +79,7 @@ img {
 
 .btn-primary {
   background-color: var(--primary-color) !important;
-  border-color: var(--primary-color) !important;
+  border-color: var(--accent-border-color, var(--primary-color)) !important;
   color: var(--accent-contrast, #ffffff) !important;
 }
 
@@ -92,8 +92,8 @@ img {
 }
 
 .btn-outline-primary {
-  color: var(--primary-color) !important;
-  border-color: var(--primary-color) !important;
+  color: var(--accent-ui-color, var(--primary-color)) !important;
+  border-color: var(--accent-border-color, var(--primary-color)) !important;
 }
 
 .btn-outline-primary:hover {
@@ -104,6 +104,16 @@ img {
 /* Focus outline overrides */
 .form-control:focus,
 .form-select:focus {
-  border-color: var(--primary-color) !important;
+  border-color: var(--accent-border-color, var(--primary-color)) !important;
   box-shadow: 0 0 0 0.15rem rgba(255, 103, 25, 0.15) !important;
+}
+
+[data-accent-contrast="light-on-light"] .btn-primary,
+[data-accent-contrast="light-on-light"] .bg-primary {
+  box-shadow: inset 0 0 0 1px var(--accent-border-color), 0 1px 2px rgba(16, 24, 40, 0.08);
+}
+
+[data-accent-contrast="light-on-light"] .btn-outline-primary:hover {
+  border-color: var(--accent-border-color) !important;
+  box-shadow: inset 0 0 0 1px var(--accent-border-color);
 }
