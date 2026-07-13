@@ -722,6 +722,7 @@ document.addEventListener('DOMContentLoaded', () => {
       // Admin Panel
       admin_dashboard: "Admin Dashboard",
       manage_users: "Manage Users",
+      manage_posts: "Manage Posts",
       manage_categories: "Manage Categories",
       manage_languages: "Manage Languages",
       total_users: "Total Users",
@@ -820,6 +821,8 @@ document.addEventListener('DOMContentLoaded', () => {
       joined: "Joined",
       views_over_time: "Views over time",
       top_languages: "Top Languages",
+      featured_posts: "Featured Articles",
+      featured_posts_desc: "Top 10 ranked by total views",
       lang_vi: "Vietnamese",
       lang_zh: "Chinese",
       lang_en: "English",
@@ -1009,6 +1012,7 @@ document.addEventListener('DOMContentLoaded', () => {
       // Admin Panel
       admin_dashboard: "Bảng điều khiển Admin",
       manage_users: "Quản lý thành viên",
+      manage_posts: "Quản lý bài viết",
       manage_categories: "Quản lý danh mục",
       manage_languages: "Quản lý ngôn ngữ",
       total_users: "Tổng số thành viên",
@@ -1105,6 +1109,8 @@ document.addEventListener('DOMContentLoaded', () => {
       joined: "Tham gia",
       views_over_time: "Lượt xem theo thời gian",
       top_languages: "Ngôn ngữ phổ biến",
+      featured_posts: "Bài viết nổi bật",
+      featured_posts_desc: "Top 10 theo tổng lượt xem",
       lang_vi: "Tiếng Việt",
       lang_zh: "Tiếng Trung",
       lang_en: "Tiếng Anh",
@@ -1284,6 +1290,7 @@ document.addEventListener('DOMContentLoaded', () => {
       // Admin Panel
       admin_dashboard: "管理后台",
       manage_users: "用户管理",
+      manage_posts: "文章管理",
       manage_categories: "分类管理",
       manage_languages: "语言管理",
       total_users: "总用户数",
@@ -1387,6 +1394,8 @@ document.addEventListener('DOMContentLoaded', () => {
       joined: "加入",
       views_over_time: "浏览量趋势",
       top_languages: "热门语言",
+      featured_posts: "热门文章",
+      featured_posts_desc: "总浏览量排名前 10",
       lang_vi: "越南语",
       lang_zh: "中文",
       lang_en: "英语",
@@ -2143,7 +2152,9 @@ document.addEventListener('DOMContentLoaded', () => {
           avatar: matchedUser.avatar
         }));
         alertDiv.classList.add('d-none');
-        window.location.href = 'index.html';
+        window.location.href = matchedUser.role === 'admin'
+          ? 'admin/index.html'
+          : 'index.html';
       } else {
         alertDiv.classList.remove('d-none');
         alertText.textContent = 'Invalid email or password!';

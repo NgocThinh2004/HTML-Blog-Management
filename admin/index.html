@@ -93,6 +93,178 @@
       opacity: 1;
     }
 
+    .featured-posts-card {
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 0;
+    }
+
+    .overview-chart-card {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      margin-bottom: 0;
+    }
+
+    .overview-chart-card .chart-box {
+      flex: 1;
+      height: auto;
+      min-height: 300px;
+    }
+
+    .dashboard-primary-row > [class*="col-"] {
+      display: flex;
+    }
+
+    .featured-posts-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 1.1rem;
+    }
+
+    .featured-posts-icon {
+      width: 36px;
+      height: 36px;
+      flex: 0 0 36px;
+      border-radius: 10px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--primary-color);
+      background: var(--accent-button-bg);
+      font-size: 1rem;
+    }
+
+    .featured-posts-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.65rem;
+      max-height: 370px;
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      scrollbar-width: thin;
+      scrollbar-color: var(--primary-color) transparent;
+      padding-right: 0.4rem;
+    }
+
+    .featured-posts-list::-webkit-scrollbar {
+      width: 5px;
+    }
+
+    .featured-posts-list::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .featured-posts-list::-webkit-scrollbar-thumb {
+      background: var(--primary-color);
+      border-radius: 999px;
+    }
+
+    .featured-posts-empty {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 220px;
+      color: var(--text-muted);
+      text-align: center;
+      font-size: 0.8rem;
+    }
+
+    .featured-posts-empty i {
+      color: var(--primary-color);
+      font-size: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .featured-post-item {
+      display: grid;
+      grid-template-columns: 34px minmax(0, 1fr);
+      gap: 0.75rem;
+      align-items: start;
+      padding: 0.8rem;
+      color: inherit;
+      text-decoration: none;
+      background: var(--bg-body);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      transition: border-color 0.18s ease, transform 0.18s ease, background-color 0.18s ease;
+    }
+
+    .featured-post-item:hover {
+      color: inherit;
+      border-color: var(--primary-color);
+      transform: translateX(3px);
+    }
+
+    .featured-post-item > span:last-child {
+      display: block;
+      min-width: 0;
+    }
+
+    .featured-post-rank {
+      width: 34px;
+      height: 34px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 9px;
+      color: var(--text-muted);
+      background: var(--bg-panel);
+      border: 1px solid var(--border-color);
+      font-size: 0.75rem;
+      font-weight: 700;
+    }
+
+    .featured-post-item:first-child .featured-post-rank {
+      color: var(--primary-color);
+      background: var(--accent-button-bg);
+      border-color: transparent;
+    }
+
+    .featured-post-title {
+      color: var(--text-main);
+      font-size: 0.84rem;
+      font-weight: 650;
+      line-height: 1.35;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .featured-post-author {
+      color: var(--text-muted);
+      font-size: 0.7rem;
+      margin-top: 0.18rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .featured-post-metrics {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-top: 0.48rem;
+      color: var(--text-muted);
+      font-size: 0.68rem;
+      font-weight: 600;
+    }
+
+    .featured-post-metrics span {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+
+    .featured-post-metrics .bi-eye-fill {
+      color: var(--primary-color);
+    }
+
     .admin-card-clean {
       background-color: transparent !important;
       border: none !important;
@@ -214,6 +386,9 @@
             <a href="manage-users.html" class="sidebar-nav-item">
               <i class="bi bi-people"></i> <span data-i18n="manage_users">Manage Users</span>
             </a>
+            <a href="manage-posts.html" class="sidebar-nav-item">
+              <i class="bi bi-file-earmark-check"></i> <span data-i18n="manage_posts">Manage Posts</span>
+            </a>
             <a href="manage-categories.html" class="sidebar-nav-item">
               <i class="bi bi-tags"></i> <span data-i18n="manage_categories">Manage Categories</span>
             </a>
@@ -331,9 +506,9 @@
           </div>
 
           <!-- CHARTS SECTION -->
-          <div class="row g-4 mb-4">
+          <div class="row g-4 mb-4 dashboard-primary-row">
             <div class="col-lg-8">
-              <div class="admin-card">
+              <div class="admin-card overview-chart-card h-100">
                 <h6 class="fw-bold text-main mb-4" data-i18n="views_over_time">Views over time</h6>
                 <div class="chart-box">
                   <div class="chart-bar" style="height: 30%;"><span>300</span></div>
@@ -350,37 +525,15 @@
               </div>
             </div>
             <div class="col-lg-4">
-              <div class="admin-card h-100">
-                <h6 class="fw-bold text-main mb-4" data-i18n="top_languages">Top Languages</h6>
-                <div class="d-flex flex-column gap-3">
+              <div class="admin-card featured-posts-card h-100">
+                <div class="featured-posts-header">
                   <div>
-                    <div class="d-flex justify-content-between text-main small mb-1">
-                      <span data-i18n="lang_vi">Vietnamese</span>
-                      <span class="fw-bold">45%</span>
-                    </div>
-                    <div class="progress" style="height: 6px;">
-                      <div class="progress-bar bg-primary" role="progressbar" style="width: 45%"></div>
-                    </div>
+                    <h6 class="fw-bold text-main mb-1" data-i18n="featured_posts">Featured Articles</h6>
+                    <p class="text-muted mb-0" style="font-size: 0.72rem;" data-i18n="featured_posts_desc">Top 10 ranked by total views</p>
                   </div>
-                  <div>
-                    <div class="d-flex justify-content-between text-main small mb-1">
-                      <span data-i18n="lang_zh">Chinese</span>
-                      <span class="fw-bold">30%</span>
-                    </div>
-                    <div class="progress" style="height: 6px;">
-                      <div class="progress-bar bg-primary" role="progressbar" style="width: 30%; opacity: 0.7"></div>
-                    </div>
-                  </div>
-                  <div>
-                    <div class="d-flex justify-content-between text-main small mb-1">
-                      <span data-i18n="lang_en">English</span>
-                      <span class="fw-bold">25%</span>
-                    </div>
-                    <div class="progress" style="height: 6px;">
-                      <div class="progress-bar bg-primary" role="progressbar" style="width: 25%; opacity: 0.4"></div>
-                    </div>
-                  </div>
+                  <span class="featured-posts-icon" aria-hidden="true"><i class="bi bi-stars"></i></span>
                 </div>
+                <div class="featured-posts-list" id="featuredPostsList"></div>
               </div>
             </div>
           </div>
@@ -463,6 +616,9 @@
         <a href="manage-users.html" class="sidebar-nav-item">
           <i class="bi bi-people"></i> <span data-i18n="manage_users">Manage Users</span>
         </a>
+        <a href="manage-posts.html" class="sidebar-nav-item">
+          <i class="bi bi-file-earmark-check"></i> <span data-i18n="manage_posts">Manage Posts</span>
+        </a>
         <a href="manage-categories.html" class="sidebar-nav-item">
           <i class="bi bi-tags"></i> <span data-i18n="manage_categories">Manage Categories</span>
         </a>
@@ -540,6 +696,73 @@
         }
       }
       updateDashboardStats();
+
+      function escapeHtml(value) {
+        return String(value || '')
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#039;');
+      }
+
+      function renderFeaturedPosts() {
+        const container = document.getElementById('featuredPostsList');
+        if (!container || !window.globalPostsData) return;
+
+        const lang = localStorage.getItem('preferredLanguage') || 'en';
+        const localeMap = { en: 'en-US', vi: 'vi-VN', zh: 'zh-CN' };
+        const dict = (window.uiTranslations && (window.uiTranslations[lang] || window.uiTranslations.en)) || {};
+        const featuredPosts = Object.entries(window.globalPostsData)
+          .filter(([, post]) => {
+            const supportedLanguages = String(post.supported_langs || '')
+              .split(',')
+              .map(code => code.trim());
+            const hasTitle = Boolean(String(post[`title_${lang}`] || '').trim());
+            const hasContent = Boolean(String(post[`content_${lang}`] || '').trim());
+            return supportedLanguages.includes(lang) && hasTitle && hasContent;
+          })
+          .sort(([, a], [, b]) => (b.views || 0) - (a.views || 0))
+          .slice(0, 10);
+
+        if (featuredPosts.length === 0) {
+          container.innerHTML = `
+            <div class="featured-posts-empty">
+              <i class="bi bi-journal-x" aria-hidden="true"></i>
+              <span>${escapeHtml(dict.no_results || 'No translated articles are available.')}</span>
+            </div>`;
+          return;
+        }
+
+        container.innerHTML = featuredPosts.map(([id, post], index) => {
+          const title = post[`title_${lang}`];
+          const formatNumber = value => Number(value || 0).toLocaleString(localeMap[lang] || 'en-US');
+
+          return `
+            <a class="featured-post-item" href="../post-detail.html?id=${encodeURIComponent(id)}" title="${escapeHtml(dict.view || 'View article')}: ${escapeHtml(title)}">
+              <span class="featured-post-rank">${String(index + 1).padStart(2, '0')}</span>
+              <span>
+                <span class="featured-post-title">${escapeHtml(title)}</span>
+                <span class="featured-post-author">${escapeHtml(post.author_name || 'Anonymous')}</span>
+                <span class="featured-post-metrics">
+                  <span title="${escapeHtml(dict.views || 'Views')}"><i class="bi bi-eye-fill"></i>${formatNumber(post.views)}</span>
+                  <span title="${escapeHtml(dict.total_likes || 'Likes')}"><i class="bi bi-heart-fill"></i>${formatNumber(post.likes)}</span>
+                  <span title="${escapeHtml(dict.comments || 'Comments')}"><i class="bi bi-chat-fill"></i>${formatNumber(post.comments)}</span>
+                </span>
+              </span>
+            </a>`;
+        }).join('');
+      }
+
+      renderFeaturedPosts();
+      document.addEventListener('click', (event) => {
+        if (event.target.closest('.global-lang-select')) {
+          renderFeaturedPosts();
+        }
+      });
+      window.addEventListener('storage', (event) => {
+        if (event.key === 'preferredLanguage') renderFeaturedPosts();
+      });
 
       const handleSignOut = (e) => {
         e.preventDefault();
