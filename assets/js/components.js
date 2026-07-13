@@ -45,17 +45,11 @@ function initSharedSidebars() {
           <a href="#" class="sidebar-nav-item">
             <i class="bi bi-inbox"></i> <span data-i18n="inbox">Inbox</span>
           </a>
-          <a href="#" class="sidebar-nav-item">
-            <i class="bi bi-heart"></i> <span data-i18n="liked_posts">Liked Posts</span>
-          </a>
           <a href="explore.html" class="sidebar-nav-item ${activePage === 'explore' ? 'active' : ''}">
             <i class="bi bi-compass-fill"></i> <span data-i18n="explore">Explore</span>
           </a>
           <a href="my-posts.html" class="sidebar-nav-item ${activePage === 'my-posts' ? 'active' : ''}">
             <i class="bi bi-journal-text"></i> <span data-i18n="my_articles">My Articles</span>
-          </a>
-          <a href="about.html" class="sidebar-nav-item ${activePage === 'about' ? 'active' : ''}">
-            <i class="bi bi-info-circle"></i> <span data-i18n="about">About</span>
           </a>
           <a href="profile.html" class="sidebar-nav-item ${activePage === 'profile' ? 'active' : ''}">
             <i class="bi bi-person"></i> <span data-i18n="profile">Profile</span>
@@ -69,6 +63,24 @@ function initSharedSidebars() {
       
       <!-- Bottom Section: More Dropdown -->
       <div class="sidebar-footer-menu">
+        <div class="sidebar-controls mb-2">
+          <!-- Theme Switch and Language -->
+          <div class="d-flex align-items-center justify-content-center gap-2 px-1 mb-2">
+            <div class="dropdown">
+              <button class="btn btn-sm btn-outline-secondary d-flex align-items-center justify-content-center p-0" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="width: 34px; height: 34px; border-radius: 8px; border-color: var(--border-color);">
+                <img src="https://flagcdn.com/w20/gb.png" width="20" height="15" id="sidebarLangFlag" style="border-radius:2px; object-fit: cover;" alt="Language">
+              </button>
+              <ul class="dropdown-menu shadow border-light-subtle" style="min-width: 120px; border-radius: 12px; font-size: 14px;">
+                <li><a class="dropdown-item py-1.5 fw-medium global-lang-select" href="#" data-lang="en"><img src="https://flagcdn.com/w20/gb.png" width="18" alt="English" class="me-2" style="border-radius:2px;"> English</a></li>
+                <li><a class="dropdown-item py-1.5 fw-medium global-lang-select" href="#" data-lang="vi"><img src="https://flagcdn.com/w20/vn.png" width="18" alt="Tiếng Việt" class="me-2" style="border-radius:2px;"> Tiếng Việt</a></li>
+                <li><a class="dropdown-item py-1.5 fw-medium global-lang-select" href="#" data-lang="zh"><img src="https://flagcdn.com/w20/cn.png" width="18" alt="中文" class="me-2" style="border-radius:2px;"> 中文</a></li>
+              </ul>
+            </div>
+            <button class="btn btn-sm btn-outline-secondary d-flex align-items-center justify-content-center p-0" id="sidebarThemeToggle" style="width: 34px; height: 34px; border-radius: 8px; border-color: var(--border-color); color: var(--text-main);" aria-label="Toggle theme">
+              <i class="bi bi-moon-fill" id="sidebarThemeIcon" style="font-size: 15px;"></i>
+            </button>
+          </div>
+        </div>
         <div class="dropdown">
           <button class="btn btn-link text-decoration-none text-main d-flex align-items-center gap-2 p-1.5 w-100 border-0 text-start" type="button" data-bs-toggle="dropdown" aria-expanded="false">
             <i class="bi bi-list fs-5"></i>
@@ -77,7 +89,6 @@ function initSharedSidebars() {
           <ul class="dropdown-menu shadow border-light-subtle">
             <li><a class="dropdown-item py-2 ${activePage === 'settings' ? 'active' : ''}" href="settings.html"><i class="bi bi-gear me-2"></i> <span data-i18n="settings">Settings</span></a></li>
             <li><a class="dropdown-item py-2" href="admin/index.html" id="adminPanelLink"><i class="bi bi-speedometer2 me-2"></i> <span data-i18n="admin_panel">Admin Panel</span></a></li>
-            <li><a class="dropdown-item py-2" href="change-password.html"><i class="bi bi-shield-lock me-2"></i> <span data-i18n="security">Security</span></a></li>
             <li><hr class="dropdown-divider"></li>
             <li><a class="dropdown-item py-2 text-danger" href="#" id="signOutBtn"><i class="bi bi-box-arrow-right me-2"></i> <span data-i18n="sign_out">Sign Out</span></a></li>
           </ul>
@@ -109,17 +120,32 @@ function initSharedSidebars() {
         <nav class="sidebar-nav mb-auto">
           <a href="index.html" class="sidebar-nav-item ${activePage === 'home' ? 'active' : ''}"><i class="bi bi-house-door-fill"></i> <span data-i18n="home">Home</span></a>
           <a href="#" class="sidebar-nav-item"><i class="bi bi-inbox"></i> <span data-i18n="inbox">Inbox</span></a>
-          <a href="#" class="sidebar-nav-item"><i class="bi bi-heart"></i> <span data-i18n="liked_posts">Liked Posts</span></a>
           <a href="explore.html" class="sidebar-nav-item ${activePage === 'explore' ? 'active' : ''}"><i class="bi bi-compass-fill"></i> <span data-i18n="explore">Explore</span></a>
           <a href="my-posts.html" class="sidebar-nav-item ${activePage === 'my-posts' ? 'active' : ''}"><i class="bi bi-journal-text"></i> <span data-i18n="my_articles">My Articles</span></a>
-          <a href="about.html" class="sidebar-nav-item ${activePage === 'about' ? 'active' : ''}"><i class="bi bi-info-circle"></i> <span data-i18n="about">About</span></a>
           <a href="profile.html" class="sidebar-nav-item ${activePage === 'profile' ? 'active' : ''}"><i class="bi bi-person"></i> <span data-i18n="profile">Profile</span></a>
         </nav>
 
         <div class="border-top pt-3 mt-3">
+        <div class="sidebar-controls mb-3">
+            <!-- Theme Switch and Language -->
+            <div class="d-flex align-items-center justify-content-center gap-2 px-1 mb-2">
+              <div class="dropdown">
+                <button class="btn btn-sm btn-outline-secondary d-flex align-items-center justify-content-center p-0" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="width: 34px; height: 34px; border-radius: 8px; border-color: var(--border-color);">
+                  <img src="https://flagcdn.com/w20/gb.png" width="20" height="15" id="mobileLangFlag" style="border-radius:2px; object-fit: cover;" alt="Language">
+                </button>
+                <ul class="dropdown-menu shadow border-light-subtle" style="min-width: 120px; border-radius: 12px; font-size: 14px;">
+                  <li><a class="dropdown-item py-1.5 fw-medium global-lang-select" href="#" data-lang="en"><img src="https://flagcdn.com/w20/gb.png" width="18" alt="English" class="me-2" style="border-radius:2px;"> English</a></li>
+                  <li><a class="dropdown-item py-1.5 fw-medium global-lang-select" href="#" data-lang="vi"><img src="https://flagcdn.com/w20/vn.png" width="18" alt="Tiếng Việt" class="me-2" style="border-radius:2px;"> Tiếng Việt</a></li>
+                  <li><a class="dropdown-item py-1.5 fw-medium global-lang-select" href="#" data-lang="zh"><img src="https://flagcdn.com/w20/cn.png" width="18" alt="中文" class="me-2" style="border-radius:2px;"> 中文</a></li>
+                </ul>
+              </div>
+              <button class="btn btn-sm btn-outline-secondary d-flex align-items-center justify-content-center p-0" id="mobileThemeToggle" style="width: 34px; height: 34px; border-radius: 8px; border-color: var(--border-color); color: var(--text-main);" aria-label="Toggle theme">
+                <i class="bi bi-moon-fill" id="mobileThemeIcon" style="font-size: 15px;"></i>
+              </button>
+            </div>
+          </div>
           <a href="settings.html" class="sidebar-nav-item mb-2 ${activePage === 'settings' ? 'active' : ''}"><i class="bi bi-gear"></i> <span data-i18n="settings">Settings</span></a>
           <a href="admin/index.html" class="sidebar-nav-item mb-2"><i class="bi bi-speedometer2"></i> <span data-i18n="admin_panel">Admin Panel</span></a>
-          <a href="change-password.html" class="sidebar-nav-item mb-2"><i class="bi bi-shield-lock"></i> <span data-i18n="security">Security</span></a>
           <a href="#" class="sidebar-nav-item text-danger"><i class="bi bi-box-arrow-right"></i> <span data-i18n="sign_out">Sign Out</span></a>
         </div>
       </div>

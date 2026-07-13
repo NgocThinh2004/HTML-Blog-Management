@@ -326,6 +326,66 @@ document.addEventListener('DOMContentLoaded', () => {
   const themeIcon = document.getElementById('themeIcon');
   const htmlElement = document.documentElement;
 
+  // Initialize sidebar language label and flag
+  const sidebarCurrentLang = document.getElementById('sidebarCurrentLang');
+  if (sidebarCurrentLang) {
+    const currentLang = localStorage.getItem('preferredLanguage') || 'en';
+    sidebarCurrentLang.textContent = currentLang.toUpperCase();
+  }
+  const sidebarLangFlag = document.getElementById('sidebarLangFlag');
+  if (sidebarLangFlag) {
+    const currentLang = localStorage.getItem('preferredLanguage') || 'en';
+    const flagMap = { 'en': 'gb', 'vi': 'vn', 'zh': 'cn' };
+    sidebarLangFlag.src = 'https://flagcdn.com/w20/' + (flagMap[currentLang] || 'gb') + '.png';
+  }
+  const mobileLangFlag = document.getElementById('mobileLangFlag');
+  if (mobileLangFlag) {
+    const currentLang = localStorage.getItem('preferredLanguage') || 'en';
+    const flagMap = { 'en': 'gb', 'vi': 'vn', 'zh': 'cn' };
+    mobileLangFlag.src = 'https://flagcdn.com/w20/' + (flagMap[currentLang] || 'gb') + '.png';
+  }
+
+  // Global language switch listener for sidebars and other selectors
+  document.addEventListener('click', (e) => {
+    const langSelect = e.target.closest('.global-lang-select');
+    if (langSelect) {
+      e.preventDefault();
+      const lang = langSelect.getAttribute('data-lang');
+      localStorage.setItem('preferredLanguage', lang);
+      
+      const sidebarCurrentLang = document.getElementById('sidebarCurrentLang');
+      if (sidebarCurrentLang) {
+        sidebarCurrentLang.textContent = lang.toUpperCase();
+      }
+      const mobileCurrentLang = document.getElementById('mobileCurrentLang');
+      if (mobileCurrentLang) {
+        mobileCurrentLang.textContent = lang.toUpperCase();
+      }
+      const currentLangLabel = document.getElementById('currentLangLabel');
+      if (currentLangLabel) {
+        currentLangLabel.textContent = lang.toUpperCase();
+      }
+      
+      // Update flag images if they exist
+      const flagMap = { 'en': 'gb', 'vi': 'vn', 'zh': 'cn' };
+      const flagImg = document.getElementById('currentLangFlag');
+      if (flagImg) {
+        flagImg.src = 'https://flagcdn.com/w20/' + (flagMap[lang] || 'gb') + '.png';
+      }
+      const sidebarFlagImg = document.getElementById('sidebarLangFlag');
+      if (sidebarFlagImg) {
+        sidebarFlagImg.src = 'https://flagcdn.com/w20/' + (flagMap[lang] || 'gb') + '.png';
+      }
+      const mobileFlagImg = document.getElementById('mobileLangFlag');
+      if (mobileFlagImg) {
+        mobileFlagImg.src = 'https://flagcdn.com/w20/' + (flagMap[lang] || 'gb') + '.png';
+      }
+      
+      if(window.applyUiTranslations) window.applyUiTranslations(lang);
+      if(window.applyLanguageFilter) window.applyLanguageFilter(lang);
+    }
+  });
+
   const savedTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
   htmlElement.setAttribute('data-bs-theme', savedTheme);
   updateThemeIcon(savedTheme);
@@ -341,13 +401,54 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function updateThemeIcon(theme) {
-    if (!themeIcon) return;
-    if (theme === 'dark') {
-      themeIcon.className = 'bi bi-sun';
-    } else {
-      themeIcon.className = 'bi bi-moon';
+    const lang = localStorage.getItem('preferredLanguage') || 'en';
+    let dict = null;
+    try { dict = uiTranslations[lang] || uiTranslations.en; } catch (e) {}
+    const modeKey = theme === 'dark' ? 'light_mode' : 'dark_mode';
+
+    if (themeIcon) {
+      if (theme === 'dark') {
+        themeIcon.className = 'bi bi-sun';
+      } else {
+        themeIcon.className = 'bi bi-moon';
+      }
+    }
+
+    // Update sidebar theme controls
+    const sidebarThemeIcon = document.getElementById('sidebarThemeIcon');
+    const sidebarThemeText = document.getElementById('sidebarThemeText');
+    
+    if (sidebarThemeIcon) {
+      sidebarThemeIcon.className = theme === 'dark' ? 'bi bi-sun-fill' : 'bi bi-moon-fill';
+    }
+    if (sidebarThemeText) {
+      sidebarThemeText.setAttribute('data-i18n', modeKey);
+      if (dict) sidebarThemeText.textContent = dict[modeKey];
+    }
+    
+    // Update mobile theme controls
+    const mobileThemeIcon = document.getElementById('mobileThemeIcon');
+    const mobileThemeText = document.getElementById('mobileThemeText');
+    
+    if (mobileThemeIcon) {
+      mobileThemeIcon.className = theme === 'dark' ? 'bi bi-sun-fill' : 'bi bi-moon-fill';
+    }
+    if (mobileThemeText) {
+      mobileThemeText.setAttribute('data-i18n', modeKey);
+      if (dict) mobileThemeText.textContent = dict[modeKey];
     }
   }
+
+  // Sidebar theme toggle click listener via event delegation (for dynamically injected DOM)
+  document.addEventListener('click', (e) => {
+    const themeToggle = e.target.closest('#sidebarThemeToggle') || e.target.closest('#mobileThemeToggle');
+    if (themeToggle) {
+      const activeTheme = htmlElement.getAttribute('data-bs-theme') === 'dark' ? 'light' : 'dark';
+      htmlElement.setAttribute('data-bs-theme', activeTheme);
+      localStorage.setItem('theme', activeTheme);
+      updateThemeIcon(activeTheme);
+    }
+  });
 
   function hexToRgb(hex) {
     const normalized = String(hex || '').replace('#', '').trim();
@@ -512,6 +613,8 @@ document.addEventListener('DOMContentLoaded', () => {
       autoplay_desc: "Automatically play animated GIFs and short clips when scrolling.",
       back_feed: "Back to Feed",
       auto_saved: "Changes auto-saved",
+      dark_mode: "Dark Mode",
+      light_mode: "Light Mode",
       // Post Detail page
       comments: "Comments",
       comment_placeholder: "Write a comment in any language...",
@@ -935,6 +1038,8 @@ document.addEventListener('DOMContentLoaded', () => {
       system_default: "Mặc định hệ thống",
       back_admin: "Quay lại Bảng điều khiển Admin",
       posts_suffix: "bài viết",
+      dark_mode: "Giao diện Tối",
+      light_mode: "Giao diện Sáng",
       select_language: "Chọn ngôn ngữ",
       choose_lang_placeholder: "Chọn một ngôn ngữ...",
       language_code: "Mã ngôn ngữ",
@@ -1207,7 +1312,9 @@ document.addEventListener('DOMContentLoaded', () => {
       primary_language: "主要语言",
       system_default: "系统默认",
       back_admin: "返回管理后台",
-      posts_suffix: "篇内容",
+      posts_suffix: "篇文章",
+      dark_mode: "深色模式",
+      light_mode: "浅色模式",
       select_language: "选择语言",
       choose_lang_placeholder: "选择语言...",
       language_code: "语言代码",
@@ -1351,6 +1458,13 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       }
     });
+
+    const sidebarCurrentLang = document.getElementById('sidebarCurrentLang');
+    if (sidebarCurrentLang) sidebarCurrentLang.textContent = lang.toUpperCase();
+    const mobileCurrentLang = document.getElementById('mobileCurrentLang');
+    if (mobileCurrentLang) mobileCurrentLang.textContent = lang.toUpperCase();
+    const currentLangLabel = document.getElementById('currentLangLabel');
+    if (currentLangLabel) currentLangLabel.textContent = lang.toUpperCase();
 
     // Translate dynamic titles in any list items (such as the admin queue)
     document.querySelectorAll('[data-translate-title-vi], [data-translate-title-zh]').forEach(el => {
