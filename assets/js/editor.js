@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const subtitleInput = document.getElementById('postSubtitle');
   const saveButton = document.getElementById('saveButton');
   const saveLabel = saveButton ? saveButton.querySelector('[data-save-label]') : null;
-  const previewButton = document.querySelector('[data-preview-button]');
+  const previewButtons = document.querySelectorAll('[data-preview-button]');
   const continueButton = document.querySelector('[data-publish-button]');
   const publishModal = document.querySelector('[data-publish-modal]');
   const draftConfirmModal = document.querySelector('[data-draft-modal]');
@@ -507,7 +507,11 @@ document.addEventListener('DOMContentLoaded', () => {
   function setSaveState(isSaved) {
     if (!saveButton || !saveLabel) return;
     saveButton.classList.toggle('is-saved', isSaved);
-    saveLabel.textContent = isSaved ? 'Saved' : 'Save';
+    const lang = localStorage.getItem('preferredLanguage') || 'en';
+    const dict = window.uiTranslations ? (window.uiTranslations[lang] || window.uiTranslations.en) : null;
+    const txtSaved = dict ? (dict.btn_saved || 'Saved') : 'Saved';
+    const txtSave = dict ? (dict.btn_save || 'Save') : 'Save';
+    saveLabel.textContent = isSaved ? txtSaved : txtSave;
   }
 
   function collectDraft() {
@@ -817,7 +821,14 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function openPreview(event) {
-    if (event) event.preventDefault();
+    if (event) {
+      event.preventDefault();
+      // Reset to original language if triggered by a real user click on the Preview button
+      if (event.isTrusted && previewLanguageSelect) {
+        previewLanguageSelect.value = 'original';
+        previewLanguageSelect.dispatchEvent(new Event('change'));
+      }
+    }
     if (!previewModal) return;
 
     saveDraft();
@@ -1058,6 +1069,20 @@ document.addEventListener('DOMContentLoaded', () => {
         setSelectedInMenu(button, '[data-format-block]');
       } else if (button.dataset.applyColor !== undefined) {
         const color = button.dataset.color;
+        
+        // Update the trigger button underline color
+        const menuPanel = button.closest('.tool-menu-panel');
+        if (menuPanel) {
+          const trigger = menuPanel.previousElementSibling;
+          if (trigger && trigger.classList.contains('tool-btn')) {
+            if (color) {
+              trigger.style.setProperty('--underline-color', color);
+            } else {
+              trigger.style.removeProperty('--underline-color');
+            }
+          }
+        }
+
         if (!color) {
           runCommand('removeFormat');
         } else if (button.dataset.applyColor === 'highlight') {
@@ -1406,7 +1431,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   if (saveButton) saveButton.addEventListener('click', saveDraft);
-  if (previewButton) previewButton.addEventListener('click', openPreview);
+  if (previewButtons.length) previewButtons.forEach(btn => btn.addEventListener('click', openPreview));
   if (continueButton) {
     continueButton.addEventListener('click', (e) => {
       saveDraft();
