@@ -593,6 +593,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const contrast = sourceLuminance > 0.58 ? '#141616' : '#ffffff';
     
     htmlElement.dataset.accentContrast = needsLightCanvasContrast ? 'light-on-light' : needsDarkCanvasContrast ? 'dark-on-dark' : 'normal';
+    htmlElement.dataset.accentTone = sourceLuminance > 0.92 ? 'light' : sourceLuminance < 0.08 ? 'dark' : 'normal';
     htmlElement.style.setProperty('--brand-accent-color', accent);
     htmlElement.style.setProperty('--primary-color', accent);
     htmlElement.style.setProperty('--primary-hover', hover);
@@ -665,8 +666,8 @@ document.addEventListener('DOMContentLoaded', () => {
       admin_panel: "Admin Panel",
       security: "Security",
       change_password: "Change password",
-      password_description_short: "Update the password for your MundiBlog account.",
-      password_description_long: "Update the password for your MundiBlog account. Use a strong password that you do not use anywhere else.",
+      password_description_short: "Update the password for your Lingora account.",
+      password_description_long: "Update the password for your Lingora account. Use a strong password that you do not use anywhere else.",
       back_to_profile: "Back to profile",
       current_password_label: "Current password",
       new_password_label: "New password",
@@ -678,6 +679,7 @@ document.addEventListener('DOMContentLoaded', () => {
       password_mismatch_error: "New passwords do not match.",
       password_success: "Password updated successfully.",
       sign_out: "Sign Out",
+      sign_out_success: "Signed out successfully!",
       active: "Active",
       inactive: "Inactive",
       created_date: "Created:",
@@ -695,9 +697,9 @@ document.addEventListener('DOMContentLoaded', () => {
       slug_ai: "ai",
       slug_backend: "backend",
       slug_design: "design",
-      search_placeholder: "Search MundiBlog...",
+      search_placeholder: "Search Lingora...",
       subscriptions: "Subscriptions",
-      join_creators: "Join creators on MundiBlog",
+      join_creators: "Join creators on Lingora",
       recommended: "Recommended for You",
       see_all: "See all",
       view_profile: "View Profile",
@@ -723,7 +725,7 @@ document.addEventListener('DOMContentLoaded', () => {
       profile_none: "None",
       // Settings page
       settings_title: "Settings & Preferences",
-      settings_desc: "Manage your interface, display language, and reading preferences on MundiBlog.",
+      settings_desc: "Manage your interface, display language, and reading preferences on Lingora.",
       appearance_title: "Appearance & Theme",
       appearance_desc: "Choose a light or dark theme to suit your environment and protect your eyes when reading posts.",
       theme_light: "Light",
@@ -742,6 +744,12 @@ document.addEventListener('DOMContentLoaded', () => {
       auto_saved: "Changes auto-saved",
       dark_mode: "Dark Mode",
       light_mode: "Light Mode",
+      toast_theme_changed: "Switched to <b>{theme}</b> theme",
+      toast_language_changed: "Feed and interface language set to <b>{language}</b>",
+      toast_compact_on: "Compact view turned on",
+      toast_compact_off: "Compact view turned off",
+      toast_autoplay_on: "Media auto-play turned on",
+      toast_autoplay_off: "Media auto-play turned off",
       // Post Detail page
       comments: "Comments",
       comment_placeholder: "Write a comment in any language...",
@@ -784,6 +792,7 @@ document.addEventListener('DOMContentLoaded', () => {
       reads: "Reads",
       actions: "Actions",
       open: "Open",
+      restore: "Restore",
       status_draft: "Draft",
       status_published: "Published",
       status_pending: "Pending",
@@ -903,6 +912,7 @@ document.addEventListener('DOMContentLoaded', () => {
       dont_have_account: "Don't have an account?",
       already_have_account: "Already have an account?",
       quick_demo_login: "QUICK DEMO LOGIN",
+      quick_admin_login: "Quick login as Admin",
       register_here: "Register here",
       login_here: "Log in here",
       post_list: "Article List",
@@ -982,8 +992,8 @@ document.addEventListener('DOMContentLoaded', () => {
       admin_panel: "Quản trị viên",
       security: "Bảo mật",
       change_password: "Đổi mật khẩu",
-      password_description_short: "Cập nhật mật khẩu cho tài khoản MundiBlog của bạn.",
-      password_description_long: "Cập nhật mật khẩu cho tài khoản MundiBlog của bạn. Hãy dùng mật khẩu mạnh mà bạn không dùng ở nơi khác.",
+      password_description_short: "Cập nhật mật khẩu cho tài khoản Lingora của bạn.",
+      password_description_long: "Cập nhật mật khẩu cho tài khoản Lingora của bạn. Hãy dùng mật khẩu mạnh mà bạn không dùng ở nơi khác.",
       back_to_profile: "Quay lại hồ sơ",
       current_password_label: "Mật khẩu hiện tại",
       new_password_label: "Mật khẩu mới",
@@ -995,6 +1005,7 @@ document.addEventListener('DOMContentLoaded', () => {
       password_mismatch_error: "Mật khẩu mới không khớp.",
       password_success: "Đã cập nhật mật khẩu thành công.",
       sign_out: "Đăng xuất",
+      sign_out_success: "Đăng xuất thành công!",
       active: "Bật",
       inactive: "Tắt",
       created_date: "Ngày tạo:",
@@ -1012,7 +1023,7 @@ document.addEventListener('DOMContentLoaded', () => {
       slug_ai: "tri-tue-nhan-tao",
       slug_backend: "ky-thuat-backend",
       slug_design: "thiet-ke-ui-ux",
-      search_placeholder: "Tìm kiếm trên MundiBlog...",
+      search_placeholder: "Tìm kiếm trên Lingora...",
       subscriptions: "Đăng ký theo dõi",
       join_creators: "Kết nối cùng tác giả",
       recommended: "Gợi ý cho bạn",
@@ -1040,7 +1051,7 @@ document.addEventListener('DOMContentLoaded', () => {
       profile_none: "Không có",
       // Settings page
       settings_title: "Cài đặt & Tùy chọn",
-      settings_desc: "Quản lý giao diện, ngôn ngữ hiển thị và cấu hình trải nghiệm đọc bài viết trên MundiBlog.",
+      settings_desc: "Quản lý giao diện, ngôn ngữ hiển thị và cấu hình trải nghiệm đọc bài viết trên Lingora.",
       appearance_title: "Chế độ Giao diện",
       appearance_desc: "Chọn chế độ màu sáng hoặc tối phù hợp với môi trường và bảo vệ thị lực của bạn khi đọc bài đăng.",
       theme_light: "Sáng",
@@ -1057,6 +1068,12 @@ document.addEventListener('DOMContentLoaded', () => {
       autoplay_desc: "Tự động phát hình ảnh động và clip ngắn khi cuộn qua bài viết.",
       back_feed: "Quay lại Bảng tin",
       auto_saved: "Tự động lưu thay đổi",
+      toast_theme_changed: "Đã đổi sang giao diện <b>{theme}</b>",
+      toast_language_changed: "Đã đặt ngôn ngữ bảng tin và giao diện là <b>{language}</b>",
+      toast_compact_on: "Đã bật chế độ đọc gọn gàng",
+      toast_compact_off: "Đã tắt chế độ đọc gọn gàng",
+      toast_autoplay_on: "Đã bật tự động phát video/GIF",
+      toast_autoplay_off: "Đã tắt tự động phát video/GIF",
       // Post Detail page
       comments: "Bình luận",
       comment_placeholder: "Viết bình luận bằng bất kỳ ngôn ngữ nào...",
@@ -1099,6 +1116,7 @@ document.addEventListener('DOMContentLoaded', () => {
       reads: "Lượt đọc",
       actions: "Thao tác",
       open: "Mở",
+      restore: "Khôi phục",
       status_draft: "Nháp",
       status_published: "Đã đăng",
       status_pending: "Chờ duyệt",
@@ -1223,6 +1241,7 @@ document.addEventListener('DOMContentLoaded', () => {
       dont_have_account: "Chưa có tài khoản?",
       already_have_account: "Đã có tài khoản?",
       quick_demo_login: "ĐĂNG NHẬP NHANH DEMO",
+      quick_admin_login: "Đăng nhập nhanh với vai trò Admin",
       register_here: "Đăng ký tại đây",
       login_here: "Đăng nhập tại đây",
       post_list: "Danh sách bài viết",
@@ -1303,8 +1322,8 @@ document.addEventListener('DOMContentLoaded', () => {
       admin_panel: "管理后台",
       security: "安全设置",
       change_password: "修改密码",
-      password_description_short: "更新你的 MundiBlog 账户密码。",
-      password_description_long: "更新你的 MundiBlog 账户密码。请使用你没有在其他地方使用过的强密码。",
+      password_description_short: "更新你的 Lingora 账户密码。",
+      password_description_long: "更新你的 Lingora 账户密码。请使用你没有在其他地方使用过的强密码。",
       back_to_profile: "返回个人资料",
       current_password_label: "当前密码",
       new_password_label: "新密码",
@@ -1316,6 +1335,7 @@ document.addEventListener('DOMContentLoaded', () => {
       password_mismatch_error: "两次输入的新密码不一致。",
       password_success: "密码已成功更新。",
       sign_out: "退出登录",
+      sign_out_success: "退出登录成功！",
       login: "登录",
       what_on_mind: "你想分享什么？",
       for_you: "推荐",
@@ -1329,9 +1349,9 @@ document.addEventListener('DOMContentLoaded', () => {
       slug_ai: "ren-gong-zhi-neng",
       slug_backend: "hou-duan-gong-cheng",
       slug_design: "ui-ux-she-ji",
-      search_placeholder: "搜索 MundiBlog...",
+      search_placeholder: "搜索 Lingora...",
       subscriptions: "关注作者",
-      join_creators: "在 MundiBlog 上连接创作者",
+      join_creators: "在 Lingora 上连接创作者",
       recommended: "为你推荐",
       see_all: "查看全部",
       view_profile: "查看主页",
@@ -1357,7 +1377,7 @@ document.addEventListener('DOMContentLoaded', () => {
       profile_none: "无",
       // Settings page
       settings_title: "设置与偏好",
-      settings_desc: "管理您的界面、显示语言和 MundiBlog 上的阅读偏好。",
+      settings_desc: "管理您的界面、显示语言和 Lingora 上的阅读偏好。",
       appearance_title: "外观与主题",
       appearance_desc: "选择适合您环境的明亮或黑暗主题，在阅读文章时保护您的视力。",
       theme_light: "明亮",
@@ -1374,6 +1394,12 @@ document.addEventListener('DOMContentLoaded', () => {
       autoplay_desc: "滚动时自动播放动图和短视频。",
       back_feed: "返回动态",
       auto_saved: "更改已自动保存",
+      toast_theme_changed: "已切换到<b>{theme}</b>主题",
+      toast_language_changed: "动态和界面语言已设置为<b>{language}</b>",
+      toast_compact_on: "已开启紧凑视图",
+      toast_compact_off: "已关闭紧凑视图",
+      toast_autoplay_on: "已开启媒体自动播放",
+      toast_autoplay_off: "已关闭媒体自动播放",
       // Post Detail page
       comments: "评论",
       comment_placeholder: "用任何语言写下你的评论...",
@@ -1416,6 +1442,7 @@ document.addEventListener('DOMContentLoaded', () => {
       reads: "阅读量",
       actions: "操作",
       open: "打开",
+      restore: "恢复",
       status_draft: "草稿",
       status_published: "已发布",
       status_pending: "待审核",
@@ -1540,6 +1567,7 @@ document.addEventListener('DOMContentLoaded', () => {
       dont_have_account: "还没有账号？",
       already_have_account: "已有账号？",
       quick_demo_login: "快速测试登录",
+      quick_admin_login: "以管理员身份快速登录",
       register_here: "点击注册",
       login_here: "点击登录",
       post_list: "文章列表",
@@ -1576,6 +1604,25 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
   window.uiTranslations = uiTranslations;
+
+  window.showLingoraToast = function (message, options = {}) {
+    document.querySelector('.lingora-app-toast')?.remove();
+    const toast = document.createElement('div');
+    toast.className = 'lingora-app-toast';
+    toast.setAttribute('role', 'status');
+    toast.setAttribute('aria-live', 'polite');
+    const icon = document.createElement('i');
+    icon.className = `bi ${options.icon || 'bi-check-circle-fill'}`;
+    const text = document.createElement('span');
+    text.textContent = String(message || '');
+    toast.append(icon, text);
+    document.body.appendChild(toast);
+    requestAnimationFrame(() => toast.classList.add('is-visible'));
+    window.setTimeout(() => {
+      toast.classList.remove('is-visible');
+      window.setTimeout(() => toast.remove(), 220);
+    }, options.duration || 1800);
+  };
 
   window.formatTimestampI18n = function (ts) {
     if (!ts) return "";
@@ -2179,11 +2226,9 @@ document.addEventListener('DOMContentLoaded', () => {
       e.preventDefault();
       localStorage.removeItem('currentUser');
       const currentLang = localStorage.getItem('preferredLanguage') || 'en';
-      const msg = currentLang === 'vi' ? 'Đăng xuất thành công!' :
-        currentLang === 'zh' ? '登出成功！' :
-          'Signed out successfully!';
-      alert(msg);
-      window.location.href = homeUrl;
+      const msg = uiTranslations[currentLang]?.sign_out_success || uiTranslations.en.sign_out_success;
+      window.showLingoraToast(msg);
+      window.setTimeout(() => { window.location.href = homeUrl; }, 900);
     }
 
     const signOutLinks = document.querySelectorAll('#signOutBtn, #mobileSignOutBtn');
@@ -2302,7 +2347,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (elenaBtn) {
       elenaBtn.addEventListener('click', (e) => {
         e.preventDefault();
-        document.getElementById('loginEmail').value = 'elena@mundiblog.com';
+        document.getElementById('loginEmail').value = 'elena@lingora.com';
         document.getElementById('loginPassword').value = 'password123';
         loginForm.dispatchEvent(new Event('submit'));
       });
@@ -2310,7 +2355,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (adminBtn) {
       adminBtn.addEventListener('click', (e) => {
         e.preventDefault();
-        document.getElementById('loginEmail').value = 'admin@mundiblog.com';
+        document.getElementById('loginEmail').value = 'admin@lingora.com';
         document.getElementById('loginPassword').value = 'admin123';
         loginForm.dispatchEvent(new Event('submit'));
       });
@@ -2338,14 +2383,14 @@ document.addEventListener('DOMContentLoaded', () => {
       const registeredUsers = JSON.parse(localStorage.getItem('registered_users') || '[]');
       const mockUsers = [
         {
-          email: 'admin@mundiblog.com',
+          email: 'admin@lingora.com',
           password: 'admin123',
           name: 'System Admin',
           role: 'admin',
           avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=80&h=80'
         },
         {
-          email: 'elena@mundiblog.com',
+          email: 'elena@lingora.com',
           password: 'password123',
           name: 'Elena Rostova',
           role: 'member',
@@ -2432,8 +2477,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const registeredUsers = JSON.parse(localStorage.getItem('registered_users') || '[]');
       const emailExists = registeredUsers.some(u => u.email.toLowerCase() === email.toLowerCase()) ||
-        email.toLowerCase() === 'admin@mundiblog.com' ||
-        email.toLowerCase() === 'elena@mundiblog.com';
+        email.toLowerCase() === 'admin@lingora.com' ||
+        email.toLowerCase() === 'elena@lingora.com';
 
       if (emailExists) {
         setAuthFieldError('regEmail', 'regEmailError', copy.duplicate);

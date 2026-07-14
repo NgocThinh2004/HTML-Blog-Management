@@ -1247,22 +1247,54 @@ button {
 
 .title-input,
 .subtitle-input {
+  display: block;
   width: 100%;
   border: 0;
   color: #596064;
   background: transparent;
   outline: none;
   font-family: Georgia, "Times New Roman", serif;
+  font-variant-numeric: lining-nums proportional-nums;
+  font-feature-settings: "lnum" 1, "onum" 0;
+  resize: none;
+  overflow: hidden;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
 }
 
 .title-input {
   font-size: clamp(42px, 7vw, 64px);
   font-weight: 700;
+  line-height: 1.12;
 }
 
 .subtitle-input {
   margin-top: 20px;
   font-size: clamp(22px, 3vw, 30px);
+  line-height: 1.35;
+}
+
+.writing-limit {
+  min-height: 20px;
+  margin-top: 5px;
+  color: #8a9192;
+  font-size: 12px;
+  font-weight: 600;
+  text-align: right;
+  transition: color 0.15s ease;
+}
+
+.writing-limit.is-near {
+  color: #a15c00;
+}
+
+.writing-limit.is-over {
+  color: #c62828;
+}
+
+.writing-limit-body {
+  margin-top: -78px;
+  padding-bottom: 58px;
 }
 
 .author-row {
@@ -2398,6 +2430,26 @@ body.publish-modal-open {
   margin-bottom: 0;
 }
 
+.original-language-readonly {
+  min-height: 40px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface-subtle, var(--bg-soft));
+  color: var(--text);
+  font-weight: 600;
+  cursor: default;
+  user-select: none;
+}
+
+.original-language-readonly i {
+  color: var(--primary);
+  font-size: 1rem;
+}
+
 .publish-form-label {
   display: block;
   font-weight: 600;
@@ -2424,6 +2476,28 @@ body.publish-modal-open {
   gap: 8px;
   font-size: 0.95rem;
   cursor: pointer;
+}
+
+/* Native checkboxes need a dark tick when the saved accent is white. */
+[data-accent-tone="light"] .publish-checkbox-label input[type="checkbox"] {
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  margin: 0;
+  border: 1px solid #98a2b3;
+  border-radius: 4px;
+  background: #ffffff;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+[data-accent-tone="light"] .publish-checkbox-label input[type="checkbox"]:checked {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23344054' stroke-linecap='round' stroke-linejoin='round' stroke-width='2.5' d='m3 8 3 3 7-7'/%3e%3c/svg%3e");
+}
+
+[data-accent-tone="light"] .publish-checkbox-label input[type="checkbox"]:focus-visible {
+  outline: 3px solid rgba(52, 64, 84, 0.24);
+  outline-offset: 2px;
 }
 
 .publish-modal-footer {
@@ -3009,12 +3083,19 @@ body.draft-modal-open {
 }
 
 .preview-article h1 {
+  max-width: 100%;
   margin: 0 0 1.5rem;
   color: #202525;
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   font-size: 2.5rem;
   font-weight: 700;
+  font-variant-numeric: lining-nums proportional-nums;
+  font-feature-settings: "lnum" 1, "onum" 0;
   line-height: 1.2;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  hyphens: auto;
 }
 
 .preview-author-row {
@@ -3064,11 +3145,18 @@ body.draft-modal-open {
 }
 
 .preview-subtitle {
+  max-width: 100%;
   margin: 0 0 34px;
   color: #687071;
   font-family: Georgia, "Times New Roman", serif;
+  font-variant-numeric: lining-nums proportional-nums;
+  font-feature-settings: "lnum" 1, "onum" 0;
   font-size: clamp(24px, 3vw, 32px);
   line-height: 1.35;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  hyphens: auto;
 }
 
 .preview-post-body {
