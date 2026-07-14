@@ -27,6 +27,55 @@
   }
 })();
 
+window.sanitizePostHtml = function sanitizePostHtml(value) {
+  const template = document.createElement('template');
+  template.innerHTML = String(value ?? '');
+
+  template.content
+    .querySelectorAll('script, style, iframe, object, embed, form, input, textarea, select, button, meta, link, base, svg, math')
+    .forEach(element => element.remove());
+
+  template.content.querySelectorAll('*').forEach(element => {
+    Array.from(element.attributes).forEach(attribute => {
+      const name = attribute.name.toLowerCase();
+      const attributeValue = attribute.value.trim();
+
+      if (name.startsWith('on') || name === 'srcdoc' || name === 'formaction') {
+        element.removeAttribute(attribute.name);
+        return;
+      }
+
+      if (name === 'href' && /^(?:javascript|vbscript|data):/i.test(attributeValue)) {
+        element.removeAttribute(attribute.name);
+        return;
+      }
+
+      if (name === 'src' && /^(?:javascript|vbscript):/i.test(attributeValue)) {
+        element.removeAttribute(attribute.name);
+        return;
+      }
+
+      if (name === 'src' && /^data:/i.test(attributeValue) && !/^data:(?:image|audio|video)\//i.test(attributeValue)) {
+        element.removeAttribute(attribute.name);
+        return;
+      }
+
+      if (name === 'style' && /(?:expression\s*\(|javascript\s*:|vbscript\s*:)/i.test(attributeValue)) {
+        element.removeAttribute(attribute.name);
+      }
+    });
+
+    element.removeAttribute('contenteditable');
+    element.removeAttribute('spellcheck');
+
+    if (element.tagName === 'A') {
+      element.setAttribute('rel', 'noopener noreferrer');
+    }
+  });
+
+  return template.innerHTML;
+};
+
 // ========================================================
 // Global Posts Data (Accessible across all pages for Live Search)
 // ========================================================
@@ -384,6 +433,39 @@ document.addEventListener('DOMContentLoaded', () => {
   const themeToggle = document.getElementById('themeToggle');
   const themeIcon = document.getElementById('themeIcon');
   const htmlElement = document.documentElement;
+  const supportedLanguages = new Set(['en', 'vi', 'zh']);
+
+  window.getLingoraLanguage = function() {
+    const storedLanguage = String(localStorage.getItem('preferredLanguage') || 'en').toLowerCase();
+    return supportedLanguages.has(storedLanguage) ? storedLanguage : 'en';
+  };
+
+  window.syncLingoraLanguageUI = function(requestedLanguage) {
+    const normalizedLanguage = String(requestedLanguage || window.getLingoraLanguage()).toLowerCase();
+    const language = supportedLanguages.has(normalizedLanguage) ? normalizedLanguage : 'en';
+    htmlElement.setAttribute('lang', language === 'zh' ? 'zh-CN' : language);
+    if (typeof window.updateGlobalFlags === 'function') window.updateGlobalFlags(language);
+    if (typeof window.applyUiTranslations === 'function') window.applyUiTranslations(language);
+    if (typeof window.syncFeedCategoryMenu === 'function') window.syncFeedCategoryMenu();
+    if (typeof window.applyLanguageFilter === 'function') window.applyLanguageFilter(language);
+    return language;
+  };
+
+  window.setLingoraLanguage = function(requestedLanguage) {
+    const normalizedLanguage = String(requestedLanguage || '').toLowerCase();
+    const language = supportedLanguages.has(normalizedLanguage) ? normalizedLanguage : 'en';
+    localStorage.setItem('preferredLanguage', language);
+    window.syncLingoraLanguageUI(language);
+    window.dispatchEvent(new CustomEvent('lingora:languagechange', { detail: { language } }));
+    Promise.resolve().then(() => {
+      if (window.getLingoraLanguage() === language) window.syncLingoraLanguageUI(language);
+    });
+    return language;
+  };
+
+  window.addEventListener('pageshow', () => {
+    window.syncLingoraLanguageUI(window.getLingoraLanguage());
+  });
 
   // Initialize sidebar language label and flag
   const sidebarCurrentLang = document.getElementById('sidebarCurrentLang');
@@ -409,12 +491,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const langSelect = e.target.closest('.global-lang-select');
     if (langSelect) {
       e.preventDefault();
-      const lang = langSelect.getAttribute('data-lang');
-      localStorage.setItem('preferredLanguage', lang);
-      window.updateGlobalFlags(lang);
-      
-      if(window.applyUiTranslations) window.applyUiTranslations(lang);
-      if(window.applyLanguageFilter) window.applyLanguageFilter(lang);
+      window.setLingoraLanguage(langSelect.getAttribute('data-lang'));
     }
   });
 
@@ -489,15 +566,19 @@ document.addEventListener('DOMContentLoaded', () => {
       vi: { flag: 'vn', name: 'Tiếng Việt' },
       zh: { flag: 'cn', name: '中文' }
     };
-    const currentLang = languages[lang] ? lang : 'en';
+    const requestedLanguage = String(lang || window.getLingoraLanguage()).toLowerCase();
+    const currentLang = languages[requestedLanguage] ? requestedLanguage : 'en';
     const language = languages[currentLang];
+    document.documentElement.setAttribute('lang', currentLang === 'zh' ? 'zh-CN' : currentLang);
 
     // querySelectorAll is intentional: a few layouts contain desktop/mobile
     // language controls at the same time, and every visible flag must stay synced.
     const flags = ['currentLangFlag', 'sidebarLangFlag', 'mobileLangFlag'];
     flags.forEach(id => {
       document.querySelectorAll(`[id="${id}"]`).forEach(el => {
-        el.src = `https://flagcdn.com/w20/${language.flag}.png`;
+        const nextSource = `https://flagcdn.com/w20/${language.flag}.png`;
+        if (el.getAttribute('src') !== nextSource) el.setAttribute('src', nextSource);
+        el.setAttribute('data-current-language', currentLang);
         el.alt = language.name;
         el.title = language.name;
       });
@@ -517,7 +598,7 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   // Apply the persisted language after all static controls on the page exist.
-  window.updateGlobalFlags(localStorage.getItem('preferredLanguage') || 'en');
+  window.updateGlobalFlags(window.getLingoraLanguage());
 
   window.updateGlobalTheme = function(theme) {
     htmlElement.setAttribute('data-bs-theme', theme);
@@ -527,10 +608,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   window.addEventListener('storage', (e) => {
     if (e.key === 'preferredLanguage') {
-      const lang = e.newValue || 'en';
-      window.updateGlobalFlags(lang);
-      if (window.applyUiTranslations) window.applyUiTranslations(lang);
-      if (window.applyLanguageFilter) window.applyLanguageFilter(lang);
+      window.syncLingoraLanguageUI(e.newValue || 'en');
     }
     if (e.key === 'theme') {
       const theme = e.newValue || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
@@ -1672,29 +1750,158 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Map category English names to i18n dictionary keys
   const categoryKeyMap = {
-    "Artificial Intelligence": "cat_ai",
-    "Backend Engineering": "cat_backend",
-    "Design": "cat_design",
-    "Frontend Development": "cat_frontend",
-    "Mobile Development": "cat_mobile",
-    "Data Science": "cat_data",
-    "Cybersecurity": "cat_cyber"
+    "artificial intelligence": "cat_ai",
+    "backend engineering": "cat_backend",
+    "design": "cat_design",
+    "frontend development": "cat_frontend",
+    "mobile development": "cat_mobile",
+    "data science": "cat_data",
+    "cybersecurity": "cat_cyber",
+    "technology": "cat_tech",
+    "tech": "cat_tech",
+    "lifestyle": "cat_life",
+    "education": "cat_edu",
+    "entertainment": "cat_ent",
+    "travel": "cat_travel",
+    "food": "cat_food",
+    "business": "cat_biz",
+    "health": "cat_health"
   };
 
   window.translateCategory = function (category) {
     if (!category) return category;
-    const currentLang = localStorage.getItem('preferredLanguage') || 'en';
-    if (currentLang === 'en') return category;
-    const key = categoryKeyMap[category];
+    const currentLang = typeof window.getLingoraLanguage === 'function' ? window.getLingoraLanguage() : (localStorage.getItem('preferredLanguage') || 'en');
+    try {
+      const managedCategories = JSON.parse(localStorage.getItem('admin_categories_v2') || '[]');
+      const normalizedCategory = String(category).trim().toLowerCase();
+      const managedCategory = Array.isArray(managedCategories) ? managedCategories.find(item =>
+        String(item.name || '').trim().toLowerCase() === normalizedCategory ||
+        Object.values(item.translations || {}).some(translation => String(translation?.name || '').trim().toLowerCase() === normalizedCategory)
+      ) : null;
+      const managedTranslation = managedCategory?.translations?.[currentLang];
+      if (managedTranslation?.name && !managedCategory?.deletedTranslations?.[currentLang]) return managedTranslation.name;
+    } catch (error) {
+      // Fall back to the built-in category dictionary.
+    }
+    const key = categoryKeyMap[String(category).trim().toLowerCase()];
     if (!key) return category;
     const dict = (window.uiTranslations && window.uiTranslations[currentLang]) || (window.uiTranslations && window.uiTranslations.en) || {};
-    return dict[key] || category;
+    const englishDict = (window.uiTranslations && window.uiTranslations.en) || {};
+    return dict[key] || englishDict[key] || category;
   };
+
+  window.isCategoryTranslationActive = function (categoryName, language = localStorage.getItem('preferredLanguage') || 'en') {
+    try {
+      const categories = JSON.parse(localStorage.getItem('admin_categories_v2') || '[]');
+      if (!Array.isArray(categories) || !categories.length) return true;
+      const normalizedName = String(categoryName || '').trim().toLowerCase();
+      const category = categories.find(item => {
+        if (String(item.name || '').trim().toLowerCase() === normalizedName) return true;
+        return Object.values(item.translations || {}).some(translation =>
+          String(translation?.name || '').trim().toLowerCase() === normalizedName
+        );
+      });
+      if (!category) return true;
+      const translation = category.translations?.[language];
+      const activeValue = translation?.active;
+      return Boolean(
+        translation &&
+        !category.deletedTranslations?.[language] &&
+        activeValue !== false &&
+        activeValue !== 'false' &&
+        activeValue !== 0 &&
+        activeValue !== '0'
+      );
+    } catch (error) {
+      return true;
+    }
+  };
+
+  function syncFeedCategoryMenu() {
+    const lang = typeof window.getLingoraLanguage === 'function' ? window.getLingoraLanguage() : (localStorage.getItem('preferredLanguage') || 'en');
+    const menu = document.querySelector('.feed-filter-row .dropdown-menu');
+    if (!menu) return;
+
+    let managedCategories = [];
+    try {
+      const stored = JSON.parse(localStorage.getItem('admin_categories_v2') || '[]');
+      managedCategories = Array.isArray(stored) ? stored : [];
+    } catch (error) {
+      managedCategories = [];
+    }
+
+    if (managedCategories.length) {
+      menu.querySelectorAll('[data-feed-category]').forEach(item => item.closest('li')?.remove());
+      managedCategories.forEach(category => {
+        const canonicalName = category.name || category.id || '';
+        const translation = category.translations?.[lang];
+        if (!canonicalName || !translation || !window.isCategoryTranslationActive(canonicalName, lang)) return;
+
+        const listItem = document.createElement('li');
+        const link = document.createElement('a');
+        const label = document.createElement('span');
+        link.className = `dropdown-item${canonicalName === window.currentSelectedCategory ? ' active' : ''}`;
+        link.href = '#';
+        link.setAttribute('data-feed-category', canonicalName);
+        link.setAttribute('aria-disabled', 'false');
+        label.textContent = translation.name || canonicalName;
+        link.appendChild(label);
+        link.addEventListener('click', event => selectCategory(event, canonicalName));
+        listItem.appendChild(link);
+        menu.appendChild(listItem);
+      });
+    }
+
+    const categoryItems = menu.querySelectorAll('[data-feed-category]');
+
+    let selectedCategoryIsActive = window.currentSelectedCategory === 'all';
+    categoryItems.forEach(item => {
+      const category = item.getAttribute('data-feed-category') || '';
+      const isActive = window.isCategoryTranslationActive(category, lang);
+      const itemLabel = item.querySelector('span');
+      if (itemLabel) itemLabel.textContent = window.translateCategory(category);
+      const listItem = item.closest('li');
+      if (listItem) listItem.hidden = !isActive;
+      item.classList.toggle('disabled', !isActive);
+      item.setAttribute('aria-disabled', String(!isActive));
+      if (category === window.currentSelectedCategory && isActive) selectedCategoryIsActive = true;
+    });
+
+    if (!selectedCategoryIsActive) {
+      window.currentSelectedCategory = 'all';
+      document.querySelectorAll('.feed-filter-row .dropdown-item').forEach(item => item.classList.remove('active'));
+      const allItem = document.querySelector('.feed-filter-row .dropdown-item:not([data-feed-category])');
+      if (allItem) allItem.classList.add('active');
+      const label = document.getElementById('currentCategoryLabel');
+      if (label) {
+        label.setAttribute('data-i18n', 'for_you');
+        const dict = uiTranslations[lang] || uiTranslations.en;
+        label.textContent = dict.for_you || 'For you';
+      }
+      if (typeof window.renderFeedPosts === 'function') {
+        window.renderFeedPosts('postsFeedContainer', window.globalPostsData, 'all');
+      }
+    }
+  }
+
+  window.syncFeedCategoryMenu = syncFeedCategoryMenu;
+
+  function refreshPublicCategoryState() {
+    const language = localStorage.getItem('preferredLanguage') || 'en';
+    syncFeedCategoryMenu(language);
+    applyLanguageFilter(language);
+  }
+
+  window.addEventListener('pageshow', refreshPublicCategoryState);
+  window.addEventListener('storage', event => {
+    if (event.key === 'admin_categories_v2') refreshPublicCategoryState();
+  });
 
 
   window.applyUiTranslations = applyUiTranslations;
 
-  function applyUiTranslations(lang = localStorage.getItem('preferredLanguage') || 'en') {
+  function applyUiTranslations() {
+    const lang = typeof window.getLingoraLanguage === 'function' ? window.getLingoraLanguage() : (localStorage.getItem('preferredLanguage') || 'en');
     const dict = uiTranslations[lang] || uiTranslations.en;
 
     document.querySelectorAll('[data-i18n]').forEach(el => {
@@ -1731,15 +1938,26 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Translate dynamic content
     document.querySelectorAll('[data-translate-content-vi], [data-translate-content-zh]').forEach(el => {
-      const originalText = el.getAttribute('data-original-content') || el.textContent.trim();
+      const isRichPostContent = el.classList.contains('post-content');
+      const originalText = el.getAttribute('data-original-content') ||
+        (isRichPostContent ? el.innerHTML.trim() : el.textContent.trim());
       if (!el.getAttribute('data-original-content')) {
         el.setAttribute('data-original-content', originalText);
       }
       const transText = el.getAttribute(`data-translate-content-${lang}`);
       if (transText) {
-        el.textContent = transText;
+        if (isRichPostContent) {
+          el.innerHTML = window.sanitizePostHtml(transText);
+        } else {
+          el.textContent = transText;
+        }
       } else {
-        el.textContent = el.getAttribute('data-original-content');
+        const originalContent = el.getAttribute('data-original-content');
+        if (isRichPostContent) {
+          el.innerHTML = window.sanitizePostHtml(originalContent);
+        } else {
+          el.textContent = originalContent;
+        }
       }
     });
 
@@ -1790,7 +2008,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (dict[i18nKey]) label.textContent = dict[i18nKey];
       } else {
         label.removeAttribute('data-i18n');
-        label.textContent = category;
+        label.textContent = typeof window.translateCategory === 'function' ? window.translateCategory(category) : category;
       }
     }
 
@@ -1805,7 +2023,8 @@ document.addEventListener('DOMContentLoaded', () => {
     applyLanguageFilter(lang);
   }
 
-  function applyLanguageFilter(lang = localStorage.getItem('preferredLanguage') || 'en') {
+  function applyLanguageFilter() {
+    const lang = typeof window.getLingoraLanguage === 'function' ? window.getLingoraLanguage() : (localStorage.getItem('preferredLanguage') || 'en');
     const posts = document.querySelectorAll('.substack-post');
     if (!posts || posts.length === 0) return;
 
@@ -1826,7 +2045,9 @@ document.addEventListener('DOMContentLoaded', () => {
         (titleEl && titleEl.hasAttribute(`data-translate-title-${lang}`));
 
       const postCategory = post.getAttribute('data-category') || '';
-      const matchesCategory = (selectedCategory === 'all') || (postCategory === selectedCategory);
+      const isPostDetail = Boolean(document.getElementById('postDetailContainer'));
+      const categoryIsActive = isPostDetail || window.isCategoryTranslationActive(postCategory, lang);
+      const matchesCategory = categoryIsActive && ((selectedCategory === 'all') || (postCategory === selectedCategory));
 
       if (hasTranslation && matchesCategory) {
         // 1. Nếu bài viết hỗ trợ ngôn ngữ được chọn và khớp danh mục -> Hiển thị
@@ -1838,7 +2059,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         if (contentEl) {
           const transContent = contentEl.getAttribute(`data-translate-content-${lang}`) || post.getAttribute(`data-translate-content-${lang}`);
-          if (transContent) contentEl.textContent = transContent;
+          if (transContent) contentEl.innerHTML = window.sanitizePostHtml(transContent);
         }
       } else {
         // 2. Nếu KHÔNG hỗ trợ hoặc không khớp danh mục -> Ẩn bài viết đi
@@ -2256,6 +2477,23 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // 4. Intercept Write post actions if not logged in
+    document.querySelectorAll('a[href*="create-post.html"]').forEach(btn => {
+      const href = btn.getAttribute('href') || '';
+      const isEditorLink = /[?&](?:edit|submitted)=/i.test(href);
+      const isCreateAction = btn.classList.contains('sidebar-create-btn') ||
+        Boolean(btn.querySelector('[data-i18n="create"]'));
+
+      if (isCreateAction && !isEditorLink && !/[?&]new=1(?:&|$)/i.test(href)) {
+        const hashIndex = href.indexOf('#');
+        const hash = hashIndex >= 0 ? href.slice(hashIndex) : '';
+        const hrefWithoutHash = hashIndex >= 0 ? href.slice(0, hashIndex) : href;
+        const separator = hrefWithoutHash.includes('?') ? '&' : '?';
+        btn.setAttribute('href', `${hrefWithoutHash}${separator}new=1${hash}`);
+      }
+    });
+
+    syncFeedCategoryMenu();
+
     document.querySelectorAll('a[href*="create-post.html"]').forEach(btn => {
       const newBtn = btn.cloneNode(true);
       btn.replaceWith(newBtn);

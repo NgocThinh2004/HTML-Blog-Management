@@ -522,6 +522,7 @@
           <div class="modal-body">
             <!-- Reference input to know which item is being edited -->
             <input type="hidden" id="editCategoryIndex">
+            <div class="small text-muted rounded-3 border px-3 py-2 mb-3" id="editCategoryLanguageContext"></div>
             <div class="mb-3">
               <label for="editCategoryName" class="form-label fw-semibold text-main" data-i18n="category_name">Category
                 Name</label>
@@ -651,7 +652,7 @@
   <!-- Bootstrap 5 JS Bundle -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <!-- Core Script -->
-  <script src="../assets/js/core.js?v=8"></script>
+  <script src="../assets/js/core.js?v=17"></script>
 
   <script type="text/plain" id="legacyCategoryManagementScript">
     document.addEventListener('DOMContentLoaded', () => {
@@ -959,26 +960,46 @@
         C1007: { en: { name: 'Cybersecurity', slug: 'cybersecurity' }, vi: { name: 'An ninh mạng', slug: 'an-ninh-mang' }, zh: { name: '网络安全', slug: 'wang-luo-an-quan' } }
       };
       const pageText = {
-        en: { category: 'Category', created: 'Created', description: 'Description', description_placeholder: 'Briefly describe this category...', name_required: 'Please enter a category name.', slug_unique_help: 'If the slug already exists, a number will be added automatically.', slug_adjusted: 'This slug already exists. The available slug {slug} will be used.', category_status: 'Category status', status_help: 'Show this category on the feed.', shown: '{shown} of {total} categories', active: 'Active', inactive: 'Inactive', posts: 'posts', edit: 'Edit', delete: 'Delete', no_results: 'No categories found', no_results_help: 'Try another search term.', created_msg: 'Category <b>{name}</b> was created.', updated_msg: 'Category <b>{name}</b> was updated.', deleted_msg: 'Category <b>{name}</b> was deleted.', status_msg: 'Category <b>{name}</b> is now {status}.', delete_confirm: 'Delete category "{name}"?', no_posts: 'No posts found in this category.', open_edit: 'Open editor for {name}' },
-        vi: { category: 'Danh mục', created: 'Ngày tạo', description: 'Mô tả', description_placeholder: 'Mô tả ngắn về danh mục...', name_required: 'Vui lòng nhập tên danh mục.', slug_unique_help: 'Nếu đường dẫn đã tồn tại, hệ thống sẽ tự động thêm số ở cuối.', slug_adjusted: 'Đường dẫn này đã tồn tại. Hệ thống sẽ dùng {slug}.', category_status: 'Trạng thái danh mục', status_help: 'Hiển thị danh mục này trên bảng tin.', shown: '{shown} / {total} danh mục', active: 'Hoạt động', inactive: 'Đã ẩn', posts: 'bài viết', edit: 'Chỉnh sửa', delete: 'Xóa', no_results: 'Không tìm thấy danh mục', no_results_help: 'Hãy thử từ khóa khác.', created_msg: 'Đã tạo danh mục <b>{name}</b>.', updated_msg: 'Đã cập nhật danh mục <b>{name}</b>.', deleted_msg: 'Đã xóa danh mục <b>{name}</b>.', status_msg: 'Danh mục <b>{name}</b> hiện {status}.', delete_confirm: 'Xóa danh mục "{name}"?', no_posts: 'Không tìm thấy bài viết trong danh mục này.', open_edit: 'Mở chỉnh sửa danh mục {name}' },
-        zh: { category: '分类', created: '创建日期', description: '描述', description_placeholder: '简要描述此分类...', name_required: '请输入分类名称。', slug_unique_help: '如果路径已存在，系统会自动在末尾添加数字。', slug_adjusted: '该路径已存在，将使用可用路径 {slug}。', category_status: '分类状态', status_help: '在动态中显示此分类。', shown: '{shown} / {total} 个分类', active: '启用', inactive: '已隐藏', posts: '篇文章', edit: '编辑', delete: '删除', no_results: '未找到分类', no_results_help: '请尝试其他关键词。', created_msg: '已创建分类 <b>{name}</b>。', updated_msg: '已更新分类 <b>{name}</b>。', deleted_msg: '已删除分类 <b>{name}</b>。', status_msg: '分类 <b>{name}</b> 当前为{status}。', delete_confirm: '删除分类“{name}”吗？', no_posts: '此分类中没有文章。', open_edit: '打开 {name} 的编辑器' }
+        en: { category: 'Category', created: 'Created', description: 'Description', description_placeholder: 'Briefly describe this category...', name_required: 'Please enter a category name.', slug_unique_help: 'If the slug already exists, a number will be added automatically.', slug_adjusted: 'This slug already exists. The available slug {slug} will be used.', category_status: 'Translation status', status_help: 'Show this category in the current interface language.', shown: '{shown} of {total} categories', active: 'Active', inactive: 'Inactive', posts: 'posts', edit: 'Edit', delete: 'Delete', no_results: 'No categories found', no_results_help: 'Try another search term.', created_msg: 'Category <b>{name}</b> was created.', updated_msg: 'Category translation <b>{name}</b> was updated.', deleted_msg: 'Translation <b>{name}</b> was deleted.', status_msg: 'Category translation <b>{name}</b> is now {status}.', delete_confirm: 'Delete only the current-language translation “{name}”?', no_posts: 'No posts found in this category.', open_edit: 'Open editor for {name}' },
+        vi: { category: 'Danh mục', created: 'Ngày tạo', description: 'Mô tả', description_placeholder: 'Mô tả ngắn về danh mục...', name_required: 'Vui lòng nhập tên danh mục.', slug_unique_help: 'Nếu đường dẫn đã tồn tại, hệ thống sẽ tự động thêm số ở cuối.', slug_adjusted: 'Đường dẫn này đã tồn tại. Hệ thống sẽ dùng {slug}.', category_status: 'Trạng thái bản dịch', status_help: 'Hiển thị danh mục bằng ngôn ngữ giao diện hiện tại.', shown: '{shown} / {total} danh mục', active: 'Hoạt động', inactive: 'Đã ẩn', posts: 'bài viết', edit: 'Chỉnh sửa', delete: 'Xóa', no_results: 'Không tìm thấy danh mục', no_results_help: 'Hãy thử từ khóa khác.', created_msg: 'Đã tạo danh mục <b>{name}</b>.', updated_msg: 'Đã cập nhật bản dịch danh mục <b>{name}</b>.', deleted_msg: 'Đã xóa bản dịch <b>{name}</b>.', status_msg: 'Bản dịch danh mục <b>{name}</b> hiện {status}.', delete_confirm: 'Chỉ xóa bản dịch ở ngôn ngữ hiện tại “{name}”?', no_posts: 'Không tìm thấy bài viết trong danh mục này.', open_edit: 'Mở chỉnh sửa danh mục {name}' },
+        zh: { category: '分类', created: '创建日期', description: '描述', description_placeholder: '简要描述此分类...', name_required: '请输入分类名称。', slug_unique_help: '如果路径已存在，系统会自动在末尾添加数字。', slug_adjusted: '该路径已存在，将使用可用路径 {slug}。', category_status: '翻译状态', status_help: '以当前界面语言显示此分类。', shown: '{shown} / {total} 个分类', active: '启用', inactive: '已隐藏', posts: '篇文章', edit: '编辑', delete: '删除', no_results: '未找到分类', no_results_help: '请尝试其他关键词。', created_msg: '已创建分类 <b>{name}</b>。', updated_msg: '已更新分类翻译 <b>{name}</b>。', deleted_msg: '已删除翻译 <b>{name}</b>。', status_msg: '分类翻译 <b>{name}</b> 当前为{status}。', delete_confirm: '仅删除当前语言的“{name}”翻译吗？', no_posts: '此分类中没有文章。', open_edit: '打开 {name} 的编辑器' }
       };
 
       let categories;
       try { categories = JSON.parse(localStorage.getItem(storageKey)) || seedCategories; } catch (_) { categories = seedCategories; }
-      categories = categories.map(category => ({
-        ...category,
-        translations: {
+      categories = categories.map(category => {
+        const translations = {
           ...(defaultCategoryTranslations[category.id] || {}),
           ...(category.translations || {})
-        }
-      }));
+        };
+        Object.keys(category.deletedTranslations || {}).forEach(language => {
+          if (category.deletedTranslations[language]) delete translations[language];
+        });
+        Object.keys(translations).forEach(language => {
+          translations[language] = {
+            ...translations[language],
+            description: translations[language].description ?? category.description ?? '',
+            active: translations[language].active ?? category.active ?? true
+          };
+        });
+        return { ...category, translations };
+      });
       let currentLang = localStorage.getItem('preferredLanguage') || 'en';
       let editingId = null;
       let openPostsCategoryId = null;
       const t = (key, values = {}) => ((pageText[currentLang] || pageText.en)[key] || pageText.en[key] || key).replace(/\{(\w+)\}/g, (_, name) => values[name] ?? '');
       const escapeHtml = value => String(value ?? '').replace(/[&<>'"]/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[char]));
-      const categoryTranslation = (category, lang = currentLang) => category.translations?.[lang] || category.translations?.en || { name: category.name, slug: category.slug };
+      const categoryTranslation = (category, lang = currentLang) => {
+        const direct = category.translations?.[lang];
+        if (direct) return { description: category.description || '', active: true, ...direct };
+        const fallback = category.translations?.en || Object.values(category.translations || {})[0] || { name: category.name, slug: category.slug, description: category.description || '' };
+        return { ...fallback, active: false, isFallback: true };
+      };
+      const editingLanguageText = {
+        en: { en: 'Editing the English translation only.', vi: 'Editing the Vietnamese translation only.', zh: 'Editing the Chinese translation only.' },
+        vi: { en: 'Chỉ đang sửa bản dịch Tiếng Anh.', vi: 'Chỉ đang sửa bản dịch Tiếng Việt.', zh: 'Chỉ đang sửa bản dịch Tiếng Trung.' },
+        zh: { en: '仅编辑英文翻译。', vi: '仅编辑越南语翻译。', zh: '仅编辑中文翻译。' }
+      };
       const hasPostTranslation = (post, lang = currentLang) => {
         const supported = String(post.supported_langs || '').split(',').map(code => code.trim());
         return supported.includes(lang) && Boolean(String(post[`title_${lang}`] || '').trim());
@@ -1037,7 +1058,7 @@
         const query = searchInput.value.trim().toLocaleLowerCase();
         return categories.filter(category => {
           const translated = categoryTranslation(category);
-          return !query || `${translated.name} ${translated.slug} ${category.description || ''}`.toLocaleLowerCase().includes(query);
+          return !query || `${translated.name} ${translated.slug} ${translated.description || ''}`.toLocaleLowerCase().includes(query);
         });
       }
 
@@ -1052,11 +1073,11 @@
           const count = postCount(category);
           const translated = categoryTranslation(category);
           return `<tr class="category-table-row" tabindex="0" data-category-id="${escapeHtml(category.id)}" aria-label="${escapeHtml(t('open_edit', { name: translated.name }))}">
-            <td><div class="category-name-cell"><span class="category-icon"><i class="bi bi-tag"></i></span><div class="min-w-0"><div class="category-title">${escapeHtml(translated.name)}</div><div class="category-description">${escapeHtml(category.description || '')}</div></div></div></td>
+            <td><div class="category-name-cell"><span class="category-icon"><i class="bi bi-tag"></i></span><div class="min-w-0"><div class="category-title">${escapeHtml(translated.name)}</div><div class="category-description">${escapeHtml(translated.description || '')}</div></div></div></td>
             <td><code class="slug-code">/${escapeHtml(translated.slug)}</code></td>
             <td class="text-muted text-nowrap">${formatDate(category.created)}</td>
             <td><button class="btn btn-sm rounded-pill post-count-btn category-posts-btn" type="button" data-category-id="${escapeHtml(category.id)}"><span class="badge rounded-pill text-bg-warning">${count}</span>${t('posts')}<i class="bi bi-chevron-right"></i></button></td>
-            <td><label class="category-status-control d-inline-flex align-items-center gap-2 mb-0"><input class="form-check-input category-status-toggle mt-0" type="checkbox" ${category.active ? 'checked' : ''} data-category-id="${escapeHtml(category.id)}" aria-label="${t('status_help')}"><span class="category-status ${category.active ? 'active' : 'inactive'}"><i class="bi bi-circle-fill" style="font-size:.42rem"></i>${t(category.active ? 'active' : 'inactive')}</span></label></td>
+            <td><label class="category-status-control d-inline-flex align-items-center gap-2 mb-0"><input class="form-check-input category-status-toggle mt-0" type="checkbox" ${translated.active ? 'checked' : ''} data-category-id="${escapeHtml(category.id)}" aria-label="${t('status_help')}"><span class="category-status ${translated.active ? 'active' : 'inactive'}"><i class="bi bi-circle-fill" style="font-size:.42rem"></i>${t(translated.active ? 'active' : 'inactive')}</span></label></td>
             <td><div class="category-actions"><button class="btn btn-sm btn-light border category-action-btn category-edit-btn" type="button" data-category-id="${escapeHtml(category.id)}" title="${t('edit')}"><i class="bi bi-pencil"></i></button><button class="btn btn-sm btn-outline-danger category-action-btn category-delete-btn" type="button" data-category-id="${escapeHtml(category.id)}" title="${t('delete')}"><i class="bi bi-trash"></i></button></div></td>
           </tr>`;
         }).join('');
@@ -1069,8 +1090,9 @@
         editingId = id;
         editName.value = translated.name;
         editSlug.value = translated.slug;
-        editDescription.value = category.description || '';
-        editStatus.checked = category.active;
+        editDescription.value = translated.description || '';
+        editStatus.checked = translated.active;
+        document.getElementById('editCategoryLanguageContext').textContent = (editingLanguageText[currentLang] || editingLanguageText.en)[currentLang];
         document.getElementById('editSlugUniqueHelp').textContent = t('slug_unique_help');
         document.getElementById('editSlugUniqueHelp').classList.remove('slug-adjusted');
         editForm.classList.remove('was-validated');
@@ -1111,7 +1133,8 @@
         }
         const name = addName.value.trim();
         const slug = uniqueSlug(generateSlug(name));
-        const category = { id: `C${Date.now()}`, name, slug, translations: { [currentLang]: { name, slug } }, description: addDescription.value.trim(), created: new Date().toISOString().slice(0, 10), active: true, fallbackPosts: 0 };
+        const description = addDescription.value.trim();
+        const category = { id: `C${Date.now()}`, name, slug, translations: { [currentLang]: { name, slug, description, active: true } }, description, created: new Date().toISOString().slice(0, 10), active: true, fallbackPosts: 0 };
         categories.push(category); persist(); renderTable(); addForm.reset(); addForm.classList.remove('was-validated'); addModal.hide(); showToast(t('created_msg', { name: escapeHtml(name) }));
       });
 
@@ -1126,9 +1149,14 @@
         const translatedName = editName.value.trim();
         const translatedSlug = uniqueSlug(generateSlug(translatedName), category.id);
         category.translations = category.translations || {};
-        category.translations[currentLang] = { name: translatedName, slug: translatedSlug };
-        category.description = editDescription.value.trim();
-        category.active = editStatus.checked;
+        category.translations[currentLang] = {
+          ...(category.translations[currentLang] || {}),
+          name: translatedName,
+          slug: translatedSlug,
+          description: editDescription.value.trim(),
+          active: editStatus.checked
+        };
+        if (category.deletedTranslations) delete category.deletedTranslations[currentLang];
         persist(); renderTable(); editModal.hide(); showToast(t('updated_msg', { name: escapeHtml(translatedName) }));
       });
 
@@ -1147,7 +1175,9 @@
             message: t('delete_confirm', { name: translated.name }),
             confirmText: t('delete')
           })) {
-            categories = categories.filter(item => item.id !== category.id);
+            category.deletedTranslations = category.deletedTranslations || {};
+            category.deletedTranslations[currentLang] = true;
+            delete category.translations[currentLang];
             persist();
             renderTable();
             showToast(t('deleted_msg', { name: escapeHtml(translated.name) }));
@@ -1164,7 +1194,15 @@
         event.stopPropagation();
         const category = categories.find(item => item.id === toggle.dataset.categoryId);
         if (!category) return;
-        category.active = toggle.checked; persist(); renderTable(); showToast(t('status_msg', { name: escapeHtml(categoryTranslation(category).name), status: t(category.active ? 'active' : 'inactive').toLowerCase() }));
+        const translated = categoryTranslation(category);
+        category.translations = category.translations || {};
+        category.translations[currentLang] = {
+          ...(category.translations[currentLang] || translated),
+          active: toggle.checked,
+          isFallback: undefined
+        };
+        if (category.deletedTranslations) delete category.deletedTranslations[currentLang];
+        persist(); renderTable(); showToast(t('status_msg', { name: escapeHtml(categoryTranslation(category).name), status: t(toggle.checked ? 'active' : 'inactive').toLowerCase() }));
       });
       tableBody.addEventListener('keydown', event => {
         if ((event.key === 'Enter' || event.key === ' ') && event.target.matches('.category-table-row')) { event.preventDefault(); openEditor(event.target.dataset.categoryId); }
