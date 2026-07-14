@@ -1,9 +1,9 @@
 // ========================================================
-// MundiBlog Global Component Interactivity & Search Modal
+// Lingora Global Component Interactivity & Search Modal
 // ========================================================
 
 document.addEventListener('DOMContentLoaded', () => {
-  console.log('MundiBlog Component Interactivity Initialized.');
+  console.log('Lingora Component Interactivity Initialized.');
   initSharedSidebars();
   initGlobalSearchModal();
 });
@@ -33,7 +33,7 @@ function initSharedSidebars() {
         <div class="substack-logo-container">
           <a href="index.html" class="text-decoration-none d-flex align-items-center gap-2">
             <i class="bi bi-bookmark-fill substack-logo"></i>
-            <span class="fs-5 fw-bold text-main" style="letter-spacing: -0.02em;">MundiBlog</span>
+            <span class="fs-5 fw-bold text-main" style="letter-spacing: -0.02em;">Lingora</span>
           </a>
         </div>
         
@@ -104,7 +104,7 @@ function initSharedSidebars() {
       <div class="offcanvas-header border-bottom">
         <a href="index.html" class="text-decoration-none d-flex align-items-center gap-2">
           <i class="bi bi-bookmark-fill text-primary fs-4"></i>
-          <span class="fs-5 fw-bold text-main" style="letter-spacing: -0.02em;">MundiBlog</span>
+          <span class="fs-5 fw-bold text-main" style="letter-spacing: -0.02em;">Lingora</span>
         </a>
         <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
       </div>
@@ -113,7 +113,7 @@ function initSharedSidebars() {
         <div class="d-lg-none mb-3">
           <div class="right-search-box w-100">
             <i class="bi bi-search"></i>
-            <input type="text" id="mobileFeedSearchInput" placeholder="Search MundiBlog..." data-i18n="search_placeholder">
+            <input type="text" id="mobileFeedSearchInput" placeholder="Search Lingora..." data-i18n="search_placeholder">
           </div>
         </div>
 
@@ -161,7 +161,7 @@ function initSharedSidebars() {
       <!-- Rounded Search bar -->
       <div class="right-search-box mb-4">
         <i class="bi bi-search"></i>
-        <input type="search" id="feedSearchInput" placeholder="Search MundiBlog..." oninput="if(typeof filterFeedPosts === 'function'){filterFeedPosts(this.value)}" data-i18n="search_placeholder">
+        <input type="search" id="feedSearchInput" placeholder="Search Lingora..." oninput="if(typeof filterFeedPosts === 'function'){filterFeedPosts(this.value)}" data-i18n="search_placeholder">
       </div>
       ` : ''}
 

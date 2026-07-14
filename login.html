@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Log in - MundiBlog</title>
+  <title>Log in - Lingora</title>
   <!-- Google Fonts: Inter -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -18,7 +18,7 @@
 
   <link rel="stylesheet" href="assets/css/base.css?v=5">
   <link rel="stylesheet" href="assets/css/layouts.css?v=4">
-  <link rel="stylesheet" href="assets/css/components.css?v=5">
+  <link rel="stylesheet" href="assets/css/components.css?v=12">
 </head>
 <body class="auth-body">
   
@@ -45,7 +45,7 @@
         </div>
         <a href="index.html" class="auth-logo d-inline-flex align-items-center gap-2 text-decoration-none">
           <i class="bi bi-bookmark-fill text-primary fs-3"></i>
-          <span class="fs-4 fw-bold text-main">MundiBlog</span>
+          <span class="fs-4 fw-bold text-main">Lingora</span>
         </a>
         <h2 class="auth-title mt-3 fw-bold text-main" data-i18n="login">Log in</h2>
       </div>
@@ -83,6 +83,15 @@
         <button type="submit" class="btn btn-primary w-100 py-2.5 rounded-pill fw-semibold mb-3" data-i18n="login">Log in</button>
       </form>
 
+      <div class="d-flex align-items-center gap-2 mb-3" aria-hidden="true">
+        <span class="border-top flex-grow-1"></span>
+        <span class="text-muted small" data-i18n="quick_demo_login">QUICK DEMO LOGIN</span>
+        <span class="border-top flex-grow-1"></span>
+      </div>
+      <button type="button" class="btn btn-outline-primary w-100 py-2.5 rounded-pill fw-semibold mb-3" id="quickLoginAdmin">
+        <i class="bi bi-shield-lock-fill me-2" aria-hidden="true"></i><span data-i18n="quick_admin_login">Quick login as Admin</span>
+      </button>
+
       <!-- Redirect to Register -->
       <div class="text-center text-muted small mb-4">
         <span data-i18n="dont_have_account">Don't have an account?</span> <a href="register.html" class="text-primary fw-semibold text-decoration-none" data-i18n="register_here">Register here</a>
@@ -94,7 +103,7 @@
   <!-- Bootstrap 5 JS Bundle -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <!-- Core Script containing theme & language simulation -->
-<script src="assets/js/core.js?v=4"></script>
+<script src="assets/js/core.js?v=8"></script>
 
   <script>
     document.addEventListener('DOMContentLoaded', () => {

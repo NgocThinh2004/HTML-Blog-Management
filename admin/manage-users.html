@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Manage Users - MundiBlog</title>
+  <title>Manage Users - Lingora</title>
   <!-- Google Fonts: Inter -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -18,7 +18,7 @@
 <link rel="stylesheet" href="../assets/css/variables.css">
   <link rel="stylesheet" href="../assets/css/base.css?v=5">
   <link rel="stylesheet" href="../assets/css/layouts.css">
-  <link rel="stylesheet" href="../assets/css/components.css?v=5">
+  <link rel="stylesheet" href="../assets/css/components.css?v=12">
 
   <style>
     .admin-container {
@@ -209,7 +209,7 @@
         <!-- Brand Logo for mobile -->
         <a href="../index.html" class="d-flex align-items-center text-decoration-none">
           <i class="bi bi-bookmark-fill fs-4 text-primary me-2"></i>
-          <span class="fs-5 fw-bold text-main">MundiBlog</span>
+          <span class="fs-5 fw-bold text-main">Lingora</span>
         </a>
       </div>
     </header>
@@ -225,7 +225,7 @@
             <a href="../index.html" class="text-decoration-none d-flex flex-column align-items-start gap-1">
               <div class="d-flex align-items-center gap-2">
                 <i class="bi bi-bookmark-fill substack-logo"></i>
-                <span class="fs-5 fw-bold text-main" style="letter-spacing: -0.02em;">MundiBlog</span>
+                <span class="fs-5 fw-bold text-main" style="letter-spacing: -0.02em;">Lingora</span>
               </div>
               <span class="badge bg-primary-subtle text-primary border border-primary-subtle rounded-pill"
                 style="font-size: 0.68rem !important; padding: 0.15rem 0.5rem !important; font-weight: 600; margin-left: 2px;"
@@ -761,7 +761,7 @@
           <div class="d-flex align-items-center justify-content-between gap-3 rounded-3 border p-3">
             <div>
               <div class="fw-semibold text-main small" data-um-key="account_status">Account status</div>
-              <div class="text-muted small" id="statusHelp">Allow this user to access MundiBlog.</div>
+              <div class="text-muted small" id="statusHelp">Allow this user to access Lingora.</div>
             </div>
             <label class="perfect-switch" id="detailStatusLabel">
               <input class="perfect-switch-input" id="editUserStatus" type="checkbox">
@@ -785,7 +785,7 @@
     <div class="offcanvas-header border-bottom">
       <a href="../index.html" class="text-decoration-none d-flex align-items-center gap-2">
         <i class="bi bi-bookmark-fill text-primary fs-4"></i>
-        <span class="fs-5 fw-bold text-main" style="letter-spacing: -0.02em;">MundiBlog</span>
+        <span class="fs-5 fw-bold text-main" style="letter-spacing: -0.02em;">Lingora</span>
       </a>
       <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
@@ -838,7 +838,7 @@
   <!-- Bootstrap 5 JS Bundle -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <!-- Core Script -->
-  <script src="../assets/js/core.js?v=2"></script>
+  <script src="../assets/js/core.js?v=8"></script>
 
   <script type="text/plain" id="legacyUserManagementScript">
     document.addEventListener('DOMContentLoaded', () => {
@@ -950,8 +950,8 @@
       const storageKey = 'admin_users_v2';
       const fallbackAvatar = 'https://ui-avatars.com/api/?background=FF6719&color=fff&bold=true&name=';
       const seedUsers = [
-        { id: 'U1001', name: 'System Admin', email: 'admin@mundiblog.com', joined: '2026-06-05', role: 'admin', active: true, posts: 12, bio: 'MundiBlog system administrator.', avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=120&h=120' },
-        { id: 'U1002', name: 'Elena Rostova', email: 'elena@mundiblog.com', joined: '2026-06-12', role: 'member', active: true, posts: 8, bio: 'Writes about culture, travel, and everyday discoveries.', avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=120&h=120' },
+        { id: 'U1001', name: 'System Admin', email: 'admin@lingora.com', joined: '2026-06-05', role: 'admin', active: true, posts: 12, bio: 'Lingora system administrator.', avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=120&h=120' },
+        { id: 'U1002', name: 'Elena Rostova', email: 'elena@lingora.com', joined: '2026-06-12', role: 'member', active: true, posts: 8, bio: 'Writes about culture, travel, and everyday discoveries.', avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=120&h=120' },
         { id: 'U1003', name: 'Hồ Quốc Tuấn', email: 'tuan@example.com', joined: '2026-06-18', role: 'member', active: true, posts: 15, bio: 'Technology and product enthusiast.', avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=120&h=120' },
         { id: 'U1004', name: '李明 (Li Ming)', email: 'liming@example.com', joined: '2026-06-25', role: 'member', active: true, posts: 6, bio: '', avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=120&h=120' },
         { id: 'U1005', name: 'Sarah Connor', email: 'sarah@example.com', joined: '2026-07-02', role: 'member', active: false, posts: 3, bio: 'Independent writer and researcher.', avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=120&h=120' },
@@ -967,21 +967,21 @@
           user: 'User', email: 'Email', joined: 'Joined', role: 'Role', status: 'Status', action: 'Action', admin: 'Admin', member: 'Member', active: 'Active', inactive: 'Inactive', you: 'You', posts: 'posts', protected: 'Protected',
           user_details: 'User details', basic_info: 'Basic information', full_name: 'Full name', name_required: 'Please enter a name.', email_address: 'Email address', email_locked_help: 'Email is used to sign in and cannot be changed here.', short_bio: 'Short bio', bio_placeholder: 'Add a short introduction...', access_account: 'Access & account', account_status: 'Account status', admin_cannot_deactivate: 'Admin accounts cannot be deactivated.', cancel: 'Cancel', save_changes: 'Save changes',
           users_count: '{shown} of {total} users', no_users: 'No users found', no_users_help: 'Try changing or clearing your filters.', open_details: 'Open details for {name}', deactivate: 'Deactivate', activate: 'Activate', account_active: 'Account active', joined_detail: 'Joined {date}',
-          role_admin_help: 'Admin role is protected and cannot be downgraded here.', role_member_help: 'Select Admin to promote this member.', own_admin_help: 'You cannot deactivate your own admin account.', admin_help: 'Admin accounts cannot be deactivated.', member_status_help: 'Allow this user to access MundiBlog.', promoted_status_help: 'Admin accounts are always active and cannot be deactivated.', status_changed: '{name} is now {status}.', saved: 'Changes to <b>{name}</b> were saved.'
+          role_admin_help: 'Admin role is protected and cannot be downgraded here.', role_member_help: 'Select Admin to promote this member.', own_admin_help: 'You cannot deactivate your own admin account.', admin_help: 'Admin accounts cannot be deactivated.', member_status_help: 'Allow this user to access Lingora.', promoted_status_help: 'Admin accounts are always active and cannot be deactivated.', status_changed: '{name} is now {status}.', saved: 'Changes to <b>{name}</b> were saved.'
         },
         vi: {
           filters_label: 'Bộ lọc người dùng', search_placeholder: 'Tìm theo tên, email hoặc mã người dùng...', all_roles: 'Tất cả vai trò', all_statuses: 'Tất cả trạng thái', clear_filters: 'Xóa tất cả bộ lọc',
           user: 'Người dùng', email: 'Email', joined: 'Ngày tham gia', role: 'Vai trò', status: 'Trạng thái', action: 'Thao tác', admin: 'Quản trị viên', member: 'Thành viên', active: 'Hoạt động', inactive: 'Đã khóa', you: 'Bạn', posts: 'bài viết', protected: 'Được bảo vệ',
           user_details: 'Chi tiết người dùng', basic_info: 'Thông tin cơ bản', full_name: 'Họ và tên', name_required: 'Vui lòng nhập họ tên.', email_address: 'Địa chỉ email', email_locked_help: 'Email được dùng để đăng nhập nên không thể thay đổi tại đây.', short_bio: 'Giới thiệu ngắn', bio_placeholder: 'Thêm phần giới thiệu ngắn...', access_account: 'Quyền và tài khoản', account_status: 'Trạng thái tài khoản', admin_cannot_deactivate: 'Không thể vô hiệu hóa tài khoản quản trị viên.', cancel: 'Hủy', save_changes: 'Lưu thay đổi',
           users_count: '{shown} / {total} người dùng', no_users: 'Không tìm thấy người dùng', no_users_help: 'Hãy thay đổi hoặc xóa bộ lọc.', open_details: 'Mở chi tiết của {name}', deactivate: 'Vô hiệu hóa', activate: 'Kích hoạt', account_active: 'Tài khoản đang hoạt động', joined_detail: 'Tham gia {date}',
-          role_admin_help: 'Vai trò quản trị viên được bảo vệ và không thể hạ cấp tại đây.', role_member_help: 'Chọn Quản trị viên để nâng cấp thành viên này.', own_admin_help: 'Bạn không thể vô hiệu hóa tài khoản quản trị của chính mình.', admin_help: 'Không thể vô hiệu hóa tài khoản quản trị viên.', member_status_help: 'Cho phép người dùng này truy cập MundiBlog.', promoted_status_help: 'Tài khoản quản trị viên luôn hoạt động và không thể bị vô hiệu hóa.', status_changed: '{name} hiện ở trạng thái {status}.', saved: 'Đã lưu thay đổi của <b>{name}</b>.'
+          role_admin_help: 'Vai trò quản trị viên được bảo vệ và không thể hạ cấp tại đây.', role_member_help: 'Chọn Quản trị viên để nâng cấp thành viên này.', own_admin_help: 'Bạn không thể vô hiệu hóa tài khoản quản trị của chính mình.', admin_help: 'Không thể vô hiệu hóa tài khoản quản trị viên.', member_status_help: 'Cho phép người dùng này truy cập Lingora.', promoted_status_help: 'Tài khoản quản trị viên luôn hoạt động và không thể bị vô hiệu hóa.', status_changed: '{name} hiện ở trạng thái {status}.', saved: 'Đã lưu thay đổi của <b>{name}</b>.'
         },
         zh: {
           filters_label: '用户筛选', search_placeholder: '按姓名、邮箱或用户编号搜索...', all_roles: '所有角色', all_statuses: '所有状态', clear_filters: '清除所有筛选',
           user: '用户', email: '邮箱', joined: '加入日期', role: '角色', status: '状态', action: '操作', admin: '管理员', member: '成员', active: '启用', inactive: '已停用', you: '你', posts: '篇文章', protected: '受保护',
           user_details: '用户详情', basic_info: '基本信息', full_name: '姓名', name_required: '请输入姓名。', email_address: '邮箱地址', email_locked_help: '邮箱用于登录，无法在此更改。', short_bio: '个人简介', bio_placeholder: '添加简短介绍...', access_account: '权限与账户', account_status: '账户状态', admin_cannot_deactivate: '管理员账户无法停用。', cancel: '取消', save_changes: '保存更改',
           users_count: '{shown} / {total} 位用户', no_users: '未找到用户', no_users_help: '请更改或清除筛选条件。', open_details: '打开 {name} 的详情', deactivate: '停用', activate: '启用', account_active: '账户已启用', joined_detail: '加入于 {date}',
-          role_admin_help: '管理员角色受保护，无法在此降级。', role_member_help: '选择管理员以提升该成员。', own_admin_help: '你无法停用自己的管理员账户。', admin_help: '管理员账户无法停用。', member_status_help: '允许此用户访问 MundiBlog。', promoted_status_help: '管理员账户始终启用且无法停用。', status_changed: '{name} 当前状态为{status}。', saved: '已保存 <b>{name}</b> 的更改。'
+          role_admin_help: '管理员角色受保护，无法在此降级。', role_member_help: '选择管理员以提升该成员。', own_admin_help: '你无法停用自己的管理员账户。', admin_help: '管理员账户无法停用。', member_status_help: '允许此用户访问 Lingora。', promoted_status_help: '管理员账户始终启用且无法停用。', status_changed: '{name} 当前状态为{status}。', saved: '已保存 <b>{name}</b> 的更改。'
         }
       };
       let currentPageLang = localStorage.getItem('preferredLanguage') || 'en';
