@@ -1,5 +1,11 @@
+html {
+  font-size: var(--font-size-base, 16px);
+}
+
 body {
-  font-family: var(--font-family-base);
+  font-family: var(--font-family-base, "Inter", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif);
+  font-size: var(--font-size-md, 1rem);
+  line-height: 1.6;
   background-color: var(--bg-body);
   color: var(--text-main);
   margin: 0;
@@ -7,6 +13,19 @@ body {
   transition: background-color var(--transition-speed) ease, color var(--transition-speed) ease;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+body,
+p,
+span,
+small,
+li,
+label,
+button,
+input,
+textarea,
+select {
+  font-size: inherit;
 }
 
 a {
