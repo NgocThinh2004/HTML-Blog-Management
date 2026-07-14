@@ -15,6 +15,11 @@ document.addEventListener('DOMContentLoaded', () => {
 function initSharedSidebars() {
 
   const path = window.location.pathname.toLowerCase();
+  const activeLanguage = typeof window.getLingoraLanguage === 'function'
+    ? window.getLingoraLanguage()
+    : (localStorage.getItem('preferredLanguage') || 'en');
+  const currentFlagCode = ({ en: 'gb', vi: 'vn', zh: 'cn' })[activeLanguage] || 'gb';
+  const currentLanguageName = ({ en: 'English', vi: 'Tiếng Việt', zh: '中文' })[activeLanguage] || 'English';
   let activePage = '';
   if (path.includes('index.html') || path.endsWith('/guest/') || path.endsWith('/guest')) activePage = 'home';
   else if (path.includes('explore.html')) activePage = 'explore';
@@ -56,7 +61,7 @@ function initSharedSidebars() {
           </a>
         </nav>
         
-        <a href="create-post.html" class="sidebar-create-btn">
+        <a href="create-post.html?new=1" class="sidebar-create-btn">
           <span data-i18n="create">Create</span> <i class="bi bi-plus-lg"></i>
         </a>
       </div>
@@ -68,7 +73,7 @@ function initSharedSidebars() {
             <div class="d-flex align-items-center justify-content-start gap-2 ps-3 pe-2 mb-2">
               <div class="dropdown">
                 <button class="btn btn-sm btn-outline-secondary d-flex align-items-center justify-content-center p-0" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="width: 38px; height: 38px; border-radius: 8px; border-color: var(--border-color);">
-                  <img src="https://flagcdn.com/w20/gb.png" width="24" height="18" id="sidebarLangFlag" style="border-radius:2px; object-fit: cover;" alt="Language">
+                  <img src="https://flagcdn.com/w20/${currentFlagCode}.png" width="24" height="18" id="sidebarLangFlag" data-current-language="${activeLanguage}" style="border-radius:2px; object-fit: cover;" alt="${currentLanguageName}" title="${currentLanguageName}">
                 </button>
                 <ul class="dropdown-menu shadow border-light-subtle" style="min-width: 120px; border-radius: 12px; font-size: 14px;">
                   <li><a class="dropdown-item py-1.5 fw-medium global-lang-select" href="#" data-lang="en"><img src="https://flagcdn.com/w20/gb.png" width="18" alt="English" class="me-2" style="border-radius:2px;"> English</a></li>
@@ -131,7 +136,7 @@ function initSharedSidebars() {
             <div class="d-flex align-items-center justify-content-center gap-2 px-1 mb-2">
               <div class="dropdown">
                 <button class="btn btn-sm btn-outline-secondary d-flex align-items-center justify-content-center p-0" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="width: 34px; height: 34px; border-radius: 8px; border-color: var(--border-color);">
-                  <img src="https://flagcdn.com/w20/gb.png" width="20" height="15" id="mobileLangFlag" style="border-radius:2px; object-fit: cover;" alt="Language">
+                  <img src="https://flagcdn.com/w20/${currentFlagCode}.png" width="20" height="15" id="mobileLangFlag" data-current-language="${activeLanguage}" style="border-radius:2px; object-fit: cover;" alt="${currentLanguageName}" title="${currentLanguageName}">
                 </button>
                 <ul class="dropdown-menu shadow border-light-subtle" style="min-width: 120px; border-radius: 12px; font-size: 14px;">
                   <li><a class="dropdown-item py-1.5 fw-medium global-lang-select" href="#" data-lang="en"><img src="https://flagcdn.com/w20/gb.png" width="18" alt="English" class="me-2" style="border-radius:2px;"> English</a></li>
@@ -246,7 +251,7 @@ function initSharedSidebars() {
   // The sidebars above are rendered dynamically, so restore the persisted
   // language after injection instead of leaving their flags at the EN default.
   if (typeof window.updateGlobalFlags === 'function') {
-    window.updateGlobalFlags(localStorage.getItem('preferredLanguage') || 'en');
+    window.updateGlobalFlags(typeof window.getLingoraLanguage === 'function' ? window.getLingoraLanguage() : (localStorage.getItem('preferredLanguage') || 'en'));
   }
 }
 
@@ -542,6 +547,9 @@ function initGlobalSearchModal() {
       if (post.supported_langs && !post.supported_langs.split(',').includes(currentLang)) {
         return;
       }
+      if (typeof window.isCategoryTranslationActive === 'function' && !window.isCategoryTranslationActive(post.category, currentLang)) {
+        return;
+      }
 
       // 2. Chỉ lấy tiêu đề và nội dung đúng ngôn ngữ hiện tại (không fallback sang tiếng Anh)
       const title = post[`title_${currentLang}`] || "";
@@ -682,13 +690,17 @@ window.renderTrendingWidgets = function() {
   if (window.globalPostsData) {
     Object.values(window.globalPostsData).forEach(post => {
       const c = post.category || "General";
+      if (typeof window.isCategoryTranslationActive === 'function' && !window.isCategoryTranslationActive(c, currentLang)) return;
       dynamicCatViews[c] = (dynamicCatViews[c] || 0) + (post.views || 0);
     });
   }
 
   document.querySelectorAll('.trending-widget-list').forEach(container => {
     let html = '';
-    trendingTopicsData.slice(0, 3).forEach((item, index) => {
+    trendingTopicsData
+      .filter(item => typeof window.isCategoryTranslationActive !== 'function' || window.isCategoryTranslationActive(item.cat_en, currentLang))
+      .slice(0, 3)
+      .forEach((item, index) => {
       const numStr = (index + 1) < 10 ? `0${index + 1}` : `${index + 1}`;
       const topicVal = item[`topic_${currentLang}`] || item.topic_en;
       const catVal = item[`cat_${currentLang}`] || item.cat_en;

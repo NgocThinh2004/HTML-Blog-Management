@@ -95,8 +95,8 @@
 
   <!-- Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-<script src="assets/js/core.js?v=8"></script>
-  <script src="assets/js/components.js"></script>
+<script src="assets/js/core.js?v=17"></script>
+  <script src="assets/js/components.js?v=4"></script>
   
   <!-- Explore Page Specific Logic -->
   <script>
@@ -130,6 +130,8 @@
           if (window.globalPostsData) {
             Object.keys(window.globalPostsData).forEach(id => {
               const post = window.globalPostsData[id];
+              const currentLang = localStorage.getItem('preferredLanguage') || 'en';
+              if (typeof window.isCategoryTranslationActive === 'function' && !window.isCategoryTranslationActive(post.category, currentLang)) return;
               const titleEn = (post.title_en || '').toLowerCase();
               const cat = (post.category || '').toLowerCase();
               if (titleEn.includes(query) || cat.includes(query)) {
@@ -245,6 +247,7 @@
       Object.keys(dataObj).forEach(id => {
         const post = dataObj[id];
         if (post.supported_langs && !post.supported_langs.split(',').includes(currentLang)) return;
+        if (typeof window.isCategoryTranslationActive === 'function' && !window.isCategoryTranslationActive(post.category, currentLang)) return;
         
         const title = (post[`title_${currentLang}`] || "").toLowerCase();
         const content = (post[`content_${currentLang}`] || "").toLowerCase();
@@ -339,6 +342,7 @@
         if (dataObj) {
           Object.values(dataObj).forEach(post => {
             const cat = post.category || "General";
+            if (typeof window.isCategoryTranslationActive === 'function' && !window.isCategoryTranslationActive(cat, currentLang)) return;
             categoryCounts[cat] = (categoryCounts[cat] || 0) + 1;
           });
         }
@@ -353,7 +357,9 @@
           "Cybersecurity": { name: dict.cat_cyber || "Cybersecurity", icon: "bi-shield-lock", desc: dict.desc_cyber || "Zero Trust, network defense, penetration testing, and cryptography." }
         };
 
-        const knownCats = Object.keys(categoryCounts).length > 0 ? Object.keys(categoryCounts) : ["Artificial Intelligence", "Backend Engineering", "Design"];
+        const fallbackCategories = ["Artificial Intelligence", "Backend Engineering", "Design"]
+          .filter(cat => typeof window.isCategoryTranslationActive !== 'function' || window.isCategoryTranslationActive(cat, currentLang));
+        const knownCats = Object.keys(categoryCounts).length > 0 ? Object.keys(categoryCounts) : fallbackCategories;
         const postWord = currentLang === 'vi' ? 'bài viết' : (currentLang === 'zh' ? '篇文章' : 'posts');
 
         let pubList = knownCats.map(cat => {
@@ -361,7 +367,7 @@
           const countVal = categoryCounts[cat] || 2;
           return {
             key: cat,
-            name: meta.name,
+            name: typeof window.translateCategory === 'function' ? window.translateCategory(cat) : meta.name,
             icon: meta.icon,
             desc: meta.desc,
             count: `${countVal} ${postWord}`

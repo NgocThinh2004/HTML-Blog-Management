@@ -433,8 +433,8 @@
   <!-- Bootstrap 5 JS Bundle -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <!-- Core Script containing theme & language simulation -->
-<script src="assets/js/core.js?v=8"></script>
-  <script src="assets/js/components.js"></script>
+<script src="assets/js/core.js?v=17"></script>
+  <script src="assets/js/components.js?v=4"></script>
   
   <script>
 
@@ -471,7 +471,7 @@
             const body = submittedPost.body || '<p>No content yet.</p>';
             postId = submittedId;
             post = {
-              category: submittedPost.categoryLabel || submittedPost.category || 'Technology',
+              category: submittedPost.category || submittedPost.categoryLabel || 'Technology',
               supported_langs: [...new Set(supportedLanguages)].join(','),
               title_en: title,
               title_vi: title,
@@ -515,10 +515,15 @@
         `;
       }
 
+      const safeContentEn = window.sanitizePostHtml(post.content_en || '');
+      const safeContentVi = window.sanitizePostHtml(post.content_vi || post.content_en || '');
+      const safeContentZh = window.sanitizePostHtml(post.content_zh || post.content_en || '');
+
       container.innerHTML = `
         <article class="substack-post border-0 py-0" data-supported-langs="${escapePostText(post.supported_langs)}" data-category="${escapePostText(post.category)}">
           <div class="mb-3">
-            <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-3 py-1 rounded-pill fw-medium">${escapePostText(post.category)}</span>
+            <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-3 py-1 rounded-pill fw-medium category-label"
+                  data-original-cat="${escapePostText(post.category)}">${escapePostText(typeof window.translateCategory === 'function' ? window.translateCategory(post.category) : post.category)}</span>
           </div>
           
           <h1 class="post-title fw-bold display-6 mb-4"
@@ -541,10 +546,10 @@
           ${imageHtml}
 
           <div class="substack-post-content post-content mt-4"
-               data-translate-content-en="${escapePostText(post.content_en)}"
-               data-translate-content-vi="${escapePostText(post.content_vi || post.content_en)}"
-               data-translate-content-zh="${escapePostText(post.content_zh || post.content_en)}">
-            ${post.content_en}
+               data-translate-content-en="${escapePostText(safeContentEn)}"
+               data-translate-content-vi="${escapePostText(safeContentVi)}"
+               data-translate-content-zh="${escapePostText(safeContentZh)}">
+            ${safeContentEn}
           </div>
 
           <div class="substack-post-footer">

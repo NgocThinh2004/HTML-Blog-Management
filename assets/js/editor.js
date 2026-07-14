@@ -39,6 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const inlineCodeClass = 'editor-inline-code-font';
   const zeroWidthSpace = '\u200B';
   const wordLimits = { title: 20, subtitle: 40, body: 3000 };
+  const maxCharactersPerWordUnit = 30;
   const limitTranslations = {
     en: { words: 'words', bodyOver: 'The post exceeds the 3,000-word limit.' },
     vi: { words: 'từ', bodyOver: 'Bài viết đã vượt giới hạn 3.000 từ.' },
@@ -84,16 +85,43 @@ document.addEventListener('DOMContentLoaded', () => {
     return Array.from(value.matchAll(/\S+/g), match => ({ index: match.index, segment: match[0] }));
   }
 
+  function getCharacters(text) {
+    const value = String(text || '');
+    const lang = localStorage.getItem('preferredLanguage') || 'en';
+    if (typeof Intl !== 'undefined' && Intl.Segmenter) {
+      const segmenter = new Intl.Segmenter(lang, { granularity: 'grapheme' });
+      return Array.from(segmenter.segment(value), part => part.segment);
+    }
+    return Array.from(value);
+  }
+
+  function getWordUnitCount(segment) {
+    return Math.max(1, Math.ceil(getCharacters(segment).length / maxCharactersPerWordUnit));
+  }
+
   function countWords(text) {
-    return getWordSegments(text).length;
+    return getWordSegments(text).reduce((total, word) => total + getWordUnitCount(word.segment), 0);
   }
 
   function trimToWordLimit(text, limit) {
     const value = String(text || '');
     const words = getWordSegments(value);
-    if (words.length <= limit) return value;
-    const lastWord = words[limit - 1];
-    return value.slice(0, lastWord.index + lastWord.segment.length).trimEnd();
+    let usedUnits = 0;
+
+    for (const word of words) {
+      const wordUnits = getWordUnitCount(word.segment);
+      if (usedUnits + wordUnits <= limit) {
+        usedUnits += wordUnits;
+        continue;
+      }
+
+      const remainingUnits = Math.max(0, limit - usedUnits);
+      const allowedCharacters = remainingUnits * maxCharactersPerWordUnit;
+      const allowedWordPart = getCharacters(word.segment).slice(0, allowedCharacters).join('');
+      return value.slice(0, word.index + allowedWordPart.length).trimEnd();
+    }
+
+    return value;
   }
 
   function resizeWritingField(field) {
@@ -156,10 +184,10 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  function syncOriginalLanguageWithSystem() {
+  function setOriginalLanguage(language) {
     if (!originalLanguageSelect) return;
-    const preferredLanguage = localStorage.getItem('preferredLanguage') || 'en';
-    const supportedLanguage = ['en', 'vi', 'zh'].includes(preferredLanguage) ? preferredLanguage : 'en';
+    const interfaceLanguage = localStorage.getItem('preferredLanguage') || 'en';
+    const supportedLanguage = ['en', 'vi', 'zh'].includes(language) ? language : 'en';
     originalLanguageSelect.value = supportedLanguage;
     if (originalLanguageDisplay) {
       const labels = {
@@ -167,9 +195,114 @@ document.addEventListener('DOMContentLoaded', () => {
         vi: { en: 'Tiếng Anh', vi: 'Tiếng Việt', zh: 'Tiếng Trung' },
         zh: { en: '英语', vi: '越南语', zh: '中文' }
       };
-      originalLanguageDisplay.textContent = labels[supportedLanguage][supportedLanguage];
+      const interfaceLabels = labels[interfaceLanguage] || labels.en;
+      originalLanguageDisplay.textContent = interfaceLabels[supportedLanguage];
     }
     updateAllowedTranslationLanguages();
+  }
+
+  function syncOriginalLanguageWithSystem() {
+    if (!originalLanguageSelect) return;
+    const previousLanguage = originalLanguageSelect.value;
+    const systemLanguage = localStorage.getItem('preferredLanguage') || 'en';
+    const nextLanguage = ['en', 'vi', 'zh'].includes(systemLanguage) ? systemLanguage : 'en';
+
+    setOriginalLanguage(nextLanguage);
+
+    if (previousLanguage && previousLanguage !== nextLanguage) {
+      const previousLanguageCheckbox = document.querySelector(`input[name="allow_translate"][value="${previousLanguage}"]`);
+      if (previousLanguageCheckbox) {
+        previousLanguageCheckbox.checked = true;
+        delete previousLanguageCheckbox.dataset.restoreChecked;
+      }
+    }
+
+    const currentOriginalCheckbox = document.querySelector(`input[name="allow_translate"][value="${nextLanguage}"]`);
+    if (currentOriginalCheckbox) currentOriginalCheckbox.checked = false;
+    updateAllowedTranslationLanguages();
+  }
+
+  function syncAvailableCategoriesWithSystem(selectedValue = '', preserveUnavailable = false) {
+    const categorySelect = document.getElementById('post_category');
+    if (!categorySelect) return;
+
+    let categories = [];
+    try {
+      const stored = JSON.parse(localStorage.getItem('admin_categories_v2') || '[]');
+      categories = Array.isArray(stored) ? stored : [];
+    } catch (error) {
+      categories = [];
+    }
+    if (!categories.length) return;
+
+    const language = localStorage.getItem('preferredLanguage') || 'en';
+    const legacyCategoryMap = {
+      technology: 'Technology',
+      tech: 'Technology'
+    };
+    const normalizeCategoryValue = value => {
+      const rawValue = String(value || '').trim();
+      return legacyCategoryMap[rawValue.toLowerCase()] || rawValue;
+    };
+    const activeCategories = categories
+      .map(category => ({ category, translation: category.translations?.[language] }))
+      .filter(item => item.translation && item.translation.active !== false && item.translation.active !== 'false' && item.translation.active !== 0 && item.translation.active !== '0');
+    const requestedValue = selectedValue || categorySelect.value;
+    const normalizedRequestedValue = normalizeCategoryValue(requestedValue);
+    const activeMatch = activeCategories.find(item => String(item.category.name || item.category.id).toLowerCase() === normalizedRequestedValue.toLowerCase());
+
+    categorySelect.innerHTML = '';
+    activeCategories.forEach(({ category, translation }) => {
+      const option = document.createElement('option');
+      option.value = category.name || category.id;
+      option.textContent = translation.name || category.name || category.id;
+      categorySelect.appendChild(option);
+    });
+
+    if (activeMatch) {
+      categorySelect.value = activeMatch.category.name || activeMatch.category.id;
+    } else if (preserveUnavailable && requestedValue) {
+      const unavailableCategory = categories.find(category => String(category.name || category.id).toLowerCase() === normalizedRequestedValue.toLowerCase());
+      const legacyCategoryIsActive = !unavailableCategory && (
+        typeof window.isCategoryTranslationActive !== 'function' ||
+        window.isCategoryTranslationActive(normalizedRequestedValue, language)
+      );
+      if (legacyCategoryIsActive) {
+        const option = document.createElement('option');
+        option.value = normalizedRequestedValue;
+        option.textContent = typeof window.translateCategory === 'function'
+          ? window.translateCategory(normalizedRequestedValue)
+          : normalizedRequestedValue;
+        option.selected = true;
+        categorySelect.prepend(option);
+        return;
+      }
+      const unavailableLabels = { en: 'Unavailable in this language', vi: 'Không khả dụng trong ngôn ngữ này', zh: '此语言不可用' };
+      const option = document.createElement('option');
+      option.value = normalizedRequestedValue;
+      const unavailableCategoryName = unavailableCategory?.translations?.[language]?.name ||
+        (typeof window.translateCategory === 'function' ? window.translateCategory(normalizedRequestedValue) : '') ||
+        unavailableCategory?.name || requestedValue;
+      option.textContent = `${unavailableCategoryName} — ${unavailableLabels[language] || unavailableLabels.en}`;
+      option.disabled = true;
+      option.selected = true;
+      categorySelect.prepend(option);
+    } else if (categorySelect.options.length) {
+      categorySelect.selectedIndex = 0;
+    } else {
+      const emptyLabels = { en: 'No active categories', vi: 'Không có danh mục đang hoạt động', zh: '没有启用的分类' };
+      const option = document.createElement('option');
+      option.value = '';
+      option.textContent = emptyLabels[language] || emptyLabels.en;
+      option.disabled = true;
+      option.selected = true;
+      categorySelect.appendChild(option);
+    }
+  }
+
+  function hasSelectableCategory() {
+    const categorySelect = document.getElementById('post_category');
+    return Boolean(categorySelect?.value && !categorySelect.selectedOptions[0]?.disabled);
   }
 
   function getGuestBackHref() {
@@ -634,11 +767,17 @@ document.addEventListener('DOMContentLoaded', () => {
   function collectDraft() {
     normalizeEditorFontMarkup(editor, { cleanMarkers: true });
 
+    const categorySelect = document.getElementById('post_category');
+
     return {
       title: titleInput ? titleInput.value : '',
       subtitle: subtitleInput ? subtitleInput.value : '',
       authors: getAuthorNames(),
       body: editor.innerHTML,
+      editingId: submittedPostId || pageParams.get('edit') || null,
+      category: categorySelect ? categorySelect.value : 'technology',
+      originalLanguage: originalLanguageSelect ? originalLanguageSelect.value : (localStorage.getItem('preferredLanguage') || 'en'),
+      allowedTranslations: Array.from(document.querySelectorAll('input[name="allow_translate"]:checked')).map(input => input.value),
       updatedAt: new Date().toISOString()
     };
   }
@@ -654,6 +793,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function submitForReview(sourceAction) {
     try {
+      if (!hasSelectableCategory()) {
+        const language = localStorage.getItem('preferredLanguage') || 'en';
+        const messages = {
+          en: 'Please choose an active category before submitting.',
+          vi: 'Vui lòng chọn một danh mục đang hoạt động trước khi gửi bài.',
+          zh: '提交前请选择一个已启用的分类。'
+        };
+        alert(messages[language] || messages.en);
+        document.getElementById('post_category')?.focus();
+        return;
+      }
       const post = collectDraft();
       const categorySelect = document.getElementById('post_category');
       const originalLanguage = originalLanguageSelect ? originalLanguageSelect.value : (localStorage.getItem('preferredLanguage') || 'en');
@@ -662,6 +812,11 @@ document.addEventListener('DOMContentLoaded', () => {
       const posts = Array.isArray(storedPosts) ? storedPosts : [];
       const language = localStorage.getItem('preferredLanguage') || 'en';
       const fallbackTitles = { en: 'Untitled post', vi: 'Bài viết chưa có tiêu đề', zh: '未命名文章' };
+
+      const existingIndex = submittedPostId
+        ? posts.findIndex(item => String(item.id) === String(submittedPostId))
+        : -1;
+      const existingPost = existingIndex >= 0 ? posts[existingIndex] : null;
 
       const submittedPost = {
         id: submittedPostId || `pending-${Date.now()}`,
@@ -674,14 +829,14 @@ document.addEventListener('DOMContentLoaded', () => {
         originalLanguage,
         allowedTranslations,
         status: 'pending',
+        previousStatus: existingPost ? existingPost.status || 'pending' : null,
+        revision: existingPost ? Number(existingPost.revision || 1) + 1 : 1,
+        createdAt: existingPost?.createdAt || new Date().toISOString(),
         sourceAction,
         updatedAt: new Date().toISOString(),
         reads: 0
       };
 
-      const existingIndex = submittedPostId
-        ? posts.findIndex(item => String(item.id) === String(submittedPostId))
-        : -1;
       if (existingIndex >= 0) {
         submittedPost.reads = posts[existingIndex].reads || 0;
         posts.splice(existingIndex, 1, submittedPost);
@@ -706,7 +861,11 @@ document.addEventListener('DOMContentLoaded', () => {
   function loadDraft() {
     try {
       const rawDraft = localStorage.getItem(draftKey);
-      if (!rawDraft) return;
+      if (!rawDraft) {
+        syncOriginalLanguageWithSystem();
+        syncAvailableCategoriesWithSystem('', false);
+        return null;
+      }
 
       const draft = JSON.parse(rawDraft);
       if (titleInput && draft.title) titleInput.value = draft.title;
@@ -730,8 +889,22 @@ document.addEventListener('DOMContentLoaded', () => {
         });
         normalizeEditorFontMarkup();
       }
+      const categorySelect = document.getElementById('post_category');
+      if (categorySelect && draft.category) categorySelect.value = draft.category;
+      setOriginalLanguage(draft.originalLanguage || localStorage.getItem('preferredLanguage') || 'en');
+      if (Array.isArray(draft.allowedTranslations)) {
+        document.querySelectorAll('input[name="allow_translate"]').forEach(checkbox => {
+          checkbox.checked = draft.allowedTranslations.includes(checkbox.value);
+        });
+      }
+      syncOriginalLanguageWithSystem();
+      syncAvailableCategoriesWithSystem(draft.category || '', Boolean(draft.category));
+      return draft;
     } catch (error) {
       localStorage.removeItem(draftKey);
+      syncOriginalLanguageWithSystem();
+      syncAvailableCategoriesWithSystem('', false);
+      return null;
     }
   }
 
@@ -1020,6 +1193,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!publishModal) return;
 
     syncOriginalLanguageWithSystem();
+    syncAvailableCategoriesWithSystem(document.getElementById('post_category')?.value || '', true);
     publishModal.hidden = false;
     document.body.classList.add('publish-modal-open');
   }
@@ -1394,11 +1568,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
   document.addEventListener('click', event => {
     if (!event.target.closest('.global-lang-select')) return;
-    setTimeout(syncOriginalLanguageWithSystem, 0);
+    const previousCategory = document.getElementById('post_category')?.value || '';
+    setTimeout(() => {
+      syncOriginalLanguageWithSystem();
+      syncAvailableCategoriesWithSystem(previousCategory, true);
+    }, 0);
   });
 
   window.addEventListener('storage', event => {
-    if (event.key === 'preferredLanguage') syncOriginalLanguageWithSystem();
+    if (event.key === 'preferredLanguage') {
+      const previousCategory = document.getElementById('post_category')?.value || '';
+      syncOriginalLanguageWithSystem();
+      syncAvailableCategoriesWithSystem(previousCategory, true);
+    }
   });
 
   if (draftConfirmModal) {
@@ -1639,7 +1821,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // Remove the query param from URL without reloading so subsequent refreshes don't wipe again?
     // Not strictly necessary for a mockup, but good practice
     window.history.replaceState({}, document.title, window.location.pathname);
-    loadDraft();
+    syncOriginalLanguageWithSystem();
+    syncAvailableCategoriesWithSystem('', false);
   } else if (submittedId) {
     let submittedPost = null;
     try {
@@ -1661,11 +1844,13 @@ document.addEventListener('DOMContentLoaded', () => {
       }
       const categorySelect = document.getElementById('post_category');
       if (categorySelect && submittedPost.category) categorySelect.value = submittedPost.category;
+      setOriginalLanguage(submittedPost.originalLanguage || localStorage.getItem('preferredLanguage') || 'en');
       document.querySelectorAll('input[name="allow_translate"]').forEach(checkbox => {
         checkbox.checked = Array.isArray(submittedPost.allowedTranslations)
           && submittedPost.allowedTranslations.includes(checkbox.value);
       });
-      updateAllowedTranslationLanguages();
+      syncOriginalLanguageWithSystem();
+      syncAvailableCategoriesWithSystem(submittedPost.category || '', Boolean(submittedPost.category));
       setSaveState(true);
     } else {
       loadDraft();
@@ -1676,12 +1861,14 @@ document.addEventListener('DOMContentLoaded', () => {
         title: 'Building AI-assisted multilingual workflows',
         subtitle: 'A deep dive into integrating AI translation into modern CMS architecture.',
         authors: ['Hồ Quốc Tuấn'],
+        originalLanguage: 'en',
         body: '<p>Integrating AI into translation workflows completely transforms how we handle multilingual content. The traditional approach requires extensive manual effort, but with large language models, we can automate the bulk of this process while maintaining high quality.</p>'
       },
       '2': {
         title: 'Product notes for Lingora profiles',
         subtitle: 'Key design decisions and rationale behind the new profile experience.',
         authors: ['Trần Thị Mai'],
+        originalLanguage: 'en',
         body: '<p>When designing the new profile pages, our primary goal was to give creators a space that feels uniquely theirs. We introduced customizable headers, accent colors, and a clean typography scale that puts the content first.</p>'
       }
     };
@@ -1695,6 +1882,9 @@ document.addEventListener('DOMContentLoaded', () => {
         editor.innerHTML = postData.body;
         normalizeEditorFontMarkup();
       }
+      setOriginalLanguage(postData.originalLanguage || localStorage.getItem('preferredLanguage') || 'en');
+      syncOriginalLanguageWithSystem();
+      syncAvailableCategoriesWithSystem(postData.category || '', Boolean(postData.category));
       setSaveState(true);
     } else {
       loadDraft();
@@ -1705,5 +1895,4 @@ document.addEventListener('DOMContentLoaded', () => {
   updateAuthorMenuState();
   updateToolbarState();
   updateAllWritingLimits();
-  syncOriginalLanguageWithSystem();
 });
