@@ -20,7 +20,7 @@
 <link rel="stylesheet" href="../assets/css/variables.css">
   <link rel="stylesheet" href="../assets/css/base.css?v=5">
   <link rel="stylesheet" href="../assets/css/layouts.css">
-  <link rel="stylesheet" href="../assets/css/components.css?v=12">
+  <link rel="stylesheet" href="../assets/css/components.css?v=13">
 
   <style>
     .admin-container {
@@ -396,7 +396,7 @@
   </div>
 
   <!-- ADD LANGUAGE MODAL -->
-  <div class="modal fade" id="addLanguageModal" tabindex="-1" aria-labelledby="addLanguageModalLabel"
+  <div class="modal fade side-panel-modal" id="addLanguageModal" tabindex="-1" aria-labelledby="addLanguageModalLabel"
     aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content rounded-4 border-0 shadow">
@@ -412,11 +412,11 @@
                 Language</label>
               <select class="form-select" id="selectLang" required>
                 <option value="" disabled selected data-i18n="choose_lang_placeholder">Choose a language...</option>
-                <option value="ja" data-name="日本語 (Japanese)" data-flag="jp">日本語 (Japanese)</option>
-                <option value="ko" data-name="한국어 (Korean)" data-flag="kr">한국어 (Korean)</option>
-                <option value="fr" data-name="Français (French)" data-flag="fr">Français (French)</option>
-                <option value="es" data-name="Español (Spanish)" data-flag="es">Español (Spanish)</option>
-                <option value="de" data-name="Deutsch (German)" data-flag="de">Deutsch (German)</option>
+                <option value="ja" data-name="日本語 (Japanese)" data-native-name="日本語" data-flag="jp">日本語 (Japanese)</option>
+                <option value="ko" data-name="한국어 (Korean)" data-native-name="한국어" data-flag="kr">한국어 (Korean)</option>
+                <option value="fr" data-name="Français (French)" data-native-name="Français" data-flag="fr">Français (French)</option>
+                <option value="es" data-name="Español (Spanish)" data-native-name="Español" data-flag="es">Español (Spanish)</option>
+                <option value="de" data-name="Deutsch (German)" data-native-name="Deutsch" data-flag="de">Deutsch (German)</option>
               </select>
             </div>
             <div class="mb-1">
@@ -438,7 +438,7 @@
   </div>
 
   <!-- EDIT LANGUAGE MODAL -->
-  <div class="modal fade" id="editLanguageModal" tabindex="-1" aria-labelledby="editLanguageModalLabel" aria-hidden="true">
+  <div class="modal fade side-panel-modal" id="editLanguageModal" tabindex="-1" aria-labelledby="editLanguageModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content rounded-4 border-0 shadow">
         <div class="modal-header border-bottom">
@@ -455,6 +455,11 @@
               <label class="form-label fw-semibold" for="editLanguageName" data-lang-key="display_name">Display name</label>
               <input class="form-control" id="editLanguageName" type="text" maxlength="100" required>
               <div class="invalid-feedback" data-lang-key="name_required">Please enter a language name.</div>
+            </div>
+            <div class="mb-3">
+              <label class="form-label fw-semibold" for="editLanguageNativeName" data-lang-key="native_name">Native name</label>
+              <input class="form-control bg-body-secondary" id="editLanguageNativeName" type="text" readonly aria-readonly="true">
+              <div class="form-text" data-lang-key="native_name_help">The language's own name is kept for identification.</div>
             </div>
             <div class="row g-3">
               <div class="col-sm-6">
@@ -780,17 +785,29 @@
       const storageKey = 'admin_languages_v2';
       const seedLanguages = [
         { id: 'L1', code: 'en', name: 'English', nativeName: 'English', flag: 'us', active: true, isDefault: true, translated: 500, total: 500 },
-        { id: 'L2', code: 'vi', name: 'Tiếng Việt', nativeName: 'Vietnamese', flag: 'vn', active: true, isDefault: false, translated: 450, total: 500 },
-        { id: 'L3', code: 'zh', name: '中文', nativeName: 'Chinese', flag: 'cn', active: true, isDefault: false, translated: 325, total: 500 }
+        { id: 'L2', code: 'vi', name: 'Tiếng Việt', nativeName: 'Tiếng Việt', flag: 'vn', active: true, isDefault: false, translated: 450, total: 500 },
+        { id: 'L3', code: 'zh', name: '中文', nativeName: '中文', flag: 'cn', active: true, isDefault: false, translated: 325, total: 500 }
       ];
       const text = {
         en: { language: 'Language', translation_progress: 'Translation progress', translated_posts: 'Translated posts', default_language: 'Default', active: 'Active', inactive: 'Inactive', primary: 'Primary', set_default: 'Set default', edit: 'Edit', delete: 'Delete', edit_language: 'Edit language', display_name: 'Display name', name_required: 'Please enter a language name.', code_locked: 'The code is used by translations and cannot be changed.', flag_code: 'Flag code', language_status: 'Language status', default_help: 'Use this language when no preference is selected.', status_help: 'Allow this language to be selected.', default_status_help: 'The default language must remain active.', coverage: '{percent}% coverage', translated_value: '{translated} / {total}', open_edit: 'Open editor for {name}', added: 'Language <b>{name}</b> was added.', updated: 'Language <b>{name}</b> was updated.', deleted: 'Language <b>{name}</b> and its translation data were deleted.', status_changed: 'Language <b>{name}</b> is now {status}.', default_changed: '<b>{name}</b> is now the default language.', duplicate: 'This language has already been configured.' },
         vi: { language: 'Ngôn ngữ', translation_progress: 'Tiến độ dịch', translated_posts: 'Bài viết đã dịch', default_language: 'Mặc định', active: 'Hoạt động', inactive: 'Đã tắt', primary: 'Ngôn ngữ chính', set_default: 'Đặt mặc định', edit: 'Chỉnh sửa', delete: 'Xóa', edit_language: 'Chỉnh sửa ngôn ngữ', display_name: 'Tên hiển thị', name_required: 'Vui lòng nhập tên ngôn ngữ.', code_locked: 'Mã này được dùng bởi các bản dịch nên không thể thay đổi.', flag_code: 'Mã quốc kỳ', language_status: 'Trạng thái ngôn ngữ', default_help: 'Dùng ngôn ngữ này khi người dùng chưa chọn tùy chọn.', status_help: 'Cho phép người dùng lựa chọn ngôn ngữ này.', default_status_help: 'Ngôn ngữ mặc định phải luôn hoạt động.', coverage: 'Hoàn thành {percent}%', translated_value: '{translated} / {total}', open_edit: 'Mở chỉnh sửa ngôn ngữ {name}', added: 'Đã thêm ngôn ngữ <b>{name}</b>.', updated: 'Đã cập nhật ngôn ngữ <b>{name}</b>.', deleted: 'Đã xóa ngôn ngữ <b>{name}</b> và dữ liệu bản dịch liên quan.', status_changed: 'Ngôn ngữ <b>{name}</b> hiện {status}.', default_changed: '<b>{name}</b> hiện là ngôn ngữ mặc định.', duplicate: 'Ngôn ngữ này đã được cấu hình.' },
         zh: { language: '语言', translation_progress: '翻译进度', translated_posts: '已翻译文章', default_language: '默认', active: '启用', inactive: '已停用', primary: '主要语言', set_default: '设为默认', edit: '编辑', delete: '删除', edit_language: '编辑语言', display_name: '显示名称', name_required: '请输入语言名称。', code_locked: '该代码用于关联翻译，无法更改。', flag_code: '国旗代码', language_status: '语言状态', default_help: '用户未选择偏好时使用此语言。', status_help: '允许用户选择此语言。', default_status_help: '默认语言必须保持启用。', coverage: '完成 {percent}%', translated_value: '{translated} / {total}', open_edit: '打开 {name} 的编辑器', added: '已添加语言 <b>{name}</b>。', updated: '已更新语言 <b>{name}</b>。', deleted: '已删除语言 <b>{name}</b> 及相关翻译数据。', status_changed: '语言 <b>{name}</b> 当前为{status}。', default_changed: '<b>{name}</b> 现在是默认语言。', duplicate: '该语言已经配置。' }
       };
+      Object.assign(text.en, { native_name: 'Native name', native_name_help: "The language's own name is kept for identification." });
+      Object.assign(text.vi, { native_name: 'Tên bản ngữ', native_name_help: 'Tên do chính người bản ngữ sử dụng, được giữ cố định để nhận diện ngôn ngữ.' });
+      Object.assign(text.zh, { native_name: '本族语名称', native_name_help: '保留该语言自身使用的名称，以便准确识别。' });
 
       let languages;
       try { languages = JSON.parse(localStorage.getItem(storageKey)) || seedLanguages; } catch (_) { languages = seedLanguages; }
+      const canonicalNativeNames = {
+        en: 'English', vi: 'Tiếng Việt', zh: '中文', ja: '日本語', ko: '한국어',
+        fr: 'Français', es: 'Español', de: 'Deutsch'
+      };
+      languages.forEach(language => {
+        language.nativeName = canonicalNativeNames[String(language.code || '').toLowerCase()]
+          || language.nativeName
+          || language.name;
+      });
       if (!languages.some(language => language.isDefault) && languages.length) languages[0].isDefault = true;
       languages.forEach(language => { if (language.isDefault) language.active = true; });
       let currentLang = localStorage.getItem('preferredLanguage') || 'en';
@@ -816,7 +833,7 @@
         tableBody.innerHTML = languages.map(language => {
           const percent = language.total ? Math.round(language.translated / language.total * 100) : 0;
           return `<tr class="language-table-row" tabindex="0" data-language-id="${escapeHtml(language.id)}" aria-label="${escapeHtml(t('open_edit', { name: language.name }))}">
-            <td><div class="language-cell"><img class="language-flag" src="https://flagcdn.com/w40/${escapeHtml(language.flag)}.png" alt=""><div><div class="language-name">${escapeHtml(language.name)}</div><div class="language-native">${escapeHtml(language.nativeName || '')}</div></div></div></td>
+            <td><div class="language-cell"><img class="language-flag" src="https://flagcdn.com/w40/${escapeHtml(language.flag)}.png" alt=""><div><div class="language-name">${escapeHtml(language.name)}</div><div class="language-native" title="${escapeHtml(t('native_name'))}">${escapeHtml(language.nativeName || '')}</div></div></div></td>
             <td><span class="language-code">${escapeHtml(language.code)}</span></td>
             <td><div class="coverage-cell"><div class="d-flex justify-content-between small mb-1"><span>${t('coverage', { percent })}</span><strong>${percent}%</strong></div><div class="coverage-track"><div class="coverage-fill" style="width:${percent}%"></div></div></div></td>
             <td class="fw-semibold text-nowrap">${t('translated_value', { translated: language.translated, total: language.total })}</td>
@@ -836,6 +853,7 @@
         document.getElementById('editLanguageHeading').textContent = language.name;
         document.getElementById('editLanguageCoverage').textContent = `${t('coverage', { percent })} · ${t('translated_value', { translated: language.translated, total: language.total })}`;
         document.getElementById('editLanguageName').value = language.name;
+        document.getElementById('editLanguageNativeName').value = language.nativeName || '';
         document.getElementById('editLanguageCode').value = language.code;
         document.getElementById('editLanguageFlag').value = language.flag;
         const status = document.getElementById('editLanguageStatus');
@@ -941,7 +959,7 @@
         const option = select.options[select.selectedIndex];
         const code = select.value.toLowerCase();
         if (languages.some(language => language.code.toLowerCase() === code)) { alert(t('duplicate')); return; }
-        const language = { id: `L${Date.now()}`, code, name: option.dataset.name || option.textContent.trim(), nativeName: option.textContent.trim(), flag: option.dataset.flag || code, active: true, isDefault: false, translated: 0, total: 500 };
+        const language = { id: `L${Date.now()}`, code, name: option.dataset.name || option.textContent.trim(), nativeName: option.dataset.nativeName || canonicalNativeNames[code] || option.textContent.trim(), flag: option.dataset.flag || code, active: true, isDefault: false, translated: 0, total: 500 };
         languages.push(language); persist(); renderTable(); addForm.reset(); codeInput.value = ''; addModal.hide(); showToast(t('added', { name: escapeHtml(language.name) }));
       });
 
