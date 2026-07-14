@@ -17,6 +17,8 @@ function initSharedSidebars() {
   const path = window.location.pathname.toLowerCase();
   let activePage = '';
   if (path.includes('index.html') || path.endsWith('/guest/') || path.endsWith('/guest')) activePage = 'home';
+  else if (path.includes('subscriptions.html')) activePage = 'subscriptions';
+  else if (path.includes('inbox.html')) activePage = 'inbox';
   else if (path.includes('explore.html')) activePage = 'explore';
   else if (path.includes('post-detail.html')) activePage = 'post-detail';
   else if (path.includes('settings.html')) activePage = 'settings';
@@ -42,7 +44,10 @@ function initSharedSidebars() {
           <a href="index.html" class="sidebar-nav-item ${activePage === 'home' ? 'active' : ''}">
             <i class="bi bi-house-door-fill"></i> <span data-i18n="home">Home</span>
           </a>
-          <a href="#" class="sidebar-nav-item">
+          <a href="subscriptions.html" class="sidebar-nav-item ${activePage === 'subscriptions' ? 'active' : ''}">
+            <i class="bi bi-person-lines-fill"></i> <span data-i18n="subscriptions">Đang theo dõi</span>
+          </a>
+          <a href="inbox.html" class="sidebar-nav-item ${activePage === 'inbox' ? 'active' : ''}">
             <i class="bi bi-inbox"></i> <span data-i18n="inbox">Inbox</span>
           </a>
           <a href="explore.html" class="sidebar-nav-item ${activePage === 'explore' ? 'active' : ''}">
@@ -119,7 +124,8 @@ function initSharedSidebars() {
 
         <nav class="sidebar-nav mb-auto">
           <a href="index.html" class="sidebar-nav-item ${activePage === 'home' ? 'active' : ''}"><i class="bi bi-house-door-fill"></i> <span data-i18n="home">Home</span></a>
-          <a href="#" class="sidebar-nav-item"><i class="bi bi-inbox"></i> <span data-i18n="inbox">Inbox</span></a>
+          <a href="subscriptions.html" class="sidebar-nav-item ${activePage === 'subscriptions' ? 'active' : ''}"><i class="bi bi-person-lines-fill"></i> <span data-i18n="subscriptions">Đang theo dõi</span></a>
+          <a href="inbox.html" class="sidebar-nav-item ${activePage === 'inbox' ? 'active' : ''}"><i class="bi bi-inbox"></i> <span data-i18n="inbox">Inbox</span></a>
           <a href="explore.html" class="sidebar-nav-item ${activePage === 'explore' ? 'active' : ''}"><i class="bi bi-compass-fill"></i> <span data-i18n="explore">Explore</span></a>
           <a href="my-posts.html" class="sidebar-nav-item ${activePage === 'my-posts' ? 'active' : ''}"><i class="bi bi-journal-text"></i> <span data-i18n="my_articles">My Articles</span></a>
           <a href="profile.html" class="sidebar-nav-item ${activePage === 'profile' ? 'active' : ''}"><i class="bi bi-person"></i> <span data-i18n="profile">Profile</span></a>
@@ -771,11 +777,30 @@ window.renderFeedPosts = function(containerId, dataObj, categoryFilter = 'all') 
     html += `
     <article class="substack-post" data-supported-langs="${post.supported_langs || 'en,vi,zh'}" data-category="${post.category || 'Artificial Intelligence'}">
       <div class="substack-post-header">
-        <div class="author-badge-group">
+        <div class="author-badge-group position-relative author-tooltip-container">
           <img src="${post.author_avatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=80&h=80'}" alt="${post.author_name}" class="author-avatar">
           <div class="author-meta-info">
             <a href="profile.html?id=${post.author_id || 101}" class="author-name">${post.author_name || 'Anonymous'}</a>
             <span class="post-timestamp" data-original-ts="${post.timestamp || 'Just now'}">${post.timestamp || 'Just now'}</span>
+          </div>
+          <!-- Author Hover Card Tooltip -->
+          <div class="author-hover-card shadow-lg border rounded-4 position-absolute overflow-hidden" style="padding: 0;">
+            <div style="height: 60px; background: linear-gradient(135deg, rgba(var(--bs-primary-rgb), 0.8), rgba(var(--bs-primary-rgb), 0.4));"></div>
+            <div class="p-3 pt-0 position-relative">
+              <div class="d-flex justify-content-between align-items-end mb-2" style="margin-top: -24px;">
+                <img src="${post.author_avatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=80&h=80'}" class="rounded-circle" width="56" height="56" style="object-fit: cover; border: 3px solid var(--bg-panel); background: var(--bg-panel);" alt="Avatar">
+                <button class="btn btn-primary btn-sm rounded-pill fw-bold px-4 py-1 shadow-sm btn-subscribe" onclick="toggleSubscribe(this, event)">Theo dõi</button>
+              </div>
+              <div class="mb-2">
+                <h6 class="mb-0 fw-bold fs-6 text-main">${post.author_name || 'Anonymous'}</h6>
+                <small class="text-muted">@${(post.author_name || 'anonymous').replace(/\\s+/g, '').toLowerCase()}</small>
+              </div>
+              <p class="small mb-3 text-muted" style="line-height: 1.4;">Writing about ${post.category || 'technology and life'}, sharing insightful thoughts with the community.</p>
+              <div class="d-flex gap-3 small">
+                <div><span class="fw-bold text-main">1.2K</span> <span class="text-muted">Followers</span></div>
+                <div><span class="fw-bold text-main">48</span> <span class="text-muted">Posts</span></div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -814,5 +839,42 @@ window.renderFeedPosts = function(containerId, dataObj, categoryFilter = 'all') 
   // Apply translations to the newly generated HTML
   if (typeof applyUiTranslations === 'function') {
     applyUiTranslations(currentLang);
+  }
+};
+
+/**
+ * Global function to handle Subscribe button interactions.
+ * This simulates subscribing to an author.
+ */
+window.toggleSubscribe = function(btn, event) {
+  if (event) {
+    event.preventDefault();
+    event.stopPropagation();
+  }
+  
+  const isSubscribed = btn.classList.toggle('subscribed');
+  const currentLang = localStorage.getItem('preferredLanguage') || 'en';
+  const dict = (window.uiTranslations && window.uiTranslations[currentLang]) || {};
+  
+  const subscribedText = dict.following || 'Đang theo dõi';
+  const subscribeText = btn.classList.contains('px-5') ? (dict.subscribe_author || 'Theo dõi tác giả') : (dict.subscribe || 'Theo dõi');
+
+  if (isSubscribed) {
+    btn.textContent = subscribedText;
+    btn.classList.remove('btn-outline-primary');
+    btn.classList.add('btn-secondary'); // Use secondary to indicate "subscribed" state
+    btn.classList.remove('btn-primary');
+  } else {
+    btn.textContent = subscribeText;
+    btn.classList.remove('btn-secondary');
+    
+    // Revert styling based on original button appearance
+    if (btn.classList.contains('px-3') && btn.classList.contains('py-0')) {
+       // Small button in header
+       btn.classList.add('btn-outline-primary');
+    } else {
+       // Large button in footer or tooltip
+       btn.classList.add('btn-primary');
+    }
   }
 };

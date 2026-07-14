@@ -307,13 +307,33 @@
           html += `
             <article class="substack-post" data-supported-langs="${post.supported_langs || 'en,vi,zh'}" data-category="${post.category}">
               <div class="substack-post-header">
-                <div class="author-badge-group">
+                <div class="author-badge-group position-relative author-tooltip-container">
                   <img src="${post.author_avatar}" alt="${post.author_name}" class="author-avatar">
                   <div class="author-meta-info">
                     <a href="profile.html?id=${post.author_id || '101'}" class="author-name">${post.author_name}</a>
                     <span class="post-timestamp">${tsLabel}</span>
                   </div>
                   <span class="badge bg-primary-subtle text-primary border border-primary-subtle rounded-pill small px-2 ms-auto category-label" data-original-cat="${post.category}">${catLabel}</span>
+                  
+                  <!-- Author Hover Card Tooltip -->
+                  <div class="author-hover-card shadow-lg border rounded-4 position-absolute overflow-hidden" style="padding: 0;">
+                    <div style="height: 60px; background: linear-gradient(135deg, rgba(var(--bs-primary-rgb), 0.8), rgba(var(--bs-primary-rgb), 0.4));"></div>
+                    <div class="p-3 pt-0 position-relative">
+                      <div class="d-flex justify-content-between align-items-end mb-2" style="margin-top: -24px;">
+                        <img src="${post.author_avatar}" class="rounded-circle" width="56" height="56" style="object-fit: cover; border: 3px solid var(--bg-panel); background: var(--bg-panel);" alt="Avatar">
+                        <button class="btn btn-primary btn-sm rounded-pill fw-bold px-4 py-1 shadow-sm btn-subscribe" onclick="if(typeof toggleSubscribe === 'function') toggleSubscribe(this, event); else { event.preventDefault(); alert('Subscribed'); }">Theo dõi</button>
+                      </div>
+                      <div class="mb-2">
+                        <h6 class="mb-0 fw-bold fs-6 text-main">${post.author_name}</h6>
+                        <small class="text-muted">@${post.author_name.replace(/\s+/g, '').toLowerCase()}</small>
+                      </div>
+                      <p class="small mb-3 text-muted" style="line-height: 1.4;">Writing about ${post.category}, sharing insightful thoughts with the community.</p>
+                      <div class="d-flex gap-3 small">
+                        <div><span class="fw-bold text-main">1.2K</span> <span class="text-muted">Followers</span></div>
+                        <div><span class="fw-bold text-main">48</span> <span class="text-muted">Posts</span></div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
 

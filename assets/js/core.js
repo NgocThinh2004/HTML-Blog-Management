@@ -1,16 +1,16 @@
 // ========================================================
 // SECURITY & ROUTING CHECKS
 // ========================================================
-(function() {
+(function () {
   const currentUserJson = localStorage.getItem('currentUser');
   let user = null;
   try {
     user = currentUserJson ? JSON.parse(currentUserJson) : null;
-  } catch(e) {
+  } catch (e) {
     localStorage.removeItem('currentUser');
   }
   const path = window.location.pathname.toLowerCase();
-  
+
   if (path.includes('/admin/')) {
     if (!user || user.role !== 'admin') {
       // If we are in /admin/, home is at ../index.html
@@ -18,7 +18,7 @@
       return;
     }
   }
-  
+
   if (path.includes('/create-post.html')) {
     if (!user) {
       window.location.replace('login.html');
@@ -319,7 +319,7 @@ window.globalPostsData = {
 };
 
 // Shared destructive confirmation dialog used across the site.
-window.confirmDestructive = function(options = {}) {
+window.confirmDestructive = function (options = {}) {
   return new Promise(resolve => {
     const lang = localStorage.getItem('preferredLanguage') || 'en';
     const defaults = {
@@ -412,9 +412,9 @@ document.addEventListener('DOMContentLoaded', () => {
       const lang = langSelect.getAttribute('data-lang');
       localStorage.setItem('preferredLanguage', lang);
       window.updateGlobalFlags(lang);
-      
-      if(window.applyUiTranslations) window.applyUiTranslations(lang);
-      if(window.applyLanguageFilter) window.applyLanguageFilter(lang);
+
+      if (window.applyUiTranslations) window.applyUiTranslations(lang);
+      if (window.applyLanguageFilter) window.applyLanguageFilter(lang);
     }
   });
 
@@ -436,7 +436,7 @@ document.addEventListener('DOMContentLoaded', () => {
   function updateThemeIcon(theme) {
     const lang = localStorage.getItem('preferredLanguage') || 'en';
     let dict = null;
-    try { dict = uiTranslations[lang] || uiTranslations.en; } catch (e) {}
+    try { dict = uiTranslations[lang] || uiTranslations.en; } catch (e) { }
     const modeKey = theme === 'dark' ? 'light_mode' : 'dark_mode';
 
     if (themeIcon) {
@@ -450,7 +450,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Update sidebar theme controls
     const sidebarThemeIcon = document.getElementById('sidebarThemeIcon');
     const sidebarThemeText = document.getElementById('sidebarThemeText');
-    
+
     if (sidebarThemeIcon) {
       sidebarThemeIcon.className = theme === 'dark' ? 'bi bi-sun-fill' : 'bi bi-moon-fill';
     }
@@ -458,11 +458,11 @@ document.addEventListener('DOMContentLoaded', () => {
       sidebarThemeText.setAttribute('data-i18n', modeKey);
       if (dict) sidebarThemeText.textContent = dict[modeKey];
     }
-    
+
     // Update mobile theme controls
     const mobileThemeIcon = document.getElementById('mobileThemeIcon');
     const mobileThemeText = document.getElementById('mobileThemeText');
-    
+
     if (mobileThemeIcon) {
       mobileThemeIcon.className = theme === 'dark' ? 'bi bi-sun-fill' : 'bi bi-moon-fill';
     }
@@ -483,7 +483,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  window.updateGlobalFlags = function(lang) {
+  window.updateGlobalFlags = function (lang) {
     const languages = {
       en: { flag: 'gb', name: 'English' },
       vi: { flag: 'vn', name: 'Tiếng Việt' },
@@ -519,7 +519,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Apply the persisted language after all static controls on the page exist.
   window.updateGlobalFlags(localStorage.getItem('preferredLanguage') || 'en');
 
-  window.updateGlobalTheme = function(theme) {
+  window.updateGlobalTheme = function (theme) {
     htmlElement.setAttribute('data-bs-theme', theme);
     updateThemeIcon(theme);
     applySavedBrandAccent();
@@ -591,7 +591,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const borderAccent = needsLightCanvasContrast ? '#98A2B3' : needsDarkCanvasContrast ? '#667085' : accent;
     const hover = needsLightCanvasContrast ? '#F2F4F7' : shiftColor(accent, sourceLuminance > 0.58 ? -0.18 : 0.16);
     const contrast = sourceLuminance > 0.58 ? '#141616' : '#ffffff';
-    
+
     htmlElement.dataset.accentContrast = needsLightCanvasContrast ? 'light-on-light' : needsDarkCanvasContrast ? 'dark-on-dark' : 'normal';
     htmlElement.dataset.accentTone = sourceLuminance > 0.92 ? 'light' : sourceLuminance < 0.08 ? 'dark' : 'normal';
     htmlElement.style.setProperty('--brand-accent-color', accent);
@@ -1024,7 +1024,7 @@ document.addEventListener('DOMContentLoaded', () => {
       slug_backend: "ky-thuat-backend",
       slug_design: "thiet-ke-ui-ux",
       search_placeholder: "Tìm kiếm trên Lingora...",
-      subscriptions: "Đăng ký theo dõi",
+      subscriptions: "Đang theo dõi",
       join_creators: "Kết nối cùng tác giả",
       recommended: "Gợi ý cho bạn",
       see_all: "Xem tất cả",
@@ -2150,7 +2150,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // ========================================================
   // SESSION STATE & DYNAMIC ROLE-BASED UI MANAGEMENT
   // ========================================================
-  window.applyUserUI = function() {
+  window.applyUserUI = function () {
     const currentUserJson = localStorage.getItem('currentUser');
     let user = null;
     let isAdmin = false;
@@ -2159,7 +2159,7 @@ document.addEventListener('DOMContentLoaded', () => {
         user = JSON.parse(currentUserJson);
         isAdmin = user && user.role === 'admin';
       }
-    } catch(e) {
+    } catch (e) {
       localStorage.removeItem('currentUser');
     }
 
@@ -2260,7 +2260,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const newBtn = btn.cloneNode(true);
       btn.replaceWith(newBtn);
     });
-    
+
     document.querySelectorAll('a[href*="create-post.html"]').forEach(btn => {
       btn.addEventListener('click', (e) => {
         if (!localStorage.getItem('currentUser')) {
@@ -2283,7 +2283,7 @@ document.addEventListener('DOMContentLoaded', () => {
       };
     }
   };
-  
+
   // Call once immediately
   window.applyUserUI();
 
