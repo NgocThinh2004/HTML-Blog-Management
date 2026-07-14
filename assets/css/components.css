@@ -715,10 +715,72 @@ select.form-select-sm {
 }
 
 .substack-logo {
-  font-size: 1.6rem;
-  color: var(--primary-color) !important;
-  font-weight: 800;
-  letter-spacing: -0.04em;
+  width: 1.75rem;
+  height: 1.75rem;
+  display: inline-block;
+  flex: 0 0 1.75rem;
+  font-size: 0 !important;
+  color: transparent !important;
+  background: url("../images/lingora-mark.svg") center / contain no-repeat;
+  filter: drop-shadow(0 1px 2px rgba(15, 23, 42, 0.18));
+}
+
+.lingora-app-toast {
+  position: fixed;
+  z-index: 12000;
+  top: 24px;
+  right: 24px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  max-width: min(420px, calc(100vw - 32px));
+  padding: 12px 16px;
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  background: var(--bg-panel);
+  color: var(--text-main);
+  box-shadow: 0 14px 38px rgba(15, 23, 42, 0.2);
+  font-weight: 600;
+  opacity: 0;
+  transform: translateX(18px);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.lingora-app-toast.is-visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+@media (max-width: 575.98px) {
+  .lingora-app-toast {
+    top: 16px;
+    right: 16px;
+  }
+}
+
+.lingora-app-toast i {
+  color: #16a34a;
+  font-size: 1.1rem;
+}
+
+/* The Lingora mark keeps its indigo-violet identity in every theme/accent. */
+.auth-logo > i.bi-bookmark-fill,
+.app-header .header-container > a:first-of-type > i.bi-bookmark-fill,
+.app-header .header-container > a:first-of-type > i.bi-feather {
+  width: 1.75rem;
+  height: 1.75rem;
+  display: inline-block;
+  flex: 0 0 1.75rem;
+  font-size: 0 !important;
+  color: transparent !important;
+  background: url("../images/lingora-mark.svg") center / contain no-repeat;
+  filter: drop-shadow(0 1px 2px rgba(15, 23, 42, 0.18));
+}
+
+[data-bs-theme="dark"] .substack-logo,
+[data-bs-theme="dark"] .auth-logo > i.bi-bookmark-fill,
+[data-bs-theme="dark"] .app-header .header-container > a:first-of-type > i {
+  filter: drop-shadow(0 0 1px rgba(255, 255, 255, 0.8)) drop-shadow(0 2px 4px rgba(0, 0, 0, 0.35));
 }
 
 /* ==========================================================
@@ -1321,10 +1383,14 @@ select.form-select-sm {
 }
 
 .substack-logo {
-  font-size: 1.6rem;
-  color: var(--primary-color, #ff6c1f);
-  font-weight: 800;
-  letter-spacing: -0.04em;
+  width: 1.75rem;
+  height: 1.75rem;
+  display: inline-block;
+  flex: 0 0 1.75rem;
+  font-size: 0 !important;
+  color: transparent !important;
+  background: url("../images/lingora-mark.svg") center / contain no-repeat;
+  filter: drop-shadow(0 1px 2px rgba(15, 23, 42, 0.18));
 }
 
 .sidebar-create-btn {
@@ -1602,6 +1668,110 @@ select.form-select-sm {
   color: var(--accent-ui-color);
 }
 
+/* White brand accents need a defined edge on the logo and primary create action. */
+[data-accent-tone="light"] .substack-logo-container .bi-bookmark-fill:not(.substack-logo),
+[data-accent-tone="light"] .offcanvas-header .bi-bookmark-fill.text-primary {
+  color: var(--primary-color) !important;
+  filter: drop-shadow(0 0 1px #344054) drop-shadow(0 1px 1px rgba(16, 24, 40, 0.38));
+}
+
+[data-accent-tone="light"] .sidebar-create-btn {
+  color: #344054 !important;
+  background: #ffffff !important;
+  border-color: #98a2b3 !important;
+  box-shadow: inset 0 0 0 1px rgba(52, 64, 84, 0.08), 0 2px 5px rgba(16, 24, 40, 0.12);
+}
+
+[data-accent-tone="light"] .sidebar-create-btn:hover,
+[data-accent-tone="light"] .sidebar-create-btn:focus-visible {
+  color: #1d2939 !important;
+  background: #f2f4f7 !important;
+  border-color: #667085 !important;
+  box-shadow: inset 0 0 0 1px rgba(52, 64, 84, 0.12), 0 3px 7px rgba(16, 24, 40, 0.16);
+}
+
+[data-accent-tone="light"] .btn-primary,
+[data-accent-tone="light"] .btn-outline-primary,
+[data-accent-tone="light"] .btn-profile-view {
+  color: #344054 !important;
+  background-color: #ffffff !important;
+  border: 1px solid #98a2b3 !important;
+  box-shadow: 0 1px 3px rgba(16, 24, 40, 0.12);
+}
+
+[data-accent-tone="light"] .btn-primary:hover,
+[data-accent-tone="light"] .btn-primary:focus-visible,
+[data-accent-tone="light"] .btn-outline-primary:hover,
+[data-accent-tone="light"] .btn-outline-primary:focus-visible,
+[data-accent-tone="light"] .btn-profile-view:hover,
+[data-accent-tone="light"] .btn-profile-view:focus-visible {
+  color: #1d2939 !important;
+  background-color: #f2f4f7 !important;
+  border-color: #667085 !important;
+  box-shadow: 0 2px 5px rgba(16, 24, 40, 0.16);
+}
+
+/* Comprehensive contrast layer for a white accent on the light theme. */
+[data-bs-theme="light"][data-accent-tone="light"] .text-primary,
+[data-bs-theme="light"][data-accent-tone="light"] .link-primary,
+[data-bs-theme="light"][data-accent-tone="light"] .option-icon,
+[data-bs-theme="light"][data-accent-tone="light"] .settings-card-title > i,
+[data-bs-theme="light"][data-accent-tone="light"] .featured-posts-icon,
+[data-bs-theme="light"][data-accent-tone="light"] .featured-posts-empty i,
+[data-bs-theme="light"][data-accent-tone="light"] .featured-post-metrics .bi-eye-fill,
+[data-bs-theme="light"][data-accent-tone="light"] .stat-icon,
+[data-bs-theme="light"][data-accent-tone="light"] .category-icon,
+[data-bs-theme="light"][data-accent-tone="light"] .select-option-card.active::after,
+[data-bs-theme="light"][data-accent-tone="light"] .featured-post-item:first-child .featured-post-rank {
+  color: #59636f !important;
+  filter: none !important;
+}
+
+[data-bs-theme="light"][data-accent-tone="light"] .select-option-card.active,
+[data-bs-theme="light"][data-accent-tone="light"] .featured-post-item:hover,
+[data-bs-theme="light"][data-accent-tone="light"] .featured-post-item:focus-visible,
+[data-bs-theme="light"][data-accent-tone="light"] .dropdown-item.active,
+[data-bs-theme="light"][data-accent-tone="light"] .nav-pills .nav-link.active,
+[data-bs-theme="light"][data-accent-tone="light"] .page-item.active .page-link {
+  color: #344054 !important;
+  background-color: #f8f9fa !important;
+  border-color: #98a2b3 !important;
+  box-shadow: 0 0 0 1px rgba(52, 64, 84, 0.08), 0 2px 5px rgba(16, 24, 40, 0.08);
+}
+
+[data-bs-theme="light"][data-accent-tone="light"] .featured-post-item:first-child .featured-post-rank,
+[data-bs-theme="light"][data-accent-tone="light"] .featured-posts-icon,
+[data-bs-theme="light"][data-accent-tone="light"] .stat-icon,
+[data-bs-theme="light"][data-accent-tone="light"] .category-icon,
+[data-bs-theme="light"][data-accent-tone="light"] .bg-primary-subtle {
+  background-color: #f2f4f7 !important;
+  border: 1px solid #98a2b3 !important;
+}
+
+[data-bs-theme="light"][data-accent-tone="light"] .sidebar-nav-item.active {
+  color: #1d2939 !important;
+  background-color: #f2f4f7 !important;
+  box-shadow: inset 3px 0 0 #667085;
+}
+
+[data-bs-theme="light"][data-accent-tone="light"] .sidebar-nav-item.active i {
+  color: #344054 !important;
+  filter: none !important;
+}
+
+[data-bs-theme="light"][data-accent-tone="light"] .bg-primary,
+[data-bs-theme="light"][data-accent-tone="light"] .progress-bar,
+[data-bs-theme="light"][data-accent-tone="light"] .badge.bg-primary {
+  color: #344054 !important;
+  background-color: #ffffff !important;
+  border: 1px solid #98a2b3 !important;
+}
+
+[data-bs-theme="light"][data-accent-tone="light"] .border-primary,
+[data-bs-theme="light"][data-accent-tone="light"] .border-primary-subtle {
+  border-color: #98a2b3 !important;
+}
+
 [data-accent-contrast="light-on-light"] .chart-bar {
   background-color: var(--primary-color);
   border: 1px solid #d0d5dd;
@@ -1639,6 +1809,33 @@ select.form-select-sm {
 
 [data-accent-contrast="light-on-light"] .perfect-switch-input:checked + .perfect-switch-track .perfect-switch-thumb {
   background-color: var(--accent-ui-color);
+}
+
+/* Keep the selected state legible when the chosen brand accent is white or near-white. */
+[data-accent-tone="light"] .form-check-input:checked {
+  border-color: var(--accent-border-color, #98a2b3) !important;
+}
+
+[data-accent-tone="light"] .form-check-input:checked:not([role="switch"]),
+[data-accent-tone="light"] .form-check-input[type="checkbox"]:checked:not(.form-switch .form-check-input) {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23344054' stroke-linecap='round' stroke-linejoin='round' stroke-width='2.5' d='m3 8 3 3 7-7'/%3e%3c/svg%3e") !important;
+  box-shadow: inset 0 0 0 1px rgba(52, 64, 84, 0.18);
+}
+
+[data-accent-tone="light"] .form-switch .form-check-input:checked,
+[data-accent-tone="light"] .form-check-input[role="switch"]:checked {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='%23344054' stroke='%23ffffff' stroke-width='.45'/%3e%3c/svg%3e") !important;
+  box-shadow: inset 0 0 0 1px rgba(52, 64, 84, 0.18);
+}
+
+[data-accent-tone="light"] .perfect-switch-input:checked + .perfect-switch-track {
+  border: 1px solid var(--accent-border-color, #98a2b3);
+  box-shadow: inset 0 0 0 1px rgba(52, 64, 84, 0.12);
+}
+
+[data-accent-tone="light"] .perfect-switch-input:checked + .perfect-switch-track .perfect-switch-thumb {
+  background-color: #344054 !important;
+  border: 1px solid #ffffff !important;
 }
 
 .auth-field-error {

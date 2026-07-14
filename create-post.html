@@ -4,8 +4,8 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Create post | MundiBlog</title>
-<link href="assets/css/styles.css" rel="stylesheet"/>
+<title>Create post | Lingora</title>
+<link href="assets/css/styles.css?v=6" rel="stylesheet"/>
 </head>
 <body class="editor-page" data-page="create-post">
 <header aria-label="Post actions" class="editor-topbar">
@@ -325,9 +325,11 @@
 <section aria-label="Post editor" class="compose-pane">
 <div class="compose-inner">
 <label class="sr-only" for="postTitle">Title</label>
-<input autocomplete="off" class="title-input" id="postTitle" placeholder="Title" type="text"/>
+<textarea autocomplete="off" aria-describedby="postTitleLimit" class="title-input" id="postTitle" placeholder="Title" rows="1"></textarea>
+<div class="writing-limit" id="postTitleLimit" aria-live="polite"><span data-title-word-count>0</span></div>
 <label class="sr-only" for="postSubtitle">Subtitle</label>
-<input autocomplete="off" class="subtitle-input" id="postSubtitle" placeholder="Add a subtitle..." type="text"/>
+<textarea autocomplete="off" aria-describedby="postSubtitleLimit" class="subtitle-input" id="postSubtitle" placeholder="Add a subtitle..." rows="1"></textarea>
+<div class="writing-limit" id="postSubtitleLimit" aria-live="polite"><span data-subtitle-word-count>0</span></div>
 <div aria-label="Authors" class="author-row" data-author-row="">
 <span class="language-chip" data-author-chip="Alone">
 <span>Alone</span>
@@ -345,7 +347,8 @@
 </div>
 </div>
 <label class="sr-only" for="postBody">Post body</label>
-<div aria-label="Post body" class="rich-editor" contenteditable="true" data-placeholder="Start writing..." id="postBody"></div>
+<div aria-describedby="postBodyLimit" aria-label="Post body" class="rich-editor" contenteditable="true" data-placeholder="Start writing..." id="postBody"></div>
+<div class="writing-limit writing-limit-body" id="postBodyLimit" aria-live="polite"><span data-body-word-count>0</span></div>
 </div>
 </section>
 </main>
@@ -375,14 +378,14 @@
 </div>
 <div class="preview-address">
 <span class="preview-lock"></span>
-<span>mundiblog.local/preview</span>
+<span>lingora.local/preview</span>
 </div>
 <span class="preview-plus">+</span>
 </div>
 <div class="preview-site-shell">
 <header class="preview-site-header">
 <span aria-hidden="true" class="preview-brand-mark"></span>
-<strong>MundiBlog</strong>
+<strong>Lingora</strong>
 <nav aria-label="Preview actions" class="preview-site-actions">
 <button aria-label="Search" data-unsupported-btn="" type="button">
 <svg aria-hidden="true" viewbox="0 0 24 24"><circle cx="11" cy="11" r="7"></circle><path d="m16 16 4 4"></path></svg>
@@ -456,11 +459,11 @@
           </div>
           <div class="publish-form-group mb-4">
             <h3 class="fb-modal-heading" data-i18n="original_language">Original Language</h3>
-            <select class="form-select" id="original_language" style="border-radius: 8px;">
-                <option value="vi" data-i18n="vietnamese">Vietnamese</option>
-                <option value="en" data-i18n="english">English</option>
-                <option value="zh" data-i18n="chinese">Chinese</option>
-            </select>
+            <input id="original_language" type="hidden" value="en">
+            <div class="original-language-readonly" aria-live="polite">
+              <i class="bi bi-translate" aria-hidden="true"></i>
+              <span data-original-language-display>English</span>
+            </div>
           </div>
           <div class="publish-form-group">
             <h3 class="fb-modal-heading" data-i18n="allowed_translations">Allowed Translations</h3>
@@ -504,31 +507,8 @@
 </footer>
 </section>
 </div>
-<script charset="UTF-8" src="assets/js/core.js?v=4"></script>
-<script charset="UTF-8" src="assets/js/editor.js"></script>
-
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const origLangSelect = document.getElementById('original_language');
-    if (origLangSelect) {
-        origLangSelect.addEventListener('change', function() {
-            const selectedLang = this.value;
-            const checkboxes = document.querySelectorAll('input[name="allow_translate"]');
-            checkboxes.forEach(cb => {
-                const wrapper = cb.closest('.d-flex.align-items-center.justify-content-between');
-                if (cb.value === selectedLang) {
-                    wrapper.style.setProperty('display', 'none', 'important');
-                    cb.checked = false; // uncheck it if it's hidden
-                } else {
-                    wrapper.style.setProperty('display', 'flex', 'important');
-                }
-            });
-        });
-        // Trigger once on load
-        origLangSelect.dispatchEvent(new Event('change'));
-    }
-});
-</script>
+<script charset="UTF-8" src="assets/js/core.js?v=8"></script>
+<script charset="UTF-8" src="assets/js/editor.js?v=6"></script>
 </body>
 
 </html>

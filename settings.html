@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Settings & Preferences - MundiBlog</title>
+  <title>Settings & Preferences - Lingora</title>
   <!-- Google Fonts: Inter -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -17,7 +17,7 @@
 <link rel="stylesheet" href="assets/css/variables.css">
   <link rel="stylesheet" href="assets/css/base.css?v=5">
   <link rel="stylesheet" href="assets/css/layouts.css?v=4">
-  <link rel="stylesheet" href="assets/css/components.css?v=5">
+  <link rel="stylesheet" href="assets/css/components.css?v=12">
   <style>
     /* Settings Page Specific Styles */
     .settings-container {
@@ -151,7 +151,7 @@
         </button>
         <a href="index.html" class="d-flex align-items-center text-decoration-none">
           <i class="bi bi-feather fs-4 text-primary me-2"></i>
-          <span class="fs-5 fw-bold text-main">MundiBlog</span>
+          <span class="fs-5 fw-bold text-main">Lingora</span>
         </a>
         <div class="d-flex align-items-center ms-auto gap-2">
           <a href="create-post.html" class="btn btn-primary btn-sm fw-medium px-3 rounded-pill"><i class="bi bi-plus-lg me-1"></i> <span data-i18n="create">Create</span></a>
@@ -172,7 +172,7 @@
           <div class="substack-logo-container">
             <a href="index.html" class="text-decoration-none d-flex align-items-center gap-2">
               <i class="bi bi-bookmark-fill substack-logo"></i>
-              <span class="fs-5 fw-bold text-main" style="letter-spacing: -0.02em;">MundiBlog</span>
+              <span class="fs-5 fw-bold text-main" style="letter-spacing: -0.02em;">Lingora</span>
             </a>
           </div>
           
@@ -243,13 +243,13 @@
           <div class="d-lg-none w-100 mb-4">
             <div class="right-search-box w-100">
               <i class="bi bi-search"></i>
-              <input type="text" id="mobileFeedSearchInput" placeholder="Search MundiBlog..." data-i18n="search_placeholder">
+              <input type="text" id="mobileFeedSearchInput" placeholder="Search Lingora..." data-i18n="search_placeholder">
             </div>
           </div>
 
           <div class="settings-header">
             <h1 class="fw-bold text-main mb-2" style="letter-spacing: -0.03em;" data-i18n="settings_title">Settings & Preferences</h1>
-            <p class="text-muted mb-0" data-i18n="settings_desc">Quản lý giao diện, ngôn ngữ hiển thị và cấu hình trải nghiệm đọc bài viết trên MundiBlog.</p>
+            <p class="text-muted mb-0" data-i18n="settings_desc">Quản lý giao diện, ngôn ngữ hiển thị và cấu hình trải nghiệm đọc bài viết trên Lingora.</p>
           </div>
 
           <!-- CARD 1: THEME / APPEARANCE -->
@@ -372,7 +372,7 @@
     <div class="offcanvas-header border-bottom">
       <a href="index.html" class="text-decoration-none d-flex align-items-center gap-2">
         <i class="bi bi-bookmark-fill text-primary fs-4"></i>
-        <span class="fs-5 fw-bold text-main" style="letter-spacing: -0.02em;">MundiBlog</span>
+        <span class="fs-5 fw-bold text-main" style="letter-spacing: -0.02em;">Lingora</span>
       </a>
       <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
@@ -381,7 +381,7 @@
       <div class="d-lg-none mb-3">
         <div class="right-search-box w-100">
           <i class="bi bi-search"></i>
-          <input type="text" id="sidebarSearchInput" placeholder="Search MundiBlog..." oninput="window.location.href='home.html?search=' + encodeURIComponent(this.value)" data-i18n="search_placeholder">
+          <input type="text" id="sidebarSearchInput" placeholder="Search Lingora..." oninput="window.location.href='home.html?search=' + encodeURIComponent(this.value)" data-i18n="search_placeholder">
         </div>
       </div>
 
@@ -429,7 +429,7 @@
   <!-- Bootstrap 5 JS Bundle -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <!-- Core Script -->
-<script src="assets/js/core.js?v=4"></script>
+<script src="assets/js/core.js?v=8"></script>
   <script src="assets/js/components.js"></script>
 
   <script>
@@ -591,6 +591,16 @@
         toast.show();
       }
 
+      function settingsT(key, params = {}, lang = localStorage.getItem('preferredLanguage') || 'en') {
+        const dictionaries = window.uiTranslations || {};
+        const template = (dictionaries[lang] && dictionaries[lang][key]) ||
+          (dictionaries.en && dictionaries.en[key]) || key;
+        return Object.entries(params).reduce(
+          (message, [name, value]) => message.replaceAll(`{${name}}`, value),
+          template
+        );
+      }
+
       // ==========================================
       // 1. THEME MODE SELECTION
       // ==========================================
@@ -613,7 +623,8 @@
           
           if (window.updateGlobalTheme) window.updateGlobalTheme(selectedTheme);
           
-          showToast(`Đã đổi sang giao diện: <b>${selectedTheme === 'dark' ? 'Tối (Dark Mode)' : 'Sáng (Light Mode)'}</b>`);
+          const themeKey = selectedTheme === 'dark' ? 'theme_dark' : 'theme_light';
+          showToast(settingsT('toast_theme_changed', { theme: settingsT(themeKey) }));
         });
       });
 
@@ -641,7 +652,7 @@
           if (window.applyLanguageFilter) window.applyLanguageFilter(selectedLang);
 
           const langNames = { en: 'English (EN)', vi: 'Tiếng Việt (VI)', zh: '中文 (ZH)' };
-          showToast(`Đã đặt ngôn ngữ bảng tin: <b>${langNames[selectedLang]}</b>`);
+          showToast(settingsT('toast_language_changed', { language: langNames[selectedLang] }, selectedLang));
         });
       });
 
@@ -653,7 +664,7 @@
         compactSwitch.checked = localStorage.getItem('compactView') === 'true';
         compactSwitch.addEventListener('change', () => {
           localStorage.setItem('compactView', compactSwitch.checked);
-          showToast(compactSwitch.checked ? 'Đã bật chế độ đọc gọn gàng' : 'Đã tắt chế độ đọc gọn gàng');
+          showToast(settingsT(compactSwitch.checked ? 'toast_compact_on' : 'toast_compact_off'));
         });
       }
 
@@ -662,7 +673,7 @@
         autoPlaySwitch.checked = localStorage.getItem('autoPlayMedia') !== 'false';
         autoPlaySwitch.addEventListener('change', () => {
           localStorage.setItem('autoPlayMedia', autoPlaySwitch.checked);
-          showToast(autoPlaySwitch.checked ? 'Đã bật tự động phát video/GIF' : 'Đã tắt tự động phát video/GIF');
+          showToast(settingsT(autoPlaySwitch.checked ? 'toast_autoplay_on' : 'toast_autoplay_off'));
         });
       }
     });

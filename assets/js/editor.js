@@ -6,11 +6,16 @@ document.addEventListener('DOMContentLoaded', () => {
   const imageInput = document.getElementById('editorImageInput');
   const titleInput = document.getElementById('postTitle');
   const subtitleInput = document.getElementById('postSubtitle');
+  const titleLimit = document.getElementById('postTitleLimit');
+  const subtitleLimit = document.getElementById('postSubtitleLimit');
+  const bodyLimit = document.getElementById('postBodyLimit');
   const saveButton = document.getElementById('saveButton');
   const saveLabel = saveButton ? saveButton.querySelector('[data-save-label]') : null;
   const previewButtons = document.querySelectorAll('[data-preview-button]');
   const continueButton = document.querySelector('[data-publish-button]');
   const publishModal = document.querySelector('[data-publish-modal]');
+  const originalLanguageSelect = publishModal ? publishModal.querySelector('#original_language') : null;
+  const originalLanguageDisplay = publishModal ? publishModal.querySelector('[data-original-language-display]') : null;
   const draftConfirmModal = document.querySelector('[data-draft-modal]');
   const authorRow = document.querySelector('[data-author-row]');
   const previewModal = document.querySelector('[data-preview-modal]');
@@ -27,9 +32,18 @@ document.addEventListener('DOMContentLoaded', () => {
   const previewShareButton = previewModal ? previewModal.querySelector('[data-share-preview]') : null;
   const draftKey = 'mundiBlogCreatePostDraft';
   const previewLanguageKey = 'mundiBlogPreviewLanguage';
+  const submittedPostsKey = 'mundiBlogSubmittedPosts';
+  const pageParams = new URLSearchParams(window.location.search);
+  const submittedPostId = pageParams.get('submitted');
   const backLink = document.querySelector('[data-back-link]');
   const inlineCodeClass = 'editor-inline-code-font';
   const zeroWidthSpace = '\u200B';
+  const wordLimits = { title: 20, subtitle: 40, body: 3000 };
+  const limitTranslations = {
+    en: { words: 'words', bodyOver: 'The post exceeds the 3,000-word limit.' },
+    vi: { words: 'từ', bodyOver: 'Bài viết đã vượt giới hạn 3.000 từ.' },
+    zh: { words: '字词', bodyOver: '文章已超过 3,000 字词的限制。' }
+  };
 
   let savedRange = null;
   let activeBaselineFormat = 'normal';
@@ -53,6 +67,109 @@ document.addEventListener('DOMContentLoaded', () => {
   if (previewLanguageSelect) {
     const savedPreviewLanguage = localStorage.getItem(previewLanguageKey);
     previewLanguageSelect.value = previewLanguages.has(savedPreviewLanguage) ? savedPreviewLanguage : 'original';
+  }
+
+  function getLimitCopy() {
+    const lang = localStorage.getItem('preferredLanguage') || 'en';
+    return limitTranslations[lang] || limitTranslations.en;
+  }
+
+  function getWordSegments(text) {
+    const value = String(text || '');
+    const lang = localStorage.getItem('preferredLanguage') || 'en';
+    if (typeof Intl !== 'undefined' && Intl.Segmenter) {
+      const segmenter = new Intl.Segmenter(lang, { granularity: 'word' });
+      return Array.from(segmenter.segment(value)).filter(part => part.isWordLike);
+    }
+    return Array.from(value.matchAll(/\S+/g), match => ({ index: match.index, segment: match[0] }));
+  }
+
+  function countWords(text) {
+    return getWordSegments(text).length;
+  }
+
+  function trimToWordLimit(text, limit) {
+    const value = String(text || '');
+    const words = getWordSegments(value);
+    if (words.length <= limit) return value;
+    const lastWord = words[limit - 1];
+    return value.slice(0, lastWord.index + lastWord.segment.length).trimEnd();
+  }
+
+  function resizeWritingField(field) {
+    if (!field) return;
+    field.style.height = 'auto';
+    field.style.height = `${field.scrollHeight}px`;
+  }
+
+  function paintLimit(element, count, limit) {
+    if (!element) return;
+    element.textContent = `${count} / ${limit} ${getLimitCopy().words}`;
+    element.classList.toggle('is-near', count >= Math.ceil(limit * 0.9) && count <= limit);
+    element.classList.toggle('is-over', count > limit);
+  }
+
+  function updateTextLimit(field, element, limit) {
+    if (!field) return;
+    const limitedValue = trimToWordLimit(field.value, limit);
+    if (field.value !== limitedValue) {
+      field.value = limitedValue;
+      field.setSelectionRange(field.value.length, field.value.length);
+    }
+    resizeWritingField(field);
+    paintLimit(element, countWords(field.value), limit);
+  }
+
+  function updateBodyLimit() {
+    const count = countWords(editor.innerText);
+    const isOver = count > wordLimits.body;
+    paintLimit(bodyLimit, count, wordLimits.body);
+    if (continueButton) {
+      continueButton.disabled = isOver;
+      continueButton.setAttribute('aria-disabled', String(isOver));
+      continueButton.title = isOver ? getLimitCopy().bodyOver : '';
+    }
+  }
+
+  function updateAllWritingLimits() {
+    updateTextLimit(titleInput, titleLimit, wordLimits.title);
+    updateTextLimit(subtitleInput, subtitleLimit, wordLimits.subtitle);
+    updateBodyLimit();
+  }
+
+  function updateAllowedTranslationLanguages() {
+    if (!originalLanguageSelect) return;
+    const selectedLanguage = originalLanguageSelect.value;
+    document.querySelectorAll('input[name="allow_translate"]').forEach(checkbox => {
+      const wrapper = checkbox.closest('.d-flex.align-items-center.justify-content-between');
+      const isOriginalLanguage = checkbox.value === selectedLanguage;
+      if (wrapper) {
+        wrapper.style.setProperty('display', isOriginalLanguage ? 'none' : 'flex', 'important');
+      }
+      if (isOriginalLanguage) {
+        if (checkbox.checked) checkbox.dataset.restoreChecked = 'true';
+        checkbox.checked = false;
+      } else if (checkbox.dataset.restoreChecked === 'true') {
+        checkbox.checked = true;
+        delete checkbox.dataset.restoreChecked;
+      }
+    });
+  }
+
+  function syncOriginalLanguageWithSystem() {
+    if (!originalLanguageSelect) return;
+    const preferredLanguage = localStorage.getItem('preferredLanguage') || 'en';
+    const supportedLanguage = ['en', 'vi', 'zh'].includes(preferredLanguage) ? preferredLanguage : 'en';
+    originalLanguageSelect.value = supportedLanguage;
+    if (originalLanguageDisplay) {
+      const labels = {
+        en: { en: 'English', vi: 'Vietnamese', zh: 'Chinese' },
+        vi: { en: 'Tiếng Anh', vi: 'Tiếng Việt', zh: 'Tiếng Trung' },
+        zh: { en: '英语', vi: '越南语', zh: '中文' }
+      };
+      originalLanguageDisplay.textContent = labels[supportedLanguage][supportedLanguage];
+    }
+    updateAllowedTranslationLanguages();
   }
 
   function getGuestBackHref() {
@@ -535,6 +652,57 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  function submitForReview(sourceAction) {
+    try {
+      const post = collectDraft();
+      const categorySelect = document.getElementById('post_category');
+      const originalLanguage = originalLanguageSelect ? originalLanguageSelect.value : (localStorage.getItem('preferredLanguage') || 'en');
+      const allowedTranslations = Array.from(document.querySelectorAll('input[name="allow_translate"]:checked')).map(input => input.value);
+      const storedPosts = JSON.parse(localStorage.getItem(submittedPostsKey) || '[]');
+      const posts = Array.isArray(storedPosts) ? storedPosts : [];
+      const language = localStorage.getItem('preferredLanguage') || 'en';
+      const fallbackTitles = { en: 'Untitled post', vi: 'Bài viết chưa có tiêu đề', zh: '未命名文章' };
+
+      const submittedPost = {
+        id: submittedPostId || `pending-${Date.now()}`,
+        title: post.title.trim() || fallbackTitles[language] || fallbackTitles.en,
+        subtitle: post.subtitle,
+        body: post.body,
+        authors: post.authors,
+        category: categorySelect ? categorySelect.value : 'technology',
+        categoryLabel: categorySelect && categorySelect.selectedOptions[0] ? categorySelect.selectedOptions[0].textContent.trim() : 'Technology',
+        originalLanguage,
+        allowedTranslations,
+        status: 'pending',
+        sourceAction,
+        updatedAt: new Date().toISOString(),
+        reads: 0
+      };
+
+      const existingIndex = submittedPostId
+        ? posts.findIndex(item => String(item.id) === String(submittedPostId))
+        : -1;
+      if (existingIndex >= 0) {
+        submittedPost.reads = posts[existingIndex].reads || 0;
+        posts.splice(existingIndex, 1, submittedPost);
+      } else {
+        posts.unshift(submittedPost);
+      }
+
+      localStorage.setItem(submittedPostsKey, JSON.stringify(posts.slice(0, 50)));
+      localStorage.removeItem(draftKey);
+      window.location.href = 'my-posts.html?status=pending';
+    } catch (error) {
+      const language = localStorage.getItem('preferredLanguage') || 'en';
+      const messages = {
+        en: 'Could not send this post for review.',
+        vi: 'Không thể gửi bài viết này để chờ duyệt.',
+        zh: '无法提交此文章进行审核。'
+      };
+      alert(messages[language] || messages.en);
+    }
+  }
+
   function loadDraft() {
     try {
       const rawDraft = localStorage.getItem(draftKey);
@@ -850,7 +1018,8 @@ document.addEventListener('DOMContentLoaded', () => {
   function openPublishModal(event) {
     if (event) event.preventDefault();
     if (!publishModal) return;
-    
+
+    syncOriginalLanguageWithSystem();
     publishModal.hidden = false;
     document.body.classList.add('publish-modal-open');
   }
@@ -1215,14 +1384,22 @@ document.addEventListener('DOMContentLoaded', () => {
       if (actionButton) {
         const action = actionButton.dataset.publishAction;
         if (action === 'publish') {
-          // In real implementation, submit the form to the backend
-          closePublishModal();
+          submitForReview('publish');
         } else if (action === 'draft') {
-          closePublishModal();
+          submitForReview('draft');
         }
       }
     });
   }
+
+  document.addEventListener('click', event => {
+    if (!event.target.closest('.global-lang-select')) return;
+    setTimeout(syncOriginalLanguageWithSystem, 0);
+  });
+
+  window.addEventListener('storage', event => {
+    if (event.key === 'preferredLanguage') syncOriginalLanguageWithSystem();
+  });
 
   if (draftConfirmModal) {
     draftConfirmModal.addEventListener('click', (event) => {
@@ -1241,9 +1418,7 @@ document.addEventListener('DOMContentLoaded', () => {
           closeDraftConfirmModal();
           window.location.href = getGuestBackHref(); // Redirect to home/previous page
         } else if (action === 'save') {
-          saveDraft();
-          closeDraftConfirmModal();
-          window.location.href = getGuestBackHref(); // Redirect to home/previous page
+          submitForReview('draft');
         }
       }
     });
@@ -1389,7 +1564,10 @@ document.addEventListener('DOMContentLoaded', () => {
     saveSelection();
     updateToolbarState();
   });
-  editor.addEventListener('input', () => setSaveState(false));
+  editor.addEventListener('input', () => {
+    setSaveState(false);
+    updateBodyLimit();
+  });
   editor.addEventListener('focus', saveSelection);
 
   editor.addEventListener('keydown', (event) => {
@@ -1427,10 +1605,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
   [titleInput, subtitleInput].forEach(input => {
     if (!input) return;
-    input.addEventListener('input', () => setSaveState(false));
+    input.addEventListener('input', () => {
+      updateTextLimit(
+        input,
+        input === titleInput ? titleLimit : subtitleLimit,
+        input === titleInput ? wordLimits.title : wordLimits.subtitle
+      );
+      setSaveState(false);
+    });
+    input.addEventListener('keydown', event => {
+      if (event.key !== 'Enter') return;
+      event.preventDefault();
+      (input === titleInput ? subtitleInput : editor)?.focus();
+    });
   });
 
-  if (saveButton) saveButton.addEventListener('click', saveDraft);
+  if (saveButton) saveButton.addEventListener('click', () => submitForReview('draft'));
   if (previewButtons.length) previewButtons.forEach(btn => btn.addEventListener('click', openPreview));
   if (continueButton) {
     continueButton.addEventListener('click', (e) => {
@@ -1439,8 +1629,9 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  const urlParams = new URLSearchParams(window.location.search);
+  const urlParams = pageParams;
   const editId = urlParams.get('edit');
+  const submittedId = urlParams.get('submitted');
   const isNew = urlParams.get('new');
 
   if (isNew === '1') {
@@ -1449,6 +1640,36 @@ document.addEventListener('DOMContentLoaded', () => {
     // Not strictly necessary for a mockup, but good practice
     window.history.replaceState({}, document.title, window.location.pathname);
     loadDraft();
+  } else if (submittedId) {
+    let submittedPost = null;
+    try {
+      const storedPosts = JSON.parse(localStorage.getItem(submittedPostsKey) || '[]');
+      submittedPost = Array.isArray(storedPosts)
+        ? storedPosts.find(item => String(item.id) === String(submittedId))
+        : null;
+    } catch (error) {
+      submittedPost = null;
+    }
+
+    if (submittedPost) {
+      if (titleInput) titleInput.value = submittedPost.title || '';
+      if (subtitleInput) subtitleInput.value = submittedPost.subtitle || '';
+      if (Array.isArray(submittedPost.authors)) renderAuthors(submittedPost.authors);
+      if (submittedPost.body) {
+        editor.innerHTML = submittedPost.body;
+        normalizeEditorFontMarkup();
+      }
+      const categorySelect = document.getElementById('post_category');
+      if (categorySelect && submittedPost.category) categorySelect.value = submittedPost.category;
+      document.querySelectorAll('input[name="allow_translate"]').forEach(checkbox => {
+        checkbox.checked = Array.isArray(submittedPost.allowedTranslations)
+          && submittedPost.allowedTranslations.includes(checkbox.value);
+      });
+      updateAllowedTranslationLanguages();
+      setSaveState(true);
+    } else {
+      loadDraft();
+    }
   } else if (editId) {
     const mockPosts = {
       '1': {
@@ -1458,7 +1679,7 @@ document.addEventListener('DOMContentLoaded', () => {
         body: '<p>Integrating AI into translation workflows completely transforms how we handle multilingual content. The traditional approach requires extensive manual effort, but with large language models, we can automate the bulk of this process while maintaining high quality.</p>'
       },
       '2': {
-        title: 'Product notes for MundiBlog profiles',
+        title: 'Product notes for Lingora profiles',
         subtitle: 'Key design decisions and rationale behind the new profile experience.',
         authors: ['Trần Thị Mai'],
         body: '<p>When designing the new profile pages, our primary goal was to give creators a space that feels uniquely theirs. We introduced customizable headers, accent colors, and a clean typography scale that puts the content first.</p>'
@@ -1483,4 +1704,6 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   updateAuthorMenuState();
   updateToolbarState();
+  updateAllWritingLimits();
+  syncOriginalLanguageWithSystem();
 });
