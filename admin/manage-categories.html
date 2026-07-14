@@ -18,7 +18,7 @@
 <link rel="stylesheet" href="../assets/css/variables.css">
   <link rel="stylesheet" href="../assets/css/base.css?v=5">
   <link rel="stylesheet" href="../assets/css/layouts.css">
-  <link rel="stylesheet" href="../assets/css/components.css?v=12">
+  <link rel="stylesheet" href="../assets/css/components.css?v=13">
 
   <style>
     .admin-container {
@@ -467,7 +467,7 @@
   </div>
 
   <!-- ADD CATEGORY MODAL -->
-  <div class="modal fade" id="addCategoryModal" tabindex="-1" aria-labelledby="addCategoryModalLabel"
+  <div class="modal fade side-panel-modal" id="addCategoryModal" tabindex="-1" aria-labelledby="addCategoryModalLabel"
     aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content rounded-4 border-0 shadow">
@@ -476,7 +476,7 @@
           </h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        <form id="addCategoryForm">
+        <form id="addCategoryForm" novalidate>
           <div class="modal-body">
             <div class="mb-3">
               <label for="inputCategoryName" class="form-label fw-semibold text-main" data-i18n="category_name">Category
@@ -509,7 +509,7 @@
   </div>
 
   <!-- EDIT CATEGORY MODAL -->
-  <div class="modal fade" id="editCategoryModal" tabindex="-1" aria-labelledby="editCategoryModalLabel"
+  <div class="modal fade side-panel-modal" id="editCategoryModal" tabindex="-1" aria-labelledby="editCategoryModalLabel"
     aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content rounded-4 border-0 shadow">
@@ -518,7 +518,7 @@
           </h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        <form id="editCategoryForm">
+        <form id="editCategoryForm" novalidate>
           <div class="modal-body">
             <!-- Reference input to know which item is being edited -->
             <input type="hidden" id="editCategoryIndex">
@@ -1104,7 +1104,11 @@
 
       addForm.addEventListener('submit', event => {
         event.preventDefault();
-        if (!addForm.checkValidity()) { addForm.classList.add('was-validated'); return; }
+        if (!addForm.checkValidity()) {
+          addForm.classList.add('was-validated');
+          addForm.querySelector(':invalid')?.focus();
+          return;
+        }
         const name = addName.value.trim();
         const slug = uniqueSlug(generateSlug(name));
         const category = { id: `C${Date.now()}`, name, slug, translations: { [currentLang]: { name, slug } }, description: addDescription.value.trim(), created: new Date().toISOString().slice(0, 10), active: true, fallbackPosts: 0 };
@@ -1114,7 +1118,11 @@
       editForm.addEventListener('submit', event => {
         event.preventDefault();
         const category = categories.find(item => item.id === editingId);
-        if (!category || !editForm.checkValidity()) { editForm.classList.add('was-validated'); return; }
+        if (!category || !editForm.checkValidity()) {
+          editForm.classList.add('was-validated');
+          editForm.querySelector(':invalid')?.focus();
+          return;
+        }
         const translatedName = editName.value.trim();
         const translatedSlug = uniqueSlug(generateSlug(translatedName), category.id);
         category.translations = category.translations || {};
