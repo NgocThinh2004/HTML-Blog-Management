@@ -655,7 +655,12 @@ document.addEventListener('DOMContentLoaded', () => {
       on: "On",
       off: "Off",
       home: "Home",
-      inbox: "Inbox",
+      inbox: "Activity",
+      activity: "Activity",
+      mark_all_read: "Mark all as read",
+      all_notifications: "All",
+      unread: "Unread",
+      no_notifications: "No notifications here right now.",
       liked_posts: "Liked Posts",
       my_articles: "My Articles",
       about: "About",
@@ -945,7 +950,26 @@ document.addEventListener('DOMContentLoaded', () => {
       new_users_growth: "New Users Growth",
       mon: "Mon", tue: "Tue", wed: "Wed", thu: "Thu", fri: "Fri", sat: "Sat", sun: "Sun",
       post_ai_1: "The Future of AI Agent Programming in 2026",
-      post_ai_2: "Next-Gen LLM Reasoning & Tool Use in 2026"
+      post_ai_2: "Next-Gen LLM Reasoning & Tool Use in 2026",
+      
+      inbox_desc: "Notification hub",
+      filter_all: "All",
+      filter_comments: "Comments",
+      filter_likes: "Likes",
+      filter_posts: "New Posts",
+      mark_all_read: "Mark all as read",
+      clear_all: "Clear all",
+      no_notifications: "No notifications here right now.",
+      manage_subscriptions: "Manage Subscriptions",
+      subscriptions_desc: "Manage the creators you follow and their notification preferences.",
+      search_creators_placeholder: "Search creators...",
+      following_tab: "Following",
+      discover_tab: "Discover",
+      you_follow: "You are following",
+      find_more: "Find more",
+      latest_from_following: "Latest from following",
+      all_notifications: "All",
+      unread: "Unread"
     },
     vi: {
 
@@ -981,7 +1005,12 @@ document.addEventListener('DOMContentLoaded', () => {
       on: "Bật",
       off: "Tắt",
       home: "Trang chủ",
-      inbox: "Hộp thư",
+      inbox: "Hoạt động",
+      activity: "Hoạt động",
+      mark_all_read: "Đánh dấu tất cả đã đọc",
+      all_notifications: "Tất cả",
+      unread: "Chưa đọc",
+      no_notifications: "Hiện tại chưa có thông báo nào.",
       liked_posts: "Bài đã thích",
       my_articles: "Bài viết của tôi",
       about: "Giới thiệu",
@@ -1274,7 +1303,26 @@ document.addEventListener('DOMContentLoaded', () => {
       new_users_growth: "Tăng trưởng Người dùng",
       mon: "T2", tue: "T3", wed: "T4", thu: "T5", fri: "T6", sat: "T7", sun: "CN",
       post_ai_1: "Tương lai của Lập trình Tác tử AI năm 2026",
-      post_ai_2: "Suy luận LLM thế hệ mới & Sử dụng Công cụ năm 2026"
+      post_ai_2: "Suy luận LLM thế hệ mới & Sử dụng Công cụ năm 2026",
+      
+      inbox_desc: "Trung tâm thông báo",
+      filter_all: "Tất cả",
+      filter_comments: "Bình luận",
+      filter_likes: "Lượt thích",
+      filter_posts: "Bài viết mới",
+      mark_all_read: "Đánh dấu đã đọc",
+      clear_all: "Xóa tất cả",
+      no_notifications: "Hiện không có thông báo nào.",
+      manage_subscriptions: "Quản lý theo dõi",
+      subscriptions_desc: "Quản lý các tác giả bạn đang theo dõi và cài đặt thông báo.",
+      search_creators_placeholder: "Tìm kiếm tác giả...",
+      following_tab: "Đang theo dõi",
+      discover_tab: "Khám phá",
+      you_follow: "Bạn đang theo dõi",
+      find_more: "Khám phá thêm",
+      latest_from_following: "Mới nhất từ tác giả đang theo dõi",
+      all_notifications: "Tất cả",
+      unread: "Chưa đọc"
     },
     zh: {
 
@@ -1311,7 +1359,12 @@ document.addEventListener('DOMContentLoaded', () => {
       off: "关闭",
       inactive: "关闭",
       home: "首页",
-      inbox: "收件箱",
+      inbox: "动态",
+      activity: "动态",
+      mark_all_read: "全部标记为已读",
+      all_notifications: "全部",
+      unread: "未读",
+      no_notifications: "暂无新动态。",
       liked_posts: "喜欢的文章",
       my_articles: "我的文章",
       about: "关于我们",
@@ -1600,7 +1653,26 @@ document.addEventListener('DOMContentLoaded', () => {
       new_users_growth: "新用户增长",
       mon: "周一", tue: "周二", wed: "周三", thu: "周四", fri: "周五", sat: "周六", sun: "周日",
       post_ai_1: "2026 年 AI 代理编程的未来",
-      post_ai_2: "2026 年下一代 LLM 推理与工具使用"
+      post_ai_2: "2026 年下一代 LLM 推理与工具使用",
+      
+      inbox_desc: "通知中心",
+      filter_all: "全部",
+      filter_comments: "评论",
+      filter_likes: "喜欢",
+      filter_posts: "新文章",
+      mark_all_read: "标为已读",
+      clear_all: "清除全部",
+      no_notifications: "暂无通知。",
+      manage_subscriptions: "管理订阅",
+      subscriptions_desc: "管理您关注的创作者及其通知设置。",
+      search_creators_placeholder: "搜索创作者...",
+      following_tab: "关注中",
+      discover_tab: "发现",
+      you_follow: "您关注了",
+      find_more: "发现更多",
+      latest_from_following: "关注作者的最新发布",
+      all_notifications: "全部",
+      unread: "未读"
     }
   };
   window.uiTranslations = uiTranslations;
@@ -1773,7 +1845,57 @@ document.addEventListener('DOMContentLoaded', () => {
     if (typeof window.renderTrendingWidgets === 'function') {
       window.renderTrendingWidgets();
     }
+    if (typeof window.renderComments === 'function') {
+      const urlParams = new URLSearchParams(window.location.search);
+      const postId = urlParams.get('id') || "1";
+      window.renderComments(postId);
+    }
+    if (typeof window.renderNotifications === 'function') {
+      const activeTab = document.querySelector('.explore-tab-btn.active')?.dataset.tab || 'all';
+      window.renderNotifications(activeTab);
+    }
+    if (typeof window.updateGlobalNotificationCount === 'function') {
+      window.updateGlobalNotificationCount();
+    }
   }
+
+  window.updateGlobalNotificationCount = function() {
+    let unreadCount = 2; // Default fallback count matching mockNotifications initial unread count
+    if (typeof window.mockNotifications !== 'undefined' && Array.isArray(window.mockNotifications)) {
+      unreadCount = window.mockNotifications.filter(n => n.is_read === 0 || n.is_read === false).length;
+    } else {
+      try {
+        const stored = localStorage.getItem('mundi_unread_notif_count');
+        if (stored !== null) unreadCount = parseInt(stored, 10);
+      } catch (e) {}
+    }
+
+    document.querySelectorAll('.header-bell .notification-count-badge, .header-bell .badge').forEach(badge => {
+      if (unreadCount > 0) {
+        badge.textContent = unreadCount;
+        badge.classList.remove('d-none');
+      } else {
+        badge.textContent = '';
+        badge.classList.add('d-none');
+      }
+    });
+
+    document.querySelectorAll('.notification-sidebar-badge').forEach(badge => {
+      if (unreadCount > 0) {
+        badge.textContent = unreadCount;
+        badge.classList.remove('d-none');
+      } else {
+        badge.textContent = '';
+        badge.classList.add('d-none');
+      }
+    });
+  };
+
+  document.addEventListener('DOMContentLoaded', () => {
+    if (typeof window.updateGlobalNotificationCount === 'function') {
+      window.updateGlobalNotificationCount();
+    }
+  });
 
   window.currentSelectedCategory = 'all';
 
@@ -2071,6 +2193,21 @@ document.addEventListener('DOMContentLoaded', () => {
     return db[postId];
   }
 
+  function ensureCommentsLikesInitialized(comments) {
+    let modified = false;
+    comments.forEach(root => {
+      if (typeof root.likes === 'undefined') { root.likes = Math.floor(Math.random() * 15) + 2; modified = true; }
+      if (typeof root.isLiked === 'undefined') { root.isLiked = false; modified = true; }
+      if (root.replies) {
+        root.replies.forEach(rep => {
+          if (typeof rep.likes === 'undefined') { rep.likes = Math.floor(Math.random() * 8) + 1; modified = true; }
+          if (typeof rep.isLiked === 'undefined') { rep.isLiked = false; modified = true; }
+        });
+      }
+    });
+    return modified;
+  }
+
   function saveCommentsForPost(postId, comments) {
     let db = JSON.parse(localStorage.getItem('mundi_comments_db')) || defaultCommentsDatabase;
     db[postId] = comments;
@@ -2124,10 +2261,117 @@ document.addEventListener('DOMContentLoaded', () => {
   window.applyUiTranslations = applyUiTranslations;
   window.applyLanguageFilter = applyLanguageFilter;
   window.selectCategory = selectCategory;
-  window.getCommentsForPost = getCommentsForPost;
+  window.getCommentsForPost = function(postId) {
+    const comments = getCommentsForPost(postId);
+    if (ensureCommentsLikesInitialized(comments)) {
+      saveCommentsForPost(postId, comments);
+    }
+    return comments;
+  };
   window.saveCommentsForPost = saveCommentsForPost;
   window.getCommentTranslation = getCommentTranslation;
   window.syncFeedCommentCounts = syncFeedCommentCounts;
+
+  // Global Toggle Like (Posts)
+  function toggleLike(btn, postIdOrBaseCount, event) {
+    if (event && typeof event.stopPropagation === 'function') {
+      event.stopPropagation();
+    }
+    const icon = btn.querySelector('i');
+    const text = btn.querySelector('.like-count');
+    const isLiked = !btn.classList.contains('liked');
+    let currentCount = parseInt(text ? text.textContent : postIdOrBaseCount) || 0;
+
+    if (isLiked) {
+      btn.classList.add('liked', 'text-danger');
+      if (icon) icon.className = 'bi bi-heart-fill text-danger';
+      if (text) text.textContent = currentCount + 1;
+      if (postIdOrBaseCount && window.globalPostsData && window.globalPostsData[postIdOrBaseCount]) {
+        window.globalPostsData[postIdOrBaseCount].likes = currentCount + 1;
+      }
+    } else {
+      btn.classList.remove('liked', 'text-danger');
+      if (icon) icon.className = 'bi bi-heart';
+      if (text) text.textContent = Math.max(0, currentCount - 1);
+      if (postIdOrBaseCount && window.globalPostsData && window.globalPostsData[postIdOrBaseCount]) {
+        window.globalPostsData[postIdOrBaseCount].likes = Math.max(0, currentCount - 1);
+      }
+    }
+  }
+
+  // Global Toggle Comment Like (Comments & Replies)
+  function toggleCommentLike(btn, rootId, repId, isChild, event) {
+    if (event && typeof event.stopPropagation === 'function') {
+      event.stopPropagation();
+    }
+    const icon = btn.querySelector('i');
+    const text = btn.querySelector('.like-count');
+    const isLiked = !btn.classList.contains('liked') && !btn.classList.contains('text-danger');
+    let currentCount = parseInt(text ? text.textContent : 0) || 0;
+
+    if (isLiked) {
+      btn.classList.add('liked', 'text-danger');
+      if (icon) icon.className = 'bi bi-heart-fill text-danger';
+      if (text) text.textContent = currentCount + 1;
+    } else {
+      btn.classList.remove('liked', 'text-danger');
+      if (icon) icon.className = 'bi bi-heart';
+      if (text) text.textContent = Math.max(0, currentCount - 1);
+    }
+
+    if (rootId && typeof window.getCommentsForPost === 'function') {
+      const urlParams = new URLSearchParams(window.location.search);
+      const postId = urlParams.get('id') || "1";
+      const comments = window.getCommentsForPost(postId);
+      const targetRoot = comments.find(c => String(c.id) === String(rootId));
+      if (targetRoot) {
+        if (isChild && targetRoot.replies) {
+          const targetRep = targetRoot.replies.find(r => String(r.id) === String(repId));
+          if (targetRep) {
+            targetRep.likes = isLiked ? (currentCount + 1) : Math.max(0, currentCount - 1);
+            targetRep.isLiked = isLiked;
+          }
+        } else if (!isChild) {
+          targetRoot.likes = isLiked ? (currentCount + 1) : Math.max(0, currentCount - 1);
+          targetRoot.isLiked = isLiked;
+        }
+        if (typeof window.saveCommentsForPost === 'function') {
+          window.saveCommentsForPost(postId, comments);
+        }
+      }
+    }
+  }
+
+  // Global Toggle Comment Translation
+  function toggleCommentTranslation(btn) {
+    if (!btn) return;
+    const card = btn.closest('.comment-reply-card, .comment-card');
+    if (!card) return;
+    const contentEl = card.querySelector('.comment-content-text');
+    if (!contentEl) return;
+
+    const orig = decodeURIComponent(btn.getAttribute('data-original') || '');
+    const trans = decodeURIComponent(btn.getAttribute('data-translated') || '');
+    const tagHtml = decodeURIComponent(btn.getAttribute('data-tag') || '');
+    const isShowingTranslated = btn.classList.toggle('active-translated');
+
+    const currentLang = localStorage.getItem('preferredLanguage') || 'en';
+    const dict = uiTranslations[currentLang] || uiTranslations.en;
+
+    if (isShowingTranslated) {
+      contentEl.innerHTML = tagHtml + trans;
+      btn.classList.add('text-primary');
+      btn.setAttribute('title', dict.show_original || "Show original content");
+    } else {
+      contentEl.innerHTML = tagHtml + orig;
+      btn.classList.remove('text-primary');
+      btn.setAttribute('title', dict.translate_comment || "Translate");
+    }
+  }
+
+  window.toggleLike = toggleLike;
+  window.toggleCommentLike = toggleCommentLike;
+  window.toggleCommentTranslation = toggleCommentTranslation;
 
   const preferredLang = localStorage.getItem('preferredLanguage') || 'en';
   applyLanguageFilter(preferredLang);
@@ -2510,3 +2754,32 @@ window.addEventListener('pageshow', (event) => {
     window.location.reload();
   }
 });
+
+// Helper: check if authorName matches currently logged in user
+window.isSelfAuthor = function(authorName) {
+  if (!authorName) return false;
+  const currentStr = localStorage.getItem('currentUser');
+  let currentName = 'Tuấn Hưng';
+  if (currentStr) {
+    if (typeof currentStr === 'string' && currentStr.startsWith('{')) {
+      try { currentName = JSON.parse(currentStr).name || currentName; } catch(e){}
+    } else {
+      currentName = currentStr;
+    }
+  }
+  return authorName.toString().trim().toLowerCase() === currentName.toString().trim().toLowerCase();
+};
+
+// Global mouseover handler: ensure no subscribe button is shown inside your own author hover cards or badges
+document.addEventListener('mouseover', function(e) {
+  const container = e.target.closest('.author-tooltip-container');
+  if (container) {
+    const nameEl = container.querySelector('.author-name, .fw-bold.fs-6, h6.text-main, .author-meta-info a');
+    if (nameEl && typeof window.isSelfAuthor === 'function' && window.isSelfAuthor(nameEl.textContent)) {
+      container.querySelectorAll('.btn-subscribe').forEach(btn => {
+        btn.style.display = 'none';
+      });
+    }
+  }
+});
+

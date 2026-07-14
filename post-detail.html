@@ -36,14 +36,14 @@
         </button>
         <a href="index.html" class="d-flex align-items-center text-decoration-none">
           <i class="bi bi-feather fs-4 text-primary me-2"></i>
-          <span class="fs-5 fw-bold text-main">MundiBlog</span>
+          <span class="fs-5 fw-bold text-main">Lingora</span>
         </a>
         <div class="d-flex align-items-center ms-auto gap-2">
-          <a href="create-post.html" class="btn btn-primary btn-sm fw-medium px-3 rounded-pill d-none d-sm-inline-flex align-items-center me-1"><i
+          <a href="create-post.html" class="btn btn-primary btn-sm fw-medium px-2 px-sm-3 rounded-pill d-inline-flex align-items-center me-1"><i
               class="bi bi-plus-lg me-1"></i> <span data-i18n="create">Create</span></a>
-          <a href="subscriptions.html" class="header-bell me-1" aria-label="Notifications">
+          <a href="inbox.html" class="header-bell me-1" aria-label="Notifications">
             <i class="bi bi-bell fs-5"></i>
-            <span class="badge bg-danger rounded-circle p-1"></span>
+            <span class="badge bg-danger rounded-pill px-1.5 py-0.5 notification-count-badge" style="font-size: 0.65rem;">2</span>
           </a>
           <a href="profile.html" class="text-decoration-none">
             <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=32&h=32"
@@ -72,8 +72,9 @@
             <a href="index.html" class="sidebar-nav-item">
               <i class="bi bi-house-door"></i> <span data-i18n="home">Home</span>
             </a>
-            <a href="#" class="sidebar-nav-item">
-              <i class="bi bi-inbox"></i> <span data-i18n="inbox">Inbox</span>
+            <a href="inbox.html" class="sidebar-nav-item">
+              <i class="bi bi-bell"></i> <span data-i18n="activity">Activity</span>
+              <span class="badge bg-danger rounded-pill ms-auto notification-sidebar-badge" style="font-size: 0.72rem; padding: 0.25em 0.55em;">2</span>
             </a>
             <a href="my-posts.html" class="sidebar-nav-item">
               <i class="bi bi-journal-text"></i> <span data-i18n="my_articles">My Articles</span>
@@ -306,8 +307,9 @@
         <a href="index.html" class="sidebar-nav-item">
           <i class="bi bi-house-door-fill"></i> <span data-i18n="home">Home</span>
         </a>
-        <a href="#" class="sidebar-nav-item">
-          <i class="bi bi-inbox"></i> <span data-i18n="inbox">Inbox</span>
+        <a href="inbox.html" class="sidebar-nav-item">
+          <i class="bi bi-bell"></i> <span data-i18n="activity">Activity</span>
+          <span class="badge bg-danger rounded-pill ms-auto notification-sidebar-badge" style="font-size: 0.72rem; padding: 0.25em 0.55em;">2</span>
         </a>
         <a href="my-posts.html" class="sidebar-nav-item">
           <i class="bi bi-journal-text"></i> <span data-i18n="my_articles">My Articles</span>
@@ -337,7 +339,7 @@
   <!-- Bootstrap 5 JS Bundle -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <!-- Core Script containing theme & language simulation -->
-  <script src="assets/js/core.js?v=4"></script>
+  <script src="assets/js/core.js?v=9"></script>
   <script src="assets/js/components.js"></script>
 
   <script>
@@ -385,7 +387,7 @@
               <div class="author-meta-info flex-grow-1">
                 <div class="d-flex align-items-center">
                   <a href="profile.html?id=${post.author_id}" class="author-name me-2 text-decoration-none">${post.author_name}</a>
-                  <button class="btn btn-sm btn-outline-primary rounded-pill px-3 py-0 btn-subscribe" style="font-size: 0.75rem;" onclick="toggleSubscribe(this, event)">Theo dõi</button>
+                  ${(typeof window.isSelfAuthor === 'function' && window.isSelfAuthor(post.author_name)) ? '' : `<button class="btn btn-sm btn-outline-primary rounded-pill px-3 py-0 btn-subscribe" style="font-size: 0.75rem;" onclick="toggleSubscribe(this, event)">Theo dõi</button>`}
                 </div>
                 <span class="post-timestamp">${typeof window.formatTimestampI18n === 'function' ? window.formatTimestampI18n(post.timestamp) : post.timestamp}</span>
               </div>
@@ -397,7 +399,7 @@
                 <div class="p-3 pt-0 position-relative">
                   <div class="d-flex justify-content-between align-items-end mb-2" style="margin-top: -24px;">
                     <img src="${post.author_avatar}" class="rounded-circle" width="56" height="56" style="object-fit: cover; border: 3px solid var(--bg-panel); background: var(--bg-panel);" alt="Avatar">
-                    <button class="btn btn-primary btn-sm rounded-pill fw-bold px-4 py-1 shadow-sm btn-subscribe" onclick="toggleSubscribe(this, event)">Theo dõi</button>
+                    ${(typeof window.isSelfAuthor === 'function' && window.isSelfAuthor(post.author_name)) ? '' : `<button class="btn btn-primary btn-sm rounded-pill fw-bold px-4 py-1 shadow-sm btn-subscribe" onclick="toggleSubscribe(this, event)">Theo dõi</button>`}
                   </div>
                   <div class="mb-2">
                     <h6 class="mb-0 fw-bold fs-6 text-main">${post.author_name}</h6>
@@ -454,8 +456,8 @@
 
       const originalText = decodeURIComponent(btn.getAttribute('data-original'));
       const translatedText = decodeURIComponent(btn.getAttribute('data-translated'));
-      const labelTranslate = btn.getAttribute('data-label-translate');
-      const labelOriginal = btn.getAttribute('data-label-original');
+      const labelTranslate = btn.getAttribute('data-label-translate') || 'Dịch';
+      const labelOriginal = btn.getAttribute('data-label-original') || 'Bản gốc';
 
       const isTranslated = btn.classList.toggle('is-translated');
 
@@ -463,14 +465,15 @@
         const tagSpan = contentEl.querySelector('.text-primary.fw-semibold');
         const tagHtml = tagSpan ? tagSpan.outerHTML + ' ' : '';
         contentEl.innerHTML = tagHtml + translatedText;
-        spanEl.textContent = labelOriginal;
-        btn.classList.replace('text-primary', 'text-success');
+        if (spanEl) spanEl.textContent = labelOriginal;
+        btn.classList.add('text-primary');
+        btn.classList.remove('text-success'); // in case it had success before
       } else {
         const tagSpan = contentEl.querySelector('.text-primary.fw-semibold');
         const tagHtml = tagSpan ? tagSpan.outerHTML + ' ' : '';
         contentEl.innerHTML = tagHtml + originalText;
-        spanEl.textContent = labelTranslate;
-        btn.classList.replace('text-success', 'text-primary');
+        if (spanEl) spanEl.textContent = labelTranslate;
+        btn.classList.remove('text-primary');
       }
     }
 
@@ -547,28 +550,26 @@
             if (rep.lang && rep.lang !== currentLang) {
               const translatedText = window.getCommentTranslation ? window.getCommentTranslation(rep, currentLang) : ("[Dịch]: " + rep.content);
               repTranslateBtnHtml = `
-                <div class="mt-1 mb-2">
-                  <button class="btn btn-link p-0 text-decoration-none small text-primary fw-medium btn-translate-toggle" 
-                          data-original="${encodeURIComponent(rep.content)}" 
-                          data-translated="${encodeURIComponent(translatedText)}" 
-                          data-label-translate="${translateLabel}" 
-                          data-label-original="${originalLabel}" 
-                          onclick="toggleCommentTranslation(this)">
-                    <i class="bi bi-translate me-1"></i><span>${translateLabel}</span>
-                  </button>
-                </div>
+                <button class="btn-reply btn-translate-toggle" 
+                        data-original="${encodeURIComponent(rep.content)}" 
+                        data-translated="${encodeURIComponent(translatedText)}" 
+                        data-tag="${encodeURIComponent(tagHtml)}"
+                        title="${translateLabel}" 
+                        onclick="if(window.toggleCommentTranslation) window.toggleCommentTranslation(this); else toggleCommentTranslation(this);">
+                  <i class="bi bi-translate"></i>
+                </button>
               `;
             }
 
             let repOwnerActionsHtml = "";
-            if (repAuthorName === currentUser) {
+            if (repAuthorName === currentUser || (typeof window.isSelfAuthor === 'function' && window.isSelfAuthor(repAuthorName))) {
               repOwnerActionsHtml = `
-                <button class="btn-reply text-secondary ms-3" onclick="editComment(${root.id}, ${rep.id}, true)"><i class="bi bi-pencil-square me-1"></i><span data-i18n="edit">${dict.edit || "Sửa"}</span></button>
-                <button class="btn-reply text-danger ms-3" onclick="deleteComment(${root.id}, ${rep.id}, true)"><i class="bi bi-trash me-1"></i><span data-i18n="delete">${dict.delete || "Xóa"}</span></button>
+                <button class="btn-reply text-secondary ms-2" onclick="editComment(${root.id}, ${rep.id}, true)" title="${dict.edit || 'Sửa'}"><i class="bi bi-pencil-square"></i></button>
+                <button class="btn-reply text-danger ms-1" onclick="deleteComment(${root.id}, ${rep.id}, true)" title="${dict.delete || 'Xóa'}"><i class="bi bi-trash"></i></button>
               `;
             } else if (isPostAuthor) {
               repOwnerActionsHtml = `
-                <button class="btn-reply text-danger ms-3" onclick="deleteComment(${root.id}, ${rep.id}, true)"><i class="bi bi-trash me-1"></i><span data-i18n="delete">${dict.delete || "Xóa"}</span></button>
+                <button class="btn-reply text-danger ms-1" onclick="deleteComment(${root.id}, ${rep.id}, true)" title="${dict.delete || 'Xóa'}"><i class="bi bi-trash"></i></button>
               `;
             }
 
@@ -585,16 +586,16 @@
                       <div class="p-3 pt-0 position-relative">
                         <div class="d-flex justify-content-between align-items-end mb-2" style="margin-top: -24px;">
                           <img src="${rep.avatar}" class="rounded-circle" width="56" height="56" style="object-fit: cover; border: 3px solid var(--bg-panel); background: var(--bg-panel);" alt="Avatar">
-                          <button class="btn btn-primary btn-sm rounded-pill fw-bold px-4 py-1 shadow-sm btn-subscribe" onclick="if(typeof toggleSubscribe === 'function') toggleSubscribe(this, event); else { event.preventDefault(); alert('Subscribed'); }">Theo dõi</button>
+                          ${(repAuthorName === currentUser || (typeof window.isSelfAuthor === 'function' && window.isSelfAuthor(repAuthorName))) ? '' : `<button class="btn btn-primary btn-sm rounded-pill fw-bold px-4 py-1 shadow-sm btn-subscribe" onclick="if(typeof toggleSubscribe === 'function') toggleSubscribe(this, event); else { event.preventDefault(); alert('Subscribed'); }">Theo dõi</button>`}
                         </div>
                         <div class="mb-2">
                           <h6 class="mb-0 fw-bold fs-6 text-main">${repAuthorName}</h6>
                           <small class="text-muted">@${repAuthorName.replace(/\s+/g, '').toLowerCase()}</small>
                         </div>
-                        <p class="small mb-3 text-muted" style="line-height: 1.4;">Active community member, engaging in meaningful discussions.</p>
+                        <p class="small mb-3 text-muted" style="line-height: 1.4;">Active contributor sharing valuable knowledge.</p>
                         <div class="d-flex gap-3 small">
                           <div><span class="fw-bold text-main">120</span> <span class="text-muted">Followers</span></div>
-                          <div><span class="fw-bold text-main">15</span> <span class="text-muted">Posts</span></div>
+                          <div><span class="fw-bold text-main">8</span> <span class="text-muted">Posts</span></div>
                         </div>
                       </div>
                     </div>
@@ -602,9 +603,10 @@
                   <span class="text-muted small ms-auto">${typeof window.formatTimestampI18n === 'function' ? window.formatTimestampI18n(rep.time) : rep.time}</span>
                 </div>
                 <p class="mb-1 text-secondary comment-content-text" style="font-size: 0.95rem;">${tagHtml}${rep.content}</p>
-                ${repTranslateBtnHtml}
-                <div class="d-flex align-items-center flex-wrap">
-                  <button class="btn-reply" onclick="openReplyBox(${root.id}, '${repAuthorName}', true)"><i class="bi bi-reply-fill me-1"></i><span data-i18n="reply">Reply</span></button>
+                <div class="d-flex align-items-center gap-1 mt-2">
+                  <button class="btn-reply d-flex align-items-center gap-1 ${rep.isLiked ? 'liked text-danger' : ''}" onclick="if(window.toggleCommentLike) window.toggleCommentLike(this, ${root.id}, ${rep.id}, true, event); else toggleCommentLike(this);"><i class="bi ${rep.isLiked ? 'bi-heart-fill text-danger' : 'bi-heart'}"></i> <span class="like-count">${rep.likes || 0}</span></button>
+                  <button class="btn-reply" onclick="openReplyBox(${root.id}, '${repAuthorName}', true)"><i class="bi bi-chat"></i></button>
+                  ${repTranslateBtnHtml}
                   ${repOwnerActionsHtml}
                 </div>
                 <div id="reply-box-child-${root.id}-${repAuthorName.replace(/\s+/g, '')}"></div>
@@ -620,28 +622,26 @@
         if (root.lang && root.lang !== currentLang) {
           const translatedText = window.getCommentTranslation ? window.getCommentTranslation(root, currentLang) : ("[Dịch]: " + root.content);
           rootTranslateBtnHtml = `
-            <div class="mt-1 mb-2">
-              <button class="btn btn-link p-0 text-decoration-none small text-primary fw-medium btn-translate-toggle" 
-                      data-original="${encodeURIComponent(root.content)}" 
-                      data-translated="${encodeURIComponent(translatedText)}" 
-                      data-label-translate="${translateLabel}" 
-                      data-label-original="${originalLabel}" 
-                      onclick="toggleCommentTranslation(this)">
-                <i class="bi bi-translate me-1"></i><span>${translateLabel}</span>
-              </button>
-            </div>
+            <button class="btn-reply btn-translate-toggle" 
+                    data-original="${encodeURIComponent(root.content)}" 
+                    data-translated="${encodeURIComponent(translatedText)}" 
+                    data-tag=""
+                    title="${translateLabel}" 
+                    onclick="if(window.toggleCommentTranslation) window.toggleCommentTranslation(this); else toggleCommentTranslation(this);">
+              <i class="bi bi-translate"></i>
+            </button>
           `;
         }
 
         let rootOwnerActionsHtml = "";
-        if (rootAuthorName === currentUser) {
+        if (rootAuthorName === currentUser || (typeof window.isSelfAuthor === 'function' && window.isSelfAuthor(rootAuthorName))) {
           rootOwnerActionsHtml = `
-            <button class="btn-reply text-secondary ms-3" onclick="editComment(${root.id}, null, false)"><i class="bi bi-pencil-square me-1"></i><span data-i18n="edit">${dict.edit || "Sửa"}</span></button>
-            <button class="btn-reply text-danger ms-3" onclick="deleteComment(${root.id}, null, false)"><i class="bi bi-trash me-1"></i><span data-i18n="delete">${dict.delete || "Xóa"}</span></button>
+            <button class="btn-reply text-secondary ms-2" onclick="editComment(${root.id}, null, false)" title="${dict.edit || 'Sửa'}"><i class="bi bi-pencil-square"></i></button>
+            <button class="btn-reply text-danger ms-1" onclick="deleteComment(${root.id}, null, false)" title="${dict.delete || 'Xóa'}"><i class="bi bi-trash"></i></button>
           `;
         } else if (isPostAuthor) {
           rootOwnerActionsHtml = `
-            <button class="btn-reply text-danger ms-3" onclick="deleteComment(${root.id}, null, false)"><i class="bi bi-trash me-1"></i><span data-i18n="delete">${dict.delete || "Xóa"}</span></button>
+            <button class="btn-reply text-danger ms-1" onclick="deleteComment(${root.id}, null, false)" title="${dict.delete || 'Xóa'}"><i class="bi bi-trash"></i></button>
           `;
         }
 
@@ -658,7 +658,7 @@
                   <div class="p-3 pt-0 position-relative">
                     <div class="d-flex justify-content-between align-items-end mb-2" style="margin-top: -24px;">
                       <img src="${root.avatar}" class="rounded-circle" width="56" height="56" style="object-fit: cover; border: 3px solid var(--bg-panel); background: var(--bg-panel);" alt="Avatar">
-                      <button class="btn btn-primary btn-sm rounded-pill fw-bold px-4 py-1 shadow-sm btn-subscribe" onclick="if(typeof toggleSubscribe === 'function') toggleSubscribe(this, event); else { event.preventDefault(); alert('Subscribed'); }">Theo dõi</button>
+                      ${(rootAuthorName === currentUser || (typeof window.isSelfAuthor === 'function' && window.isSelfAuthor(rootAuthorName))) ? '' : `<button class="btn btn-primary btn-sm rounded-pill fw-bold px-4 py-1 shadow-sm btn-subscribe" onclick="if(typeof toggleSubscribe === 'function') toggleSubscribe(this, event); else { event.preventDefault(); alert('Subscribed'); }">Theo dõi</button>`}
                     </div>
                     <div class="mb-2">
                       <h6 class="mb-0 fw-bold fs-6 text-main">${rootAuthorName}</h6>
@@ -675,9 +675,10 @@
               <span class="text-muted small ms-auto">${typeof window.formatTimestampI18n === 'function' ? window.formatTimestampI18n(root.time) : root.time}</span>
             </div>
             <p class="mb-1 text-secondary comment-content-text">${root.content}</p>
-            ${rootTranslateBtnHtml}
-            <div class="d-flex align-items-center flex-wrap">
-              <button class="btn-reply" onclick="openReplyBox(${root.id}, '${rootAuthorName}', false)"><i class="bi bi-reply-fill me-1"></i><span data-i18n="reply">Reply</span></button>
+            <div class="d-flex align-items-center gap-1 mt-2">
+              <button class="btn-reply d-flex align-items-center gap-1 ${root.isLiked ? 'liked text-danger' : ''}" onclick="if(window.toggleCommentLike) window.toggleCommentLike(this, ${root.id}, null, false, event); else toggleCommentLike(this);"><i class="bi ${root.isLiked ? 'bi-heart-fill text-danger' : 'bi-heart'}"></i> <span class="like-count">${root.likes || 0}</span></button>
+              <button class="btn-reply" onclick="openReplyBox(${root.id}, '${rootAuthorName}', false)"><i class="bi bi-chat"></i></button>
+              ${rootTranslateBtnHtml}
               ${rootOwnerActionsHtml}
             </div>
             <div id="reply-box-root-${root.id}"></div>
@@ -978,17 +979,41 @@
     }
 
     // Toggle Feed Likes simulation
-    function toggleLike(btn, baseCount) {
+    function toggleLike(btn, baseCount, event) {
+      if (window.toggleLike && window.toggleLike !== toggleLike) {
+        return window.toggleLike(btn, baseCount, event);
+      }
       const icon = btn.querySelector('i');
       const text = btn.querySelector('.like-count');
       const isLiked = btn.classList.toggle('liked');
+      const count = parseInt(text ? text.textContent : baseCount) || 0;
 
       if (isLiked) {
-        icon.className = 'bi bi-heart-fill';
-        text.textContent = baseCount + 1;
+        btn.classList.add('text-danger');
+        if (icon) icon.className = 'bi bi-heart-fill text-danger';
+        if (text) text.textContent = count + 1;
       } else {
-        icon.className = 'bi bi-heart';
-        text.textContent = baseCount;
+        btn.classList.remove('text-danger');
+        if (icon) icon.className = 'bi bi-heart';
+        if (text) text.textContent = Math.max(0, count - 1);
+      }
+    }
+
+    function toggleCommentLike(btn, rootId, repId, isChild, event) {
+      if (window.toggleCommentLike && window.toggleCommentLike !== toggleCommentLike) {
+        return window.toggleCommentLike(btn, rootId, repId, isChild, event);
+      }
+      const icon = btn.querySelector('i');
+      const text = btn.querySelector('.like-count');
+      const isLiked = btn.classList.toggle('text-danger');
+      let currentCount = parseInt(text ? text.textContent : 0) || 0;
+
+      if (isLiked) {
+        if (icon) icon.className = 'bi bi-heart-fill text-danger';
+        if (text) text.textContent = currentCount + 1;
+      } else {
+        if (icon) icon.className = 'bi bi-heart';
+        if (text) text.textContent = Math.max(0, currentCount - 1);
       }
     }
 

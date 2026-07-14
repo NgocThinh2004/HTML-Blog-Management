@@ -45,10 +45,11 @@ function initSharedSidebars() {
             <i class="bi bi-house-door-fill"></i> <span data-i18n="home">Home</span>
           </a>
           <a href="subscriptions.html" class="sidebar-nav-item ${activePage === 'subscriptions' ? 'active' : ''}">
-            <i class="bi bi-person-lines-fill"></i> <span data-i18n="subscriptions">Đang theo dõi</span>
+            <i class="bi bi-person-lines-fill"></i> <span data-i18n="subscriptions">Subscriptions</span>
           </a>
           <a href="inbox.html" class="sidebar-nav-item ${activePage === 'inbox' ? 'active' : ''}">
-            <i class="bi bi-inbox"></i> <span data-i18n="inbox">Inbox</span>
+            <i class="bi ${activePage === 'inbox' ? 'bi-bell-fill' : 'bi-bell'}"></i> <span data-i18n="activity">Activity</span>
+            <span class="badge bg-danger rounded-pill ms-auto notification-sidebar-badge" style="font-size: 0.72rem; padding: 0.25em 0.55em;">2</span>
           </a>
           <a href="explore.html" class="sidebar-nav-item ${activePage === 'explore' ? 'active' : ''}">
             <i class="bi bi-compass-fill"></i> <span data-i18n="explore">Explore</span>
@@ -124,8 +125,8 @@ function initSharedSidebars() {
 
         <nav class="sidebar-nav mb-auto">
           <a href="index.html" class="sidebar-nav-item ${activePage === 'home' ? 'active' : ''}"><i class="bi bi-house-door-fill"></i> <span data-i18n="home">Home</span></a>
-          <a href="subscriptions.html" class="sidebar-nav-item ${activePage === 'subscriptions' ? 'active' : ''}"><i class="bi bi-person-lines-fill"></i> <span data-i18n="subscriptions">Đang theo dõi</span></a>
-          <a href="inbox.html" class="sidebar-nav-item ${activePage === 'inbox' ? 'active' : ''}"><i class="bi bi-inbox"></i> <span data-i18n="inbox">Inbox</span></a>
+          <a href="subscriptions.html" class="sidebar-nav-item ${activePage === 'subscriptions' ? 'active' : ''}"><i class="bi bi-person-lines-fill"></i> <span data-i18n="subscriptions">Subscriptions</span></a>
+          <a href="inbox.html" class="sidebar-nav-item ${activePage === 'inbox' ? 'active' : ''}"><i class="bi ${activePage === 'inbox' ? 'bi-bell-fill' : 'bi-bell'}"></i> <span data-i18n="activity">Activity</span> <span class="badge bg-danger rounded-pill ms-auto notification-sidebar-badge" style="font-size: 0.72rem; padding: 0.25em 0.55em;">2</span></a>
           <a href="explore.html" class="sidebar-nav-item ${activePage === 'explore' ? 'active' : ''}"><i class="bi bi-compass-fill"></i> <span data-i18n="explore">Explore</span></a>
           <a href="my-posts.html" class="sidebar-nav-item ${activePage === 'my-posts' ? 'active' : ''}"><i class="bi bi-journal-text"></i> <span data-i18n="my_articles">My Articles</span></a>
           <a href="profile.html" class="sidebar-nav-item ${activePage === 'profile' ? 'active' : ''}"><i class="bi bi-person"></i> <span data-i18n="profile">Profile</span></a>
@@ -789,7 +790,7 @@ window.renderFeedPosts = function(containerId, dataObj, categoryFilter = 'all') 
             <div class="p-3 pt-0 position-relative">
               <div class="d-flex justify-content-between align-items-end mb-2" style="margin-top: -24px;">
                 <img src="${post.author_avatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=80&h=80'}" class="rounded-circle" width="56" height="56" style="object-fit: cover; border: 3px solid var(--bg-panel); background: var(--bg-panel);" alt="Avatar">
-                <button class="btn btn-primary btn-sm rounded-pill fw-bold px-4 py-1 shadow-sm btn-subscribe" onclick="toggleSubscribe(this, event)">Theo dõi</button>
+                ${(typeof window.isSelfAuthor === 'function' && window.isSelfAuthor(post.author_name)) ? '' : `<button class="btn btn-primary btn-sm rounded-pill fw-bold px-4 py-1 shadow-sm btn-subscribe" onclick="toggleSubscribe(this, event)">Theo dõi</button>`}
               </div>
               <div class="mb-2">
                 <h6 class="mb-0 fw-bold fs-6 text-main">${post.author_name || 'Anonymous'}</h6>
