@@ -309,7 +309,7 @@
           const role = authorRoles[name] || 'MundiBlog Creator';
           const followingLabel = dict.btn_following || "Following";
           manageHtml += `
-            <div class="col-12 col-md-6">
+            <div class="col-12">
               <div class="manage-author-card h-100">
                 <img src="${avatar}" class="rounded-circle border" width="54" height="54" style="object-fit: cover;" alt="${name}">
                 <div class="flex-grow-1">
@@ -379,7 +379,7 @@
       candidates.forEach(c => {
         const isSubbed = subs.includes(c.name);
         html += `
-          <div class="col-12 col-md-6 mb-3">
+          <div class="col-12 mb-3">
             <div class="card bg-light border-0 rounded-4 p-3 d-flex flex-row align-items-center h-100">
               <img src="${c.avatar}" class="rounded-circle border border-white shadow-sm me-3" width="50" height="50" alt="${c.name}" style="object-fit: cover;">
               <div class="flex-grow-1">
