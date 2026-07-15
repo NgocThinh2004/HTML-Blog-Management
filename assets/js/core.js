@@ -403,6 +403,106 @@ window.globalPostsData = {
   }
 };
 
+// One public post source for the feed, Explore, profiles and the admin dashboard.
+// Approved local submissions are projected into the same shape as the seeded mock posts.
+window.getLingoraPostsData = function () {
+  const posts = { ...(window.globalPostsData || {}) };
+  let submittedPosts = [];
+  try {
+    const stored = JSON.parse(localStorage.getItem('mundiBlogSubmittedPosts') || '[]');
+    submittedPosts = Array.isArray(stored) ? stored : [];
+  } catch (error) {
+    submittedPosts = [];
+  }
+
+  let profile = {};
+  try {
+    profile = JSON.parse(localStorage.getItem('mundiBlogProfile') || localStorage.getItem('lingoraProfile') || '{}') || {};
+  } catch (error) {
+    profile = {};
+  }
+
+  submittedPosts.forEach(post => {
+    const status = String(post.status || '').toLowerCase();
+    if (!['approved', 'published'].includes(status)) return;
+    const language = String(post.originalLanguage || 'en').toLowerCase();
+    const id = `submitted-${post.id}`;
+    const body = document.createElement('div');
+    body.innerHTML = typeof window.sanitizePostHtml === 'function'
+      ? window.sanitizePostHtml(post.body || '')
+      : String(post.body || '');
+    const summary = String(body.textContent || '').trim().slice(0, 320);
+    const authors = Array.isArray(post.authors) ? post.authors : [];
+    const authorName = authors[0] || profile.displayName || 'Alone';
+    posts[id] = {
+      author_name: authorName,
+      author_avatar: profile.avatar || '',
+      author_id: authorName === (profile.displayName || 'Alone') ? 'self' : String(post.authorId || 'self'),
+      profile_href: authorName === (profile.displayName || 'Alone') ? 'profile.html' : undefined,
+      detail_href: `post-detail.html?submitted=${encodeURIComponent(post.id)}`,
+      timestamp: post.updatedAt ? new Date(post.updatedAt).toLocaleDateString() : 'Just now',
+      category: post.category || post.categoryLabel || 'General',
+      supported_langs: language,
+      image: post.coverImage || post.image || '',
+      likes: Number(post.likes || 0),
+      comments: Number(post.comments || 0),
+      views: Number(post.views || 0),
+      status: 'published',
+      [`title_${language}`]: post.title || post.subtitle || 'Untitled post',
+      [`content_${language}`]: summary || post.subtitle || ''
+    };
+  });
+
+  return posts;
+};
+
+// Keep every current-user avatar consumer on the same profile source. Older
+// sessions can still have a string in `currentUser`, so normalize that shape
+// before merging the latest editable profile fields.
+window.getLingoraCurrentUser = function () {
+  let sessionUser = null;
+  let savedProfile = {};
+
+  try {
+    const storedUser = JSON.parse(localStorage.getItem('currentUser') || 'null');
+    if (storedUser && typeof storedUser === 'object') {
+      sessionUser = { ...storedUser };
+    } else if (typeof storedUser === 'string' && storedUser.trim()) {
+      sessionUser = { name: storedUser.trim() };
+    }
+  } catch (error) {
+    sessionUser = null;
+  }
+
+  try {
+    savedProfile = JSON.parse(localStorage.getItem('mundiBlogProfile') || '{}') || {};
+  } catch (error) {
+    savedProfile = {};
+  }
+
+  if (!sessionUser) return null;
+  return {
+    ...sessionUser,
+    name: savedProfile.displayName || sessionUser.name || '',
+    avatar: savedProfile.avatar || sessionUser.avatar || ''
+  };
+};
+
+window.getLingoraSubscribedAuthors = function () {
+  try {
+    const raw = localStorage.getItem('lingoraSubscribedAuthors');
+    if (!raw) {
+      const defaults = ['Elena Rostova', 'Hồ Quốc Tuấn', 'Thái Dương'];
+      localStorage.setItem('lingoraSubscribedAuthors', JSON.stringify(defaults));
+      return defaults;
+    }
+    const stored = JSON.parse(raw);
+    return Array.isArray(stored) ? stored : [];
+  } catch (error) {
+    return [];
+  }
+};
+
 // Shared destructive confirmation dialog used across the site.
 window.confirmDestructive = function (options = {}) {
   return new Promise(resolve => {
@@ -544,11 +644,10 @@ document.addEventListener('DOMContentLoaded', () => {
     if (langSelect) {
       e.preventDefault();
       const lang = langSelect.getAttribute('data-lang');
-      localStorage.setItem('preferredLanguage', lang);
-      window.updateGlobalFlags(lang);
-
-      if (window.applyUiTranslations) window.applyUiTranslations(lang);
-      if (window.applyLanguageFilter) window.applyLanguageFilter(lang);
+      // Route every language control through the single state setter. Writing
+      // localStorage directly does not fire a storage event in the same tab,
+      // so page-specific widgets would otherwise update only after a reload.
+      window.setLingoraLanguage(lang);
     }
   });
 
@@ -1978,7 +2077,9 @@ document.addEventListener('DOMContentLoaded', () => {
       ) : null;
       const managedTranslation = managedCategory?.translations?.[currentLang];
       if (managedTranslation?.name && !managedCategory?.deletedTranslations?.[currentLang]) return managedTranslation.name;
-      if (managedCategory) return '';
+      // Once the admin catalog exists it is authoritative: a removed/hidden
+      // category must not fall back to an English built-in label.
+      if (Array.isArray(managedCategories) && managedCategories.length) return '';
     } catch (error) {
       // Fall back to the built-in category dictionary.
     }
@@ -2000,7 +2101,7 @@ document.addEventListener('DOMContentLoaded', () => {
           String(translation?.name || '').trim().toLowerCase() === normalizedName
         );
       });
-      if (!category) return true;
+      if (!category) return false;
       const translation = category.translations?.[language];
       const activeValue = translation?.active;
       const categoryActive = category.active;
@@ -2071,6 +2172,18 @@ document.addEventListener('DOMContentLoaded', () => {
       if (category === window.currentSelectedCategory && isActive) selectedCategoryIsActive = true;
     });
 
+    const selectedLabel = document.getElementById('currentCategoryLabel');
+    if (selectedLabel) {
+      if (window.currentSelectedCategory === 'all') {
+        selectedLabel.setAttribute('data-i18n', 'for_you');
+        const dict = uiTranslations[lang] || uiTranslations.en;
+        selectedLabel.textContent = dict.for_you || 'For you';
+      } else {
+        selectedLabel.removeAttribute('data-i18n');
+        selectedLabel.textContent = window.translateCategory(window.currentSelectedCategory, lang);
+      }
+    }
+
     if (!selectedCategoryIsActive) {
       window.currentSelectedCategory = 'all';
       document.querySelectorAll('.feed-filter-row .dropdown-item').forEach(item => item.classList.remove('active'));
@@ -2083,7 +2196,7 @@ document.addEventListener('DOMContentLoaded', () => {
         label.textContent = dict.for_you || 'For you';
       }
       if (typeof window.renderFeedPosts === 'function') {
-        window.renderFeedPosts('postsFeedContainer', window.globalPostsData, 'all');
+        window.renderFeedPosts('postsFeedContainer', window.getLingoraPostsData ? window.getLingoraPostsData() : window.globalPostsData, 'all');
       }
     }
   }
@@ -2243,7 +2356,8 @@ document.addEventListener('DOMContentLoaded', () => {
     if (event && event.currentTarget) event.currentTarget.classList.add('active');
 
     if (typeof window.renderFeedPosts === 'function') {
-      window.renderFeedPosts('postsFeedContainer', window.globalPostsData, category);
+      const posts = window.getLingoraPostsData ? window.getLingoraPostsData() : window.globalPostsData;
+      window.renderFeedPosts('postsFeedContainer', posts, category);
     }
 
     const lang = localStorage.getItem('preferredLanguage') || 'en';
@@ -2274,7 +2388,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const postCategory = post.getAttribute('data-category') || '';
       const isPostDetail = Boolean(document.getElementById('postDetailContainer'));
-      const categoryIsActive = isPostDetail || window.isCategoryTranslationActive(postCategory, lang);
+      const includesInactiveCategory = post.getAttribute('data-include-inactive-category') === 'true';
+      const categoryIsActive = isPostDetail || includesInactiveCategory || window.isCategoryTranslationActive(postCategory, lang);
       const matchesCategory = categoryIsActive && ((selectedCategory === 'all') || (postCategory === selectedCategory));
 
       if (isPostDetailPage) {
@@ -2757,7 +2872,6 @@ document.addEventListener('DOMContentLoaded', () => {
             `;
           }
 
-          const safeRepAuthorId = (repAuthorName || 'user').replace(/\s+/g, '');
           const repTooltipHtml = getAuthorTooltipHtml(repAuthorName, rep.avatar);
           repliesHtml += `
             <div class="comment-reply-card py-2 border-bottom border-light-subtle" id="comment-${rep.id}">
@@ -2772,11 +2886,9 @@ document.addEventListener('DOMContentLoaded', () => {
               <p class="mb-1 text-secondary comment-content-text" style="font-size: 0.95rem;">${tagHtml}${rep.content}</p>
               <div class="d-flex align-items-center gap-1 mt-2">
                 <button class="btn-reply d-flex align-items-center gap-1 ${rep.isLiked ? 'liked text-danger' : ''}" onclick="if(window.toggleCommentLike) window.toggleCommentLike(this, ${root.id}, ${rep.id}, true, event);"><i class="bi ${rep.isLiked ? 'bi-heart-fill text-danger' : 'bi-heart'}"></i> <span class="like-count">${rep.likes || 0}</span></button>
-                <button class="btn-reply" onclick="window.openReplyBox(${root.id}, '${repAuthorName.replace(/'/g, "\\'")}', true)"><i class="bi bi-chat"></i></button>
                 ${repTranslateBtnHtml}
                 ${repOwnerActionsHtml}
               </div>
-              <div id="reply-box-child-${root.id}-${safeRepAuthorId}"></div>
               <div id="edit-box-child-${root.id}-${rep.id}"></div>
             </div>
           `;
@@ -2841,6 +2953,8 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function openReplyBox(rootId, targetAuthor, isChildReply) {
+    // Comments are strictly two levels: only a root comment can receive replies.
+    if (isChildReply) return;
     const user = checkAuthOrSimulate();
     if (!user) return;
 
@@ -2872,6 +2986,8 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function submitReply(rootId, isChildReply, replyToAuthor) {
+    // Defense-in-depth for stale markup or direct calls from the console.
+    if (isChildReply) return;
     const inputEl = document.getElementById(`input-reply-${rootId}`);
     if (!inputEl || !inputEl.value.trim()) {
       alert('Vui lòng nhập nội dung phản hồi!');
@@ -2892,7 +3008,7 @@ document.addEventListener('DOMContentLoaded', () => {
       time: "Just now",
       content: inputEl.value.trim(),
       lang: currentLang,
-      replyTo: isChildReply ? replyToAuthor : "",
+      replyTo: "",
       translations: {},
       likes: 0,
       isLiked: false
@@ -3236,13 +3352,22 @@ document.addEventListener('DOMContentLoaded', () => {
   // ========================================================
   // SESSION STATE & DYNAMIC ROLE-BASED UI MANAGEMENT
   // ========================================================
-  window.applyUserUI = function () {
+  window.applyUserUI = function (profileOverride = null) {
     const currentUserJson = localStorage.getItem('currentUser');
     let user = null;
     let isAdmin = false;
     try {
       if (currentUserJson) {
-        user = JSON.parse(currentUserJson);
+        user = typeof window.getLingoraCurrentUser === 'function'
+          ? window.getLingoraCurrentUser()
+          : JSON.parse(currentUserJson);
+        if (user && profileOverride) {
+          user = {
+            ...user,
+            name: profileOverride.displayName || user.name || '',
+            avatar: profileOverride.avatar || ''
+          };
+        }
         isAdmin = user && user.role === 'admin';
       }
     } catch (e) {
@@ -3307,29 +3432,33 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
 
-    // 3. Handle Sign Out vs Log in Menu Toggles
-    function handleSignOut(e) {
-      e.preventDefault();
-      localStorage.removeItem('currentUser');
-      const currentLang = localStorage.getItem('preferredLanguage') || 'en';
-      const msg = uiTranslations[currentLang]?.sign_out_success || uiTranslations.en.sign_out_success;
-      window.showLingoraToast(msg);
-      window.setTimeout(() => { window.location.href = homeUrl; }, 900);
-    }
+    // 3. Handle sign out once at the document level. Some pages still contain
+    // legacy button listeners; capture phase plus stopImmediatePropagation keeps
+    // one click from producing multiple stacked notifications.
+    if (!window.__lingoraSignOutHandlerBound) {
+      window.__lingoraSignOutHandlerBound = true;
+      document.addEventListener('click', event => {
+        const signOutLink = event.target.closest('#signOutBtn, #mobileSignOutBtn');
+        if (!signOutLink || !localStorage.getItem('currentUser')) return;
 
-    const signOutLinks = document.querySelectorAll('#signOutBtn, #mobileSignOutBtn');
-    signOutLinks.forEach(link => {
-      // Clean previous listeners
-      const clone = link.cloneNode(true);
-      link.replaceWith(clone);
-    });
+        event.preventDefault();
+        event.stopImmediatePropagation();
+        if (window.__lingoraSignOutInProgress) return;
+        window.__lingoraSignOutInProgress = true;
+
+        localStorage.removeItem('currentUser');
+        const currentLang = localStorage.getItem('preferredLanguage') || 'en';
+        const msg = uiTranslations[currentLang]?.sign_out_success || uiTranslations.en.sign_out_success;
+        window.showLingoraToast(msg);
+        window.setTimeout(() => { window.location.href = homeUrl; }, 900);
+      }, true);
+    }
 
     document.querySelectorAll('#signOutBtn, #mobileSignOutBtn').forEach(link => {
       if (currentUserJson) {
         link.style.removeProperty('display');
         link.classList.add('text-danger');
         link.innerHTML = `<i class="bi bi-box-arrow-right me-2"></i> <span data-i18n="sign_out">Sign Out</span>`;
-        link.addEventListener('click', handleSignOut);
       } else {
         link.classList.remove('text-danger');
         link.innerHTML = `<i class="bi bi-box-arrow-in-right me-2"></i> <span data-i18n="login">Log in</span>`;

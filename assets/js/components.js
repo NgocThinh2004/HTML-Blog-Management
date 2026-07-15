@@ -544,7 +544,7 @@ function initGlobalSearchModal() {
     resultsContainer.style.display = 'block';
     resultsList.innerHTML = '';
 
-    const dataObj = window.globalPostsData || (typeof postsData !== 'undefined' ? postsData : null);
+    const dataObj = window.getLingoraPostsData ? window.getLingoraPostsData() : (window.globalPostsData || (typeof postsData !== 'undefined' ? postsData : null));
     if (!dataObj) {
       resultsList.innerHTML = `<div class="text-muted p-3 text-center">No post data available.</div>`;
       return;
@@ -709,8 +709,10 @@ window.renderTrendingWidgets = function() {
 
   // 1. Update Sidebar & Explore Trending Widgets
   const dynamicCatViews = {};
-  if (window.globalPostsData) {
-    Object.values(window.globalPostsData).forEach(post => {
+  const publicPosts = window.getLingoraPostsData ? window.getLingoraPostsData() : window.globalPostsData;
+  if (publicPosts) {
+    Object.values(publicPosts).forEach(post => {
+      if (post.supported_langs && !post.supported_langs.split(',').includes(currentLang)) return;
       const c = post.category || "General";
       if (typeof window.isCategoryTranslationActive === 'function' && !window.isCategoryTranslationActive(c, currentLang)) return;
       dynamicCatViews[c] = (dynamicCatViews[c] || 0) + (post.views || 0);
@@ -785,7 +787,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 100);
 });
 
-window.renderFeedPosts = function(containerId, dataObj, categoryFilter = 'all') {
+window.renderFeedPosts = function(containerId, dataObj, categoryFilter = 'all', options = {}) {
   const container = document.getElementById(containerId);
   if (!container || !dataObj) return;
 
@@ -801,11 +803,14 @@ window.renderFeedPosts = function(containerId, dataObj, categoryFilter = 'all') 
     const supportedLangs = post.supported_langs ? post.supported_langs.split(',') : ['en', 'vi', 'zh'];
     if (!supportedLangs.includes(currentLang)) return;
 
+    // A post must not expose a category translation that an admin disabled.
+    if (!options.includeInactiveCategories && typeof window.isCategoryTranslationActive === 'function' && !window.isCategoryTranslationActive(post.category, currentLang)) return;
+
     // Category filter check
     if (categoryFilter !== 'all' && post.category !== categoryFilter) return;
 
     html += `
-    <article class="substack-post" data-supported-langs="${post.supported_langs || 'en,vi,zh'}" data-category="${post.category || 'Artificial Intelligence'}">
+    <article class="substack-post" data-supported-langs="${post.supported_langs || 'en,vi,zh'}" data-category="${post.category || 'Artificial Intelligence'}"${options.includeInactiveCategories ? ' data-include-inactive-category="true"' : ''}>
       <div class="substack-post-header">
         <div class="author-badge-group position-relative author-tooltip-container" style="cursor: pointer; z-index: 2;" onclick="window.location.href='${authorHref}'">
           <img src="${post.author_avatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=80&h=80'}" alt="${post.author_name}" class="author-avatar">
@@ -866,6 +871,16 @@ window.toggleSubscribe = function(btn, event) {
   }
 
   const isSubscribed = btn.classList.toggle('subscribed');
+  const authorName = String(btn.dataset.authorName || btn.closest('[data-author-name]')?.dataset.authorName || '').trim();
+  if (authorName) {
+    const list = typeof window.getLingoraSubscribedAuthors === 'function'
+      ? window.getLingoraSubscribedAuthors()
+      : (() => { try { return JSON.parse(localStorage.getItem('lingoraSubscribedAuthors') || '[]'); } catch (_) { return []; } })();
+    const next = Array.isArray(list) ? list.filter(name => name !== authorName) : [];
+    if (isSubscribed) next.push(authorName);
+    localStorage.setItem('lingoraSubscribedAuthors', JSON.stringify(next));
+    window.dispatchEvent(new CustomEvent('lingora:subscriptionschange', { detail: { authors: next } }));
+  }
   const currentLang = localStorage.getItem('preferredLanguage') || 'en';
   const dict = (window.uiTranslations && window.uiTranslations[currentLang]) || {};
   const unfollowLabels = { en: 'Unfollow', vi: 'Bỏ theo dõi', zh: '取消关注' };

@@ -783,6 +783,17 @@ document.addEventListener('DOMContentLoaded', () => {
         ? posts.findIndex(item => String(item.id) === String(submittedPostId))
         : -1;
       const existingPost = existingIndex >= 0 ? posts[existingIndex] : null;
+      if (existingPost && [existingPost.status, existingPost.previousStatus]
+        .some(status => ['approved', 'published'].includes(String(status || '').toLowerCase()))) {
+        const lockedMessages = {
+          en: 'Approved posts can no longer be edited.',
+          vi: 'Bài viết đã được duyệt không thể chỉnh sửa nữa.',
+          zh: '已审核的文章无法再编辑。'
+        };
+        alert(lockedMessages[language] || lockedMessages.en);
+        window.location.href = 'my-posts.html?status=published';
+        return;
+      }
 
       const submittedPost = {
         id: submittedPostId || `pending-${Date.now()}`,
@@ -1819,6 +1830,18 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     if (submittedPost) {
+      if ([submittedPost.status, submittedPost.previousStatus]
+        .some(status => ['approved', 'published'].includes(String(status || '').toLowerCase()))) {
+        const language = localStorage.getItem('preferredLanguage') || 'en';
+        const messages = {
+          en: 'Approved posts can no longer be edited.',
+          vi: 'Bài viết đã được duyệt không thể chỉnh sửa nữa.',
+          zh: '已审核的文章无法再编辑。'
+        };
+        alert(messages[language] || messages.en);
+        window.location.replace('my-posts.html?status=published');
+        return;
+      }
       if (titleInput) titleInput.value = submittedPost.title || '';
       if (subtitleInput) subtitleInput.value = submittedPost.subtitle || '';
       if (Array.isArray(submittedPost.authors)) renderAuthors(submittedPost.authors);
@@ -1842,6 +1865,17 @@ document.addEventListener('DOMContentLoaded', () => {
       loadDraft();
     }
   } else if (editId) {
+    if (['1', '17'].includes(String(editId))) {
+      const language = localStorage.getItem('preferredLanguage') || 'en';
+      const messages = {
+        en: 'Approved posts can no longer be edited.',
+        vi: 'Bài viết đã được duyệt không thể chỉnh sửa nữa.',
+        zh: '已审核的文章无法再编辑。'
+      };
+      alert(messages[language] || messages.en);
+      window.location.replace('my-posts.html?status=published');
+      return;
+    }
     const mockPosts = {
       '1': {
         title: 'Building AI-assisted multilingual workflows',

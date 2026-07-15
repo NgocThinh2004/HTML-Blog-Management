@@ -674,7 +674,7 @@
   <!-- Bootstrap 5 JS Bundle -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <!-- Core Script -->
-  <script src="../assets/js/core.js?v=23"></script>
+  <script src="../assets/js/core.js?v=29"></script>
 
   <script type="text/plain" id="legacyCategoryManagementScript">
     document.addEventListener('DOMContentLoaded', () => {
@@ -1261,6 +1261,15 @@
         C1006: { en: ['Data Science', 'data-science'], vi: ['Khoa học Dữ liệu', 'khoa-hoc-du-lieu'], zh: ['数据科学', 'shu-ju-ke-xue'] },
         C1007: { en: ['Cybersecurity', 'cybersecurity'], vi: ['An ninh mạng', 'an-ninh-mang'], zh: ['网络安全', 'wang-luo-an-quan'] }
       };
+      const seedDescriptions = {
+        C1001: { en: 'AI, machine learning, and emerging intelligent technologies.', vi: 'AI, máy học và các công nghệ thông minh mới nổi.', zh: '人工智能、机器学习与新兴智能技术。' },
+        C1002: { en: 'Server-side development, APIs, databases, and architecture.', vi: 'Phát triển phía máy chủ, API, cơ sở dữ liệu và kiến trúc hệ thống.', zh: '服务端开发、API、数据库与系统架构。' },
+        C1003: { en: 'UI/UX, product design, and creative workflows.', vi: 'UI/UX, thiết kế sản phẩm và quy trình sáng tạo.', zh: 'UI/UX、产品设计与创意工作流程。' },
+        C1004: { en: 'Modern web interfaces, frameworks, and browser technologies.', vi: 'Giao diện web hiện đại, framework và công nghệ trình duyệt.', zh: '现代网页界面、框架与浏览器技术。' },
+        C1005: { en: 'Native and cross-platform mobile application development.', vi: 'Phát triển ứng dụng di động native và đa nền tảng.', zh: '原生与跨平台移动应用开发。' },
+        C1006: { en: 'Data analysis, visualization, and predictive modeling.', vi: 'Phân tích dữ liệu, trực quan hóa và mô hình dự đoán.', zh: '数据分析、可视化与预测建模。' },
+        C1007: { en: 'Application security, privacy, and online safety.', vi: 'Bảo mật ứng dụng, quyền riêng tư và an toàn trực tuyến.', zh: '应用安全、隐私保护与网络安全。' }
+      };
       const copy = {
         en: { category: 'Category', created: 'Created', posts: 'posts', status: 'Status', actions: 'Actions', active: 'Active', inactive: 'Inactive', edit: 'Edit', delete: 'Delete', shown: '{shown} of {total} categories', no_results: 'No categories found', no_results_help: 'Try another search term.', name: 'Name', description: 'Description', slug: 'Slug', name_required: 'Enter a name for every language.', all_translations_help: 'Enter every translation now so the category is ready in all active languages.', category_status: 'Category status', status_help: 'Show or hide this category in every language.', created_msg: 'Category <b>{name}</b> and all translations were created.', updated_msg: 'Category <b>{name}</b> and all translations were updated.', deleted_msg: 'Category <b>{name}</b> and all translations were deleted.', status_msg: 'Category <b>{name}</b> is now {status} in every language.', delete_confirm: 'Delete “{name}” and all of its translations?', open_edit: 'Open editor for {name}', no_posts: 'No posts found in this category.' },
         vi: { category: 'Danh mục', created: 'Ngày tạo', posts: 'bài viết', status: 'Trạng thái', actions: 'Thao tác', active: 'Hoạt động', inactive: 'Đã ẩn', edit: 'Chỉnh sửa', delete: 'Xóa', shown: '{shown} / {total} danh mục', no_results: 'Không tìm thấy danh mục', no_results_help: 'Hãy thử từ khóa khác.', name: 'Tên', description: 'Mô tả', slug: 'Đường dẫn', name_required: 'Vui lòng nhập tên cho tất cả ngôn ngữ.', all_translations_help: 'Nhập đầy đủ các bản dịch để danh mục sẵn sàng ở mọi ngôn ngữ đang hoạt động.', category_status: 'Trạng thái danh mục', status_help: 'Hiển thị hoặc ẩn danh mục này ở tất cả ngôn ngữ.', created_msg: 'Đã tạo danh mục <b>{name}</b> cùng tất cả bản dịch.', updated_msg: 'Đã cập nhật danh mục <b>{name}</b> cùng tất cả bản dịch.', deleted_msg: 'Đã xóa danh mục <b>{name}</b> cùng tất cả bản dịch.', status_msg: 'Danh mục <b>{name}</b> hiện {status} ở tất cả ngôn ngữ.', delete_confirm: 'Xóa “{name}” và toàn bộ bản dịch của danh mục này?', open_edit: 'Mở chỉnh sửa danh mục {name}', no_posts: 'Không tìm thấy bài viết trong danh mục này.' },
@@ -1293,15 +1302,17 @@
           const seeded = defaults[language.code];
           const fallback = translations.en || Object.entries(translations).find(([code]) => code !== language.code)?.[1] || {};
           const existing = translations[language.code];
+          const localizedDescription = seedDescriptions[category.id]?.[language.code] || category.description || '';
           const copiedFallback = existing && !seeded && language.code !== 'en' &&
             existing.name === fallback.name && existing.slug === fallback.slug &&
             String(existing.description || '') === String(fallback.description || category.description || '');
           if (copiedFallback) {
             delete translations[language.code];
           } else if (existing) {
-            translations[language.code] = { ...existing, active: category.active !== false };
+            const descriptionWasFallback = language.code !== 'en' && (!existing.description || String(existing.description) === String(category.description || ''));
+            translations[language.code] = { ...existing, description: descriptionWasFallback ? localizedDescription : existing.description, active: category.active !== false };
           } else if (seeded) {
-            translations[language.code] = { name: seeded[0], slug: seeded[1], description: category.description || '', active: category.active !== false };
+            translations[language.code] = { name: seeded[0], slug: seeded[1], description: localizedDescription, active: category.active !== false };
           }
         });
         return { ...category, active: category.active !== false, translations, deletedTranslations: {} };
@@ -1506,6 +1517,7 @@
         if (editingId && document.getElementById('editCategoryModal').classList.contains('show')) openEditor(editingId);
       };
       document.addEventListener('click', event => { const option = event.target.closest('.global-lang-select'); if (option) applyPageLanguage(option.dataset.lang || 'en'); });
+      window.addEventListener('lingora:languagechange', event => applyPageLanguage(event.detail?.language || 'en'));
       window.addEventListener('storage', event => { if (event.key === 'preferredLanguage') applyPageLanguage(event.newValue || 'en'); });
       const signOut = event => { event.preventDefault(); localStorage.removeItem('currentUser'); window.location.href = '../index.html'; };
       document.getElementById('signOutBtn')?.addEventListener('click', signOut);

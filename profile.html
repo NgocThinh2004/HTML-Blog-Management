@@ -286,6 +286,29 @@
         margin-top: 12px;
       }
 
+      .profile-avatar-column {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 14px;
+      }
+
+      body.profile-modal-open { overflow: hidden; }
+
+      #profilePostsContainer {
+        display: grid;
+        gap: 18px;
+      }
+
+      #profilePostsContainer .substack-post {
+        margin: 0;
+        padding: 22px;
+        border: 1px solid var(--line);
+        border-radius: 18px;
+        background: var(--panel);
+        box-shadow: 0 10px 28px rgba(20, 22, 22, .05);
+      }
+
       .profile-avatar {
         display: grid;
         place-items: center;
@@ -832,6 +855,49 @@
         box-shadow: 0 24px 64px rgba(0, 0, 0, 0.45);
       }
 
+      #subscribersModal .password-modal-panel {
+        height: min(535px, calc(100vh - 40px));
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+      }
+
+      #subscribersModal .password-modal-head { flex: 0 0 auto; }
+
+      #subscribersListContainer {
+        min-height: 0;
+        flex: 1 1 auto;
+        overflow-y: auto;
+      }
+
+      #subscribersSearchWrap {
+        border: 1px solid var(--line) !important;
+        border-radius: 999px;
+        color: var(--text) !important;
+        background: var(--panel-soft) !important;
+        overflow: hidden;
+        transition: border-color var(--transition-speed, 0.15s) ease,
+          box-shadow var(--transition-speed, 0.15s) ease;
+      }
+
+      #subscribersSearchWrap input {
+        border: 0 !important;
+        border-radius: 0 !important;
+        color: var(--text) !important;
+        background: transparent !important;
+        caret-color: var(--text);
+        outline: none;
+        box-shadow: none !important;
+      }
+
+      #subscribersSearchWrap:focus-within {
+        border-color: var(--accent-ui-color, var(--accent)) !important;
+        box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 16%, transparent);
+      }
+
+      #subscribersSearchWrap input::placeholder,
+      #subscribersSearchWrap i { color: var(--muted) !important; }
+
       .password-modal-head {
         position: relative;
         padding: 24px 24px 18px;
@@ -1329,7 +1395,12 @@
                 </div>
               </div>
 
-              <div class="profile-avatar hero-avatar" data-hero-avatar><span>A</span></div>
+              <div class="profile-avatar-column">
+                <div class="profile-avatar hero-avatar" data-hero-avatar><span>A</span></div>
+                <button class="profile-action is-primary btn-subscribe d-none m-0" style="min-height: 44px; padding: 0 24px; width: auto;" id="guestSubscribeBtn" type="button" onclick="window.toggleSubscribe && window.toggleSubscribe(this, event)">
+                  <i class="bi bi-plus-lg me-1"></i> <span data-i18n="subscribe">Theo dõi</span>
+                </button>
+              </div>
             </section>
             
             <div class="profile-stats" aria-label="Profile statistics">
@@ -1337,20 +1408,14 @@
                 <strong id="profileFollowersCount">840</strong>
                 <span data-i18n="followers">Followers</span>
               </a>
-              <span class="profile-stat">
+              <button class="profile-stat" type="button" id="btnSeeFollowing">
                 <strong id="profileFollowingCount">36</strong>
                 <span data-i18n="following">Following</span>
-              </span>
+              </button>
               <span class="profile-stat">
                 <strong id="profilePostsCount">0</strong>
                 <span data-i18n="posts">Posts</span>
               </span>
-            </div>
-
-            <div class="profile-guest-actions">
-              <button class="profile-action is-primary btn-subscribe d-none m-0" style="min-height: 44px; padding: 0 24px; width: auto;" id="guestSubscribeBtn" type="button" onclick="window.toggleSubscribe ? window.toggleSubscribe(this, event) : (window.toggleAuthorSubscription && window.toggleAuthorSubscription(this, event))">
-                <i class="bi bi-plus-lg me-1"></i> <span data-i18n="subscribe">Theo dõi</span>
-              </button>
             </div>
 
             <div class="action-row" id="profileActionRow">
@@ -1646,8 +1711,8 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-<script src="assets/js/components.js?v=5"></script>
-    <script src="assets/js/core.js?v=23"></script>
+<script src="assets/js/components.js?v=8"></script>
+    <script src="assets/js/core.js?v=29"></script>
     <script>
       document.addEventListener('DOMContentLoaded', () => {
         const storageKey = 'mundiBlogProfile';
@@ -1811,6 +1876,23 @@
 
         function saveProfile() {
           localStorage.setItem(storageKey, JSON.stringify(profile));
+          syncCurrentUserProfile();
+        }
+
+        function syncCurrentUserProfile() {
+          try {
+            const storedUser = JSON.parse(localStorage.getItem('currentUser') || 'null');
+            const currentUser = storedUser && typeof storedUser === 'object'
+              ? { ...storedUser }
+              : (typeof storedUser === 'string' && storedUser.trim() ? { name: storedUser.trim() } : null);
+            if (currentUser) {
+              currentUser.avatar = profile.avatar || '';
+              currentUser.name = profile.displayName;
+              localStorage.setItem('currentUser', JSON.stringify(currentUser));
+            }
+          } catch (_) {}
+          if (typeof window.applyUserUI === 'function') window.applyUserUI(profile);
+          window.dispatchEvent(new CustomEvent('lingora:profilechange', { detail: { profile: { ...profile } } }));
         }
 
         function normalizeHex(value) {
@@ -2054,6 +2136,7 @@
           reader.addEventListener('load', () => {
             profile.avatar = reader.result;
             render();
+            syncCurrentUserProfile();
           });
           reader.readAsDataURL(file);
         });
@@ -2314,34 +2397,28 @@
           let guestFollowers = '0';
           let guestFollowing = '0';
           
-          if (guestId === '101') {
-            guestName = 'Elena Rostova';
-            guestAvatar = 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=80&h=80';
-            guestBio = 'Researching agentic reasoning, speculative decoding & next-gen LLM architectures.';
-            guestHandle = '@elenarostova';
-            guestFollowers = '12.4K';
-            guestFollowing = '186';
-          } else if (guestId === '102') {
-            guestName = 'Hồ Quốc Tuấn';
-            guestAvatar = 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=80&h=80';
-            guestBio = 'Macroeconomics and Finance.';
-            guestHandle = '@hoquoctuan';
-            guestFollowers = '18.2K';
-            guestFollowing = '241';
-          } else if (guestId === '103') {
-            guestName = 'Thái Dương';
-            guestAvatar = 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=80&h=80';
-            guestBio = 'Security Engineer.';
-            guestHandle = '@thaiduong';
-            guestFollowers = '15.6K';
-            guestFollowing = '128';
-          } else if (window.globalPostsData) {
-             const post = Object.values(window.globalPostsData).find(p => String(p.author_id) === guestId);
-             if (post) {
-               guestName = post.author_name;
-               guestAvatar = post.author_avatar || '';
-             }
+          const authorProfiles = {
+            '101': { handle: '@elenarostova', bio: 'Researching agentic reasoning, speculative decoding & next-gen LLM architectures.', followers: '12.4K', following: '186' },
+            '102': { handle: '@hoquoctuan', bio: 'Macroeconomics and Finance.', followers: '18.2K', following: '241' },
+            '103': { handle: '@liming', bio: 'Distributed systems, data engineering and high-performance backends.', followers: '9.8K', following: '128' },
+            '104': { handle: '@sarahconnor', bio: 'Cybersecurity and Zero Trust architecture.', followers: '14.1K', following: '164' },
+            '105': { handle: '@alexrivera', bio: 'Rust, cloud-native systems and Kubernetes.', followers: '11.5K', following: '132' },
+            '106': { handle: '@mayalin', bio: 'Product design, color systems and responsive experiences.', followers: '8.6K', following: '118' },
+            '107': { handle: '@kenjisato', bio: 'Distributed caching and high-traffic systems.', followers: '10.3K', following: '147' },
+            '108': { handle: '@vuthuhà', bio: 'Accessible product design and inclusive interfaces.', followers: '7.9K', following: '104' },
+            '109': { handle: '@thaiduong', bio: 'Engineering culture and deep work.', followers: '15.6K', following: '173' }
+          };
+          const publicPosts = window.getLingoraPostsData ? window.getLingoraPostsData() : window.globalPostsData;
+          const authorPost = Object.values(publicPosts || {}).find(post => String(post.author_id) === guestId);
+          const authorProfile = authorProfiles[guestId] || {};
+          if (authorPost) {
+            guestName = authorPost.author_name;
+            guestAvatar = authorPost.author_avatar || '';
           }
+          guestBio = authorProfile.bio || guestBio;
+          guestHandle = authorProfile.handle || guestHandle;
+          guestFollowers = authorProfile.followers || guestFollowers;
+          guestFollowing = authorProfile.following || guestFollowing;
 
           // Override DOM with guest data
           document.querySelectorAll('[data-view-name]').forEach(node => node.textContent = guestName);
@@ -2362,27 +2439,42 @@
 
           // Show Subscribe button
           const guestSubscribeBtn = document.getElementById('guestSubscribeBtn');
-          if (guestSubscribeBtn) guestSubscribeBtn.classList.remove('d-none');
+          if (guestSubscribeBtn) {
+            guestSubscribeBtn.classList.remove('d-none');
+            guestSubscribeBtn.dataset.authorName = guestName;
+            const subscribed = (window.getLingoraSubscribedAuthors ? window.getLingoraSubscribedAuthors() : []).includes(guestName);
+            guestSubscribeBtn.classList.toggle('subscribed', subscribed);
+            if (subscribed) {
+              const lang = window.getLingoraLanguage ? window.getLingoraLanguage() : 'en';
+              const label = guestSubscribeBtn.querySelector('span');
+              const labels = { en: 'Following', vi: 'Đang theo dõi', zh: '正在关注' };
+              if (label) {
+                label.removeAttribute('data-i18n');
+                label.textContent = labels[lang] || labels.en;
+              }
+            }
+          }
 
           // Render guest posts
           const postsContainer = document.getElementById('profilePostsContainer');
-          if (postsContainer && window.globalPostsData && window.renderFeedPosts) {
+          const renderPostsData = window.getLingoraPostsData ? window.getLingoraPostsData() : window.globalPostsData;
+          if (postsContainer && renderPostsData && window.renderFeedPosts) {
             const guestPosts = {};
-            Object.keys(window.globalPostsData).forEach(key => {
-              const post = window.globalPostsData[key];
+            const currentLang = window.getLingoraLanguage ? window.getLingoraLanguage() : (localStorage.getItem('preferredLanguage') || 'en');
+            Object.keys(renderPostsData).forEach(key => {
+              const post = renderPostsData[key];
+              const supportsLanguage = String(post.supported_langs || '').split(',').includes(currentLang);
+              const categoryIsVisible = !window.isCategoryTranslationActive || window.isCategoryTranslationActive(post.category, currentLang);
               if (String(post.author_id) === guestId || (!post.author_id && guestId === '101' && post.author_name === 'Elena Rostova')) {
-                guestPosts[key] = post;
+                if (supportsLanguage && categoryIsVisible) guestPosts[key] = post;
               }
             });
             if (profilePostsCount) profilePostsCount.textContent = Object.keys(guestPosts).length;
             window.renderFeedPosts('profilePostsContainer', guestPosts, 'all');
           }
 
-          // Subscribers Visibility logic for guest
-          let guestAllowShowSubscribers = true;
-          if (guestId === '102') {
-            guestAllowShowSubscribers = false; // Mock: Hồ Quốc Tuấn hides his subscribers
-          }
+          // Every mock profile exposes the follower list consistently.
+          const guestAllowShowSubscribers = true;
 
           const btnSeeSubscribers = document.getElementById('btnSeeSubscribers');
           if (btnSeeSubscribers) {
@@ -2392,62 +2484,53 @@
           }
         } else {
           const ownPosts = {};
-          if (window.globalPostsData) {
-            Object.entries(window.globalPostsData).forEach(([key, post]) => {
-              if (post.author_name === profile.displayName) ownPosts[key] = post;
-            });
-          }
-
-          try {
-            const submittedPosts = JSON.parse(localStorage.getItem('mundiBlogSubmittedPosts') || '[]');
-            if (Array.isArray(submittedPosts)) {
-              submittedPosts.forEach(post => {
-                const status = String(post.status || '').toLowerCase();
-                const authors = Array.isArray(post.authors) ? post.authors : [];
-                if (!['approved', 'published'].includes(status) || !authors.includes(profile.displayName)) return;
-
-                const bodyContainer = document.createElement('div');
-                bodyContainer.innerHTML = typeof window.sanitizePostHtml === 'function'
-                  ? window.sanitizePostHtml(post.body || '')
-                  : (post.body || '');
-                const summary = String(bodyContainer.textContent || '').trim().slice(0, 320);
-                const language = post.originalLanguage || 'en';
-                const key = `submitted-${post.id}`;
-                ownPosts[key] = {
-                  author_name: profile.displayName,
-                  author_avatar: profile.avatar,
-                  author_id: 'self',
-                  profile_href: 'profile.html',
-                  detail_href: `post-detail.html?submitted=${encodeURIComponent(post.id)}`,
-                  timestamp: post.updatedAt ? new Date(post.updatedAt).toLocaleDateString() : 'Just now',
-                  category: post.category || post.categoryLabel || 'technology',
-                  supported_langs: language,
-                  likes: Number(post.likes || 0),
-                  comments: Number(post.comments || 0),
-                  views: Number(post.reads || 0),
-                  image: post.image || '',
-                  title_en: post.title || 'Untitled post',
-                  title_vi: post.title || 'Bài viết chưa có tiêu đề',
-                  title_zh: post.title || '未命名文章',
-                  content_en: summary,
-                  content_vi: summary,
-                  content_zh: summary
-                };
-              });
-            }
-          } catch (error) {
-            // Keep the profile usable if local post data is malformed.
-          }
+          const publicPosts = window.getLingoraPostsData ? window.getLingoraPostsData() : window.globalPostsData;
+          const currentLang = window.getLingoraLanguage ? window.getLingoraLanguage() : (localStorage.getItem('preferredLanguage') || 'en');
+          Object.entries(publicPosts || {}).forEach(([key, post]) => {
+            const isOwner = post.author_name === profile.displayName || post.author_id === 'self';
+            const supportsLanguage = String(post.supported_langs || '').split(',').includes(currentLang);
+            if (isOwner && supportsLanguage) ownPosts[key] = post;
+          });
 
           const profilePostsCount = document.getElementById('profilePostsCount');
           if (profilePostsCount) profilePostsCount.textContent = Object.keys(ownPosts).length;
           if (window.renderFeedPosts) {
-            window.renderFeedPosts('profilePostsContainer', ownPosts, 'all');
+            window.renderFeedPosts('profilePostsContainer', ownPosts, 'all', { includeInactiveCategories: true });
           }
+        }
+
+        function refreshProfilePostsForLanguage(event) {
+          const publicPosts = window.getLingoraPostsData ? window.getLingoraPostsData() : window.globalPostsData;
+          const currentLang = window.getLingoraLanguage ? window.getLingoraLanguage() : (localStorage.getItem('preferredLanguage') || 'en');
+          const changedProfile = event && event.detail && event.detail.profile;
+          const visiblePosts = {};
+          Object.entries(publicPosts || {}).forEach(([key, post]) => {
+            const isOwner = guestId
+              ? (String(post.author_id) === guestId || (!post.author_id && guestId === '101' && post.author_name === 'Elena Rostova'))
+              : (post.author_name === profile.displayName || post.author_id === 'self');
+            const supportsLanguage = String(post.supported_langs || '').split(',').includes(currentLang);
+            const categoryIsVisible = !guestId || !window.isCategoryTranslationActive || window.isCategoryTranslationActive(post.category, currentLang);
+            if (isOwner && supportsLanguage && categoryIsVisible) {
+              visiblePosts[key] = !guestId && changedProfile
+                ? { ...post, author_name: changedProfile.displayName || post.author_name, author_avatar: changedProfile.avatar || '' }
+                : post;
+            }
+          });
+          const count = document.getElementById('profilePostsCount');
+          if (count) count.textContent = Object.keys(visiblePosts).length;
+          if (window.renderFeedPosts) window.renderFeedPosts('profilePostsContainer', visiblePosts, 'all', { includeInactiveCategories: !guestId });
+        }
+
+        window.addEventListener('lingora:languagechange', refreshProfilePostsForLanguage);
+        window.addEventListener('lingora:profilechange', refreshProfilePostsForLanguage);
+        if (!guestId) {
+          const followingCount = document.getElementById('profileFollowingCount');
+          if (followingCount) followingCount.textContent = window.getLingoraSubscribedAuthors().length;
         }
 
         // ======= SUBSCRIBERS MODAL LOGIC =======
         const btnSeeSubscribers = document.getElementById('btnSeeSubscribers');
+        const btnSeeFollowing = document.getElementById('btnSeeFollowing');
         const subscribersModal = document.getElementById('subscribersModal');
         const closeSubscribersModalBtn = document.getElementById('closeSubscribersModalBtn');
         const closeSubscribersModalBg = document.getElementById('closeSubscribersModalBg');
@@ -2462,9 +2545,24 @@
           { name: 'Michael Brown', avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=40&h=40' }
         ];
 
+        let peopleModalMode = 'followers';
+
+        function getFollowingProfiles() {
+          const posts = window.getLingoraPostsData ? window.getLingoraPostsData() : window.globalPostsData;
+          return window.getLingoraSubscribedAuthors().map(name => {
+            const post = Object.values(posts || {}).find(item => item.author_name === name);
+            return {
+              name,
+              avatar: post?.author_avatar || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=80&h=80',
+              href: `profile.html?id=${encodeURIComponent(post?.author_id || '')}`
+            };
+          });
+        }
+
         function renderSubscribers(filterText = '') {
           if (!subscribersListContainer) return;
-          const filtered = mockSubscribers.filter(sub => sub.name.toLowerCase().includes(filterText.toLowerCase()));
+          const source = peopleModalMode === 'following' ? getFollowingProfiles() : mockSubscribers;
+          const filtered = source.filter(sub => sub.name.toLowerCase().includes(filterText.toLowerCase()));
           
           if (filtered.length === 0) {
             subscribersListContainer.innerHTML = '<div class="text-center text-muted py-4">Không tìm thấy người đăng ký nào.</div>';
@@ -2475,11 +2573,13 @@
           filtered.forEach(sub => {
             html += `
               <div class="d-flex align-items-center justify-content-between">
-                <div class="d-flex align-items-center gap-3">
+                <a class="d-flex align-items-center gap-3 text-decoration-none text-reset" href="${sub.href || '#'}">
                   <img src="${sub.avatar}" class="rounded-circle" width="40" height="40" style="object-fit: cover;" alt="${sub.name}">
                   <span class="fw-bold text-main">${sub.name}</span>
-                </div>
-                <button class="btn btn-sm btn-outline-secondary rounded-pill fw-medium" data-i18n="subscribe">Theo dõi</button>
+                </a>
+                ${peopleModalMode === 'following'
+                  ? `<button class="btn btn-sm btn-outline-secondary rounded-pill fw-medium subscribed" data-author-name="${sub.name}" onclick="window.toggleSubscribe(this, event)"><span data-i18n="following">Đang theo dõi</span></button>`
+                  : `<button class="btn btn-sm btn-outline-secondary rounded-pill fw-medium" data-author-name="${sub.name}" onclick="window.toggleSubscribe(this, event)" data-i18n="subscribe">Theo dõi</button>`}
               </div>
             `;
           });
@@ -2487,19 +2587,48 @@
           subscribersListContainer.innerHTML = html;
         }
 
+        const openPeopleModal = mode => {
+          peopleModalMode = mode;
+          const title = document.getElementById('subscribersModalTitle');
+          const lang = window.getLingoraLanguage ? window.getLingoraLanguage() : 'en';
+          const labels = {
+            followers: { en: 'Followers', vi: 'Người theo dõi', zh: '关注者' },
+            following: { en: 'Following', vi: 'Đang theo dõi', zh: '正在关注' }
+          };
+          if (title) {
+            title.removeAttribute('data-i18n');
+            title.textContent = labels[mode]?.[lang] || labels[mode].en;
+          }
+          subscribersModal.hidden = false;
+          document.body.classList.add('profile-modal-open');
+          renderSubscribers();
+          if (window.applyUiTranslations) window.applyUiTranslations();
+        };
+
         if (btnSeeSubscribers && subscribersModal) {
           btnSeeSubscribers.addEventListener('click', (e) => {
             e.preventDefault();
             if (btnSeeSubscribers.dataset.subscribersVisible === 'false') return;
-            subscribersModal.hidden = false;
-            renderSubscribers();
-            if (window.applyUiTranslations) window.applyUiTranslations();
+            openPeopleModal('followers');
           });
         }
+
+        if (btnSeeFollowing && subscribersModal) {
+          btnSeeFollowing.addEventListener('click', () => openPeopleModal('following'));
+        }
+
+        window.addEventListener('lingora:subscriptionschange', () => {
+          if (!guestId) {
+            const count = document.getElementById('profileFollowingCount');
+            if (count) count.textContent = window.getLingoraSubscribedAuthors().length;
+          }
+          if (!subscribersModal.hidden && peopleModalMode === 'following') renderSubscribers(subscribersSearchInput?.value || '');
+        });
 
         const closeSubModal = () => {
           if (subscribersModal) subscribersModal.hidden = true;
           if (subscribersSearchInput) subscribersSearchInput.value = '';
+          document.body.classList.remove('profile-modal-open');
         };
 
         if (closeSubscribersModalBtn) closeSubscribersModalBtn.addEventListener('click', closeSubModal);

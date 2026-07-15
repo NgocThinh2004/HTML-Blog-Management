@@ -910,7 +910,7 @@
 <td>0</td>
 <td>
 <div class="action-group">
-<a class="action-btn" href="create-post.html?edit=2" title="Open"><i class="bi bi-box-arrow-up-right"></i></a>
+<a class="action-btn" href="post-detail.html?id=2" title="Open"><i class="bi bi-box-arrow-up-right"></i></a>
 <a class="action-btn" href="create-post.html?edit=2&amp;from=my-posts.html" title="Edit"><i class="bi bi-pencil"></i></a>
 <a class="action-btn text-danger" href="#" title="Trash"><i class="bi bi-trash"></i></a>
 </div>
@@ -948,7 +948,7 @@
 <td>0</td>
 <td>
 <div class="action-group">
-<a class="action-btn" href="create-post.html?from=my-posts.html" title="Open"><i class="bi bi-box-arrow-up-right"></i></a>
+<a class="action-btn" href="post-detail.html?id=7" title="Open"><i class="bi bi-box-arrow-up-right"></i></a>
 <a class="action-btn" href="create-post.html?from=my-posts.html" title="Edit"><i class="bi bi-pencil"></i></a>
 <a class="action-btn text-danger" href="#" title="Trash"><i class="bi bi-trash"></i></a>
 </div>
@@ -1004,8 +1004,8 @@
 <td>5,102</td>
 <td>
 <div class="action-group">
-<a class="action-btn" href="#" title="Open"><i class="bi bi-box-arrow-up-right"></i></a>
-<a class="action-btn" href="#" title="Edit"><i class="bi bi-pencil"></i></a>
+<a class="action-btn" href="post-detail.html?id=17" title="Open"><i class="bi bi-box-arrow-up-right"></i></a>
+<a class="action-btn" href="create-post.html?edit=17&amp;from=my-posts.html" title="Edit"><i class="bi bi-pencil"></i></a>
 <a class="action-btn text-danger" href="#" title="Trash"><i class="bi bi-trash"></i></a>
 </div>
 </td>
@@ -1023,8 +1023,8 @@
 <td>0</td>
 <td>
 <div class="action-group">
-<a class="action-btn" href="#" title="Open"><i class="bi bi-box-arrow-up-right"></i></a>
-<a class="action-btn" href="#" title="Edit"><i class="bi bi-pencil"></i></a>
+<a class="action-btn" href="post-detail.html?id=18" title="Open"><i class="bi bi-box-arrow-up-right"></i></a>
+<a class="action-btn" href="create-post.html?edit=18&amp;from=my-posts.html" title="Edit"><i class="bi bi-pencil"></i></a>
 <a class="action-btn text-danger" href="#" title="Trash"><i class="bi bi-trash"></i></a>
 </div>
 </td>
@@ -1094,11 +1094,61 @@
 </div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-<script src="assets/js/core.js?v=8"></script>
-<script src="assets/js/components.js"></script>
+<script src="assets/js/core.js?v=29"></script>
+<script src="assets/js/components.js?v=8"></script>
 <script>
     document.addEventListener('DOMContentLoaded', () => {
       const submittedPostsKey = 'mundiBlogSubmittedPosts';
+      const staticPostsStateKey = 'mundiBlogMyPostsState';
+
+      function readSubmittedPosts() {
+        try {
+          const posts = JSON.parse(localStorage.getItem(submittedPostsKey) || '[]');
+          return Array.isArray(posts) ? posts : [];
+        } catch (error) {
+          return [];
+        }
+      }
+
+      function readStaticPostsState() {
+        try {
+          const state = JSON.parse(localStorage.getItem(staticPostsStateKey) || '{}');
+          return state && typeof state === 'object' ? state : {};
+        } catch (error) {
+          return {};
+        }
+      }
+
+      function getStaticPostKey(row) {
+        if (!row || row.dataset.submittedId) return '';
+        if (row.dataset.postKey) return row.dataset.postKey;
+        const detailHref = row.querySelector('.bi-box-arrow-up-right')?.closest('a')?.getAttribute('href') || '';
+        const editorHref = row.querySelector('.bi-pencil')?.closest('a')?.getAttribute('href') || '';
+        const idMatch = `${detailHref} ${editorHref}`.match(/[?&](?:id|edit)=([^&]+)/);
+        const title = row.querySelector('.post-title-cell strong')?.textContent?.trim().toLowerCase() || '';
+        row.dataset.postKey = idMatch ? `mock-${decodeURIComponent(idMatch[1])}` : `title-${title.replace(/[^a-z0-9]+/g, '-')}`;
+        return row.dataset.postKey;
+      }
+
+      function persistRowState(row, status, deleted = false) {
+        const submittedId = row?.dataset.submittedId;
+        if (submittedId) {
+          const posts = readSubmittedPosts();
+          const nextPosts = deleted
+            ? posts.filter(post => String(post.id) !== String(submittedId))
+            : posts.map(post => String(post.id) === String(submittedId)
+              ? { ...post, status, updatedAt: new Date().toISOString() }
+              : post);
+          localStorage.setItem(submittedPostsKey, JSON.stringify(nextPosts));
+          return;
+        }
+
+        const key = getStaticPostKey(row);
+        if (!key) return;
+        const state = readStaticPostsState();
+        state[key] = deleted ? { deleted: true } : { status };
+        localStorage.setItem(staticPostsStateKey, JSON.stringify(state));
+      }
 
       function escapeHtml(value) {
         return String(value ?? '').replace(/[&<>'"]/g, character => ({
@@ -1167,13 +1217,7 @@
       function renderSubmittedPosts() {
         const tableBody = document.querySelector('[data-post-table-body]');
         if (!tableBody) return;
-        let submittedPosts = [];
-        try {
-          const stored = JSON.parse(localStorage.getItem(submittedPostsKey) || '[]');
-          submittedPosts = Array.isArray(stored) ? stored : [];
-        } catch (error) {
-          submittedPosts = [];
-        }
+        const submittedPosts = readSubmittedPosts();
 
         const currentLanguage = localStorage.getItem('preferredLanguage') || 'en';
         const locale = currentLanguage === 'vi' ? 'vi-VN' : currentLanguage === 'zh' ? 'zh-CN' : 'en-US';
@@ -1192,7 +1236,10 @@
 
         submittedPosts.slice().reverse().forEach(post => {
           const storedStatus = String(post.status || 'pending').toLowerCase();
-          const status = ['approved', 'published'].includes(storedStatus)
+          const previousStatus = String(post.previousStatus || '').toLowerCase();
+          const isApproved = ['approved', 'published'].includes(storedStatus)
+            || ['approved', 'published'].includes(previousStatus);
+          const status = isApproved
             ? 'published'
             : (statusLabels[storedStatus] ? storedStatus : 'pending');
             
@@ -1229,7 +1276,9 @@
           const updatedDate = post.updatedAt ? dateFormatter.format(new Date(post.updatedAt)) : '-';
           const searchText = `${post.title || ''} ${post.subtitle || ''} ${categoryCode} ${categoryLabel}`.toLowerCase();
           
-          const actionMarkup = status === 'trash'
+          const actionMarkup = isApproved
+            ? `<a class="action-btn" href="post-detail.html?submitted=${encodeURIComponent(post.id)}" data-tooltip-key="open"><i class="bi bi-box-arrow-up-right"></i></a>`
+            : status === 'trash'
             ? `<a class="action-btn" href="#" data-tooltip-key="restore"><i class="bi bi-arrow-counterclockwise"></i></a>
                <a class="action-btn text-danger" href="#" data-tooltip-key="delete"><i class="bi bi-trash3"></i></a>`
             : `<a class="action-btn" href="post-detail.html?submitted=${encodeURIComponent(post.id)}" data-tooltip-key="open"><i class="bi bi-box-arrow-up-right"></i></a>
@@ -1237,8 +1286,8 @@
                <a class="action-btn text-danger" href="#" data-tooltip-key="trash"><i class="bi bi-trash"></i></a>`;
                
           tableBody.insertAdjacentHTML('afterbegin', `
-            <tr class="new-submission-row" data-submitted-id="${escapeHtml(post.id)}" data-category="${escapeHtml(post.category || '')}" data-language="${escapeHtml(post.originalLanguage || 'en')}" data-search="${escapeHtml(searchText)}" data-status="${status}">
-              <td class="select-col"><input aria-label="Select ${escapeHtml(post.title)}" class="row-check" type="checkbox"></td>
+            <tr class="new-submission-row" data-submitted-id="${escapeHtml(post.id)}" data-approved="${isApproved}" data-category="${escapeHtml(post.category || '')}" data-language="${escapeHtml(post.originalLanguage || 'en')}" data-search="${escapeHtml(searchText)}" data-status="${status}">
+              <td class="select-col"><input aria-label="Select ${escapeHtml(post.title)}" class="row-check" type="checkbox"${isApproved ? ' disabled' : ''}></td>
               <td class="post-title-cell"><strong>${escapeHtml(post.title)}</strong><span class="category-label" data-original-cat="${escapeHtml(categoryCode)}">${escapeHtml(categoryLabel)}</span></td>
               <td><span class="status-badge is-${status}"><span data-i18n="status_${status}">${statusLabels[status][currentLanguage] || statusLabels[status].en}</span></span></td>
               <td>${languageBadge(post.originalLanguage || 'en')}</td>
@@ -1252,6 +1301,70 @@
       }
 
       renderSubmittedPosts();
+
+      function updateRowPresentation(row, status) {
+        if (!row) return;
+        const approved = row.dataset.approved === 'true' || status === 'published';
+        row.dataset.status = approved ? 'published' : status;
+        row.dataset.approved = String(approved);
+
+        const check = row.querySelector('.row-check');
+        if (check) {
+          check.disabled = approved;
+          if (approved) check.checked = false;
+        }
+
+        const statusCell = row.querySelector('td:nth-child(3)');
+        if (statusCell) {
+          const effectiveStatus = approved ? 'published' : status;
+          const label = window.uiTranslations?.[getCurrentLanguage()]?.[`status_${effectiveStatus}`] || effectiveStatus;
+          statusCell.innerHTML = `<span class="status-badge is-${effectiveStatus}"><span data-i18n="status_${effectiveStatus}">${label}</span></span>`;
+        }
+
+        const actionCell = row.querySelector('td:last-child .action-group');
+        if (!actionCell) return;
+        const submittedId = row.dataset.submittedId;
+        if (!row.dataset.openHref) {
+          row.dataset.openHref = actionCell.querySelector('.bi-box-arrow-up-right')?.closest('a')?.getAttribute('href')
+            || (submittedId ? `post-detail.html?submitted=${encodeURIComponent(submittedId)}` : '');
+        }
+        if (!row.dataset.editHref) {
+          row.dataset.editHref = actionCell.querySelector('.bi-pencil')?.closest('a')?.getAttribute('href')
+            || (submittedId
+              ? `create-post.html?submitted=${encodeURIComponent(submittedId)}&from=my-posts.html`
+              : 'create-post.html?from=my-posts.html');
+        }
+
+        const openAction = row.dataset.openHref
+          ? `<a class="action-btn" href="${escapeHtml(row.dataset.openHref)}" data-tooltip-key="open"><i class="bi bi-box-arrow-up-right"></i></a>`
+          : '';
+        if (approved) {
+          actionCell.innerHTML = openAction;
+        } else if (status === 'trash') {
+          actionCell.innerHTML = `<a class="action-btn" href="#" data-tooltip-key="restore"><i class="bi bi-arrow-counterclockwise"></i></a>
+            <a class="action-btn text-danger" href="#" data-tooltip-key="delete"><i class="bi bi-trash3"></i></a>`;
+        } else {
+          actionCell.innerHTML = `${openAction}
+            <a class="action-btn" href="${escapeHtml(row.dataset.editHref)}" data-tooltip-key="edit"><i class="bi bi-pencil"></i></a>
+            <a class="action-btn text-danger" href="#" data-tooltip-key="trash"><i class="bi bi-trash"></i></a>`;
+        }
+      }
+
+      const staticPostsState = readStaticPostsState();
+      document.querySelectorAll('[data-post-table-body] tr').forEach(row => {
+        if (!row.dataset.submittedId) {
+          const initialStatus = row.dataset.status || 'draft';
+          row.dataset.approved = String(initialStatus === 'published');
+          const savedState = staticPostsState[getStaticPostKey(row)];
+          if (savedState?.deleted) {
+            row.remove();
+            return;
+          }
+          if (savedState?.status && initialStatus !== 'published') row.dataset.status = savedState.status;
+        }
+        updateRowPresentation(row, row.dataset.status || 'draft');
+      });
+
       formatUpdatedDates();
       syncActionTooltips();
       let rows = Array.from(document.querySelectorAll('[data-post-table-body] tr'));
@@ -1390,7 +1503,7 @@
           check.closest('tr')?.classList.toggle('is-selected', check.checked);
         });
 
-        const filteredChecks = currentFilteredRows.map(row => row.querySelector('.row-check')).filter(Boolean);
+        const filteredChecks = currentFilteredRows.map(row => row.querySelector('.row-check')).filter(check => check && !check.disabled);
         const checkedCount = filteredChecks.filter(check => check.checked).length;
 
         if (selectAll) {
@@ -1440,13 +1553,13 @@
       selectAll?.addEventListener('change', () => {
         currentFilteredRows.forEach(row => {
           const check = row.querySelector('.row-check');
-          if (check) check.checked = selectAll.checked;
+          if (check && !check.disabled) check.checked = selectAll.checked;
         });
         syncSelectedRows();
       });
 
       document.getElementById('mobileSelectAllBtn')?.addEventListener('click', () => {
-        const checks = currentFilteredRows.map(row => row.querySelector('.row-check')).filter(Boolean);
+        const checks = currentFilteredRows.map(row => row.querySelector('.row-check')).filter(check => check && !check.disabled);
         const allChecked = checks.length > 0 && checks.every(check => check.checked);
         checks.forEach(check => check.checked = !allChecked);
         if (selectAll) selectAll.checked = !allChecked;
@@ -1473,7 +1586,11 @@
 
         if (activeFilter === 'trash') {
           if (await window.confirmDestructive({ message: `Bạn có chắc chắn muốn xóa vĩnh viễn ${checkedRows.length} bài viết này?` })) {
-            checkedRows.forEach(row => row.remove());
+            checkedRows.forEach(row => {
+              if (row.dataset.approved === 'true') return;
+              persistRowState(row, null, true);
+              row.remove();
+            });
           }
         } else {
           const currentLang = localStorage.getItem('preferredLanguage') || 'en';
@@ -1487,18 +1604,9 @@
             message: trashMessage
           })) {
             checkedRows.forEach(row => {
-              row.dataset.status = 'trash';
-              const statusCell = row.querySelector('td:nth-child(3)');
-              if (statusCell) {
-                statusCell.innerHTML = '<span class="status-badge is-trash"><span data-i18n="status_trash">Trash</span></span>';
-              }
-              const actionCell = row.querySelector('td:last-child .action-group');
-              if (actionCell) {
-                actionCell.innerHTML = `
-                  <a class="action-btn" href="#" data-tooltip-key="restore"><i class="bi bi-arrow-counterclockwise"></i></a>
-                  <a class="action-btn text-danger" href="#" data-tooltip-key="delete"><i class="bi bi-trash3"></i></a>
-                `;
-              }
+              if (row.dataset.approved === 'true') return;
+              persistRowState(row, 'trash');
+              updateRowPresentation(row, 'trash');
             });
           }
         }
@@ -1519,19 +1627,9 @@
 
         if (confirm(`Bạn có muốn khôi phục ${checkedRows.length} bài viết này?`)) {
           checkedRows.forEach(row => {
-            row.dataset.status = 'draft';
-            const statusCell = row.querySelector('td:nth-child(3)');
-            if (statusCell) {
-              statusCell.innerHTML = '<span class="status-badge is-draft"><span data-i18n="status_draft">Draft</span></span>';
-            }
-            const actionCell = row.querySelector('td:last-child .action-group');
-            if (actionCell) {
-              actionCell.innerHTML = `
-                <a class="action-btn" href="create-post.html?from=my-posts.html" data-tooltip-key="open"><i class="bi bi-box-arrow-up-right"></i></a>
-                <a class="action-btn" href="create-post.html?from=my-posts.html" data-tooltip-key="edit"><i class="bi bi-pencil"></i></a>
-                <a class="action-btn text-danger" href="#" data-tooltip-key="trash"><i class="bi bi-trash"></i></a>
-              `;
-            }
+            if (row.dataset.approved === 'true') return;
+            persistRowState(row, 'draft');
+            updateRowPresentation(row, 'draft');
           });
         }
         
@@ -1547,8 +1645,10 @@
           e.preventDefault();
           const row = trashBtn.closest('tr');
           if (row) {
+            if (row.dataset.approved === 'true') return;
             if (row.dataset.status === 'trash') {
               if (await window.confirmDestructive({ message: (window.uiTranslations && window.uiTranslations[localStorage.getItem('preferredLanguage') || 'en'] ? window.uiTranslations[localStorage.getItem('preferredLanguage') || 'en']['confirm_delete_permanent'] : 'Are you sure you want to permanently delete this post?') })) {
+                persistRowState(row, null, true);
                 row.remove();
                 rows = Array.from(document.querySelectorAll('[data-post-table-body] tr'));
                 rowChecks = Array.from(document.querySelectorAll('[data-post-table-body] .row-check'));
@@ -1560,18 +1660,8 @@
                 variant: 'trash',
                 message: (window.uiTranslations && window.uiTranslations[localStorage.getItem('preferredLanguage') || 'en'] ? window.uiTranslations[localStorage.getItem('preferredLanguage') || 'en']['confirm_trash'] : 'Do you want to move this post to trash?')
               })) {
-                row.dataset.status = 'trash';
-                const statusCell = row.querySelector('td:nth-child(3)');
-                if (statusCell) {
-                  statusCell.innerHTML = '<span class="status-badge is-trash"><span data-i18n="status_trash">Trash</span></span>';
-                }
-                const actionCell = row.querySelector('td:last-child .action-group');
-                if (actionCell) {
-                  actionCell.innerHTML = `
-                    <a class="action-btn" href="#" data-tooltip-key="restore"><i class="bi bi-arrow-counterclockwise"></i></a>
-                    <a class="action-btn text-danger" href="#" data-tooltip-key="delete"><i class="bi bi-trash3"></i></a>
-                  `;
-                }
+                persistRowState(row, 'trash');
+                updateRowPresentation(row, 'trash');
                 updateSummary();
                 applyFilters();
               }
@@ -1585,19 +1675,9 @@
           e.preventDefault();
           const row = restoreBtn.closest('tr');
           if (row && row.dataset.status === 'trash') {
-            row.dataset.status = 'draft';
-            const statusCell = row.querySelector('td:nth-child(3)');
-            if (statusCell) {
-              statusCell.innerHTML = '<span class="status-badge is-draft"><span data-i18n="status_draft">Draft</span></span>';
-            }
-            const actionCell = row.querySelector('td:last-child .action-group');
-            if (actionCell) {
-              actionCell.innerHTML = `
-                <a class="action-btn" href="create-post.html?from=my-posts.html" data-tooltip-key="open"><i class="bi bi-box-arrow-up-right"></i></a>
-                <a class="action-btn" href="create-post.html?from=my-posts.html" data-tooltip-key="edit"><i class="bi bi-pencil"></i></a>
-                <a class="action-btn text-danger" href="#" data-tooltip-key="trash"><i class="bi bi-trash"></i></a>
-              `;
-            }
+            if (row.dataset.approved === 'true') return;
+            persistRowState(row, 'draft');
+            updateRowPresentation(row, 'draft');
             updateSummary();
             applyFilters();
             syncActionTooltips();

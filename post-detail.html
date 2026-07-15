@@ -124,8 +124,8 @@
   <!-- Bootstrap 5 JS Bundle -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <!-- Core Script containing theme & language simulation -->
-<script src="assets/js/core.js?v=23"></script>
-  <script src="assets/js/components.js?v=5"></script>
+<script src="assets/js/core.js?v=30"></script>
+<script src="assets/js/components.js?v=8"></script>
   
   <script>
     function escapePostText(value) {
@@ -233,7 +233,7 @@
       container.innerHTML = `
         <article class="substack-post border-0 py-0" data-supported-langs="${escapePostText(post.supported_langs || 'en,vi,zh')}" data-category="${escapePostText(post.category)}">
           <div class="mb-3">
-            <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-3 py-1 rounded-pill fw-medium">${typeof window.translateCategory === 'function' ? window.translateCategory(post.category) : post.category}</span>
+            <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-3 py-1 rounded-pill fw-medium category-label" data-original-cat="${post.category}">${typeof window.translateCategory === 'function' ? window.translateCategory(post.category) : post.category}</span>
           </div>
           
           <h1 class="post-title fw-bold mb-4 text-main"

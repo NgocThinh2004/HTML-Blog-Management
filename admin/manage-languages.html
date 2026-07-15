@@ -445,6 +445,7 @@
                 Language</label>
               <select class="form-select" id="selectLang" required>
                 <option value="" disabled selected data-i18n="choose_lang_placeholder">Choose a language...</option>
+                <option value="zh" data-name="中文 (Chinese)" data-native-name="中文" data-flag="cn">中文 (Chinese)</option>
                 <option value="ja" data-name="日本語 (Japanese)" data-native-name="日本語" data-flag="jp">日本語 (Japanese)</option>
                 <option value="ko" data-name="한국어 (Korean)" data-native-name="한국어" data-flag="kr">한국어 (Korean)</option>
                 <option value="fr" data-name="Français (French)" data-native-name="Français" data-flag="fr">Français (French)</option>
@@ -617,7 +618,7 @@
   <!-- Bootstrap 5 JS Bundle -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <!-- Core Script -->
-  <script src="../assets/js/core.js?v=23"></script>
+  <script src="../assets/js/core.js?v=29"></script>
 
   <script type="text/plain" id="legacyLanguageManagementScript">
     document.addEventListener('DOMContentLoaded', () => {
@@ -1008,7 +1009,11 @@
         const option = select.options[select.selectedIndex];
         const code = select.value.toLowerCase();
         if (languages.some(language => language.code.toLowerCase() === code)) { alert(t('duplicate')); return; }
-        const language = { id: `L${Date.now()}`, code, name: option.dataset.name || option.textContent.trim(), nativeName: option.dataset.nativeName || canonicalNativeNames[code] || option.textContent.trim(), flag: option.dataset.flag || code, active: true, isDefault: false, translated: 0, total: publishedPosts.length };
+        const translated = publishedPosts.filter(post => {
+          const supported = String(post.supported_langs || '').split(',').map(item => item.trim()).filter(Boolean);
+          return (!supported.length || supported.includes(code)) && Boolean(String(post[`title_${code}`] || '').trim() && String(post[`content_${code}`] || '').trim());
+        }).length;
+        const language = { id: `L${Date.now()}`, code, name: option.dataset.name || option.textContent.trim(), nativeName: option.dataset.nativeName || canonicalNativeNames[code] || option.textContent.trim(), flag: option.dataset.flag || code, active: true, isDefault: false, translated, total: publishedPosts.length };
         languages.push(language); currentPage = Math.ceil(languages.length / pageSize); persist(); renderTable(); addForm.reset(); codeInput.value = ''; addModal.hide(); showToast(t('added', { name: escapeHtml(language.name) }));
       });
 
