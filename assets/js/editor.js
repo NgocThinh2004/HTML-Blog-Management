@@ -828,7 +828,7 @@ document.addEventListener('DOMContentLoaded', () => {
         categoryLabel: categorySelect && categorySelect.selectedOptions[0] ? categorySelect.selectedOptions[0].textContent.trim() : 'Technology',
         originalLanguage,
         allowedTranslations,
-        status: 'pending',
+        status: sourceAction === 'draft' ? 'draft' : 'pending',
         previousStatus: existingPost ? existingPost.status || 'pending' : null,
         revision: existingPost ? Number(existingPost.revision || 1) + 1 : 1,
         createdAt: existingPost?.createdAt || new Date().toISOString(),
@@ -846,7 +846,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
       localStorage.setItem(submittedPostsKey, JSON.stringify(posts.slice(0, 50)));
       localStorage.removeItem(draftKey);
-      window.location.href = 'my-posts.html?status=pending';
+      window.location.href = sourceAction === 'draft'
+        ? 'my-posts.html?status=draft'
+        : 'my-posts.html?status=pending';
     } catch (error) {
       const language = localStorage.getItem('preferredLanguage') || 'en';
       const messages = {
@@ -1598,7 +1600,22 @@ document.addEventListener('DOMContentLoaded', () => {
         const action = actionButton.dataset.draftAction;
         if (action === 'discard') {
           closeDraftConfirmModal();
-          window.location.href = getGuestBackHref(); // Redirect to home/previous page
+          localStorage.removeItem(draftKey);
+          if (submittedPostId) {
+            try {
+              const storedPosts = JSON.parse(localStorage.getItem(submittedPostsKey) || '[]');
+              if (Array.isArray(storedPosts)) {
+                const nextPosts = storedPosts.filter(post => (
+                  String(post.id) !== String(submittedPostId)
+                  || !['draft'].includes(String(post.status || '').toLowerCase())
+                ));
+                localStorage.setItem(submittedPostsKey, JSON.stringify(nextPosts));
+              }
+            } catch (error) {
+              // The local draft is already removed; continue back to the draft list.
+            }
+          }
+          window.location.href = 'my-posts.html?status=draft';
         } else if (action === 'save') {
           submitForReview('draft');
         }

@@ -508,6 +508,7 @@ document.addEventListener('DOMContentLoaded', () => {
     localStorage.setItem('preferredLanguage', language);
     window.syncLingoraLanguageUI(language);
     window.dispatchEvent(new CustomEvent('lingora:languagechange', { detail: { language } }));
+    document.dispatchEvent(new CustomEvent('lingoraLangChange', { detail: { lang: language } }));
     Promise.resolve().then(() => {
       if (window.getLingoraLanguage() === language) window.syncLingoraLanguageUI(language);
     });
@@ -542,15 +543,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const langSelect = e.target.closest('.global-lang-select');
     if (langSelect) {
       e.preventDefault();
-      const lang = langSelect.getAttribute('data-lang');
-      localStorage.setItem('preferredLanguage', lang);
-      window.updateGlobalFlags(lang);
-
-      if (window.applyUiTranslations) window.applyUiTranslations(lang);
-      if (window.applyLanguageFilter) window.applyLanguageFilter(lang);
-
-      // Dispatch custom event so page-specific handlers (e.g. post-detail) can react
-      document.dispatchEvent(new CustomEvent('lingoraLangChange', { detail: { lang } }));
+      window.setLingoraLanguage(langSelect.getAttribute('data-lang'));
     }
   });
 
@@ -1104,6 +1097,8 @@ document.addEventListener('DOMContentLoaded', () => {
       find_more: "Find more",
       latest_from_following: "Latest from following",
       top: "Top",
+      followers: "Followers",
+      following: "Following",
       posts: "Posts",
       publications: "Publications",
       people: "People",
@@ -1469,6 +1464,8 @@ document.addEventListener('DOMContentLoaded', () => {
       find_more: "Khám phá thêm",
       latest_from_following: "Mới nhất từ tác giả đang theo dõi",
       top: "Nổi bật",
+      followers: "Người theo dõi",
+      following: "Đang theo dõi",
       posts: "Bài viết",
       publications: "Chuyên mục",
       people: "Tác giả",
@@ -1824,6 +1821,8 @@ document.addEventListener('DOMContentLoaded', () => {
       find_more: "发现更多",
       latest_from_following: "关注作者的最新发布",
       top: "热门",
+      followers: "关注者",
+      following: "正在关注",
       posts: "文章",
       publications: "专栏",
       people: "作者",
