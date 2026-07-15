@@ -533,6 +533,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
       if (window.applyUiTranslations) window.applyUiTranslations(lang);
       if (window.applyLanguageFilter) window.applyLanguageFilter(lang);
+
+      // Dispatch custom event so page-specific handlers (e.g. post-detail) can react
+      document.dispatchEvent(new CustomEvent('lingoraLangChange', { detail: { lang } }));
     }
   });
 
@@ -868,6 +871,10 @@ document.addEventListener('DOMContentLoaded', () => {
       toast_compact_off: "Compact view turned off",
       toast_autoplay_on: "Media auto-play turned on",
       toast_autoplay_off: "Media auto-play turned off",
+      show_subscribers: "Show Subscribers",
+      show_subscribers_desc: "Allow others to see the list of people following you.",
+      toast_show_subscribers_on: "Subscribers visibility turned on",
+      toast_show_subscribers_off: "Subscribers visibility turned off",
       // Post Detail page
       comments: "Comments",
       comment_placeholder: "Write a comment in any language...",
@@ -1224,6 +1231,10 @@ document.addEventListener('DOMContentLoaded', () => {
       toast_compact_off: "Đã tắt chế độ đọc gọn gàng",
       toast_autoplay_on: "Đã bật tự động phát video/GIF",
       toast_autoplay_off: "Đã tắt tự động phát video/GIF",
+      show_subscribers: "Hiển thị người đăng ký",
+      show_subscribers_desc: "Cho phép người khác xem danh sách những người đang theo dõi bạn.",
+      toast_show_subscribers_on: "Đã bật hiển thị người đăng ký",
+      toast_show_subscribers_off: "Đã tắt hiển thị người đăng ký",
       // Post Detail page
       comments: "Bình luận",
       comment_placeholder: "Viết bình luận bằng bất kỳ ngôn ngữ nào...",
@@ -1582,6 +1593,10 @@ document.addEventListener('DOMContentLoaded', () => {
       toast_compact_off: "已关闭紧凑视图",
       toast_autoplay_on: "已开启媒体自动播放",
       toast_autoplay_off: "已关闭媒体自动播放",
+      show_subscribers: "显示订阅者",
+      show_subscribers_desc: "允许其他人查看关注您的人的列表。",
+      toast_show_subscribers_on: "订阅者可见性已开启",
+      toast_show_subscribers_off: "订阅者可见性已关闭",
       // Post Detail page
       comments: "评论",
       comment_placeholder: "用任何语言写下你的评论...",
@@ -2432,6 +2447,12 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!db || db._version !== 3) {
       db = JSON.parse(JSON.stringify(defaultCommentsDatabase));
       db._version = 3;
+      localStorage.setItem('mundi_comments_db', JSON.stringify(db));
+    }
+
+    // Don't auto-generate sample comments for user-submitted posts
+    if (!db[postId] && String(postId).startsWith('pending-')) {
+      db[postId] = [];
       localStorage.setItem('mundi_comments_db', JSON.stringify(db));
     }
 
@@ -3540,10 +3561,13 @@ window.addEventListener('pageshow', (event) => {
 
   function _resolveSelfName() {
     const currentStr = localStorage.getItem('currentUser');
-    let name = 'Tuấn Hưng';
+    let name = '';
     if (currentStr) {
       if (typeof currentStr === 'string' && currentStr.startsWith('{')) {
-        try { name = JSON.parse(currentStr).name || name; } catch(e){}
+        try { 
+          const obj = JSON.parse(currentStr);
+          name = obj.name || obj.username || ''; 
+        } catch(e){}
       } else {
         name = currentStr;
       }
