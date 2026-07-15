@@ -303,9 +303,6 @@ document.addEventListener('DOMContentLoaded', () => {
     if (from && aliases[from]) return aliases[from];
     if (isSafeGuestBackHref(from)) return from;
 
-    const storedBackHref = sessionStorage.getItem('mundiCreatePostBackHref');
-    if (isSafeGuestBackHref(storedBackHref)) return storedBackHref;
-
     if (window.history.length > 1) {
       return 'javascript:history.back()';
     }
