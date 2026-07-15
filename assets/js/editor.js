@@ -203,27 +203,6 @@ document.addEventListener('DOMContentLoaded', () => {
     updateAllowedTranslationLanguages();
   }
 
-  function syncOriginalLanguageWithSystem() {
-    if (!originalLanguageSelect) return;
-    const previousLanguage = originalLanguageSelect.value;
-    const systemLanguage = localStorage.getItem('preferredLanguage') || 'en';
-    const nextLanguage = ['en', 'vi', 'zh'].includes(systemLanguage) ? systemLanguage : 'en';
-
-    setOriginalLanguage(nextLanguage);
-
-    if (previousLanguage && previousLanguage !== nextLanguage) {
-      const previousLanguageCheckbox = document.querySelector(`input[name="allow_translate"][value="${previousLanguage}"]`);
-      if (previousLanguageCheckbox) {
-        previousLanguageCheckbox.checked = true;
-        delete previousLanguageCheckbox.dataset.restoreChecked;
-      }
-    }
-
-    const currentOriginalCheckbox = document.querySelector(`input[name="allow_translate"][value="${nextLanguage}"]`);
-    if (currentOriginalCheckbox) currentOriginalCheckbox.checked = false;
-    updateAllowedTranslationLanguages();
-  }
-
   function syncAvailableCategoriesWithSystem(selectedValue = '', preserveUnavailable = false) {
     const categorySelect = document.getElementById('post_category');
     if (!categorySelect) return;
@@ -895,7 +874,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
       const categorySelect = document.getElementById('post_category');
       if (categorySelect && draft.category) categorySelect.value = draft.category;
-      setOriginalLanguage(draft.originalLanguage || localStorage.getItem('preferredLanguage') || 'en');
+      postOriginalLanguageOverride = draft.originalLanguage || localStorage.getItem('preferredLanguage') || 'en' || null;
       if (Array.isArray(draft.allowedTranslations)) {
         document.querySelectorAll('input[name="allow_translate"]').forEach(checkbox => {
           checkbox.checked = draft.allowedTranslations.includes(checkbox.value);
@@ -1904,7 +1883,7 @@ document.addEventListener('DOMContentLoaded', () => {
         editor.innerHTML = postData.body;
         normalizeEditorFontMarkup();
       }
-      setOriginalLanguage(postData.originalLanguage || localStorage.getItem('preferredLanguage') || 'en');
+      postOriginalLanguageOverride = postData.originalLanguage || localStorage.getItem('preferredLanguage') || 'en' || null;
       syncOriginalLanguageWithSystem();
       syncAvailableCategoriesWithSystem(postData.category || '', Boolean(postData.category));
       setSaveState(true);
