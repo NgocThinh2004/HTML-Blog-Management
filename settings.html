@@ -15,9 +15,9 @@
   
   <!-- Custom CSS (Standard Shared Assets) -->
 <link rel="stylesheet" href="assets/css/variables.css">
-  <link rel="stylesheet" href="assets/css/base.css?v=5">
-  <link rel="stylesheet" href="assets/css/layouts.css?v=4">
-  <link rel="stylesheet" href="assets/css/components.css?v=12">
+  <link rel="stylesheet" href="assets/css/base.css?v=1784089471952">
+  <link rel="stylesheet" href="assets/css/layouts.css?v=1784089471952">
+  <link rel="stylesheet" href="assets/css/components.css?v=1784089471952">
   <style>
     /* Settings Page Specific Styles */
     .settings-container {
@@ -445,8 +445,8 @@
   <!-- Bootstrap 5 JS Bundle -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <!-- Core Script -->
-<script src="assets/js/core.js?v=17"></script>
-  <script src="assets/js/components.js?v=4"></script>
+<script src="assets/js/core.js?v=1784089471952"></script>
+  <script src="assets/js/components.js?v=1784089471952"></script>
 
   <script>
     document.addEventListener('DOMContentLoaded', () => {
@@ -698,7 +698,7 @@
         showSubscribersSwitch.checked = localStorage.getItem('allowShowSubscribers') !== 'false';
         showSubscribersSwitch.addEventListener('change', () => {
           localStorage.setItem('allowShowSubscribers', showSubscribersSwitch.checked);
-          showSubscribersSwitch.checked ? showToast(settingsT('toast_show_subscribers_on', {}, currentLang) || "Đã bật hiển thị người đăng ký") : showToast(settingsT('toast_show_subscribers_off', {}, currentLang) || "Đã tắt hiển thị người đăng ký");
+          showToast(settingsT(showSubscribersSwitch.checked ? 'toast_show_subscribers_on' : 'toast_show_subscribers_off'));
         });
       }
     });
