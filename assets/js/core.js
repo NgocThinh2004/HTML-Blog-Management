@@ -435,6 +435,21 @@ document.addEventListener('DOMContentLoaded', () => {
   const htmlElement = document.documentElement;
   const supportedLanguages = new Set(['en', 'vi', 'zh']);
 
+  const mobileSidebarBody = document.querySelector('#mobileSidebar .offcanvas-body');
+  if (mobileSidebarBody && !mobileSidebarBody.querySelector('.mobile-preference-panel')) {
+    const currentLanguage = String(localStorage.getItem('preferredLanguage') || 'en').toLowerCase();
+    const flagMap = { en: 'gb', vi: 'vn', zh: 'cn' };
+    const preferencePanel = document.createElement('div');
+    preferencePanel.className = 'mobile-preference-panel';
+    preferencePanel.setAttribute('aria-label', 'Display preferences');
+    preferencePanel.innerHTML = `<div class="dropdown"><button class="mobile-preference-btn w-100" type="button" data-bs-toggle="dropdown" aria-expanded="false"><img id="mobileLangFlag" src="https://flagcdn.com/w20/${flagMap[currentLanguage] || 'gb'}.png" alt=""><span id="mobileCurrentLang">${supportedLanguages.has(currentLanguage) ? currentLanguage.toUpperCase() : 'EN'}</span><i class="bi bi-chevron-down ms-auto"></i></button><ul class="dropdown-menu shadow-sm w-100"><li><a class="dropdown-item global-lang-select" href="#" data-lang="en"><img src="https://flagcdn.com/w20/gb.png" width="18" class="me-2" alt="">English</a></li><li><a class="dropdown-item global-lang-select" href="#" data-lang="vi"><img src="https://flagcdn.com/w20/vn.png" width="18" class="me-2" alt="">Tiếng Việt</a></li><li><a class="dropdown-item global-lang-select" href="#" data-lang="zh"><img src="https://flagcdn.com/w20/cn.png" width="18" class="me-2" alt="">中文</a></li></ul></div><button class="mobile-preference-btn" id="mobileThemeToggle" type="button"><i class="bi bi-moon-fill" id="mobileThemeIcon"></i><span id="mobileThemeText" data-i18n="dark_mode">Dark mode</span></button>`;
+    preferencePanel.querySelector('[data-bs-toggle="dropdown"]')?.setAttribute('aria-label', 'Change language');
+    preferencePanel.querySelector('#mobileThemeToggle')?.setAttribute('aria-label', 'Toggle color theme');
+    const mobileFooter = mobileSidebarBody.querySelector('.mt-auto');
+    if (mobileFooter) mobileSidebarBody.insertBefore(preferencePanel, mobileFooter);
+    else mobileSidebarBody.appendChild(preferencePanel);
+  }
+
   window.getLingoraLanguage = function() {
     const storedLanguage = String(localStorage.getItem('preferredLanguage') || 'en').toLowerCase();
     return supportedLanguages.has(storedLanguage) ? storedLanguage : 'en';
@@ -1012,7 +1027,7 @@ document.addEventListener('DOMContentLoaded', () => {
       views_over_time: "Views over time",
       top_languages: "Top Languages",
       featured_posts: "Featured Articles",
-      featured_posts_desc: "Top 10 ranked by total views",
+      featured_posts_desc: "Base posts ranked by total views",
       lang_vi: "Vietnamese",
       lang_zh: "Chinese",
       lang_en: "English",
@@ -1341,7 +1356,7 @@ document.addEventListener('DOMContentLoaded', () => {
       views_over_time: "Lượt xem theo thời gian",
       top_languages: "Ngôn ngữ phổ biến",
       featured_posts: "Bài viết nổi bật",
-      featured_posts_desc: "Top 10 theo tổng lượt xem",
+      featured_posts_desc: "Xếp hạng bài gốc theo tổng lượt xem",
       lang_vi: "Tiếng Việt",
       lang_zh: "Tiếng Trung",
       lang_en: "Tiếng Anh",
@@ -1667,7 +1682,7 @@ document.addEventListener('DOMContentLoaded', () => {
       views_over_time: "浏览量趋势",
       top_languages: "热门语言",
       featured_posts: "热门文章",
-      featured_posts_desc: "总浏览量排名前 10",
+      featured_posts_desc: "按总浏览量对原始文章排名",
       lang_vi: "越南语",
       lang_zh: "中文",
       lang_en: "英语",
@@ -1682,6 +1697,28 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
   window.uiTranslations = uiTranslations;
+
+  window.renderAdminPagination = function (container, currentPage, totalItems, pageSize = 8) {
+    if (!container) return 1;
+    const totalPages = Math.max(1, Math.ceil(totalItems / pageSize));
+    const page = Math.min(Math.max(1, Number(currentPage) || 1), totalPages);
+    container.hidden = totalPages <= 1;
+    if (totalPages <= 1) {
+      container.innerHTML = '';
+      return page;
+    }
+    const pages = [];
+    for (let number = 1; number <= totalPages; number += 1) {
+      if (number === 1 || number === totalPages || Math.abs(number - page) <= 1) pages.push(number);
+    }
+    const items = [];
+    pages.forEach((number, index) => {
+      if (index && number - pages[index - 1] > 1) items.push('<span class="admin-page-gap" aria-hidden="true">…</span>');
+      items.push(`<button class="admin-page-btn${number === page ? ' is-active' : ''}" type="button" data-page="${number}" ${number === page ? 'aria-current="page"' : ''}>${number}</button>`);
+    });
+    container.innerHTML = `<button class="admin-page-btn" type="button" data-page="${page - 1}" aria-label="Previous page" ${page === 1 ? 'disabled' : ''}><i class="bi bi-chevron-left"></i></button>${items.join('')}<button class="admin-page-btn" type="button" data-page="${page + 1}" aria-label="Next page" ${page === totalPages ? 'disabled' : ''}><i class="bi bi-chevron-right"></i></button>`;
+    return page;
+  };
 
   window.showLingoraToast = function (message, options = {}) {
     document.querySelector('.lingora-app-toast')?.remove();
@@ -1780,6 +1817,7 @@ document.addEventListener('DOMContentLoaded', () => {
       ) : null;
       const managedTranslation = managedCategory?.translations?.[currentLang];
       if (managedTranslation?.name && !managedCategory?.deletedTranslations?.[currentLang]) return managedTranslation.name;
+      if (managedCategory) return '';
     } catch (error) {
       // Fall back to the built-in category dictionary.
     }
@@ -1804,9 +1842,14 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!category) return true;
       const translation = category.translations?.[language];
       const activeValue = translation?.active;
+      const categoryActive = category.active;
       return Boolean(
         translation &&
         !category.deletedTranslations?.[language] &&
+        categoryActive !== false &&
+        categoryActive !== 'false' &&
+        categoryActive !== 0 &&
+        categoryActive !== '0' &&
         activeValue !== false &&
         activeValue !== 'false' &&
         activeValue !== 0 &&
@@ -1976,7 +2019,9 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.category-label[data-original-cat]').forEach(el => {
       const originalCat = el.getAttribute('data-original-cat');
       if (typeof window.translateCategory === 'function') {
-        el.textContent = window.translateCategory(originalCat);
+        const translatedCategory = window.translateCategory(originalCat);
+        el.textContent = translatedCategory;
+        el.classList.toggle('d-none', !translatedCategory);
       }
     });
 
