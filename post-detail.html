@@ -160,12 +160,7 @@
       container.innerHTML = `
         <article class="substack-post border-0 py-0" data-supported-langs="${post.supported_langs || 'en,vi,zh'}" data-category="${post.category}">
           <div class="mb-3">
-<<<<<<< HEAD
-            <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-3 py-1 rounded-pill fw-medium category-label"
-                  data-original-cat="${escapePostText(post.category)}">${escapePostText(typeof window.translateCategory === 'function' ? window.translateCategory(post.category) : post.category)}</span>
-=======
             <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-3 py-1 rounded-pill fw-medium">${typeof window.translateCategory === 'function' ? window.translateCategory(post.category) : post.category}</span>
->>>>>>> feature/notifications-subscribe
           </div>
           
           <h1 class="post-title fw-bold mb-4 text-main"
