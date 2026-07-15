@@ -1,16 +1,16 @@
 // ========================================================
 // SECURITY & ROUTING CHECKS
 // ========================================================
-(function() {
+(function () {
   const currentUserJson = localStorage.getItem('currentUser');
   let user = null;
   try {
     user = currentUserJson ? JSON.parse(currentUserJson) : null;
-  } catch(e) {
+  } catch (e) {
     localStorage.removeItem('currentUser');
   }
   const path = window.location.pathname.toLowerCase();
-  
+
   if (path.includes('/admin/')) {
     if (!user || user.role !== 'admin') {
       // If we are in /admin/, home is at ../index.html
@@ -18,7 +18,7 @@
       return;
     }
   }
-  
+
   if (path.includes('/create-post.html')) {
     if (!user) {
       window.location.replace('login.html');
@@ -364,11 +364,47 @@ window.globalPostsData = {
     content_en: "After years of feature bloat and complex dashboards, enterprise users are experiencing cognitive overload. We analyze the shift back towards minimalist interfaces that prioritize white space, clear typography, and focused user workflows.",
     content_vi: "Sau nhiều năm nhồi nhét tính năng và bảng điều khiển phức tạp, người dùng doanh nghiệp đang trải qua sự quá tải nhận thức. Chúng tôi phân tích sự chuyển dịch quay lại các giao diện tối giản, ưu tiên khoảng trắng, kiểu chữ rõ ràng và quy trình làm việc tập trung.",
     content_zh: "经过多年的功能膨胀和复杂的仪表板，企业用户正经历着认知超载。我们分析了回归极简主义界面的趋势，这些界面优先考虑留白、清晰的排版和专注的用户工作流。"
+  },
+  17: {
+    views: 3200,
+    author_name: "Hồ Quốc Tuấn",
+    author_avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=80&h=80",
+    author_id: "102",
+    timestamp: "3 days ago",
+    category: "Economics & Markets",
+    supported_langs: "en,vi,zh",
+    image: "https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?auto=format&fit=crop&q=80&w=720&h=360",
+    likes: 840,
+    comments: 120,
+    title_en: "Global Macro Outlook: Interest Rates & Financial Markets in 2026",
+    title_vi: "Triển vọng Vĩ mô Toàn cầu: Lãi suất & Thị trường Tài chính năm 2026",
+    title_zh: "全球宏观展望：2026年利率与金融市场",
+    content_en: "As central banks navigate post-inflation dynamics, monetary policy shifts are creating both challenges and opportunities across global equities and fixed income. We analyze the trajectory of real interest rates, liquidity cycles, and capital reallocation across emerging markets.",
+    content_vi: "Khi các ngân hàng trung ương điều hướng động thái hậu lạm phát, sự thay đổi chính sách tiền tệ đang tạo ra cả thách thức lẫn cơ hội trên thị trường cổ phiếu và trái phiếu toàn cầu. Chúng tôi phân tích quỹ đạo lãi suất thực, chu kỳ thanh khoản và dòng vốn tái phân bổ tại các thị trường mới nổi.",
+    content_zh: "随着央行驾驭通胀后的动态，货币政策的转向在全球股票和固定收益市场中既创造了挑战也带来了机遇。我们分析了实际利率的轨迹、流动性周期以及新兴市场的资金重新配置。"
+  },
+  18: {
+    views: 1450,
+    author_name: "Thái Dương",
+    author_avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=80&h=80",
+    author_id: "109",
+    timestamp: "5 days ago",
+    category: "Life & Philosophy",
+    supported_langs: "en,vi,zh",
+    image: "https://images.unsplash.com/photo-1506784983877-45594efa4cbe?auto=format&fit=crop&q=80&w=720&h=360",
+    likes: 410,
+    comments: 68,
+    title_en: "The Art of Deep Work: Engineering Culture in an Asynchronous World",
+    title_vi: "Nghệ thuật Làm việc Sâu: Văn hóa Kỹ thuật trong Thế giới Bất đồng bộ",
+    title_zh: "深度工作的艺术：异步世界中的工程文化",
+    content_en: "True engineering breakthroughs require uninterrupted stretches of focus. In a remote work environment dominated by instant messaging and constant notifications, preserving cognitive flow and building an asynchronous writing culture is the most valuable organizational superpower.",
+    content_vi: "Những đột phá kỹ thuật thực sự đòi hỏi những khoảng thời gian tập trung liên tục không bị gián đoạn. Trong môi trường làm việc từ xa bị chi phối bởi tin nhắn tức thì và thông báo liên tục, việc bảo vệ luồng nhận thức và xây dựng văn hóa viết bất đồng bộ là siêu năng lực quý giá nhất của tổ chức.",
+    content_zh: "真正的技术突破需要深度且连续的专注时间。在由即时通讯和不断推送通知主导的远程工作环境中，保护认知流和建立异步写作文化是组织最有价值的超能力。"
   }
 };
 
 // Shared destructive confirmation dialog used across the site.
-window.confirmDestructive = function(options = {}) {
+window.confirmDestructive = function (options = {}) {
   return new Promise(resolve => {
     const lang = localStorage.getItem('preferredLanguage') || 'en';
     const defaults = {
@@ -491,7 +527,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const langSelect = e.target.closest('.global-lang-select');
     if (langSelect) {
       e.preventDefault();
-      window.setLingoraLanguage(langSelect.getAttribute('data-lang'));
+      const lang = langSelect.getAttribute('data-lang');
+      localStorage.setItem('preferredLanguage', lang);
+      window.updateGlobalFlags(lang);
+
+      if (window.applyUiTranslations) window.applyUiTranslations(lang);
+      if (window.applyLanguageFilter) window.applyLanguageFilter(lang);
     }
   });
 
@@ -513,7 +554,7 @@ document.addEventListener('DOMContentLoaded', () => {
   function updateThemeIcon(theme) {
     const lang = localStorage.getItem('preferredLanguage') || 'en';
     let dict = null;
-    try { dict = uiTranslations[lang] || uiTranslations.en; } catch (e) {}
+    try { dict = uiTranslations[lang] || uiTranslations.en; } catch (e) { }
     const modeKey = theme === 'dark' ? 'light_mode' : 'dark_mode';
 
     if (themeIcon) {
@@ -527,7 +568,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Update sidebar theme controls
     const sidebarThemeIcon = document.getElementById('sidebarThemeIcon');
     const sidebarThemeText = document.getElementById('sidebarThemeText');
-    
+
     if (sidebarThemeIcon) {
       sidebarThemeIcon.className = theme === 'dark' ? 'bi bi-sun-fill' : 'bi bi-moon-fill';
     }
@@ -535,11 +576,11 @@ document.addEventListener('DOMContentLoaded', () => {
       sidebarThemeText.setAttribute('data-i18n', modeKey);
       if (dict) sidebarThemeText.textContent = dict[modeKey];
     }
-    
+
     // Update mobile theme controls
     const mobileThemeIcon = document.getElementById('mobileThemeIcon');
     const mobileThemeText = document.getElementById('mobileThemeText');
-    
+
     if (mobileThemeIcon) {
       mobileThemeIcon.className = theme === 'dark' ? 'bi bi-sun-fill' : 'bi bi-moon-fill';
     }
@@ -560,7 +601,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  window.updateGlobalFlags = function(lang) {
+  window.updateGlobalFlags = function (lang) {
     const languages = {
       en: { flag: 'gb', name: 'English' },
       vi: { flag: 'vn', name: 'Tiếng Việt' },
@@ -600,7 +641,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Apply the persisted language after all static controls on the page exist.
   window.updateGlobalFlags(window.getLingoraLanguage());
 
-  window.updateGlobalTheme = function(theme) {
+  window.updateGlobalTheme = function (theme) {
     htmlElement.setAttribute('data-bs-theme', theme);
     updateThemeIcon(theme);
     applySavedBrandAccent();
@@ -669,7 +710,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const borderAccent = needsLightCanvasContrast ? '#98A2B3' : needsDarkCanvasContrast ? '#667085' : accent;
     const hover = needsLightCanvasContrast ? '#F2F4F7' : shiftColor(accent, sourceLuminance > 0.58 ? -0.18 : 0.16);
     const contrast = sourceLuminance > 0.58 ? '#141616' : '#ffffff';
-    
+
     htmlElement.dataset.accentContrast = needsLightCanvasContrast ? 'light-on-light' : needsDarkCanvasContrast ? 'dark-on-dark' : 'normal';
     htmlElement.dataset.accentTone = sourceLuminance > 0.92 ? 'light' : sourceLuminance < 0.08 ? 'dark' : 'normal';
     htmlElement.style.setProperty('--brand-accent-color', accent);
@@ -733,7 +774,7 @@ document.addEventListener('DOMContentLoaded', () => {
       on: "On",
       off: "Off",
       home: "Home",
-      inbox: "Inbox",
+
       liked_posts: "Liked Posts",
       my_articles: "My Articles",
       about: "About",
@@ -784,8 +825,7 @@ document.addEventListener('DOMContentLoaded', () => {
       subscribe: "Subscribe",
       profile_see_subscribers: "See subscribers",
       profile_edit_profile: "Edit profile",
-      profile_notice_title: "Notifications",
-      profile_notice_empty: "You do not have any new notifications.",
+
       profile_edit_title: "Edit Profile",
       profile_done: "Done",
       profile_name_label: "Name",
@@ -1023,7 +1063,40 @@ document.addEventListener('DOMContentLoaded', () => {
       new_users_growth: "New Users Growth",
       mon: "Mon", tue: "Tue", wed: "Wed", thu: "Thu", fri: "Fri", sat: "Sat", sun: "Sun",
       post_ai_1: "The Future of AI Agent Programming in 2026",
-      post_ai_2: "Next-Gen LLM Reasoning & Tool Use in 2026"
+      post_ai_2: "Next-Gen LLM Reasoning & Tool Use in 2026",
+      
+
+
+
+
+
+
+
+
+      manage_subscriptions: "Manage Subscriptions",
+      subscriptions_desc: "Manage the creators you follow and their notification preferences.",
+      search_creators_placeholder: "Search creators...",
+      following_tab: "Following",
+      discover_tab: "Discover",
+      you_follow: "You are following",
+      find_more: "Find more",
+      latest_from_following: "Latest from following",
+      top: "Top",
+      posts: "Posts",
+      publications: "Publications",
+      people: "People",
+      showing_results_for: "Showing results for ",
+      no_results: "No matching results found.",
+      sub_empty_title: "You haven't followed any authors yet",
+      sub_empty_desc: "Discover insightful articles and follow authors so you never miss their latest updates!",
+      sub_suggested_authors: "Suggested Authors",
+      sub_tab_all: "All Posts",
+      sub_tab_manage: "Following",
+      sub_all_authors_filter: "All Authors",
+      btn_follow: "Follow",
+      btn_following: "Following",
+      btn_unfollow: "Unfollow",
+
     },
     vi: {
 
@@ -1059,7 +1132,7 @@ document.addEventListener('DOMContentLoaded', () => {
       on: "Bật",
       off: "Tắt",
       home: "Trang chủ",
-      inbox: "Hộp thư",
+
       liked_posts: "Bài đã thích",
       my_articles: "Bài viết của tôi",
       about: "Giới thiệu",
@@ -1102,7 +1175,7 @@ document.addEventListener('DOMContentLoaded', () => {
       slug_backend: "ky-thuat-backend",
       slug_design: "thiet-ke-ui-ux",
       search_placeholder: "Tìm kiếm trên Lingora...",
-      subscriptions: "Đăng ký theo dõi",
+      subscriptions: "Đang theo dõi",
       join_creators: "Kết nối cùng tác giả",
       recommended: "Gợi ý cho bạn",
       see_all: "Xem tất cả",
@@ -1110,8 +1183,7 @@ document.addEventListener('DOMContentLoaded', () => {
       subscribe: "Đăng ký",
       profile_see_subscribers: "Xem người đăng ký",
       profile_edit_profile: "Chỉnh sửa hồ sơ",
-      profile_notice_title: "Thông báo",
-      profile_notice_empty: "Bạn chưa có thông báo mới.",
+
       profile_edit_title: "Chỉnh sửa hồ sơ",
       profile_done: "Xong",
       profile_name_label: "Tên",
@@ -1352,7 +1424,40 @@ document.addEventListener('DOMContentLoaded', () => {
       new_users_growth: "Tăng trưởng Người dùng",
       mon: "T2", tue: "T3", wed: "T4", thu: "T5", fri: "T6", sat: "T7", sun: "CN",
       post_ai_1: "Tương lai của Lập trình Tác tử AI năm 2026",
-      post_ai_2: "Suy luận LLM thế hệ mới & Sử dụng Công cụ năm 2026"
+      post_ai_2: "Suy luận LLM thế hệ mới & Sử dụng Công cụ năm 2026",
+      
+
+
+
+
+
+
+
+
+      manage_subscriptions: "Quản lý theo dõi",
+      subscriptions_desc: "Quản lý các tác giả bạn đang theo dõi và cài đặt thông báo.",
+      search_creators_placeholder: "Tìm kiếm tác giả...",
+      following_tab: "Đang theo dõi",
+      discover_tab: "Khám phá",
+      you_follow: "Bạn đang theo dõi",
+      find_more: "Khám phá thêm",
+      latest_from_following: "Mới nhất từ tác giả đang theo dõi",
+      top: "Nổi bật",
+      posts: "Bài viết",
+      publications: "Chuyên mục",
+      people: "Tác giả",
+      showing_results_for: "Kết quả tìm kiếm cho ",
+      no_results: "Không tìm thấy kết quả phù hợp.",
+      sub_empty_title: "Bạn chưa theo dõi tác giả nào",
+      sub_empty_desc: "Hãy khám phá những bài viết thú vị và theo dõi họ để không bỏ lỡ cập nhật mới nhất nhé!",
+      sub_suggested_authors: "Gợi ý tác giả nổi bật",
+      sub_tab_all: "Tất cả bài mới",
+      sub_tab_manage: "Đang theo dõi",
+      sub_all_authors_filter: "Tất cả tác giả",
+      btn_follow: "Theo dõi",
+      btn_following: "Đang theo dõi",
+      btn_unfollow: "Bỏ theo dõi",
+
     },
     zh: {
 
@@ -1389,7 +1494,7 @@ document.addEventListener('DOMContentLoaded', () => {
       off: "关闭",
       inactive: "关闭",
       home: "首页",
-      inbox: "收件箱",
+
       liked_posts: "喜欢的文章",
       my_articles: "我的文章",
       about: "关于我们",
@@ -1436,8 +1541,7 @@ document.addEventListener('DOMContentLoaded', () => {
       subscribe: "关注",
       profile_see_subscribers: "查看订阅者",
       profile_edit_profile: "编辑个人资料",
-      profile_notice_title: "通知",
-      profile_notice_empty: "你还没有新通知。",
+
       profile_edit_title: "编辑个人资料",
       profile_done: "完成",
       profile_name_label: "姓名",
@@ -1678,7 +1782,33 @@ document.addEventListener('DOMContentLoaded', () => {
       new_users_growth: "新用户增长",
       mon: "周一", tue: "周二", wed: "周三", thu: "周四", fri: "周五", sat: "周六", sun: "周日",
       post_ai_1: "2026 年 AI 代理编程的未来",
-      post_ai_2: "2026 年下一代 LLM 推理与工具使用"
+      post_ai_2: "2026 年下一代 LLM 推理与工具使用",
+      
+
+      manage_subscriptions: "管理订阅",
+      subscriptions_desc: "管理您关注的创作者及其通知设置。",
+      search_creators_placeholder: "搜索创作者...",
+      following_tab: "关注中",
+      discover_tab: "发现",
+      you_follow: "您关注了",
+      find_more: "发现更多",
+      latest_from_following: "关注作者的最新发布",
+      top: "热门",
+      posts: "文章",
+      publications: "专栏",
+      people: "作者",
+      showing_results_for: "搜索结果：",
+      no_results: "未找到匹配项。",
+      sub_empty_title: "您还未关注任何作者",
+      sub_empty_desc: "探索精彩好文并关注作者，不错过最新动态！",
+      sub_suggested_authors: "推荐关注作者",
+      sub_tab_all: "全部文章",
+      sub_tab_manage: "正在关注",
+      sub_all_authors_filter: "全部作者",
+      btn_follow: "关注",
+      btn_following: "已关注",
+      btn_unfollow: "取消关注",
+
     }
   };
   window.uiTranslations = uiTranslations;
@@ -1985,12 +2115,33 @@ document.addEventListener('DOMContentLoaded', () => {
       searchInput.setAttribute('placeholder', dict.search_placeholder);
     }
 
-    if (typeof syncFeedCommentCounts === 'function') {
+    // NOTE: Page-specific re-renders (renderSubscriptionsPage, renderComments,
+    // renderTrendingWidgets, renderExploreResults) are intentionally NOT called here.
+    // They were causing cascading double-renders on every interaction.
+    // Instead, they are triggered only from language-switch event handlers that
+    // need a full page re-render after translations are applied.
+
+    // Sync comment counts only when feed posts exist on the page
+    if (typeof syncFeedCommentCounts === 'function' && document.querySelector('.substack-post')) {
       syncFeedCommentCounts();
     }
-    if (typeof window.renderTrendingWidgets === 'function') {
-      window.renderTrendingWidgets();
-    }
+
+    // Automatically update all subscribe / following buttons based on their .subscribed class state
+    document.querySelectorAll('.btn-subscribe').forEach(btn => {
+      const isSubbed = btn.classList.contains('subscribed');
+      if (isSubbed) {
+        const followingText = dict.btn_following || dict.following || 'Following';
+        btn.innerHTML = `<span class="btn-subscribe-label">${followingText}</span>`;
+        btn.setAttribute('data-unfollow-label', dict.btn_unfollow || 'Unfollow');
+      } else {
+        const isAuthorCard = btn.classList.contains('px-5') || btn.getAttribute('data-btn-type') === 'author';
+        const followText = isAuthorCard
+          ? (dict.subscribe_author || dict.btn_follow || 'Follow')
+          : (dict.btn_follow || dict.subscribe || 'Follow');
+        btn.innerHTML = `<span class="btn-subscribe-label">${followText}</span>`;
+        btn.removeAttribute('data-unfollow-label');
+      }
+    });
   }
 
   window.currentSelectedCategory = 'all';
@@ -2034,6 +2185,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     console.log(`Applying Feed Language Filter: ${lang.toUpperCase()}`);
     const selectedCategory = window.currentSelectedCategory || 'all';
+    const isPostDetailPage = window.location.pathname.toLowerCase().includes('post-detail.html') || document.getElementById('postDetailContainer') !== null;
 
     posts.forEach(post => {
       const supportedLangs = post.getAttribute('data-supported-langs') || '';
@@ -2049,7 +2201,18 @@ document.addEventListener('DOMContentLoaded', () => {
       const categoryIsActive = isPostDetail || window.isCategoryTranslationActive(postCategory, lang);
       const matchesCategory = categoryIsActive && ((selectedCategory === 'all') || (postCategory === selectedCategory));
 
-      if (hasTranslation && matchesCategory) {
+      if (isPostDetailPage) {
+        // Trên trang chi tiết bài viết, KHÔNG BAO GIỜ ẩn bài viết chính theo bộ lọc danh mục
+        post.classList.remove('d-none');
+        if (titleEl) {
+          const transTitle = titleEl.getAttribute(`data-translate-title-${lang}`) || post.getAttribute(`data-translate-title-${lang}`);
+          if (transTitle) titleEl.textContent = transTitle;
+        }
+        if (contentEl) {
+          const transContent = contentEl.getAttribute(`data-translate-content-${lang}`) || post.getAttribute(`data-translate-content-${lang}`);
+          if (transContent) contentEl.textContent = transContent;
+        }
+      } else if (hasTranslation && matchesCategory) {
         // 1. Nếu bài viết hỗ trợ ngôn ngữ được chọn và khớp danh mục -> Hiển thị
         post.classList.remove('d-none');
 
@@ -2064,6 +2227,20 @@ document.addEventListener('DOMContentLoaded', () => {
       } else {
         // 2. Nếu KHÔNG hỗ trợ hoặc không khớp danh mục -> Ẩn bài viết đi
         post.classList.add('d-none');
+      }
+    });
+
+    // Translate Related Posts on post-detail.html if any
+    document.querySelectorAll('.related-post-card').forEach(card => {
+      const titleEl = card.querySelector('h5');
+      if (titleEl) {
+        const transTitle = titleEl.getAttribute(`data-translate-title-${lang}`) || card.getAttribute(`data-translate-title-${lang}`);
+        if (transTitle) titleEl.textContent = transTitle;
+      }
+      const catEl = card.querySelector('.category-label');
+      if (catEl && typeof window.translateCategory === 'function') {
+        const origCat = catEl.getAttribute('data-original-cat') || catEl.textContent;
+        catEl.textContent = window.translateCategory(origCat);
       }
     });
   }
@@ -2292,6 +2469,21 @@ document.addEventListener('DOMContentLoaded', () => {
     return db[postId];
   }
 
+  function ensureCommentsLikesInitialized(comments) {
+    let modified = false;
+    comments.forEach(root => {
+      if (typeof root.likes === 'undefined') { root.likes = Math.floor(Math.random() * 15) + 2; modified = true; }
+      if (typeof root.isLiked === 'undefined') { root.isLiked = false; modified = true; }
+      if (root.replies) {
+        root.replies.forEach(rep => {
+          if (typeof rep.likes === 'undefined') { rep.likes = Math.floor(Math.random() * 8) + 1; modified = true; }
+          if (typeof rep.isLiked === 'undefined') { rep.isLiked = false; modified = true; }
+        });
+      }
+    });
+    return modified;
+  }
+
   function saveCommentsForPost(postId, comments) {
     let db = JSON.parse(localStorage.getItem('mundi_comments_db')) || defaultCommentsDatabase;
     db[postId] = comments;
@@ -2308,14 +2500,25 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function syncFeedCommentCounts() {
-    document.querySelectorAll('.substack-post').forEach(post => {
+    const posts = document.querySelectorAll('.substack-post');
+    if (!posts.length) return;
+
+    // Parse localStorage ONCE for all posts instead of per-post
+    let db;
+    try {
+      db = JSON.parse(localStorage.getItem('mundi_comments_db'));
+    } catch(e) { db = null; }
+    if (!db || db._version !== 3) return; // Skip if DB not initialized
+
+    posts.forEach(post => {
       const linkEl = post.querySelector('a[href*="post-detail.html?id="]');
       if (!linkEl) return;
       const href = linkEl.getAttribute('href');
       const match = href.match(/id=(\d+)/);
       if (match && match[1]) {
         const postId = match[1];
-        const comments = getCommentsForPost(postId);
+        const comments = db[postId];
+        if (!comments || !Array.isArray(comments)) return;
         let totalCount = 0;
         comments.forEach(c => {
           totalCount += 1 + (c.replies ? c.replies.length : 0);
@@ -2326,6 +2529,470 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       }
     });
+  }
+
+  // ==========================================
+  // MULTILINGUAL COMMENTS ENGINE (CENTRALLY MANAGED)
+  // ==========================================
+  function checkAuthOrSimulate() {
+    let currentUserStr = localStorage.getItem('currentUser');
+    if (!currentUserStr) {
+      const proceed = confirm('Bạn cần đăng nhập để bình luận hoặc trả lời! Bạn có muốn đăng nhập nhanh (Simulate Login) với tên "Hồ Quốc Tuấn" không?');
+      if (proceed) {
+        localStorage.setItem('currentUser', 'Hồ Quốc Tuấn');
+        return { name: 'Hồ Quốc Tuấn', avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=40&h=40" };
+      }
+      return null;
+    }
+    if (currentUserStr.startsWith('{')) {
+      try {
+        const userObj = JSON.parse(currentUserStr);
+        return { name: userObj.name, avatar: userObj.avatar || "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=40&h=40" };
+      } catch (e) {
+        return { name: currentUserStr, avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=40&h=40" };
+      }
+    }
+    return { name: currentUserStr, avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=40&h=40" };
+  }
+
+  function parseUserName(userStr) {
+    if (!userStr) return '';
+    if (typeof userStr === 'string' && userStr.startsWith('{')) {
+      try { return JSON.parse(userStr).name || userStr; } catch (e) { }
+    }
+    return userStr;
+  }
+
+  function isSelfAuthor(authorName) {
+    if (!authorName) return false;
+    const cleanAuthor = parseUserName(authorName).trim().toLowerCase();
+    const currentUserStr = localStorage.getItem('currentUser');
+    const cleanCurrent = parseUserName(currentUserStr || 'Hồ Quốc Tuấn').trim().toLowerCase();
+    return cleanAuthor === cleanCurrent;
+  }
+
+  function getAuthorTooltipHtml(authorName, avatar) {
+    const isSelf = isSelfAuthor(authorName);
+    const safeHandle = (authorName || 'user').replace(/\s+/g, '').toLowerCase();
+    const currentLang = localStorage.getItem('preferredLanguage') || 'en';
+    const dict = (window.uiTranslations && window.uiTranslations[currentLang]) || {};
+    const followLabel = dict.btn_follow || dict.subscribe || 'Follow';
+    const followBtnHtml = isSelf ? '' : `<button class="btn btn-primary btn-sm rounded-pill fw-bold px-3 py-1 shadow-sm btn-subscribe" onclick="if(typeof window.toggleSubscribe === 'function') window.toggleSubscribe(this, event); else alert('Subscribed');">${followLabel}</button>`;
+    
+    return `
+      <div class="author-hover-card shadow-lg border rounded-4 position-absolute overflow-hidden text-start" style="padding: 0; min-width: 280px; max-width: 320px; z-index: 1060; cursor: default;" onclick="event.stopPropagation()">
+        <div style="height: 56px; background: linear-gradient(135deg, rgba(var(--bs-primary-rgb), 0.8), rgba(var(--bs-primary-rgb), 0.4));"></div>
+        <div class="p-3 pt-0 position-relative">
+          <div class="d-flex justify-content-between align-items-end mb-2" style="margin-top: -24px;">
+            <img src="${avatar || 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=80&h=80'}" class="rounded-circle" width="52" height="52" style="object-fit: cover; border: 3px solid var(--bg-panel); background: var(--bg-panel);" alt="Avatar">
+            ${followBtnHtml}
+          </div>
+          <div class="mb-2">
+            <h6 class="mb-0 fw-bold fs-6 text-main">${authorName}</h6>
+            <small class="text-muted">@${safeHandle}</small>
+          </div>
+          <p class="small mb-3 text-muted" style="line-height: 1.4;">Member of Lingora community, sharing insights and engaging in discussions.</p>
+          <div class="d-flex gap-3 small">
+            <div><span class="fw-bold text-main">840</span> <span class="text-muted">Followers</span></div>
+            <div><span class="fw-bold text-main">15</span> <span class="text-muted">Comments</span></div>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  window.isSelfAuthor = isSelfAuthor;
+  window.getAuthorTooltipHtml = getAuthorTooltipHtml;
+
+  function renderComments(postId) {
+    const comments = window.getCommentsForPost ? window.getCommentsForPost(postId) : [];
+    const container = document.getElementById('commentsListContainer');
+    if (!container) return;
+
+    // Calculate total count (roots + replies)
+    let totalCount = 0;
+    comments.forEach(c => {
+      totalCount += 1 + (c.replies ? c.replies.length : 0);
+    });
+    const countTextEl = document.getElementById('commentCountText');
+    if (countTextEl) countTextEl.textContent = totalCount;
+    const footerCountEl = document.getElementById('footerCommentCount');
+    if (footerCountEl) footerCountEl.textContent = totalCount;
+    if (window.globalPostsData && window.globalPostsData[postId]) {
+      window.globalPostsData[postId].comments = totalCount;
+    }
+
+    if (comments.length === 0) {
+      const currentLang = localStorage.getItem('preferredLanguage') || 'en';
+      const dict = (uiTranslations && uiTranslations[currentLang]) || (uiTranslations && uiTranslations.en) || {};
+      container.innerHTML = `<p class="text-muted">${dict.no_comments || "No comments yet. Be the first to comment!"}</p>`;
+      return;
+    }
+
+    const currentLang = localStorage.getItem('preferredLanguage') || 'en';
+    const dict = (uiTranslations && uiTranslations[currentLang]) || (uiTranslations && uiTranslations.en) || {};
+    const translateLabel = dict.translate_comment || "Dịch";
+    const currentUserStr = localStorage.getItem('currentUser');
+    const currentUser = parseUserName(currentUserStr) || 'Hồ Quốc Tuấn';
+    const post = (window.globalPostsData && window.globalPostsData[postId]) || (window.globalPostsData && window.globalPostsData["1"]) || {};
+    const isPostAuthor = (post.author_name === currentUser);
+
+    let html = "";
+    comments.forEach(root => {
+      let repliesHtml = "";
+      if (root.replies && root.replies.length > 0) {
+        repliesHtml += `<div class="comment-reply-list mt-3 ps-3 border-start border-2">`;
+        root.replies.forEach(rep => {
+          const repReplyToName = parseUserName(rep.replyTo);
+          const repAuthorName = parseUserName(rep.author);
+          const rootAuthorName = parseUserName(root.author);
+          const tagHtml = (repReplyToName && repReplyToName !== rootAuthorName) ? `<span class="text-primary fw-semibold">@${repReplyToName}</span> ` : '';
+
+          let repTranslateBtnHtml = "";
+          if (rep.lang && rep.lang !== currentLang) {
+            const translatedText = getCommentTranslation(rep, currentLang);
+            repTranslateBtnHtml = `
+              <button class="btn-reply btn-translate-toggle" 
+                      data-original="${encodeURIComponent(rep.content)}" 
+                      data-translated="${encodeURIComponent(translatedText)}" 
+                      data-tag="${encodeURIComponent(tagHtml)}"
+                      title="${translateLabel}" 
+                      onclick="if(window.toggleCommentTranslation) window.toggleCommentTranslation(this); else toggleCommentTranslation(this);">
+                <i class="bi bi-translate"></i>
+              </button>
+            `;
+          }
+
+          let repOwnerActionsHtml = "";
+          if (repAuthorName === currentUser || (typeof window.isSelfAuthor === 'function' && window.isSelfAuthor(repAuthorName))) {
+            repOwnerActionsHtml = `
+              <button class="btn-reply text-secondary ms-2" onclick="window.editComment(${root.id}, ${rep.id}, true)" title="${dict.edit || 'Sửa'}"><i class="bi bi-pencil-square"></i></button>
+              <button class="btn-reply text-danger ms-1" onclick="window.deleteComment(${root.id}, ${rep.id}, true)" title="${dict.delete || 'Xóa'}"><i class="bi bi-trash"></i></button>
+            `;
+          } else if (isPostAuthor) {
+            repOwnerActionsHtml = `
+              <button class="btn-reply text-danger ms-1" onclick="window.deleteComment(${root.id}, ${rep.id}, true)" title="${dict.delete || 'Xóa'}"><i class="bi bi-trash"></i></button>
+            `;
+          }
+
+          const safeRepAuthorId = (repAuthorName || 'user').replace(/\s+/g, '');
+          const repTooltipHtml = getAuthorTooltipHtml(repAuthorName, rep.avatar);
+          repliesHtml += `
+            <div class="comment-reply-card py-2 border-bottom border-light-subtle" id="comment-${rep.id}">
+              <div class="d-flex align-items-center gap-2 mb-1">
+                <div class="author-tooltip-container position-relative d-inline-flex align-items-center gap-2" style="cursor: pointer;">
+                  <img src="${rep.avatar}" class="rounded-circle" width="28" height="28" alt="User">
+                  <span class="fw-bold fs-6 text-main">${repAuthorName}</span>
+                  ${repTooltipHtml}
+                </div>
+                <span class="text-muted small ms-auto">${typeof window.formatTimestampI18n === 'function' ? window.formatTimestampI18n(rep.time) : rep.time}</span>
+              </div>
+              <p class="mb-1 text-secondary comment-content-text" style="font-size: 0.95rem;">${tagHtml}${rep.content}</p>
+              <div class="d-flex align-items-center gap-1 mt-2">
+                <button class="btn-reply d-flex align-items-center gap-1 ${rep.isLiked ? 'liked text-danger' : ''}" onclick="if(window.toggleCommentLike) window.toggleCommentLike(this, ${root.id}, ${rep.id}, true, event);"><i class="bi ${rep.isLiked ? 'bi-heart-fill text-danger' : 'bi-heart'}"></i> <span class="like-count">${rep.likes || 0}</span></button>
+                <button class="btn-reply" onclick="window.openReplyBox(${root.id}, '${repAuthorName.replace(/'/g, "\\'")}', true)"><i class="bi bi-chat"></i></button>
+                ${repTranslateBtnHtml}
+                ${repOwnerActionsHtml}
+              </div>
+              <div id="reply-box-child-${root.id}-${safeRepAuthorId}"></div>
+              <div id="edit-box-child-${root.id}-${rep.id}"></div>
+            </div>
+          `;
+        });
+        repliesHtml += `</div>`;
+      }
+
+      const rootAuthorName = parseUserName(root.author);
+      let rootTranslateBtnHtml = "";
+      if (root.lang && root.lang !== currentLang) {
+        const translatedText = getCommentTranslation(root, currentLang);
+        rootTranslateBtnHtml = `
+          <button class="btn-reply btn-translate-toggle" 
+                  data-original="${encodeURIComponent(root.content)}" 
+                  data-translated="${encodeURIComponent(translatedText)}" 
+                  data-tag=""
+                  title="${translateLabel}" 
+                  onclick="if(window.toggleCommentTranslation) window.toggleCommentTranslation(this); else toggleCommentTranslation(this);">
+            <i class="bi bi-translate"></i>
+          </button>
+        `;
+      }
+
+      let rootOwnerActionsHtml = "";
+      if (rootAuthorName === currentUser || (typeof window.isSelfAuthor === 'function' && window.isSelfAuthor(rootAuthorName))) {
+        rootOwnerActionsHtml = `
+          <button class="btn-reply text-secondary ms-2" onclick="window.editComment(${root.id}, null, false)" title="${dict.edit || 'Sửa'}"><i class="bi bi-pencil-square"></i></button>
+          <button class="btn-reply text-danger ms-1" onclick="window.deleteComment(${root.id}, null, false)" title="${dict.delete || 'Xóa'}"><i class="bi bi-trash"></i></button>
+        `;
+      } else if (isPostAuthor) {
+        rootOwnerActionsHtml = `
+          <button class="btn-reply text-danger ms-1" onclick="window.deleteComment(${root.id}, null, false)" title="${dict.delete || 'Xóa'}"><i class="bi bi-trash"></i></button>
+        `;
+      }
+
+      const rootTooltipHtml = getAuthorTooltipHtml(rootAuthorName, root.avatar);
+      html += `
+        <div class="comment-card py-3 border-bottom border-light-subtle" id="comment-${root.id}">
+          <div class="d-flex align-items-center gap-2 mb-2">
+            <div class="author-tooltip-container position-relative d-inline-flex align-items-center gap-2" style="cursor: pointer;">
+              <img src="${root.avatar}" class="rounded-circle" width="36" height="36" alt="User">
+              <span class="fw-bold fs-6 text-main">${rootAuthorName}</span>
+              ${rootTooltipHtml}
+            </div>
+            <span class="text-muted small ms-auto">${typeof window.formatTimestampI18n === 'function' ? window.formatTimestampI18n(root.time) : root.time}</span>
+          </div>
+          <p class="mb-1 text-secondary comment-content-text">${root.content}</p>
+          <div class="d-flex align-items-center gap-1 mt-2">
+            <button class="btn-reply d-flex align-items-center gap-1 ${root.isLiked ? 'liked text-danger' : ''}" onclick="if(window.toggleCommentLike) window.toggleCommentLike(this, ${root.id}, null, false, event);"><i class="bi ${root.isLiked ? 'bi-heart-fill text-danger' : 'bi-heart'}"></i> <span class="like-count">${root.likes || 0}</span></button>
+            <button class="btn-reply" onclick="window.openReplyBox(${root.id}, '${rootAuthorName.replace(/'/g, "\\'")}', false)"><i class="bi bi-chat"></i></button>
+            ${rootTranslateBtnHtml}
+            ${rootOwnerActionsHtml}
+          </div>
+          <div id="reply-box-root-${root.id}"></div>
+          <div id="edit-box-root-${root.id}"></div>
+          ${repliesHtml}
+        </div>
+      `;
+    });
+
+    container.innerHTML = html;
+  }
+
+  function openReplyBox(rootId, targetAuthor, isChildReply) {
+    const user = checkAuthOrSimulate();
+    if (!user) return;
+
+    document.querySelectorAll('[id^="reply-box-"], [id^="edit-box-"]').forEach(el => el.innerHTML = '');
+
+    const safeAuthorId = (targetAuthor || 'user').replace(/\s+/g, '');
+    const boxId = isChildReply ? `reply-box-child-${rootId}-${safeAuthorId}` : `reply-box-root-${rootId}`;
+    const boxEl = document.getElementById(boxId);
+    if (!boxEl) return;
+
+    const lang = localStorage.getItem('preferredLanguage') || 'en';
+    const dict = (uiTranslations && uiTranslations[lang]) || (uiTranslations && uiTranslations.en) || {};
+    const replyPrefix = isChildReply ? (dict.replying_to || "Replying to @") : (dict.replying_to_comment || "Replying to comment by ");
+    const placeholderText = replyPrefix + targetAuthor + "...";
+
+    boxEl.innerHTML = `
+      <div class="mt-2 pt-2 border-top">
+        <textarea id="input-reply-${rootId}" class="form-control form-control-sm mb-2" rows="2" placeholder="${placeholderText}"></textarea>
+        <div class="d-flex justify-content-end gap-2">
+          <button class="btn btn-sm btn-outline-secondary rounded-pill px-3" onclick="this.parentElement.parentElement.innerHTML=''" data-i18n="cancel">${dict.cancel || "Cancel"}</button>
+          <button class="btn btn-sm btn-primary rounded-pill px-3 fw-medium" onclick="window.submitReply(${rootId}, ${isChildReply}, '${targetAuthor.replace(/'/g, "\\'")}')" data-i18n="reply">${dict.reply || "Reply"}</button>
+        </div>
+      </div>
+    `;
+    setTimeout(() => {
+      const inputEl = document.getElementById(`input-reply-${rootId}`);
+      if (inputEl) inputEl.focus();
+    }, 50);
+  }
+
+  function submitReply(rootId, isChildReply, replyToAuthor) {
+    const inputEl = document.getElementById(`input-reply-${rootId}`);
+    if (!inputEl || !inputEl.value.trim()) {
+      alert('Vui lòng nhập nội dung phản hồi!');
+      return;
+    }
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const postId = urlParams.get('id') || "1";
+    const comments = window.getCommentsForPost(postId);
+    const user = checkAuthOrSimulate();
+    if (!user) return;
+
+    const currentLang = localStorage.getItem('preferredLanguage') || 'vi';
+    const newReply = {
+      id: Date.now(),
+      author: user.name,
+      avatar: user.avatar,
+      time: "Just now",
+      content: inputEl.value.trim(),
+      lang: currentLang,
+      replyTo: isChildReply ? replyToAuthor : "",
+      translations: {},
+      likes: 0,
+      isLiked: false
+    };
+
+    const targetRoot = comments.find(c => String(c.id) === String(rootId));
+    if (targetRoot) {
+      if (!targetRoot.replies) targetRoot.replies = [];
+      targetRoot.replies.push(newReply);
+      saveCommentsForPost(postId, comments);
+      renderComments(postId);
+    }
+  }
+
+  function postNewComment() {
+    const inputEl = document.getElementById('newCommentInput');
+    if (!inputEl || !inputEl.value.trim()) {
+      alert('Vui lòng nhập nội dung bình luận!');
+      return;
+    }
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const postId = urlParams.get('id') || "1";
+    const comments = window.getCommentsForPost(postId);
+    const user = checkAuthOrSimulate();
+    if (!user) return;
+
+    const currentLang = localStorage.getItem('preferredLanguage') || 'vi';
+    const newComment = {
+      id: Date.now(),
+      author: user.name,
+      avatar: user.avatar,
+      time: "Just now",
+      content: inputEl.value.trim(),
+      lang: currentLang,
+      translations: {},
+      likes: 0,
+      isLiked: false,
+      replies: []
+    };
+
+    comments.unshift(newComment);
+    saveCommentsForPost(postId, comments);
+    inputEl.value = '';
+    renderComments(postId);
+  }
+
+  async function deleteComment(rootId, repId, isChild) {
+    const urlParams = new URLSearchParams(window.location.search);
+    const postId = urlParams.get('id') || "1";
+    let comments = window.getCommentsForPost(postId);
+    const currentUserStr = localStorage.getItem('currentUser');
+    const currentUser = parseUserName(currentUserStr) || 'Hồ Quốc Tuấn';
+    const post = (window.globalPostsData && window.globalPostsData[postId]) || (window.globalPostsData && window.globalPostsData["1"]) || {};
+    const isPostAuthor = (post.author_name === currentUser);
+
+    const lang = localStorage.getItem('preferredLanguage') || 'en';
+    const dict = (uiTranslations && uiTranslations[lang]) || (uiTranslations && uiTranslations.en) || {};
+
+    if (isChild) {
+      const root = comments.find(c => String(c.id) === String(rootId));
+      if (!root || !root.replies) return;
+      const targetRep = root.replies.find(r => String(r.id) === String(repId));
+      if (!targetRep) return;
+
+      if (parseUserName(targetRep.author) !== currentUser && !isPostAuthor) {
+        alert("Bạn không có quyền xóa bình luận này! Chỉ tác giả bình luận hoặc chủ bài viết mới có quyền xóa.");
+        return;
+      }
+
+      const confirmMsg = dict.delete_confirm_reply || "Bạn có chắc muốn xóa câu trả lời này?";
+      if (typeof window.confirmDestructive === 'function') {
+        if (!await window.confirmDestructive({ message: confirmMsg })) return;
+      } else if (!confirm(confirmMsg)) return;
+
+      root.replies = root.replies.filter(r => String(r.id) !== String(repId));
+      saveCommentsForPost(postId, comments);
+      renderComments(postId);
+    } else {
+      const targetRoot = comments.find(c => String(c.id) === String(rootId));
+      if (!targetRoot) return;
+
+      if (parseUserName(targetRoot.author) !== currentUser && !isPostAuthor) {
+        alert("Bạn không có quyền xóa bình luận này! Chỉ tác giả bình luận hoặc chủ bài viết mới có quyền xóa.");
+        return;
+      }
+
+      const confirmMsg = dict.delete_confirm_root || "Bạn có chắc muốn xóa bình luận này? Toàn bộ các bình luận phản hồi bên trong cũng sẽ bị xóa theo!";
+      if (typeof window.confirmDestructive === 'function') {
+        if (!await window.confirmDestructive({ message: confirmMsg })) return;
+      } else if (!confirm(confirmMsg)) return;
+
+      comments = comments.filter(c => String(c.id) !== String(rootId));
+      saveCommentsForPost(postId, comments);
+      renderComments(postId);
+    }
+  }
+
+  function editComment(rootId, repId, isChild) {
+    document.querySelectorAll('[id^="reply-box-"], [id^="edit-box-"]').forEach(el => el.innerHTML = '');
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const postId = urlParams.get('id') || "1";
+    const comments = window.getCommentsForPost(postId);
+    const currentUserStr = localStorage.getItem('currentUser');
+    const currentUser = parseUserName(currentUserStr) || 'Hồ Quốc Tuấn';
+
+    let targetComment = null;
+    if (isChild) {
+      const root = comments.find(c => String(c.id) === String(rootId));
+      if (root && root.replies) targetComment = root.replies.find(r => String(r.id) === String(repId));
+    } else {
+      targetComment = comments.find(c => String(c.id) === String(rootId));
+    }
+    if (!targetComment) return;
+
+    if (parseUserName(targetComment.author) !== currentUser) {
+      alert("Bạn chỉ có quyền chỉnh sửa bình luận do chính bạn viết!");
+      return;
+    }
+
+    const boxId = isChild ? `edit-box-child-${rootId}-${repId}` : `edit-box-root-${rootId}`;
+    const boxEl = document.getElementById(boxId);
+    if (!boxEl) return;
+
+    const lang = localStorage.getItem('preferredLanguage') || 'en';
+    const dict = (uiTranslations && uiTranslations[lang]) || (uiTranslations && uiTranslations.en) || {};
+
+    boxEl.innerHTML = `
+      <div class="mt-2 pt-2 border-top">
+        <textarea id="input-edit-${isChild ? repId : rootId}" class="form-control form-control-sm mb-2" rows="3">${targetComment.content}</textarea>
+        <div class="d-flex justify-content-end gap-2">
+          <button class="btn btn-sm btn-outline-secondary rounded-pill px-3" onclick="this.parentElement.parentElement.innerHTML=''" data-i18n="cancel">${dict.cancel || "Cancel"}</button>
+          <button class="btn btn-sm btn-success rounded-pill px-3 fw-medium" onclick="window.submitEdit(${rootId}, ${isChild ? repId : 'null'}, ${isChild})" data-i18n="save">${dict.save || "Save"}</button>
+        </div>
+      </div>
+    `;
+    setTimeout(() => {
+      const inputEl = document.getElementById(`input-edit-${isChild ? repId : rootId}`);
+      if (inputEl) {
+        inputEl.focus();
+        inputEl.selectionStart = inputEl.selectionEnd = inputEl.value.length;
+      }
+    }, 50);
+  }
+
+  function submitEdit(rootId, repId, isChild) {
+    const inputId = `input-edit-${isChild ? repId : rootId}`;
+    const inputEl = document.getElementById(inputId);
+    if (!inputEl || !inputEl.value.trim()) {
+      alert('Vui lòng nhập nội dung bình luận!');
+      return;
+    }
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const postId = urlParams.get('id') || "1";
+    const comments = window.getCommentsForPost(postId);
+    const currentUserStr = localStorage.getItem('currentUser');
+    const currentUser = parseUserName(currentUserStr) || 'Hồ Quốc Tuấn';
+
+    let targetComment = null;
+    if (isChild) {
+      const root = comments.find(c => String(c.id) === String(rootId));
+      if (root && root.replies) targetComment = root.replies.find(r => String(r.id) === String(repId));
+    } else {
+      targetComment = comments.find(c => String(c.id) === String(rootId));
+    }
+
+    if (targetComment) {
+      if (parseUserName(targetComment.author) !== currentUser) {
+        alert("Bạn chỉ có quyền chỉnh sửa bình luận do chính bạn viết!");
+        return;
+      }
+      targetComment.content = inputEl.value.trim();
+      if (targetComment.translations) {
+        const currentLang = localStorage.getItem('preferredLanguage') || 'vi';
+        targetComment.lang = currentLang;
+        targetComment.translations = {};
+      }
+      saveCommentsForPost(postId, comments);
+      renderComments(postId);
+    }
   }
 
   function resetDemoComments() {
@@ -2340,15 +3007,131 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // Expose functions globally
+  window.checkAuthOrSimulate = checkAuthOrSimulate;
+  window.parseUserName = parseUserName;
+  window.renderComments = renderComments;
+  window.openReplyBox = openReplyBox;
+  window.submitReply = submitReply;
+  window.postNewComment = postNewComment;
+  window.deleteComment = deleteComment;
+  window.editComment = editComment;
+  window.submitEdit = submitEdit;
   window.resetDemoComments = resetDemoComments;
   window.uiTranslations = uiTranslations;
   window.applyUiTranslations = applyUiTranslations;
   window.applyLanguageFilter = applyLanguageFilter;
   window.selectCategory = selectCategory;
-  window.getCommentsForPost = getCommentsForPost;
+  window.getCommentsForPost = function(postId) {
+    const comments = getCommentsForPost(postId);
+    if (ensureCommentsLikesInitialized(comments)) {
+      saveCommentsForPost(postId, comments);
+    }
+    return comments;
+  };
   window.saveCommentsForPost = saveCommentsForPost;
   window.getCommentTranslation = getCommentTranslation;
   window.syncFeedCommentCounts = syncFeedCommentCounts;
+
+  // Global Toggle Like (Posts)
+  function toggleLike(btn, postIdOrBaseCount, event) {
+    if (event && typeof event.stopPropagation === 'function') {
+      event.stopPropagation();
+    }
+    const icon = btn.querySelector('i');
+    const text = btn.querySelector('.like-count');
+    const isLiked = !btn.classList.contains('liked');
+    let currentCount = parseInt(text ? text.textContent : postIdOrBaseCount) || 0;
+
+    if (isLiked) {
+      btn.classList.add('liked', 'text-danger');
+      if (icon) icon.className = 'bi bi-heart-fill text-danger';
+      if (text) text.textContent = currentCount + 1;
+      if (postIdOrBaseCount && window.globalPostsData && window.globalPostsData[postIdOrBaseCount]) {
+        window.globalPostsData[postIdOrBaseCount].likes = currentCount + 1;
+      }
+    } else {
+      btn.classList.remove('liked', 'text-danger');
+      if (icon) icon.className = 'bi bi-heart';
+      if (text) text.textContent = Math.max(0, currentCount - 1);
+      if (postIdOrBaseCount && window.globalPostsData && window.globalPostsData[postIdOrBaseCount]) {
+        window.globalPostsData[postIdOrBaseCount].likes = Math.max(0, currentCount - 1);
+      }
+    }
+  }
+
+  // Global Toggle Comment Like (Comments & Replies)
+  function toggleCommentLike(btn, rootId, repId, isChild, event) {
+    if (event && typeof event.stopPropagation === 'function') {
+      event.stopPropagation();
+    }
+    const icon = btn.querySelector('i');
+    const text = btn.querySelector('.like-count');
+    const isLiked = !btn.classList.contains('liked') && !btn.classList.contains('text-danger');
+    let currentCount = parseInt(text ? text.textContent : 0) || 0;
+
+    if (isLiked) {
+      btn.classList.add('liked', 'text-danger');
+      if (icon) icon.className = 'bi bi-heart-fill text-danger';
+      if (text) text.textContent = currentCount + 1;
+    } else {
+      btn.classList.remove('liked', 'text-danger');
+      if (icon) icon.className = 'bi bi-heart';
+      if (text) text.textContent = Math.max(0, currentCount - 1);
+    }
+
+    if (rootId && typeof window.getCommentsForPost === 'function') {
+      const urlParams = new URLSearchParams(window.location.search);
+      const postId = urlParams.get('id') || "1";
+      const comments = window.getCommentsForPost(postId);
+      const targetRoot = comments.find(c => String(c.id) === String(rootId));
+      if (targetRoot) {
+        if (isChild && targetRoot.replies) {
+          const targetRep = targetRoot.replies.find(r => String(r.id) === String(repId));
+          if (targetRep) {
+            targetRep.likes = isLiked ? (currentCount + 1) : Math.max(0, currentCount - 1);
+            targetRep.isLiked = isLiked;
+          }
+        } else if (!isChild) {
+          targetRoot.likes = isLiked ? (currentCount + 1) : Math.max(0, currentCount - 1);
+          targetRoot.isLiked = isLiked;
+        }
+        if (typeof window.saveCommentsForPost === 'function') {
+          window.saveCommentsForPost(postId, comments);
+        }
+      }
+    }
+  }
+
+  // Global Toggle Comment Translation
+  function toggleCommentTranslation(btn) {
+    if (!btn) return;
+    const card = btn.closest('.comment-reply-card, .comment-card');
+    if (!card) return;
+    const contentEl = card.querySelector('.comment-content-text');
+    if (!contentEl) return;
+
+    const orig = decodeURIComponent(btn.getAttribute('data-original') || '');
+    const trans = decodeURIComponent(btn.getAttribute('data-translated') || '');
+    const tagHtml = decodeURIComponent(btn.getAttribute('data-tag') || '');
+    const isShowingTranslated = btn.classList.toggle('active-translated');
+
+    const currentLang = localStorage.getItem('preferredLanguage') || 'en';
+    const dict = uiTranslations[currentLang] || uiTranslations.en;
+
+    if (isShowingTranslated) {
+      contentEl.innerHTML = tagHtml + trans;
+      btn.classList.add('text-primary');
+      btn.setAttribute('title', dict.show_original || "Show original content");
+    } else {
+      contentEl.innerHTML = tagHtml + orig;
+      btn.classList.remove('text-primary');
+      btn.setAttribute('title', dict.translate_comment || "Translate");
+    }
+  }
+
+  window.toggleLike = toggleLike;
+  window.toggleCommentLike = toggleCommentLike;
+  window.toggleCommentTranslation = toggleCommentTranslation;
 
   const preferredLang = localStorage.getItem('preferredLanguage') || 'en';
   applyLanguageFilter(preferredLang);
@@ -2371,7 +3154,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // ========================================================
   // SESSION STATE & DYNAMIC ROLE-BASED UI MANAGEMENT
   // ========================================================
-  window.applyUserUI = function() {
+  window.applyUserUI = function () {
     const currentUserJson = localStorage.getItem('currentUser');
     let user = null;
     let isAdmin = false;
@@ -2380,7 +3163,7 @@ document.addEventListener('DOMContentLoaded', () => {
         user = JSON.parse(currentUserJson);
         isAdmin = user && user.role === 'admin';
       }
-    } catch(e) {
+    } catch (e) {
       localStorage.removeItem('currentUser');
     }
 
@@ -2498,7 +3281,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const newBtn = btn.cloneNode(true);
       btn.replaceWith(newBtn);
     });
-    
+
     document.querySelectorAll('a[href*="create-post.html"]').forEach(btn => {
       btn.addEventListener('click', (e) => {
         if (!localStorage.getItem('currentUser')) {
@@ -2521,7 +3304,7 @@ document.addEventListener('DOMContentLoaded', () => {
       };
     }
   };
-  
+
   // Call once immediately
   window.applyUserUI();
 
@@ -2748,3 +3531,54 @@ window.addEventListener('pageshow', (event) => {
     window.location.reload();
   }
 });
+
+// Helper: check if authorName matches currently logged in user
+// Cached to avoid JSON.parse on every call (especially from mouseover)
+(function() {
+  let _cachedSelfName = null;
+  let _cacheInitialized = false;
+
+  function _resolveSelfName() {
+    const currentStr = localStorage.getItem('currentUser');
+    let name = 'Tuấn Hưng';
+    if (currentStr) {
+      if (typeof currentStr === 'string' && currentStr.startsWith('{')) {
+        try { name = JSON.parse(currentStr).name || name; } catch(e){}
+      } else {
+        name = currentStr;
+      }
+    }
+    return name.toString().trim().toLowerCase();
+  }
+
+  window.isSelfAuthor = function(authorName) {
+    if (!authorName) return false;
+    if (!_cacheInitialized) {
+      _cachedSelfName = _resolveSelfName();
+      _cacheInitialized = true;
+    }
+    return authorName.toString().trim().toLowerCase() === _cachedSelfName;
+  };
+
+  // Invalidate cache when localStorage changes (login/logout)
+  window.addEventListener('storage', function(e) {
+    if (e.key === 'currentUser') {
+      _cachedSelfName = _resolveSelfName();
+    }
+  });
+})();
+
+// Global mouseenter handler (NOT mouseover — mouseenter doesn't bubble into children,
+// so it fires once per container entry instead of continuously on nested elements)
+document.addEventListener('mouseenter', function(e) {
+  const container = e.target.closest('.author-tooltip-container');
+  if (container) {
+    const nameEl = container.querySelector('.author-name, .fw-bold.fs-6, h6.text-main, .author-meta-info a');
+    if (nameEl && typeof window.isSelfAuthor === 'function' && window.isSelfAuthor(nameEl.textContent)) {
+      container.querySelectorAll('.btn-subscribe').forEach(btn => {
+        btn.style.display = 'none';
+      });
+    }
+  }
+}, true);
+
