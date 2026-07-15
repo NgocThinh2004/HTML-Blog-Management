@@ -182,9 +182,12 @@ function initSharedSidebars() {
         </div>
         <div class="featured-author-item">
           <div class="featured-author-info">
-            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=80&h=80" alt="Tuấn" class="featured-author-avatar">
-            <div class="featured-author-meta">
-              <span class="featured-author-name">Hồ Quốc Tuấn</span>
+            <div class="position-relative author-tooltip-container" style="cursor: pointer;" onclick="window.location.href='profile.html?id=102'">
+              <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=80&h=80" alt="Tuấn" class="featured-author-avatar">
+              ${typeof window.getAuthorTooltipHtml === 'function' ? window.getAuthorTooltipHtml('Hồ Quốc Tuấn', 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=80&h=80') : ''}
+            </div>
+            <div class="featured-author-meta" style="cursor: pointer;" onclick="window.location.href='profile.html?id=102'">
+              <span class="featured-author-name hover-text-primary">Hồ Quốc Tuấn</span>
               <span class="featured-author-count">Economics Author</span>
             </div>
           </div>
@@ -192,9 +195,12 @@ function initSharedSidebars() {
         </div>
         <div class="featured-author-item">
           <div class="featured-author-info">
-            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=80&h=80" alt="Elena" class="featured-author-avatar">
-            <div class="featured-author-meta">
-              <span class="featured-author-name">Elena Rostova</span>
+            <div class="position-relative author-tooltip-container" style="cursor: pointer;" onclick="window.location.href='profile.html?id=101'">
+              <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=80&h=80" alt="Elena" class="featured-author-avatar">
+              ${typeof window.getAuthorTooltipHtml === 'function' ? window.getAuthorTooltipHtml('Elena Rostova', 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=80&h=80') : ''}
+            </div>
+            <div class="featured-author-meta" style="cursor: pointer;" onclick="window.location.href='profile.html?id=101'">
+              <span class="featured-author-name hover-text-primary">Elena Rostova</span>
               <span class="featured-author-count">Economics Lead</span>
             </div>
           </div>
@@ -202,9 +208,12 @@ function initSharedSidebars() {
         </div>
         <div class="featured-author-item">
           <div class="featured-author-info">
-            <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=80&h=80" alt="Li Ming" class="featured-author-avatar">
-            <div class="featured-author-meta">
-              <span class="featured-author-name">李明 (Li Ming)</span>
+            <div class="position-relative author-tooltip-container" style="cursor: pointer;" onclick="window.location.href='profile.html?id=103'">
+              <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=80&h=80" alt="Li Ming" class="featured-author-avatar">
+              ${typeof window.getAuthorTooltipHtml === 'function' ? window.getAuthorTooltipHtml('李明 (Li Ming)', 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=80&h=80') : ''}
+            </div>
+            <div class="featured-author-meta" style="cursor: pointer;" onclick="window.location.href='profile.html?id=103'">
+              <span class="featured-author-name hover-text-primary">李明 (Li Ming)</span>
               <span class="featured-author-count">Tech Lead</span>
             </div>
           </div>
@@ -500,6 +509,8 @@ function initGlobalSearchModal() {
     document.querySelectorAll('.right-search-box, .explore-search-input-box').forEach(boxEl => {
       // On the explore page, the main search box (#exploreSearchBox) uses its own dropdown — skip modal
       if (isExplorePage && boxEl.id === 'exploreSearchBox') return;
+      if (boxEl.id === 'subscribersSearchWrap') return;
+      
       boxEl.style.cursor = 'pointer';
       boxEl.addEventListener('click', (e) => {
         e.preventDefault();
@@ -543,7 +554,7 @@ function initGlobalSearchModal() {
     const dict = (window.uiTranslations && window.uiTranslations[currentLang]) || (window.uiTranslations && window.uiTranslations.en) || {};
     const noResultsText = dict.no_results || "No matching results found.";
 
-    let matchCount = 0;
+    let matchedPosts = [];
     Object.keys(dataObj).forEach(id => {
       const post = dataObj[id];
       
@@ -571,31 +582,38 @@ function initGlobalSearchModal() {
         category.toLowerCase().includes(query) ||
         content.toLowerCase().includes(query)
       ) {
-        matchCount++;
-        const itemEl = document.createElement('a');
-        itemEl.href = `post-detail.html?id=${id}`;
-        itemEl.className = 'search-result-item';
-        itemEl.innerHTML = `
-          <img src="${post.author_avatar}" class="search-result-avatar" alt="${author}">
-          <div class="search-result-content">
-            <div class="search-result-title">${title}</div>
-            <div class="search-result-meta">
-              <span><i class="bi bi-person-fill"></i> ${author}</span> &bull; 
-              <span class="badge bg-secondary-subtle text-secondary border px-2 py-0 category-label" data-original-cat="${category}">${typeof window.translateCategory === 'function' ? window.translateCategory(category) : category}</span> &bull; 
-              <span class="post-timestamp">${typeof window.formatTimestampI18n === 'function' ? window.formatTimestampI18n(post.timestamp) : post.timestamp}</span> &bull;
-              <span><i class="bi bi-eye"></i> ${post.views || 300}</span>
-            </div>
-            <div class="search-result-snippet">${content.substring(0, 130)}...</div>
-          </div>
-        `;
-        itemEl.addEventListener('click', () => {
-          closeSearchModal();
-        });
-        resultsList.appendChild(itemEl);
+        matchedPosts.push({ id, post, title, content, author, category });
       }
     });
 
-    if (matchCount === 0) {
+    // Sắp xếp bài viết hot nhất (dựa trên views) và giới hạn 3 kết quả
+    matchedPosts.sort((a, b) => (b.post.views || 0) - (a.post.views || 0));
+    matchedPosts = matchedPosts.slice(0, 3);
+
+    matchedPosts.forEach(({ id, post, title, content, author, category }) => {
+      const itemEl = document.createElement('a');
+      itemEl.href = `post-detail.html?id=${id}`;
+      itemEl.className = 'search-result-item';
+      itemEl.innerHTML = `
+        <img src="${post.author_avatar}" class="search-result-avatar" alt="${author}">
+        <div class="search-result-content">
+          <div class="search-result-title">${title}</div>
+          <div class="search-result-meta">
+            <span><i class="bi bi-person-fill"></i> ${author}</span> &bull; 
+            <span class="badge bg-secondary-subtle text-secondary border px-2 py-0 category-label" data-original-cat="${category}">${typeof window.translateCategory === 'function' ? window.translateCategory(category) : category}</span> &bull; 
+            <span class="post-timestamp">${typeof window.formatTimestampI18n === 'function' ? window.formatTimestampI18n(post.timestamp) : post.timestamp}</span> &bull;
+            <span><i class="bi bi-eye"></i> ${post.views || 300}</span>
+          </div>
+          <div class="search-result-snippet">${content.substring(0, 130)}...</div>
+        </div>
+      `;
+      itemEl.addEventListener('click', () => {
+        closeSearchModal();
+      });
+      resultsList.appendChild(itemEl);
+    });
+
+    if (matchedPosts.length === 0) {
       resultsList.innerHTML = `
         <div class="text-center py-4 text-muted">
           <i class="bi bi-search fs-2 d-block mb-2"></i>
@@ -787,10 +805,10 @@ window.renderFeedPosts = function(containerId, dataObj, categoryFilter = 'all') 
     html += `
     <article class="substack-post" data-supported-langs="${post.supported_langs || 'en,vi,zh'}" data-category="${post.category || 'Artificial Intelligence'}">
       <div class="substack-post-header">
-        <div class="author-badge-group position-relative author-tooltip-container">
+        <div class="author-badge-group position-relative author-tooltip-container" style="cursor: pointer; z-index: 2;" onclick="window.location.href='profile.html?id=${post.author_id || 101}'">
           <img src="${post.author_avatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=80&h=80'}" alt="${post.author_name}" class="author-avatar">
           <div class="author-meta-info">
-            <a href="profile.html?id=${post.author_id || 101}" class="author-name">${post.author_name || 'Anonymous'}</a>
+            <span class="author-name hover-text-primary fw-bold" style="color: var(--text-main);">${post.author_name || 'Anonymous'}</span>
             <span class="post-timestamp" data-original-ts="${post.timestamp || 'Just now'}">${post.timestamp || 'Just now'}</span>
           </div>
           <!-- Author Hover Card Tooltip -->

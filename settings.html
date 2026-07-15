@@ -350,6 +350,25 @@
 </label>
                 </div>
               </div>
+
+              <hr class="my-1 border-light-subtle">
+
+              <div class="d-flex align-items-center justify-content-between p-2 rounded-3 hover-bg">
+                <div>
+                  <div class="fw-bold text-main" data-i18n="show_subscribers">Hiển thị người đăng ký (Show Subscribers)</div>
+                  <small class="text-muted" data-i18n="show_subscribers_desc">Cho phép người khác xem danh sách những người đang theo dõi bạn.</small>
+                </div>
+                <div class="form-check form-switch fs-5 mb-0">
+                  <label class="perfect-switch" id="showSubscribersSwitchContainer">
+                    <input class="perfect-switch-input" type="checkbox" id="showSubscribersSwitch" checked>
+                    <div class="perfect-switch-track">
+                      <div class="perfect-switch-thumb"></div>
+                      <span class="perfect-switch-text-on" data-i18n="on">On</span>
+                      <span class="perfect-switch-text-off" data-i18n="off">Off</span>
+                    </div>
+                  </label>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -671,6 +690,15 @@
         autoPlaySwitch.addEventListener('change', () => {
           localStorage.setItem('autoPlayMedia', autoPlaySwitch.checked);
           showToast(settingsT(autoPlaySwitch.checked ? 'toast_autoplay_on' : 'toast_autoplay_off'));
+        });
+      }
+
+      const showSubscribersSwitch = document.getElementById('showSubscribersSwitch');
+      if (showSubscribersSwitch) {
+        showSubscribersSwitch.checked = localStorage.getItem('allowShowSubscribers') !== 'false';
+        showSubscribersSwitch.addEventListener('change', () => {
+          localStorage.setItem('allowShowSubscribers', showSubscribersSwitch.checked);
+          showSubscribersSwitch.checked ? showToast(settingsT('toast_show_subscribers_on', {}, currentLang) || "Đã bật hiển thị người đăng ký") : showToast(settingsT('toast_show_subscribers_off', {}, currentLang) || "Đã tắt hiển thị người đăng ký");
         });
       }
     });
