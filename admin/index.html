@@ -2,6 +2,7 @@
 <html lang="en" data-bs-theme="light">
 
 <head>
+  <link rel="icon" type="image/svg+xml" href="../assets/images/lingora-mark.svg">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Admin Dashboard - Lingora</title>
@@ -18,7 +19,7 @@
 <link rel="stylesheet" href="../assets/css/variables.css">
   <link rel="stylesheet" href="../assets/css/base.css?v=5">
   <link rel="stylesheet" href="../assets/css/layouts.css">
-  <link rel="stylesheet" href="../assets/css/components.css?v=12">
+  <link rel="stylesheet" href="../assets/css/components.css?v=16">
 
   <style>
     /* Admin specific layout styles */
@@ -658,7 +659,7 @@
   <!-- Bootstrap 5 JS Bundle -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <!-- Core Script -->
-  <script src="../assets/js/core.js?v=17"></script>
+  <script src="../assets/js/core.js?v=23"></script>
 
   <script>
     document.addEventListener('DOMContentLoaded', () => {
@@ -713,16 +714,32 @@
         const lang = localStorage.getItem('preferredLanguage') || 'en';
         const localeMap = { en: 'en-US', vi: 'vi-VN', zh: 'zh-CN' };
         const dict = (window.uiTranslations && (window.uiTranslations[lang] || window.uiTranslations.en)) || {};
-        const featuredPosts = Object.entries(window.globalPostsData)
-          .filter(([, post]) => {
-            const supportedLanguages = String(post.supported_langs || '')
-              .split(',')
-              .map(code => code.trim());
-            const hasTitle = Boolean(String(post[`title_${lang}`] || '').trim());
-            const hasContent = Boolean(String(post[`content_${lang}`] || '').trim());
-            return supportedLanguages.includes(lang) && hasTitle && hasContent;
-          })
-          .sort(([, a], [, b]) => (b.views || 0) - (a.views || 0))
+        const getSharedMetric = (post, databaseField, legacyField) => {
+          const value = post[databaseField] ?? post[legacyField] ?? 0;
+          const number = Number(value);
+          return Number.isFinite(number) ? number : 0;
+        };
+        const hasTranslation = post => {
+          const supportedLanguages = String(post.supported_langs || '')
+            .split(',')
+            .map(code => code.trim().toLowerCase())
+            .filter(Boolean);
+          const hasTitle = Boolean(String(post[`title_${lang}`] || '').trim());
+          const hasContent = Boolean(String(post[`content_${lang}`] || '').trim());
+          return supportedLanguages.includes(lang) && hasTitle && hasContent;
+        };
+
+        // Xếp hạng một lần trên bài viết gốc vì lượt xem/like thuộc bảng posts.
+        // Sau đó bỏ qua bài chưa có bản dịch hiện tại và lấy bài kế tiếp trong bảng xếp hạng.
+        const rankedBasePosts = Object.entries(window.globalPostsData)
+          .filter(([, post]) => !post.deleted_at && !['draft', 'hidden'].includes(String(post.status || '').toLowerCase()))
+          .sort(([, a], [, b]) => {
+            const viewDifference = getSharedMetric(b, 'view_count', 'views') - getSharedMetric(a, 'view_count', 'views');
+            if (viewDifference !== 0) return viewDifference;
+            return getSharedMetric(b, 'like_count', 'likes') - getSharedMetric(a, 'like_count', 'likes');
+          });
+        const featuredPosts = rankedBasePosts
+          .filter(([, post]) => hasTranslation(post))
           .slice(0, 10);
 
         if (featuredPosts.length === 0) {
@@ -737,17 +754,20 @@
         container.innerHTML = featuredPosts.map(([id, post], index) => {
           const title = post[`title_${lang}`];
           const formatNumber = value => Number(value || 0).toLocaleString(localeMap[lang] || 'en-US');
+          const viewCount = getSharedMetric(post, 'view_count', 'views');
+          const likeCount = getSharedMetric(post, 'like_count', 'likes');
+          const commentCount = getSharedMetric(post, 'comment_count', 'comments');
 
           return `
-            <a class="featured-post-item" href="../post-detail.html?id=${encodeURIComponent(id)}" title="${escapeHtml(dict.view || 'View article')}: ${escapeHtml(title)}">
+            <a class="featured-post-item" href="../post-detail.html?id=${encodeURIComponent(id)}&lang=${encodeURIComponent(lang)}" title="${escapeHtml(dict.view || 'View article')}: ${escapeHtml(title)}">
               <span class="featured-post-rank">${String(index + 1).padStart(2, '0')}</span>
               <span>
                 <span class="featured-post-title">${escapeHtml(title)}</span>
                 <span class="featured-post-author">${escapeHtml(post.author_name || 'Anonymous')}</span>
                 <span class="featured-post-metrics">
-                  <span title="${escapeHtml(dict.views || 'Views')}"><i class="bi bi-eye-fill"></i>${formatNumber(post.views)}</span>
-                  <span title="${escapeHtml(dict.total_likes || 'Likes')}"><i class="bi bi-heart-fill"></i>${formatNumber(post.likes)}</span>
-                  <span title="${escapeHtml(dict.comments || 'Comments')}"><i class="bi bi-chat-fill"></i>${formatNumber(post.comments)}</span>
+                  <span title="${escapeHtml(dict.views || 'Views')}"><i class="bi bi-eye-fill"></i>${formatNumber(viewCount)}</span>
+                  <span title="${escapeHtml(dict.total_likes || 'Likes')}"><i class="bi bi-heart-fill"></i>${formatNumber(likeCount)}</span>
+                  <span title="${escapeHtml(dict.comments || 'Comments')}"><i class="bi bi-chat-fill"></i>${formatNumber(commentCount)}</span>
                 </span>
               </span>
             </a>`;
@@ -755,11 +775,7 @@
       }
 
       renderFeaturedPosts();
-      document.addEventListener('click', (event) => {
-        if (event.target.closest('.global-lang-select')) {
-          renderFeaturedPosts();
-        }
-      });
+      window.addEventListener('lingora:languagechange', renderFeaturedPosts);
       window.addEventListener('storage', (event) => {
         if (event.key === 'preferredLanguage') renderFeaturedPosts();
       });
