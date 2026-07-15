@@ -2454,6 +2454,17 @@ body.publish-modal-open {
   font-size: 1rem;
 }
 
+.category-select {
+  min-height: 40px;
+  padding: 8px 12px;
+  padding-right: 2.25rem; /* Space for the dropdown arrow */
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background-color: var(--surface-subtle, var(--bg-soft));
+  color: var(--text);
+  font-weight: 600;
+}
+
 .publish-form-label {
   display: block;
   font-weight: 600;
