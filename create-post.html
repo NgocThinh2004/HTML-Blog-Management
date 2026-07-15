@@ -446,7 +446,7 @@
 <main class="publish-modal-body">
           <div class="publish-form-group mb-4">
             <h3 class="fb-modal-heading" data-i18n="post_category">Post Category</h3>
-            <select class="form-select" id="post_category" style="border-radius: 8px;">
+            <select class="form-select" id="post_category" style="width: 100%; border-radius: 8px; padding: 8px 12px; min-height: 40px; border: 1px solid var(--border); background: var(--surface-subtle, var(--bg-soft)); color: var(--text);">
                 <option value="technology" data-i18n="cat_tech">Technology</option>
                 <option value="lifestyle" data-i18n="cat_life">Lifestyle</option>
                 <option value="education" data-i18n="cat_edu">Education</option>
@@ -467,7 +467,7 @@
           </div>
           <div class="publish-form-group">
             <h3 class="fb-modal-heading" data-i18n="allowed_translations">Allowed Translations</h3>
-            <div class="publish-checkbox-group d-flex flex-column gap-2">
+            <div class="publish-checkbox-group d-flex flex-column gap-2" style="max-height: 165px; overflow-y: auto; padding-right: 4px;">
               <div class="d-flex align-items-center justify-content-between p-2 rounded-2 border" style="background: var(--bg-body, #fff);">
                 <label class="publish-checkbox-label mb-0" style="cursor: pointer;"><input type="checkbox" name="allow_translate" value="en" checked> English</label>
                 <a href="#" class="btn btn-sm btn-outline-primary px-3 rounded-pill" style="font-size: 0.8rem; font-weight: 500;" onclick="document.querySelector('[data-publish-modal]').hidden = true; document.body.classList.remove('publish-modal-open'); document.querySelector('[data-preview-language]').value='en'; document.querySelector('[data-preview-language]').dispatchEvent(new Event('change')); document.querySelector('[data-preview-button]').click(); return false;"><i class="bi bi-eye me-1"></i> <span data-i18n="preview_translation">Preview translation</span></a>

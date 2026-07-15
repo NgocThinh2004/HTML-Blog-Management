@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&display=swap');
+
 :root {
   --bg: #f4f5f3;
   --surface: #ffffff;
@@ -1085,7 +1087,7 @@ button {
   display: inline-flex;
   justify-content: center;
   color: #3c4141;
-  font-family: Georgia, "Times New Roman", serif;
+  font-family: 'Lora', Georgia, "Times New Roman", serif;
   font-size: 21px;
   font-weight: 500;
   line-height: 1;
@@ -1202,7 +1204,7 @@ button {
   display: block;
   margin: 18px 0 10px;
   color: #777d7d;
-  font-family: Georgia, "Times New Roman", serif;
+  font-family: 'Lora', Georgia, "Times New Roman", serif;
   font-size: 14px;
   letter-spacing: 1.8px;
 }
@@ -1253,7 +1255,7 @@ button {
   color: #596064;
   background: transparent;
   outline: none;
-  font-family: Georgia, "Times New Roman", serif;
+  font-family: 'Lora', Georgia, "Times New Roman", serif;
   font-variant-numeric: lining-nums proportional-nums;
   font-feature-settings: "lnum" 1, "onum" 0;
   resize: none;
@@ -1470,7 +1472,7 @@ button {
   padding: 10px 0 90px;
   color: #434949;
   outline: none;
-  font-family: Cambria, Georgia, "Times New Roman", serif;
+  font-family: 'Lora', Cambria, Georgia, "Times New Roman", serif;
   font-variant-numeric: lining-nums;
   font-size: 22px;
   line-height: 1.65;
@@ -1996,7 +1998,7 @@ button {
 .preview-title {
   margin: 0 0 8px;
   color: #343a3a;
-  font-family: Georgia, "Times New Roman", serif;
+  font-family: 'Lora', Georgia, "Times New Roman", serif;
   font-size: 24px;
 }
 
@@ -3148,7 +3150,7 @@ body.draft-modal-open {
   max-width: 100%;
   margin: 0 0 34px;
   color: #687071;
-  font-family: Georgia, "Times New Roman", serif;
+  font-family: 'Lora', Georgia, "Times New Roman", serif;
   font-variant-numeric: lining-nums proportional-nums;
   font-feature-settings: "lnum" 1, "onum" 0;
   font-size: clamp(24px, 3vw, 32px);
@@ -3161,7 +3163,7 @@ body.draft-modal-open {
 
 .preview-post-body {
   color: #363d3d;
-  font-family: Cambria, Georgia, "Times New Roman", serif;
+  font-family: 'Lora', Cambria, Georgia, "Times New Roman", serif;
   font-variant-numeric: lining-nums;
   font-size: 22px;
   line-height: 1.65;

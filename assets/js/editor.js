@@ -156,10 +156,13 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  let postOriginalLanguageOverride = null;
+
   function syncOriginalLanguageWithSystem() {
     if (!originalLanguageSelect) return;
-    const preferredLanguage = localStorage.getItem('preferredLanguage') || 'en';
-    const supportedLanguage = ['en', 'vi', 'zh'].includes(preferredLanguage) ? preferredLanguage : 'en';
+    const currentSystemLanguage = localStorage.getItem('preferredLanguage') || 'en';
+    const languageToUse = postOriginalLanguageOverride || currentSystemLanguage;
+    const supportedLanguage = ['en', 'vi', 'zh'].includes(languageToUse) ? languageToUse : 'en';
     originalLanguageSelect.value = supportedLanguage;
     if (originalLanguageDisplay) {
       const labels = {
@@ -167,7 +170,7 @@ document.addEventListener('DOMContentLoaded', () => {
         vi: { en: 'Tiếng Anh', vi: 'Tiếng Việt', zh: 'Tiếng Trung' },
         zh: { en: '英语', vi: '越南语', zh: '中文' }
       };
-      originalLanguageDisplay.textContent = labels[supportedLanguage][supportedLanguage];
+      originalLanguageDisplay.textContent = labels[currentSystemLanguage][supportedLanguage];
     }
     updateAllowedTranslationLanguages();
   }
@@ -689,7 +692,7 @@ document.addEventListener('DOMContentLoaded', () => {
         posts.unshift(submittedPost);
       }
 
-      localStorage.setItem(submittedPostsKey, JSON.stringify(posts.slice(0, 50)));
+      localStorage.setItem(submittedPostsKey, JSON.stringify(posts.slice(0, 500)));
       localStorage.removeItem(draftKey);
       window.location.href = 'my-posts.html?status=pending';
     } catch (error) {
@@ -1415,6 +1418,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (actionButton) {
         const action = actionButton.dataset.draftAction;
         if (action === 'discard') {
+          localStorage.removeItem(draftKey);
           closeDraftConfirmModal();
           window.location.href = getGuestBackHref(); // Redirect to home/previous page
         } else if (action === 'save') {
@@ -1661,6 +1665,9 @@ document.addEventListener('DOMContentLoaded', () => {
       }
       const categorySelect = document.getElementById('post_category');
       if (categorySelect && submittedPost.category) categorySelect.value = submittedPost.category;
+      if (submittedPost.originalLanguage) {
+        postOriginalLanguageOverride = submittedPost.originalLanguage;
+      }
       document.querySelectorAll('input[name="allow_translate"]').forEach(checkbox => {
         checkbox.checked = Array.isArray(submittedPost.allowedTranslations)
           && submittedPost.allowedTranslations.includes(checkbox.value);
