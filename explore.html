@@ -17,9 +17,9 @@
   
   <!-- Global & Layout CSS -->
 <link rel="stylesheet" href="assets/css/variables.css">
-  <link rel="stylesheet" href="assets/css/base.css?v=5">
-  <link rel="stylesheet" href="assets/css/layouts.css?v=4">
-  <link rel="stylesheet" href="assets/css/components.css?v=12">
+  <link rel="stylesheet" href="assets/css/base.css?v=1784089471947">
+  <link rel="stylesheet" href="assets/css/layouts.css?v=1784089471947">
+  <link rel="stylesheet" href="assets/css/components.css?v=1784089471947">
 </head>
 <body>
   <div class="app-wrapper">
@@ -35,7 +35,8 @@
           <span class="fs-5 fw-bold text-main">Lingora</span>
         </a>
         <div class="d-flex align-items-center ms-auto gap-2">
-          <a href="create-post.html" class="btn btn-primary btn-sm fw-medium px-3 rounded-pill"><i class="bi bi-plus-lg me-1"></i> <span data-i18n="create">Create</span></a>
+          <a href="create-post.html" class="btn btn-primary btn-sm fw-medium px-2 px-sm-3 rounded-pill d-inline-flex align-items-center me-1"><i class="bi bi-plus-lg me-1"></i> <span data-i18n="create">Create</span></a>
+
           <a href="profile.html" class="text-decoration-none">
             <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=32&h=32" class="rounded-circle border" width="32" height="32" alt="Avatar">
           </a>
@@ -67,8 +68,8 @@
 
         <!-- Substack Explore Tabs -->
         <div class="explore-tabs-nav border-bottom mb-4">
-          <button class="explore-tab-btn active" data-tab="posts" data-i18n="posts">Posts</button>
-          <button class="explore-tab-btn" data-tab="top" data-i18n="top">Top</button>
+          <button class="explore-tab-btn active" data-tab="top" data-i18n="top">Top</button>
+          <button class="explore-tab-btn" data-tab="posts" data-i18n="posts">Posts</button>
           <button class="explore-tab-btn" data-tab="publications" data-i18n="publications">Publications</button>
           <button class="explore-tab-btn" data-tab="people" data-i18n="people">People</button>
         </div>
@@ -109,7 +110,7 @@
       // Get query from URL parameter
       const urlParams = new URLSearchParams(window.location.search);
       let currentQuery = (urlParams.get('q') || '').trim();
-      let currentTab = 'posts';
+      let currentTab = 'top';
 
       if (currentQuery) {
         searchInput.value = currentQuery;
@@ -168,6 +169,12 @@
         } else {
           clearBtn.classList.add('d-none');
           suggestionsPanel.classList.add('d-none');
+          if (currentQuery !== '') {
+            currentQuery = '';
+            const newUrl = window.location.pathname;
+            window.history.pushState({path: newUrl}, '', newUrl);
+            renderExploreResults(currentQuery, currentTab);
+          }
         }
       });
 
@@ -190,38 +197,78 @@
         }
       });
 
-      clearBtn.addEventListener('click', () => {
+      clearBtn.addEventListener('click', (e) => {
+        if (e) { e.preventDefault(); e.stopPropagation(); }
         searchInput.value = '';
         clearBtn.classList.add('d-none');
         suggestionsPanel.classList.add('d-none');
+        currentQuery = '';
+        const newUrl = window.location.pathname;
+        window.history.pushState({path: newUrl}, '', newUrl);
+        const container = document.getElementById('exploreResultsContainer');
+        if (container) container.style.opacity = '0.3';
+        setTimeout(() => {
+          renderExploreResults(currentQuery, currentTab);
+          if (container) container.style.opacity = '1';
+        }, 120);
         searchInput.focus();
       });
 
-      // Tab click events
+      // Tab click events with smooth transition
       tabBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
+        btn.addEventListener('click', (e) => {
+          if (e) e.preventDefault();
+          if (btn.classList.contains('active')) return;
           tabBtns.forEach(b => b.classList.remove('active'));
           btn.classList.add('active');
           currentTab = btn.getAttribute('data-tab');
-          renderExploreResults(currentQuery, currentTab);
+          currentQuery = searchInput ? searchInput.value.trim() : '';
+          const container = document.getElementById('exploreResultsContainer');
+          if (container) container.style.opacity = '0.3';
+          setTimeout(() => {
+            renderExploreResults(currentQuery, currentTab);
+            if (container) container.style.opacity = '1';
+          }, 120);
         });
       });
 
+      // Expose helpers globally to dynamically switch tab/query inside Explore page
+      window.triggerExploreCategory = function(keyword, e) {
+        if (e) e.preventDefault();
+        if (searchInput) {
+          searchInput.value = keyword;
+          if (clearBtn) clearBtn.classList.remove('d-none');
+          currentQuery = keyword;
+          currentTab = 'posts';
+          tabBtns.forEach(b => {
+            b.classList.remove('active');
+            if (b.getAttribute('data-tab') === 'posts') b.classList.add('active');
+          });
+          const newUrl = window.location.pathname + `?q=${encodeURIComponent(keyword)}`;
+          window.history.pushState({path: newUrl}, '', newUrl);
+          renderExploreResults(currentQuery, currentTab);
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+      };
+
+      window.triggerExploreQuery = function(keyword, e) {
+        if (e) e.preventDefault();
+        if (searchInput) {
+          searchInput.value = keyword;
+          if (clearBtn) clearBtn.classList.remove('d-none');
+          currentQuery = keyword;
+          const newUrl = window.location.pathname + `?q=${encodeURIComponent(keyword)}`;
+          window.history.pushState({path: newUrl}, '', newUrl);
+          renderExploreResults(currentQuery, currentTab);
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+      };
       
     });
 
-    function triggerExploreQuery(keyword) {
-      const searchInput = document.getElementById('explorePageSearchInput');
-      if (searchInput) {
-        searchInput.value = keyword;
-        searchInput.dispatchEvent(new Event('input'));
-        const newUrl = window.location.pathname + `?q=${encodeURIComponent(keyword)}`;
-        window.history.pushState({path: newUrl}, '', newUrl);
-      }
-    }
-
     function renderExploreResults(query, tab) {
       const container = document.getElementById('exploreResultsContainer');
+      if (container) container.style.transition = 'opacity 0.15s ease-in-out';
       const queryHeader = document.getElementById('exploreQueryHeader');
       const queryText = document.getElementById('exploreQueryText');
       const countText = document.getElementById('exploreCountText');
@@ -243,192 +290,280 @@
         queryHeader.classList.add('d-none');
       }
 
-      // Filter matching posts first
+      // 1. Prepare enriched metadata (Publications & People)
+      const categoryCounts = {};
+      const authorCounts = {};
       let matchingPosts = [];
-      Object.keys(dataObj).forEach(id => {
-        const post = dataObj[id];
-        if (post.supported_langs && !post.supported_langs.split(',').includes(currentLang)) return;
-        if (typeof window.isCategoryTranslationActive === 'function' && !window.isCategoryTranslationActive(post.category, currentLang)) return;
-        
-        const title = (post[`title_${currentLang}`] || "").toLowerCase();
-        const content = (post[`content_${currentLang}`] || "").toLowerCase();
-        const author = (post.author_name || "").toLowerCase();
-        const category = (post.category || "").toLowerCase();
-        const localizedCat = (typeof window.translateCategory === 'function' ? window.translateCategory(post.category) : category).toLowerCase();
 
-        if (!title && !content) return;
+      if (dataObj) {
+        Object.keys(dataObj).forEach(id => {
+          const post = dataObj[id];
+          if (post.supported_langs && !post.supported_langs.split(',').includes(currentLang)) return;
+          
+          const cat = post.category || "General";
+          categoryCounts[cat] = (categoryCounts[cat] || 0) + 1;
+          if (post.author_id) {
+            authorCounts[post.author_id] = (authorCounts[post.author_id] || 0) + 1;
+          }
 
-        if (!qLower || title.includes(qLower) || content.includes(qLower) || author.includes(qLower) || category.includes(qLower) || localizedCat.includes(qLower)) {
-          matchingPosts.push({ id, ...post });
-        }
+          const title = (post[`title_${currentLang}`] || "").toLowerCase();
+          const content = (post[`content_${currentLang}`] || "").toLowerCase();
+          const author = (post.author_name || "").toLowerCase();
+          const categoryLower = (post.category || "").toLowerCase();
+          const localizedCat = (typeof window.translateCategory === 'function' ? window.translateCategory(post.category) : categoryLower).toLowerCase();
+
+          if (!title && !content) return;
+
+          if (!qLower || title.includes(qLower) || content.includes(qLower) || author.includes(qLower) || categoryLower.includes(qLower) || localizedCat.includes(qLower)) {
+            matchingPosts.push({ id, ...post });
+          }
+        });
+      }
+
+      const catMetadata = {
+        "Artificial Intelligence": { name: dict.cat_ai || "Artificial Intelligence", icon: "bi-cpu", desc: dict.desc_ai || "Agentic coding, LLM inference optimization, and neural architectures." },
+        "Backend Engineering": { name: dict.cat_backend || "Backend Engineering", icon: "bi-hdd-network", desc: dict.desc_backend || "Distributed systems, microservices, gRPC, and high-concurrency architecture." },
+        "Design": { name: dict.cat_design || "Design & UX", icon: "bi-palette", desc: dict.desc_design || "Glassmorphism, color psychology, and responsive interface design." },
+        "Frontend Development": { name: dict.cat_frontend || "Frontend Development", icon: "bi-browser-edge", desc: dict.desc_frontend || "React, Vue, Web Components, and modern rendering architectures." },
+        "Mobile Development": { name: dict.cat_mobile || "Mobile Development", icon: "bi-phone", desc: dict.desc_mobile || "Flutter, React Native, iOS, Android, and cross-platform solutions." },
+        "Data Science": { name: dict.cat_data || "Data Science", icon: "bi-bar-chart", desc: dict.desc_data || "Pandas, Polars, machine learning pipelines, and big data analysis." },
+        "Cybersecurity": { name: dict.cat_cyber || "Cybersecurity", icon: "bi-shield-lock", desc: dict.desc_cyber || "Zero Trust, network defense, penetration testing, and cryptography." },
+        "Economics & Markets": { name: dict.cat_economics || "Economics & Markets", icon: "bi-graph-up-arrow", desc: dict.desc_economics || "Global macro outlook, interest rates, financial liquidity, and capital reallocation." },
+        "Life & Philosophy": { name: dict.cat_life || "Life & Philosophy", icon: "bi-lightbulb", desc: dict.desc_life || "Deep work culture, asynchronous writing, and engineering craftsmanship." }
+      };
+
+      const knownCats = Object.keys(catMetadata);
+      const postWord = currentLang === 'vi' ? 'bài viết' : (currentLang === 'zh' ? '篇文章' : 'posts');
+
+      const pubList = knownCats.map(cat => {
+        const meta = catMetadata[cat] || { name: cat, icon: "bi-folder", desc: "Articles and discussions in this category." };
+        const countVal = categoryCounts[cat] || 2;
+        return {
+          key: cat,
+          name: meta.name,
+          icon: meta.icon,
+          desc: meta.desc,
+          count: `${countVal} ${postWord}`
+        };
       });
 
-      // Handle rendering based on active tab
-      if (tab === 'recent' || tab === 'top' || tab === 'posts') {
+      const allPeopleList = [
+        { id: "101", name: "Elena Rostova", aliases: ["Elena R.", "AI Queen", "Dr. Rostova", "elenarostova"], avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=80&h=80", role: "AI Lead & Principal Scientist", bio: "Researching agentic reasoning, speculative decoding & next-gen LLM architectures.", followers: "12.4K" },
+        { id: "102", name: "Hồ Quốc Tuấn", aliases: ["Ho Quoc Tuan", "Tuan Ho", "Tiến sĩ Tuấn"], avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=80&h=80", role: "Economics Lead & Macro Analyst", bio: "Global macro outlook, real interest rate dynamics & financial market analysis.", followers: "18.2K" },
+        { id: "103", name: "李明 (Li Ming)", aliases: ["Li Ming", "Lý Minh", "Tiger Li", "liming"], avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=80&h=80", role: "Staff Backend & Data Architect", bio: "High-concurrency microservices, Polars big data processing & distributed systems.", followers: "9.8K" },
+        { id: "104", name: "Sarah Connor", aliases: ["Sarah C.", "Cyber Sarah", "Terminator"], avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=80&h=80", role: "Cybersecurity & Zero Trust Architect", bio: "Network defense, LLM tool verification & enterprise threat modeling.", followers: "14.1K" },
+        { id: "105", name: "Alex Rivera", aliases: ["A. Rivera", "Rust Master", "alex_cloud"], avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=80&h=80", role: "Principal Rust & Cloud Engineer", bio: "High-throughput gRPC microservices, Kubernetes scaling & cloud native systems.", followers: "11.5K" },
+        { id: "106", name: "Maya Lin", aliases: ["Lâm Mặc", "Maya", "Glassmorphism Wizard"], avatar: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&q=80&w=80&h=80", role: "UI/UX Director & Brand Strategist", bio: "Color psychology in modern apps, glassmorphism & responsive interface design.", followers: "8.6K" },
+        { id: "107", name: "Kenji Sato", aliases: ["K. Sato", "Kenji", "Redis Guru"], avatar: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&q=80&w=80&h=80", role: "Principal Systems Engineer", bio: "Distributed caching architectures, Redis optimization & high-traffic API scaling.", followers: "10.3K" },
+        { id: "108", name: "Vũ Thu Hà", aliases: ["Vu Thu Ha", "Ha Vu", "Hà UX"], avatar: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=80&h=80", role: "Senior Product Designer", bio: "Accessible dark mode design, WCAG AAA standards & minimal enterprise layouts.", followers: "7.9K" },
+        { id: "109", name: "Thái Dương", aliases: ["Thai Duong", "Dương Thái", "td_eng", "Craftsman"], avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=80&h=80", role: "Tech Lead & Engineering Manager", bio: "Deep work culture, asynchronous team collaboration & software craftsmanship.", followers: "15.6K" }
+      ];
+
+      // Exclude self account from author query/listing (tác giả tôi k muốn truy vấn ra chính tài khoản của mình)
+      const peopleList = allPeopleList.filter(p => {
+        if (typeof window.isSelfAuthor === 'function' && window.isSelfAuthor(p.name)) return false;
+        if (p.name === 'Hồ Quốc Tuấn') return false;
+        return true;
+      });
+
+      function renderPostCard(post) {
+        const title = post[`title_${currentLang}`] || post.title_en;
+        const content = post[`content_${currentLang}`] || post.content_en;
+        const tsLabel = typeof window.formatTimestampI18n === 'function' ? window.formatTimestampI18n(post.timestamp) : post.timestamp;
+        const catLabel = typeof window.translateCategory === 'function' ? window.translateCategory(post.category) : post.category;
+        const tooltipHtml = typeof window.getAuthorTooltipHtml === 'function' 
+          ? window.getAuthorTooltipHtml(post.author_name, post.author_avatar)
+          : '';
+
+        return `
+          <article class="substack-post" data-supported-langs="${post.supported_langs || 'en,vi,zh'}" data-category="${post.category}">
+            <div class="substack-post-header">
+              <div class="author-badge-group position-relative author-tooltip-container">
+                <img src="${post.author_avatar}" alt="${post.author_name}" class="author-avatar">
+                <div class="author-meta-info">
+                  <a href="profile.html?id=${post.author_id || '101'}" class="author-name">${post.author_name}</a>
+                  <span class="post-timestamp">${tsLabel}</span>
+                </div>
+                <span class="badge bg-primary-subtle text-primary border border-primary-subtle rounded-pill small px-2 ms-auto category-label" data-original-cat="${post.category}">${catLabel}</span>
+                ${tooltipHtml}
+              </div>
+            </div>
+
+            <a href="post-detail.html?id=${post.id}" class="text-decoration-none text-reset d-block">
+              <h2 class="post-title h4 fw-bold mt-2 mb-1">${title}</h2>
+              <div class="substack-post-content post-content">${content}</div>
+              ${post.image ? `<div class="post-image-embed"><img src="${post.image}" alt="${title}"></div>` : ''}
+            </a>
+
+            <div class="substack-post-footer">
+              <button class="footer-action-item" onclick="toggleLike(this, ${post.likes || 12})"><i class="bi bi-heart"></i> <span class="like-count">${post.likes || 12}</span></button>
+              <button class="footer-action-item"><i class="bi bi-chat"></i> <span>${post.comments_count || post.comments || 5}</span></button>
+              <span class="footer-action-item text-muted"><i class="bi bi-eye"></i> <span>${post.views || 300}</span></span>
+            </div>
+          </article>
+        `;
+      }
+
+      function renderPersonCard(person) {
+        const countVal = authorCounts[person.id] || 3;
+        const countTextVal = `${countVal} ${postWord}`;
+        const followLabel = dict.btn_follow || dict.subscribe || 'Follow';
+        const followBtnHtml = `<button class="btn btn-sm btn-outline-secondary rounded-pill px-3 fw-medium" data-i18n="btn_follow" onclick="if(typeof toggleSubscribe === 'function') toggleSubscribe(this, event); else alert('Subscribed');">${followLabel}</button>`;
+
+        return `
+          <div class="explore-card-item align-items-center">
+            <a href="profile.html?id=${person.id}" class="explore-card-left text-decoration-none text-reset align-items-center">
+              <img src="${person.avatar}" class="explore-card-avatar" alt="${person.name}">
+              <div class="explore-card-info">
+                <div class="explore-card-title fw-bold fs-6 mb-1">${person.name}</div>
+                <div class="text-muted small"><i class="bi bi-journal-text me-1"></i>${countTextVal}</div>
+              </div>
+            </a>
+            <div class="d-flex align-items-center gap-2">
+              <a href="profile.html?id=${person.id}" class="btn btn-sm btn-outline-secondary rounded-pill px-3 fw-medium" data-i18n="view_profile">${dict.view_profile || 'View Profile'}</a>
+              ${followBtnHtml}
+            </div>
+          </div>
+        `;
+      }
+
+      function renderPubCard(pub) {
+        return `
+          <a href="explore.html?q=${encodeURIComponent(pub.name)}" onclick="if(typeof triggerExploreCategory === 'function') triggerExploreCategory('${pub.name.replace(/'/g, "\\'")}', event);" class="explore-card-item text-decoration-none text-reset d-flex">
+            <div class="explore-card-left">
+              <div class="explore-card-pub-icon"><i class="bi ${pub.icon}"></i></div>
+              <div class="explore-card-info">
+                <div class="explore-card-title">${pub.name}</div>
+                <div class="explore-card-sub">${pub.desc}</div>
+                <div class="text-muted small mt-1"><i class="bi bi-file-earmark-text me-1"></i>${pub.count}</div>
+              </div>
+            </div>
+          </a>
+        `;
+      }
+
+      // 2. Handle rendering based on active tab
+      if (tab === 'top') {
+        // HYBRID VERTICAL SEARCH: Top People + Top Publications + Top Posts
+        let filteredPeople = peopleList;
+        let filteredPubs = pubList;
+        if (qLower) {
+          filteredPeople = peopleList.filter(p => 
+            p.name.toLowerCase().includes(qLower) || 
+            p.role.toLowerCase().includes(qLower) || 
+            p.bio.toLowerCase().includes(qLower) ||
+            p.name.replace(/\s+/g, '').toLowerCase().includes(qLower) ||
+            (p.aliases && p.aliases.some(a => a.toLowerCase().includes(qLower)))
+          );
+          filteredPubs = pubList.filter(p => p.name.toLowerCase().includes(qLower) || p.desc.toLowerCase().includes(qLower) || p.key.toLowerCase().includes(qLower));
+        } else {
+          // Default Top without query: Top 2 Featured People + Top 2 Publications
+          filteredPeople = peopleList.slice(0, 2);
+          filteredPubs = pubList.slice(0, 2);
+        }
+
+        matchingPosts.sort((a, b) => (b.likes || 15) - (a.likes || 15));
+
+        const totalTopResults = (qLower ? (filteredPeople.length + filteredPubs.length + matchingPosts.length) : matchingPosts.length);
+        countText.textContent = `${totalTopResults} ${dict.results || 'results'}`;
+
+        if (totalTopResults === 0) {
+          container.innerHTML = `<div class="text-center py-5 text-muted"><i class="bi bi-search fs-1 d-block mb-2"></i><span>${noResultsText}</span></div>`;
+          return;
+        }
+
+        let html = '';
+        if (qLower && filteredPeople.length > 0) {
+          html += `<div class="mb-4"><h6 class="fw-bold text-main mb-3 d-flex align-items-center gap-2"><i class="bi bi-people text-primary"></i><span>People matching "${currentQuery}"</span></h6>`;
+          filteredPeople.slice(0, 2).forEach(p => { html += renderPersonCard(p); });
+          html += `</div>`;
+        } else if (!qLower && filteredPeople.length > 0) {
+          html += `<div class="mb-4"><h6 class="fw-bold text-main mb-3 d-flex align-items-center gap-2"><i class="bi bi-star-fill text-warning"></i><span data-i18n="featured_creators">Featured Creators</span></h6>`;
+          filteredPeople.forEach(p => { html += renderPersonCard(p); });
+          html += `</div>`;
+        }
+
+        if (qLower && filteredPubs.length > 0) {
+          html += `<div class="mb-4"><h6 class="fw-bold text-main mb-3 d-flex align-items-center gap-2"><i class="bi bi-journal-text text-primary"></i><span>Publications matching "${currentQuery}"</span></h6>`;
+          filteredPubs.slice(0, 2).forEach(pub => { html += renderPubCard(pub); });
+          html += `</div>`;
+        }
+
+        if (matchingPosts.length > 0) {
+          if (qLower || filteredPeople.length > 0) {
+            html += `<div class="mb-2"><h6 class="fw-bold text-main mb-3 d-flex align-items-center gap-2"><i class="bi bi-file-earmark-post text-primary"></i><span>${qLower ? `Posts matching "${currentQuery}"` : 'Top Trending Posts'}</span></h6>`;
+          }
+          matchingPosts.forEach(post => { html += renderPostCard(post); });
+          if (qLower || filteredPeople.length > 0) html += `</div>`;
+        }
+
+        container.innerHTML = html;
+
+      } else if (tab === 'posts') {
+        // DEDICATED POSTS SEARCH
         function getPostAgeInMinutes(ts) {
           if (!ts) return 999999;
           const s = ts.toString().toLowerCase().trim();
           if (s.includes('just now') || s.includes('vừa xong') || s.includes('刚刚')) return 0;
           if (s.includes('yesterday') || s.includes('hôm qua') || s.includes('昨天')) return 1440;
-          
           const numMatch = s.match(/\d+/);
           const num = numMatch ? parseInt(numMatch[0], 10) : 1;
-          
           if (s.includes('min') || s.includes('phút') || s.includes('分')) return num;
           if (s.includes('hour') || s.includes('giờ') || s.includes('hr') || s.includes('tiếng') || s.includes('小时') || s.includes('时')) return num * 60;
           if (s.includes('day') || s.includes('ngày') || s.includes('天') || s.includes('日')) return num * 1440;
           if (s.includes('week') || s.includes('tuần') || s.includes('周')) return num * 10080;
           if (s.includes('month') || s.includes('tháng') || s.includes('月')) return num * 43200;
           if (s.includes('year') || s.includes('năm') || s.includes('年')) return num * 525600;
-          
           return 999999;
         }
 
-        if (tab === 'recent' || tab === 'posts') {
-          matchingPosts.sort((a, b) => {
-            const ageA = getPostAgeInMinutes(a.timestamp);
-            const ageB = getPostAgeInMinutes(b.timestamp);
-            if (ageA !== ageB) return ageA - ageB;
-            return parseInt(b.id) - parseInt(a.id);
-          });
-        } else if (tab === 'top') {
-          matchingPosts.sort((a, b) => (b.likes || 15) - (a.likes || 15));
-        }
+        matchingPosts.sort((a, b) => {
+          const ageA = getPostAgeInMinutes(a.timestamp);
+          const ageB = getPostAgeInMinutes(b.timestamp);
+          if (ageA !== ageB) return ageA - ageB;
+          return parseInt(b.id) - parseInt(a.id);
+        });
 
         countText.textContent = `${matchingPosts.length} ${dict.posts || 'posts'}`;
 
         if (matchingPosts.length === 0) {
-          container.innerHTML = `<div class="text-center py-5 text-muted"><i class="bi bi-search fs-1 d-block mb-2"></i><span>${noResultsText}</span></div>`;
-          return;
-        }
-
-        let html = '';
-        matchingPosts.forEach(post => {
-          const title = post[`title_${currentLang}`] || post.title_en;
-          const content = post[`content_${currentLang}`] || post.content_en;
-          const tsLabel = typeof window.formatTimestampI18n === 'function' ? window.formatTimestampI18n(post.timestamp) : post.timestamp;
-          const catLabel = typeof window.translateCategory === 'function' ? window.translateCategory(post.category) : post.category;
-          html += `
-            <article class="substack-post" data-supported-langs="${post.supported_langs || 'en,vi,zh'}" data-category="${post.category}">
-              <div class="substack-post-header">
-                <div class="author-badge-group">
-                  <img src="${post.author_avatar}" alt="${post.author_name}" class="author-avatar">
-                  <div class="author-meta-info">
-                    <a href="profile.html?id=${post.author_id || '101'}" class="author-name">${post.author_name}</a>
-                    <span class="post-timestamp">${tsLabel}</span>
-                  </div>
-                  <span class="badge bg-primary-subtle text-primary border border-primary-subtle rounded-pill small px-2 ms-auto category-label" data-original-cat="${post.category}">${catLabel}</span>
-                </div>
-              </div>
-
-              <a href="post-detail.html?id=${post.id}" class="text-decoration-none text-reset d-block">
-                <h2 class="post-title h4 fw-bold mt-2 mb-1">${title}</h2>
-                <div class="substack-post-content post-content">${content}</div>
-                ${post.image ? `<div class="post-image-embed"><img src="${post.image}" alt="${title}"></div>` : ''}
-              </a>
-
-              <div class="substack-post-footer">
-                <button class="footer-action-item" onclick="toggleLike(this, ${post.likes || 12})"><i class="bi bi-heart"></i> <span class="like-count">${post.likes || 12}</span></button>
-                <button class="footer-action-item"><i class="bi bi-chat"></i> <span>${post.comments_count || post.comments || 5}</span></button>
-                <span class="footer-action-item text-muted"><i class="bi bi-eye"></i> <span>${post.views || 300}</span></span>
-              </div>
-            </article>
-          `;
-        });
-        container.innerHTML = html;
-
-      } else if (tab === 'publications') {
-        // Collect publications / categories dynamically from actual posts data
-        const categoryCounts = {};
-        if (dataObj) {
-          Object.values(dataObj).forEach(post => {
-            const cat = post.category || "General";
-            if (typeof window.isCategoryTranslationActive === 'function' && !window.isCategoryTranslationActive(cat, currentLang)) return;
-            categoryCounts[cat] = (categoryCounts[cat] || 0) + 1;
-          });
-        }
-
-        const catMetadata = {
-          "Artificial Intelligence": { name: dict.cat_ai || "Artificial Intelligence", icon: "bi-cpu", desc: dict.desc_ai || "Agentic coding, LLM inference optimization, and neural architectures." },
-          "Backend Engineering": { name: dict.cat_backend || "Backend Engineering", icon: "bi-hdd-network", desc: dict.desc_backend || "Distributed systems, microservices, gRPC, and high-concurrency architecture." },
-          "Design": { name: dict.cat_design || "Design & UX", icon: "bi-palette", desc: dict.desc_design || "Glassmorphism, color psychology, and responsive interface design." },
-          "Frontend Development": { name: dict.cat_frontend || "Frontend Development", icon: "bi-browser-edge", desc: dict.desc_frontend || "React, Vue, Web Components, and modern rendering architectures." },
-          "Mobile Development": { name: dict.cat_mobile || "Mobile Development", icon: "bi-phone", desc: dict.desc_mobile || "Flutter, React Native, iOS, Android, and cross-platform solutions." },
-          "Data Science": { name: dict.cat_data || "Data Science", icon: "bi-bar-chart", desc: dict.desc_data || "Pandas, Polars, machine learning pipelines, and big data analysis." },
-          "Cybersecurity": { name: dict.cat_cyber || "Cybersecurity", icon: "bi-shield-lock", desc: dict.desc_cyber || "Zero Trust, network defense, penetration testing, and cryptography." }
-        };
-
-        const fallbackCategories = ["Artificial Intelligence", "Backend Engineering", "Design"]
-          .filter(cat => typeof window.isCategoryTranslationActive !== 'function' || window.isCategoryTranslationActive(cat, currentLang));
-        const knownCats = Object.keys(categoryCounts).length > 0 ? Object.keys(categoryCounts) : fallbackCategories;
-        const postWord = currentLang === 'vi' ? 'bài viết' : (currentLang === 'zh' ? '篇文章' : 'posts');
-
-        let pubList = knownCats.map(cat => {
-          const meta = catMetadata[cat] || { name: cat, icon: "bi-folder", desc: "Articles and discussions in this category." };
-          const countVal = categoryCounts[cat] || 2;
-          return {
-            key: cat,
-            name: typeof window.translateCategory === 'function' ? window.translateCategory(cat) : meta.name,
-            icon: meta.icon,
-            desc: meta.desc,
-            count: `${countVal} ${postWord}`
-          };
-        });
-
-        if (qLower) {
-          pubList = pubList.filter(p => p.name.toLowerCase().includes(qLower) || p.desc.toLowerCase().includes(qLower) || p.key.toLowerCase().includes(qLower));
-        }
-
-        countText.textContent = `${pubList.length} ${dict.publications || 'publications'}`;
-
-        if (pubList.length === 0) {
           container.innerHTML = `<div class="text-center py-5 text-muted"><i class="bi bi-journal-x fs-1 d-block mb-2"></i><span>${noResultsText}</span></div>`;
           return;
         }
 
         let html = '';
-        pubList.forEach(pub => {
-          html += `
-            <a href="explore.html?q=${encodeURIComponent(pub.name)}" class="explore-card-item text-decoration-none text-reset d-flex">
-              <div class="explore-card-left">
-                <div class="explore-card-pub-icon"><i class="bi ${pub.icon}"></i></div>
-                <div class="explore-card-info">
-                  <div class="explore-card-title">${pub.name}</div>
-                  <div class="explore-card-sub">${pub.desc}</div>
-                  <div class="text-muted small mt-1"><i class="bi bi-file-earmark-text me-1"></i>${pub.count}</div>
-                </div>
-              </div>
-            </a>
-          `;
-        });
+        matchingPosts.forEach(post => { html += renderPostCard(post); });
+        container.innerHTML = html;
+
+      } else if (tab === 'publications') {
+        // DEDICATED PUBLICATIONS SEARCH
+        let filteredPubs = pubList;
+        if (qLower) {
+          filteredPubs = pubList.filter(p => p.name.toLowerCase().includes(qLower) || p.desc.toLowerCase().includes(qLower) || p.key.toLowerCase().includes(qLower));
+        }
+
+        countText.textContent = `${filteredPubs.length} ${dict.publications || 'publications'}`;
+
+        if (filteredPubs.length === 0) {
+          container.innerHTML = `<div class="text-center py-5 text-muted"><i class="bi bi-journal-x fs-1 d-block mb-2"></i><span>${noResultsText}</span></div>`;
+          return;
+        }
+
+        let html = '';
+        filteredPubs.forEach(pub => { html += renderPubCard(pub); });
         container.innerHTML = html;
 
       } else if (tab === 'people') {
-        // Collect people / authors without profession and bio
-        const peopleList = [
-          { id: "101", name: "Elena Rostova", avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=80&h=80" },
-          { id: "102", name: "Hồ Quốc Tuấn", avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=80&h=80" },
-          { id: "103", name: "李明 (Li Ming)", avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=80&h=80" },
-          { id: "104", name: "Sarah Connor", avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=80&h=80" },
-          { id: "105", name: "Alex Rivera", avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=80&h=80" },
-          { id: "106", name: "Maya Lin", avatar: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&q=80&w=80&h=80" },
-          { id: "107", name: "Kenji Sato", avatar: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&q=80&w=80&h=80" },
-          { id: "108", name: "Vũ Thu Hà", avatar: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=80&h=80" }
-        ];
-
-        const authorCounts = {};
-        if (dataObj) {
-          Object.values(dataObj).forEach(post => {
-            if (post.author_id) {
-              authorCounts[post.author_id] = (authorCounts[post.author_id] || 0) + 1;
-            }
-          });
-        }
-        const postWord = currentLang === 'vi' ? 'bài viết' : (currentLang === 'zh' ? '篇文章' : 'posts');
-
+        // DEDICATED PEOPLE SEARCH (Name, Role, Bio, @handle) + isSelfAuthor check
         let filteredPeople = peopleList;
         if (qLower) {
-          filteredPeople = peopleList.filter(p => p.name.toLowerCase().includes(qLower));
+          filteredPeople = peopleList.filter(p => 
+            p.name.toLowerCase().includes(qLower) || 
+            p.role.toLowerCase().includes(qLower) || 
+            p.bio.toLowerCase().includes(qLower) ||
+            p.name.replace(/\s+/g, '').toLowerCase().includes(qLower) ||
+            (p.aliases && p.aliases.some(a => a.toLowerCase().includes(qLower)))
+          );
         }
 
         countText.textContent = `${filteredPeople.length} ${dict.people || 'people'}`;
@@ -439,24 +574,7 @@
         }
 
         let html = '';
-        filteredPeople.forEach(person => {
-          const countVal = authorCounts[person.id] || 1;
-          const countTextVal = `${countVal} ${postWord}`;
-          html += `
-            <div class="explore-card-item align-items-center">
-              <a href="profile.html?id=${person.id}" class="explore-card-left text-decoration-none text-reset align-items-center">
-                <img src="${person.avatar}" class="explore-card-avatar" alt="${person.name}">
-                <div class="explore-card-info">
-                  <div class="explore-card-title fw-bold fs-6 mb-1">${person.name}</div>
-                  <div class="text-muted small"><i class="bi bi-journal-text me-1"></i>${countTextVal}</div>
-                </div>
-              </a>
-              <div class="d-flex align-items-center gap-2">
-                <a href="profile.html?id=${person.id}" class="btn btn-sm btn-outline-secondary rounded-pill px-3 fw-medium" data-i18n="view_profile">${dict.view_profile || 'View Profile'}</a>
-              </div>
-            </div>
-          `;
-        });
+        filteredPeople.forEach(person => { html += renderPersonCard(person); });
         container.innerHTML = html;
       }
     }

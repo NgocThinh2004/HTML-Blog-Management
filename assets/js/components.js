@@ -22,6 +22,8 @@ function initSharedSidebars() {
   const currentLanguageName = ({ en: 'English', vi: 'Tiếng Việt', zh: '中文' })[activeLanguage] || 'English';
   let activePage = '';
   if (path.includes('index.html') || path.endsWith('/guest/') || path.endsWith('/guest')) activePage = 'home';
+  else if (path.includes('subscriptions.html')) activePage = 'subscriptions';
+
   else if (path.includes('explore.html')) activePage = 'explore';
   else if (path.includes('post-detail.html')) activePage = 'post-detail';
   else if (path.includes('settings.html')) activePage = 'settings';
@@ -47,9 +49,10 @@ function initSharedSidebars() {
           <a href="index.html" class="sidebar-nav-item ${activePage === 'home' ? 'active' : ''}">
             <i class="bi bi-house-door-fill"></i> <span data-i18n="home">Home</span>
           </a>
-          <a href="#" class="sidebar-nav-item">
-            <i class="bi bi-inbox"></i> <span data-i18n="inbox">Inbox</span>
+          <a href="subscriptions.html" class="sidebar-nav-item ${activePage === 'subscriptions' ? 'active' : ''}">
+            <i class="bi bi-person-lines-fill"></i> <span data-i18n="subscriptions">Subscriptions</span>
           </a>
+
           <a href="explore.html" class="sidebar-nav-item ${activePage === 'explore' ? 'active' : ''}">
             <i class="bi bi-compass-fill"></i> <span data-i18n="explore">Explore</span>
           </a>
@@ -124,7 +127,8 @@ function initSharedSidebars() {
 
         <nav class="sidebar-nav mb-auto">
           <a href="index.html" class="sidebar-nav-item ${activePage === 'home' ? 'active' : ''}"><i class="bi bi-house-door-fill"></i> <span data-i18n="home">Home</span></a>
-          <a href="#" class="sidebar-nav-item"><i class="bi bi-inbox"></i> <span data-i18n="inbox">Inbox</span></a>
+          <a href="subscriptions.html" class="sidebar-nav-item ${activePage === 'subscriptions' ? 'active' : ''}"><i class="bi bi-person-lines-fill"></i> <span data-i18n="subscriptions">Subscriptions</span></a>
+
           <a href="explore.html" class="sidebar-nav-item ${activePage === 'explore' ? 'active' : ''}"><i class="bi bi-compass-fill"></i> <span data-i18n="explore">Explore</span></a>
           <a href="my-posts.html" class="sidebar-nav-item ${activePage === 'my-posts' ? 'active' : ''}"><i class="bi bi-journal-text"></i> <span data-i18n="my_articles">My Articles</span></a>
           <a href="profile.html" class="sidebar-nav-item ${activePage === 'profile' ? 'active' : ''}"><i class="bi bi-person"></i> <span data-i18n="profile">Profile</span></a>
@@ -178,9 +182,12 @@ function initSharedSidebars() {
         </div>
         <div class="featured-author-item">
           <div class="featured-author-info">
-            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=80&h=80" alt="Tuấn" class="featured-author-avatar">
-            <div class="featured-author-meta">
-              <span class="featured-author-name">Hồ Quốc Tuấn</span>
+            <div class="position-relative author-tooltip-container" style="cursor: pointer;" onclick="window.location.href='profile.html?id=102'">
+              <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=80&h=80" alt="Tuấn" class="featured-author-avatar">
+              ${typeof window.getAuthorTooltipHtml === 'function' ? window.getAuthorTooltipHtml('Hồ Quốc Tuấn', 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=80&h=80') : ''}
+            </div>
+            <div class="featured-author-meta" style="cursor: pointer;" onclick="window.location.href='profile.html?id=102'">
+              <span class="featured-author-name hover-text-primary">Hồ Quốc Tuấn</span>
               <span class="featured-author-count">Economics Author</span>
             </div>
           </div>
@@ -188,9 +195,12 @@ function initSharedSidebars() {
         </div>
         <div class="featured-author-item">
           <div class="featured-author-info">
-            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=80&h=80" alt="Elena" class="featured-author-avatar">
-            <div class="featured-author-meta">
-              <span class="featured-author-name">Elena Rostova</span>
+            <div class="position-relative author-tooltip-container" style="cursor: pointer;" onclick="window.location.href='profile.html?id=101'">
+              <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=80&h=80" alt="Elena" class="featured-author-avatar">
+              ${typeof window.getAuthorTooltipHtml === 'function' ? window.getAuthorTooltipHtml('Elena Rostova', 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=80&h=80') : ''}
+            </div>
+            <div class="featured-author-meta" style="cursor: pointer;" onclick="window.location.href='profile.html?id=101'">
+              <span class="featured-author-name hover-text-primary">Elena Rostova</span>
               <span class="featured-author-count">Economics Lead</span>
             </div>
           </div>
@@ -198,9 +208,12 @@ function initSharedSidebars() {
         </div>
         <div class="featured-author-item">
           <div class="featured-author-info">
-            <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=80&h=80" alt="Li Ming" class="featured-author-avatar">
-            <div class="featured-author-meta">
-              <span class="featured-author-name">李明 (Li Ming)</span>
+            <div class="position-relative author-tooltip-container" style="cursor: pointer;" onclick="window.location.href='profile.html?id=103'">
+              <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=80&h=80" alt="Li Ming" class="featured-author-avatar">
+              ${typeof window.getAuthorTooltipHtml === 'function' ? window.getAuthorTooltipHtml('李明 (Li Ming)', 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=80&h=80') : ''}
+            </div>
+            <div class="featured-author-meta" style="cursor: pointer;" onclick="window.location.href='profile.html?id=103'">
+              <span class="featured-author-name hover-text-primary">李明 (Li Ming)</span>
               <span class="featured-author-count">Tech Lead</span>
             </div>
           </div>
@@ -496,6 +509,8 @@ function initGlobalSearchModal() {
     document.querySelectorAll('.right-search-box, .explore-search-input-box').forEach(boxEl => {
       // On the explore page, the main search box (#exploreSearchBox) uses its own dropdown — skip modal
       if (isExplorePage && boxEl.id === 'exploreSearchBox') return;
+      if (boxEl.id === 'subscribersSearchWrap') return;
+      
       boxEl.style.cursor = 'pointer';
       boxEl.addEventListener('click', (e) => {
         e.preventDefault();
@@ -539,7 +554,7 @@ function initGlobalSearchModal() {
     const dict = (window.uiTranslations && window.uiTranslations[currentLang]) || (window.uiTranslations && window.uiTranslations.en) || {};
     const noResultsText = dict.no_results || "No matching results found.";
 
-    let matchCount = 0;
+    let matchedPosts = [];
     Object.keys(dataObj).forEach(id => {
       const post = dataObj[id];
       
@@ -567,31 +582,38 @@ function initGlobalSearchModal() {
         category.toLowerCase().includes(query) ||
         content.toLowerCase().includes(query)
       ) {
-        matchCount++;
-        const itemEl = document.createElement('a');
-        itemEl.href = `post-detail.html?id=${id}`;
-        itemEl.className = 'search-result-item';
-        itemEl.innerHTML = `
-          <img src="${post.author_avatar}" class="search-result-avatar" alt="${author}">
-          <div class="search-result-content">
-            <div class="search-result-title">${title}</div>
-            <div class="search-result-meta">
-              <span><i class="bi bi-person-fill"></i> ${author}</span> &bull; 
-              <span class="badge bg-secondary-subtle text-secondary border px-2 py-0 category-label" data-original-cat="${category}">${typeof window.translateCategory === 'function' ? window.translateCategory(category) : category}</span> &bull; 
-              <span class="post-timestamp">${typeof window.formatTimestampI18n === 'function' ? window.formatTimestampI18n(post.timestamp) : post.timestamp}</span> &bull;
-              <span><i class="bi bi-eye"></i> ${post.views || 300}</span>
-            </div>
-            <div class="search-result-snippet">${content.substring(0, 130)}...</div>
-          </div>
-        `;
-        itemEl.addEventListener('click', () => {
-          closeSearchModal();
-        });
-        resultsList.appendChild(itemEl);
+        matchedPosts.push({ id, post, title, content, author, category });
       }
     });
 
-    if (matchCount === 0) {
+    // Sắp xếp bài viết hot nhất (dựa trên views) và giới hạn 3 kết quả
+    matchedPosts.sort((a, b) => (b.post.views || 0) - (a.post.views || 0));
+    matchedPosts = matchedPosts.slice(0, 3);
+
+    matchedPosts.forEach(({ id, post, title, content, author, category }) => {
+      const itemEl = document.createElement('a');
+      itemEl.href = `post-detail.html?id=${id}`;
+      itemEl.className = 'search-result-item';
+      itemEl.innerHTML = `
+        <img src="${post.author_avatar}" class="search-result-avatar" alt="${author}">
+        <div class="search-result-content">
+          <div class="search-result-title">${title}</div>
+          <div class="search-result-meta">
+            <span><i class="bi bi-person-fill"></i> ${author}</span> &bull; 
+            <span class="badge bg-secondary-subtle text-secondary border px-2 py-0 category-label" data-original-cat="${category}">${typeof window.translateCategory === 'function' ? window.translateCategory(category) : category}</span> &bull; 
+            <span class="post-timestamp">${typeof window.formatTimestampI18n === 'function' ? window.formatTimestampI18n(post.timestamp) : post.timestamp}</span> &bull;
+            <span><i class="bi bi-eye"></i> ${post.views || 300}</span>
+          </div>
+          <div class="search-result-snippet">${content.substring(0, 130)}...</div>
+        </div>
+      `;
+      itemEl.addEventListener('click', () => {
+        closeSearchModal();
+      });
+      resultsList.appendChild(itemEl);
+    });
+
+    if (matchedPosts.length === 0) {
       resultsList.innerHTML = `
         <div class="text-center py-4 text-muted">
           <i class="bi bi-search fs-2 d-block mb-2"></i>
@@ -783,12 +805,14 @@ window.renderFeedPosts = function(containerId, dataObj, categoryFilter = 'all') 
     html += `
     <article class="substack-post" data-supported-langs="${post.supported_langs || 'en,vi,zh'}" data-category="${post.category || 'Artificial Intelligence'}">
       <div class="substack-post-header">
-        <div class="author-badge-group">
+        <div class="author-badge-group position-relative author-tooltip-container" style="cursor: pointer; z-index: 2;" onclick="window.location.href='profile.html?id=${post.author_id || 101}'">
           <img src="${post.author_avatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=80&h=80'}" alt="${post.author_name}" class="author-avatar">
           <div class="author-meta-info">
-            <a href="profile.html?id=${post.author_id || 101}" class="author-name">${post.author_name || 'Anonymous'}</a>
+            <span class="author-name hover-text-primary fw-bold" style="color: var(--text-main);">${post.author_name || 'Anonymous'}</span>
             <span class="post-timestamp" data-original-ts="${post.timestamp || 'Just now'}">${post.timestamp || 'Just now'}</span>
           </div>
+          <!-- Author Hover Card Tooltip -->
+          ${typeof window.getAuthorTooltipHtml === 'function' ? window.getAuthorTooltipHtml(post.author_name, post.author_avatar) : ''}
         </div>
       </div>
       <a href="post-detail.html?id=${id}" class="text-decoration-none text-reset d-block">
@@ -826,5 +850,34 @@ window.renderFeedPosts = function(containerId, dataObj, categoryFilter = 'all') 
   // Apply translations to the newly generated HTML
   if (typeof applyUiTranslations === 'function') {
     applyUiTranslations(currentLang);
+  }
+};
+
+/**
+ * Global function to handle Subscribe button interactions.
+ * This simulates subscribing to an author.
+ */
+window.toggleSubscribe = function(btn, event) {
+  if (event) {
+    event.preventDefault();
+    event.stopPropagation();
+  }
+
+  const isSubscribed = btn.classList.toggle('subscribed');
+  const currentLang = localStorage.getItem('preferredLanguage') || 'en';
+  const dict = (window.uiTranslations && window.uiTranslations[currentLang]) || {};
+  const unfollowLabels = { en: 'Unfollow', vi: 'Bỏ theo dõi', zh: '取消关注' };
+
+  if (isSubscribed) {
+    const followingText = dict.btn_following || dict.following || 'Following';
+    btn.innerHTML = `<span class="btn-subscribe-label">${followingText}</span>`;
+    btn.setAttribute('data-unfollow-label', unfollowLabels[currentLang] || unfollowLabels.en);
+  } else {
+    const isAuthorCard = btn.classList.contains('px-5') || btn.getAttribute('data-btn-type') === 'author';
+    const followText = isAuthorCard
+      ? (dict.subscribe_author || dict.btn_follow || 'Follow')
+      : (dict.btn_follow || dict.subscribe || 'Follow');
+    btn.innerHTML = `<span class="btn-subscribe-label">${followText}</span>`;
+    btn.removeAttribute('data-unfollow-label');
   }
 };

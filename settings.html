@@ -16,9 +16,9 @@
   
   <!-- Custom CSS (Standard Shared Assets) -->
 <link rel="stylesheet" href="assets/css/variables.css">
-  <link rel="stylesheet" href="assets/css/base.css?v=5">
-  <link rel="stylesheet" href="assets/css/layouts.css?v=4">
-  <link rel="stylesheet" href="assets/css/components.css?v=12">
+  <link rel="stylesheet" href="assets/css/base.css?v=1784089471952">
+  <link rel="stylesheet" href="assets/css/layouts.css?v=1784089471952">
+  <link rel="stylesheet" href="assets/css/components.css?v=1784089471952">
   <style>
     /* Settings Page Specific Styles */
     .settings-container {
@@ -155,7 +155,8 @@
           <span class="fs-5 fw-bold text-main">Lingora</span>
         </a>
         <div class="d-flex align-items-center ms-auto gap-2">
-          <a href="create-post.html" class="btn btn-primary btn-sm fw-medium px-3 rounded-pill"><i class="bi bi-plus-lg me-1"></i> <span data-i18n="create">Create</span></a>
+          <a href="create-post.html" class="btn btn-primary btn-sm fw-medium px-2 px-sm-3 rounded-pill d-inline-flex align-items-center me-1"><i class="bi bi-plus-lg me-1"></i> <span data-i18n="create">Create</span></a>
+
           <a href="profile.html" class="text-decoration-none">
             <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=32&h=32" class="rounded-circle border" width="32" height="32" alt="Avatar">
           </a>
@@ -182,9 +183,7 @@
             <a href="index.html" class="sidebar-nav-item">
               <i class="bi bi-house-door"></i> <span data-i18n="home">Home</span>
             </a>
-            <a href="#" class="sidebar-nav-item">
-              <i class="bi bi-inbox"></i> <span data-i18n="inbox">Inbox</span>
-            </a>
+
             <a href="my-posts.html" class="sidebar-nav-item">
               <i class="bi bi-journal-text"></i> <span data-i18n="my_articles">My Articles</span>
             </a>
@@ -352,6 +351,25 @@
 </label>
                 </div>
               </div>
+
+              <hr class="my-1 border-light-subtle">
+
+              <div class="d-flex align-items-center justify-content-between p-2 rounded-3 hover-bg">
+                <div>
+                  <div class="fw-bold text-main" data-i18n="show_subscribers">Hiển thị người đăng ký (Show Subscribers)</div>
+                  <small class="text-muted" data-i18n="show_subscribers_desc">Cho phép người khác xem danh sách những người đang theo dõi bạn.</small>
+                </div>
+                <div class="form-check form-switch fs-5 mb-0">
+                  <label class="perfect-switch" id="showSubscribersSwitchContainer">
+                    <input class="perfect-switch-input" type="checkbox" id="showSubscribersSwitch" checked>
+                    <div class="perfect-switch-track">
+                      <div class="perfect-switch-thumb"></div>
+                      <span class="perfect-switch-text-on" data-i18n="on">On</span>
+                      <span class="perfect-switch-text-off" data-i18n="off">Off</span>
+                    </div>
+                  </label>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -390,9 +408,7 @@
         <a href="index.html" class="sidebar-nav-item">
           <i class="bi bi-house-door-fill"></i> <span data-i18n="home">Home</span>
         </a>
-        <a href="#" class="sidebar-nav-item">
-          <i class="bi bi-inbox"></i> <span data-i18n="inbox">Inbox</span>
-        </a>
+
         <a href="my-posts.html" class="sidebar-nav-item">
           <i class="bi bi-journal-text"></i> <span data-i18n="my_articles">My Articles</span>
         </a>
@@ -675,6 +691,15 @@
         autoPlaySwitch.addEventListener('change', () => {
           localStorage.setItem('autoPlayMedia', autoPlaySwitch.checked);
           showToast(settingsT(autoPlaySwitch.checked ? 'toast_autoplay_on' : 'toast_autoplay_off'));
+        });
+      }
+
+      const showSubscribersSwitch = document.getElementById('showSubscribersSwitch');
+      if (showSubscribersSwitch) {
+        showSubscribersSwitch.checked = localStorage.getItem('allowShowSubscribers') !== 'false';
+        showSubscribersSwitch.addEventListener('change', () => {
+          localStorage.setItem('allowShowSubscribers', showSubscribersSwitch.checked);
+          showToast(settingsT(showSubscribersSwitch.checked ? 'toast_show_subscribers_on' : 'toast_show_subscribers_off'));
         });
       }
     });
