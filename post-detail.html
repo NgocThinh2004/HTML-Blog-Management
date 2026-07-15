@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MundiBlog - Post Details</title>
+  <title>Lingora - Post Details</title>
   <!-- Google Fonts: Inter -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -18,10 +18,9 @@
 
   <!-- Custom CSS (Standard Shared Assets) -->
   <link rel="stylesheet" href="assets/css/variables.css">
-  <link rel="stylesheet" href="assets/css/base.css">
-  <link rel="stylesheet" href="assets/css/layouts.css">
-  <link rel="stylesheet" href="assets/css/components.css">
-  
+  <link rel="stylesheet" href="assets/css/base.css?v=5">
+  <link rel="stylesheet" href="assets/css/layouts.css?v=4">
+  <link rel="stylesheet" href="assets/css/components.css?v=12">
 </head>
 
 <body>
@@ -41,10 +40,7 @@
         <div class="d-flex align-items-center ms-auto gap-2">
           <a href="create-post.html" class="btn btn-primary btn-sm fw-medium px-2 px-sm-3 rounded-pill d-inline-flex align-items-center me-1"><i
               class="bi bi-plus-lg me-1"></i> <span data-i18n="create">Create</span></a>
-          <a href="inbox.html" class="header-bell me-1" aria-label="Notifications">
-            <i class="bi bi-bell fs-5"></i>
-            <span class="badge bg-danger rounded-pill px-1.5 py-0.5 notification-count-badge" style="font-size: 0.65rem;">2</span>
-          </a>
+
           <a href="profile.html" class="text-decoration-none">
             <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=32&h=32"
               class="rounded-circle border" width="32" height="32" alt="Avatar">
@@ -56,97 +52,8 @@
     <!-- 3-COLUMN LAYOUT -->
     <main class="app-main-content">
 
-      <!-- COLUMN 1: LEFT SIDEBAR NAVIGATION -->
-      <aside class="left-sidebar">
-        <div>
-          <!-- Substack Logo -->
-          <div class="substack-logo-container">
-            <a href="index.html" class="text-decoration-none d-flex align-items-center gap-2">
-              <i class="bi bi-bookmark-fill substack-logo"></i>
-              <span class="fs-5 fw-bold text-main" style="letter-spacing: -0.02em;">MundiBlog</span>
-            </a>
-          </div>
-
-          <!-- Navigation menu -->
-          <nav class="sidebar-nav">
-            <a href="index.html" class="sidebar-nav-item">
-              <i class="bi bi-house-door"></i> <span data-i18n="home">Home</span>
-            </a>
-            <a href="inbox.html" class="sidebar-nav-item">
-              <i class="bi bi-bell"></i> <span data-i18n="activity">Activity</span>
-              <span class="badge bg-danger rounded-pill ms-auto notification-sidebar-badge" style="font-size: 0.72rem; padding: 0.25em 0.55em;">2</span>
-            </a>
-            <a href="my-posts.html" class="sidebar-nav-item">
-              <i class="bi bi-journal-text"></i> <span data-i18n="my_articles">My Articles</span>
-            </a>
-            <a href="profile.html" class="sidebar-nav-item">
-              <i class="bi bi-person"></i> <span data-i18n="profile">Profile</span>
-            </a>
-          </nav>
-
-          <a href="create-post.html" class="sidebar-create-btn">
-            <span data-i18n="create">Create</span> <i class="bi bi-plus-lg"></i>
-          </a>
-        </div>
-
-        <!-- Bottom Section: Only More Dropdown (Clean Substack style) -->
-
-        <div class="sidebar-footer-menu">
-
-          <!-- Sidebar Controls (Theme & Language) -->
-          <div class="sidebar-controls mb-2">
-            <!-- Theme Switch and Language -->
-            <div class="d-flex align-items-center justify-content-start gap-2 ps-3 pe-2 mb-2">
-              <div class="dropdown">
-                <button class="btn btn-sm btn-outline-secondary d-flex align-items-center justify-content-center p-0"
-                  type="button" data-bs-toggle="dropdown" aria-expanded="false"
-                  style="width: 38px; height: 38px; border-radius: 8px; border-color: var(--border-color);">
-                  <img src="https://flagcdn.com/w20/gb.png" width="24" height="18" id="sidebarLangFlag"
-                    style="border-radius:2px; object-fit: cover;" alt="Language">
-                </button>
-                <ul class="dropdown-menu shadow border-light-subtle"
-                  style="min-width: 120px; border-radius: 12px; font-size: 14px;">
-                  <li><a class="dropdown-item py-1.5 fw-medium global-lang-select" href="#" data-lang="en"><img
-                        src="https://flagcdn.com/w20/gb.png" width="18" alt="English" class="me-2"
-                        style="border-radius:2px;"> English</a></li>
-                  <li><a class="dropdown-item py-1.5 fw-medium global-lang-select" href="#" data-lang="vi"><img
-                        src="https://flagcdn.com/w20/vn.png" width="18" alt="Tiếng Việt" class="me-2"
-                        style="border-radius:2px;"> Tiếng Việt</a></li>
-                  <li><a class="dropdown-item py-1.5 fw-medium global-lang-select" href="#" data-lang="zh"><img
-                        src="https://flagcdn.com/w20/cn.png" width="18" alt="中文" class="me-2"
-                        style="border-radius:2px;"> 中文</a></li>
-                </ul>
-              </div>
-              <button class="btn btn-sm btn-outline-secondary d-flex align-items-center justify-content-center p-0"
-                id="sidebarThemeToggle"
-                style="width: 38px; height: 38px; border-radius: 8px; border-color: var(--border-color); color: var(--text-main);"
-                aria-label="Toggle theme">
-                <i class="bi bi-moon-fill" id="sidebarThemeIcon" style="font-size: 17px;"></i>
-              </button>
-            </div>
-          </div>
-
-          <div class="dropdown">
-            <button
-              class="btn btn-link text-decoration-none text-main d-flex align-items-center gap-2 p-1.5 w-100 border-0 text-start"
-              type="button" data-bs-toggle="dropdown" aria-expanded="false">
-              <i class="bi bi-list fs-5"></i>
-              <span class="fw-medium" data-i18n="more">More</span>
-            </button>
-            <ul class="dropdown-menu shadow border-light-subtle">
-              <li><a class="dropdown-item py-2" href="settings.html"><i class="bi bi-gear me-2"></i> <span
-                    data-i18n="settings">Settings</span></a></li>
-              <li><a class="dropdown-item py-2" href="admin/index.html" id="adminPanelLink"><i
-                    class="bi bi-speedometer2 me-2"></i> <span data-i18n="admin_panel">Admin Panel</span></a></li>
-              <li>
-                <hr class="dropdown-divider">
-              </li>
-              <li><a class="dropdown-item py-2 text-danger" href="#" id="signOutBtn"><i
-                    class="bi bi-box-arrow-right me-2"></i> <span data-i18n="sign_out">Sign Out</span></a></li>
-            </ul>
-          </div>
-        </div>
-      </aside>
+      <!-- COLUMN 1: LEFT SIDEBAR NAVIGATION (Rendered dynamically by components.js) -->
+      <aside class="left-sidebar"></aside>
 
       <!-- COLUMN 2: CENTER WORKSPACE FEED (Post Details View) -->
       <div class="center-feed">
@@ -154,7 +61,7 @@
         <div class="d-lg-none w-100 mb-3">
           <div class="right-search-box w-100">
             <i class="bi bi-search"></i>
-            <input type="text" id="mobileFeedSearchInput" placeholder="Search MundiBlog..."
+            <input type="text" id="mobileFeedSearchInput" placeholder="Search Lingora..."
               data-i18n="search_placeholder">
           </div>
         </div>
@@ -168,13 +75,13 @@
           <!-- Dynamically loaded by script below -->
         </div>
 
-        <!-- Comments Section (Max 2 Levels, Multi-language Support) -->
-        <div class="mt-5 pt-3">
+        <!-- Comments Section (Multi-language Support) -->
+        <div class="mt-5 pt-3 border-top">
           <div class="d-flex justify-content-between align-items-center mb-4">
             <h4 class="fw-bold mb-0"><span data-i18n="comments">Comments</span> (<span id="commentCountText">0</span>)
             </h4>
             <button class="btn btn-sm btn-outline-secondary rounded-pill px-3 shadow-sm d-flex align-items-center gap-1"
-              onclick="resetDemoComments()" title="Khôi phục dữ liệu mẫu">
+              onclick="if(typeof resetDemoComments==='function') resetDemoComments();" title="Khôi phục dữ liệu mẫu">
               <i class="bi bi-arrow-counterclockwise"></i><span data-i18n="reset_demo">Khôi phục dữ liệu mẫu</span>
             </button>
           </div>
@@ -183,14 +90,14 @@
             <textarea id="newCommentInput" class="form-control mb-2" rows="3"
               placeholder="Write a comment in any language..." data-i18n="comment_placeholder"></textarea>
             <div class="d-flex justify-content-end">
-              <button class="btn btn-primary px-4 rounded-pill fw-medium" onclick="postNewComment()"
+              <button class="btn btn-primary px-4 rounded-pill fw-medium" onclick="if(typeof postNewComment==='function') postNewComment();"
                 data-i18n="post_comment">Post Comment</button>
             </div>
           </div>
 
           <!-- Dynamic Comments Container -->
           <div id="commentsListContainer" class="comments-list mt-4">
-            <!-- Rendered by script -->
+            <!-- Rendered cleanly by core.js -->
           </div>
         </div>
 
@@ -204,137 +111,14 @@
         </div>
       </div>
 
-      <!-- COLUMN 3: RIGHT PANEL (Search, Widgets, App promo) -->
-      <aside class="right-panel">
-        <!-- Rounded Search bar -->
-        <div class="right-search-box">
-          <i class="bi bi-search"></i>
-          <input type="search" id="feedSearchInput" placeholder="Search MundiBlog..." data-i18n="search_placeholder">
-        </div>
-
-        <!-- Platform Subscriptions widgets -->
-        <div class="subscriptions-widget">
-          <div class="d-flex align-items-center gap-3">
-            <div class="substack-logo-container p-0">
-              <i class="bi bi-bookmark-fill fs-3" style="color: var(--primary-color);"></i>
-            </div>
-            <div>
-              <h6 class="fw-bold text-main mb-0" style="font-size: 0.85rem;" data-i18n="subscriptions">Subscriptions
-              </h6>
-              <span class="text-muted" style="font-size: 0.75rem;" data-i18n="join_creators">Join creators on
-                MundiBlog</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Recommended Authors Widget (CSDL Users) -->
-        <div class="featured-authors-widget">
-          <div class="d-flex justify-content-between align-items-center mb-3">
-            <h6 class="fw-bold text-main mb-0" style="font-size: 0.85rem;" data-i18n="recommended">Recommended for You
-            </h6>
-            <a href="#" class="text-decoration-none small text-muted" data-i18n="see_all">See all</a>
-          </div>
-
-          <!-- Recommended Authors List -->
-          <div class="featured-author-item">
-            <div class="featured-author-info">
-              <img
-                src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=80&h=80"
-                alt="Tuấn" class="featured-author-avatar">
-              <div class="featured-author-meta">
-                <span class="featured-author-name">Hồ Quốc Tuấn</span>
-                <span class="featured-author-count">Economics Author</span>
-              </div>
-            </div>
-            <button class="btn-profile-view" onclick="window.location.href='profile.html?id=1'"
-              data-i18n="view_profile">View Profile</button>
-          </div>
-
-          <div class="featured-author-item">
-            <div class="featured-author-info">
-              <img
-                src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=80&h=80"
-                alt="Anh" class="featured-author-avatar">
-              <div class="featured-author-meta">
-                <span class="featured-author-name">Hoàng Anh</span>
-                <span class="featured-author-count">UX Designer</span>
-              </div>
-            </div>
-            <button class="btn-profile-view" onclick="window.location.href='profile.html?id=2'"
-              data-i18n="view_profile">View Profile</button>
-          </div>
-
-          <div class="featured-author-item">
-            <div class="featured-author-info">
-              <img
-                src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=80&h=80"
-                alt="Dương" class="featured-author-avatar">
-              <div class="featured-author-meta">
-                <span class="featured-author-name">Thái Dương</span>
-                <span class="featured-author-count">Tech Lead</span>
-              </div>
-            </div>
-            <button class="btn-profile-view" onclick="window.location.href='profile.html?id=3'"
-              data-i18n="view_profile">View Profile</button>
-          </div>
-        </div>
-      </aside>
+      <!-- COLUMN 3: RIGHT PANEL (Rendered dynamically by components.js) -->
+      <aside class="right-panel"></aside>
 
     </main>
   </div>
 
-  <!-- MOBILE SIDEBAR / OFFCANVAS -->
-  <div class="offcanvas offcanvas-start" tabindex="-1" id="mobileSidebar" aria-labelledby="mobileSidebarLabel">
-    <div class="offcanvas-header border-bottom">
-      <a href="index.html" class="text-decoration-none d-flex align-items-center gap-2">
-        <i class="bi bi-bookmark-fill text-primary fs-4"></i>
-        <span class="fs-5 fw-bold text-main" style="letter-spacing: -0.02em;">MundiBlog</span>
-      </a>
-      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-    </div>
-    <div class="offcanvas-body d-flex flex-column p-3">
-      <!-- Mobile Search inside Sidebar -->
-      <div class="d-lg-none mb-3">
-        <div class="right-search-box w-100">
-          <i class="bi bi-search"></i>
-          <input type="text" id="sidebarSearchInput" placeholder="Search MundiBlog..."
-            oninput="window.location.href='home.html?search=' + encodeURIComponent(this.value)"
-            data-i18n="search_placeholder">
-        </div>
-      </div>
-
-      <nav class="sidebar-nav mb-3">
-        <a href="index.html" class="sidebar-nav-item">
-          <i class="bi bi-house-door-fill"></i> <span data-i18n="home">Home</span>
-        </a>
-        <a href="inbox.html" class="sidebar-nav-item">
-          <i class="bi bi-bell"></i> <span data-i18n="activity">Activity</span>
-          <span class="badge bg-danger rounded-pill ms-auto notification-sidebar-badge" style="font-size: 0.72rem; padding: 0.25em 0.55em;">2</span>
-        </a>
-        <a href="my-posts.html" class="sidebar-nav-item">
-          <i class="bi bi-journal-text"></i> <span data-i18n="my_articles">My Articles</span>
-        </a>
-        <a href="profile.html" class="sidebar-nav-item">
-          <i class="bi bi-person"></i> <span data-i18n="profile">Profile</span>
-        </a>
-      </nav>
-
-      <a href="create-post.html" class="sidebar-create-btn mb-4">
-        <span data-i18n="create">Create</span> <i class="bi bi-plus-lg"></i>
-      </a>
-
-      <div class="mt-auto pt-3 border-top">
-        <div class="d-flex flex-column gap-1">
-          <a class="sidebar-nav-item" href="settings.html"><i class="bi bi-gear"></i> <span
-              data-i18n="settings">Settings</span></a>
-          <a class="sidebar-nav-item" href="admin/index.html"><i class="bi bi-speedometer2"></i> <span
-              data-i18n="admin_panel">Admin Panel</span></a>
-          <a class="sidebar-nav-item text-danger" href="#" id="mobileSignOutBtn"><i class="bi bi-box-arrow-right"></i>
-            <span data-i18n="sign_out">Sign Out</span></a>
-        </div>
-      </div>
-    </div>
-  </div>
+  <!-- MOBILE SIDEBAR / OFFCANVAS (Rendered dynamically by components.js) -->
+  <div class="offcanvas offcanvas-start" tabindex="-1" id="mobileSidebar" aria-labelledby="mobileSidebarLabel"></div>
 
   <!-- Bootstrap 5 JS Bundle -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
@@ -343,14 +127,14 @@
   <script src="assets/js/components.js"></script>
 
   <script>
-
     function renderPostDetail() {
       const urlParams = new URLSearchParams(window.location.search);
       const postId = urlParams.get('id') || "1";
-      const post = window.globalPostsData[postId] || window.globalPostsData["1"];
+      const post = (window.globalPostsData && window.globalPostsData[postId]) || (window.globalPostsData && window.globalPostsData["1"]);
+      if (!post) return;
 
       // Sync post.comments with actual comments database count
-      const comments = getCommentsForPost(postId);
+      const comments = window.getCommentsForPost ? window.getCommentsForPost(postId) : [];
       let initCount = 0;
       comments.forEach(c => {
         initCount += 1 + (c.replies ? c.replies.length : 0);
@@ -358,23 +142,25 @@
       post.comments = initCount;
 
       const container = document.getElementById('postDetailContainer');
+      if (!container) return;
 
       let imageHtml = "";
       if (post.image) {
         imageHtml = `
-          <div class="post-image-embed">
-            <img src="${post.image}" alt="Cover Image">
+          <div class="post-image-embed mb-4">
+            <img src="${post.image}" alt="Cover Image" class="w-100 rounded-4 shadow-sm" style="max-height: 420px; object-fit: cover;">
           </div>
         `;
       }
 
       container.innerHTML = `
-        <article class="substack-post border-0 py-0" data-supported-langs="${post.supported_langs}" data-category="${post.category}">
+        <article class="substack-post border-0 py-0" data-supported-langs="${post.supported_langs || 'en,vi,zh'}" data-category="${post.category}">
           <div class="mb-3">
-            <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-3 py-1 rounded-pill fw-medium">${post.category}</span>
+            <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-3 py-1 rounded-pill fw-medium">${typeof window.translateCategory === 'function' ? window.translateCategory(post.category) : post.category}</span>
           </div>
           
-          <h1 class="post-title fw-bold display-6 mb-4"
+          <h1 class="post-title fw-bold mb-4 text-main"
+              style="font-size: 1.75rem; letter-spacing: -0.025em; line-height: 1.25;"
               data-translate-title-en="${post.title_en}"
               data-translate-title-vi="${post.title_vi || post.title_en}"
               data-translate-title-zh="${post.title_zh || post.title_en}">
@@ -383,60 +169,42 @@
 
           <div class="substack-post-header mb-4 pb-3 border-bottom">
             <div class="author-badge-group d-flex align-items-center w-100 position-relative author-tooltip-container">
-              <img src="${post.author_avatar}" alt="${post.author_name}" class="author-avatar me-3" style="width:48px;height:48px;">
+              <img src="${post.author_avatar}" alt="${post.author_name}" class="author-avatar me-3 rounded-circle border" style="width:48px;height:48px;object-fit:cover;">
               <div class="author-meta-info flex-grow-1">
                 <div class="d-flex align-items-center">
-                  <a href="profile.html?id=${post.author_id}" class="author-name me-2 text-decoration-none">${post.author_name}</a>
-                  ${(typeof window.isSelfAuthor === 'function' && window.isSelfAuthor(post.author_name)) ? '' : `<button class="btn btn-sm btn-outline-primary rounded-pill px-3 py-0 btn-subscribe" style="font-size: 0.75rem;" onclick="toggleSubscribe(this, event)">Theo dõi</button>`}
+                  <a href="profile.html?id=${post.author_id}" class="author-name me-2 text-decoration-none fw-bold text-main">${post.author_name}</a>
+                  ${(typeof window.isSelfAuthor === 'function' && window.isSelfAuthor(post.author_name)) ? '' : `<button class="btn btn-sm btn-outline-primary rounded-pill btn-subscribe" onclick="if(typeof toggleSubscribe==='function') toggleSubscribe(this, event); else alert('Subscribed');"><span class="btn-subscribe-label">${typeof window.uiTranslations !== 'undefined' ? ((window.uiTranslations[localStorage.getItem('preferredLanguage') || 'en'] || {}).btn_follow || 'Follow') : 'Follow'}</span></button>`}
                 </div>
-                <span class="post-timestamp">${typeof window.formatTimestampI18n === 'function' ? window.formatTimestampI18n(post.timestamp) : post.timestamp}</span>
+                <span class="post-timestamp text-muted small">${typeof window.formatTimestampI18n === 'function' ? window.formatTimestampI18n(post.timestamp) : post.timestamp}</span>
               </div>
-              
-              <!-- Author Hover Card Tooltip -->
-              <!-- Author Hover Card Tooltip -->
-              <div class="author-hover-card shadow-lg border rounded-4 position-absolute overflow-hidden" style="padding: 0;">
-                <div style="height: 60px; background: linear-gradient(135deg, rgba(var(--bs-primary-rgb), 0.8), rgba(var(--bs-primary-rgb), 0.4));"></div>
-                <div class="p-3 pt-0 position-relative">
-                  <div class="d-flex justify-content-between align-items-end mb-2" style="margin-top: -24px;">
-                    <img src="${post.author_avatar}" class="rounded-circle" width="56" height="56" style="object-fit: cover; border: 3px solid var(--bg-panel); background: var(--bg-panel);" alt="Avatar">
-                    ${(typeof window.isSelfAuthor === 'function' && window.isSelfAuthor(post.author_name)) ? '' : `<button class="btn btn-primary btn-sm rounded-pill fw-bold px-4 py-1 shadow-sm btn-subscribe" onclick="toggleSubscribe(this, event)">Theo dõi</button>`}
-                  </div>
-                  <div class="mb-2">
-                    <h6 class="mb-0 fw-bold fs-6 text-main">${post.author_name}</h6>
-                    <small class="text-muted">@${post.author_name.replace(/\s+/g, '').toLowerCase()}</small>
-                  </div>
-                  <p class="small mb-3 text-muted" style="line-height: 1.4;">Writing about ${post.category}, sharing insightful thoughts with the community.</p>
-                  <div class="d-flex gap-3 small">
-                    <div><span class="fw-bold text-main">1.2K</span> <span class="text-muted">Followers</span></div>
-                    <div><span class="fw-bold text-main">48</span> <span class="text-muted">Posts</span></div>
-                  </div>
-                </div>
-              </div>
+              ${typeof window.getAuthorTooltipHtml === 'function' ? window.getAuthorTooltipHtml(post.author_name, post.author_avatar) : ''}
             </div>
           </div>
 
           ${imageHtml}
 
-          <div class="substack-post-content post-content mt-4"
+          <div class="substack-post-content post-content mt-4 text-main" style="line-height: 1.8;"
                data-translate-content-en="${post.content_en}"
                data-translate-content-vi="${post.content_vi || post.content_en}"
                data-translate-content-zh="${post.content_zh || post.content_en}">
             ${post.content_en}
           </div>
 
-          <div class="substack-post-footer">
-            <button class="footer-action-item" onclick="toggleLike(this, ${post.likes})"><i class="bi bi-heart"></i> <span class="like-count">${post.likes}</span></button>
-            <button class="footer-action-item" onclick="document.getElementById('newCommentInput').focus()"><i class="bi bi-chat"></i> <span id="footerCommentCount">${post.comments}</span></button>
-            <span class="footer-action-item text-muted"><i class="bi bi-eye"></i> <span>${post.views || 500}</span></span>
+          <div class="substack-post-footer mt-5 pt-3 border-top d-flex align-items-center gap-4">
+            <button class="footer-action-item btn btn-link text-decoration-none text-secondary d-flex align-items-center gap-1 p-0" onclick="if(typeof toggleLike === 'function') toggleLike(this, ${post.likes}, event);"><i class="bi bi-heart"></i> <span class="like-count">${post.likes}</span></button>
+            <button class="footer-action-item btn btn-link text-decoration-none text-secondary d-flex align-items-center gap-1 p-0" onclick="document.getElementById('newCommentInput')?.focus()"><i class="bi bi-chat"></i> <span id="footerCommentCount">${post.comments}</span></button>
+            <span class="footer-action-item text-muted ms-auto d-flex align-items-center gap-1"><i class="bi bi-eye"></i> <span>${post.views || 500}</span></span>
           </div>
         </article>
       `;
 
-      // Render comments and related posts
-      renderComments(postId);
+      // Render comments and related posts from core.js
+      if (typeof window.renderComments === 'function') {
+        window.renderComments(postId);
+      }
       renderRelatedPosts(postId, post.category);
 
-      // Apply language filter and translations
+      // Apply translations & ensure filter does not hide post
       const currentLang = localStorage.getItem('preferredLanguage') || 'en';
       if (typeof window.applyLanguageFilter === 'function') {
         window.applyLanguageFilter(currentLang);
@@ -446,507 +214,21 @@
       }
     }
 
-    // ==========================================
-    // MULTILINGUAL COMMENTS SYSTEM (MAX 2 LEVELS)
-    // ==========================================
-    function toggleCommentTranslation(btn) {
-      const card = btn.closest('.comment-card, .comment-reply-card');
-      const contentEl = card.querySelector('.comment-content-text');
-      const spanEl = btn.querySelector('span');
-
-      const originalText = decodeURIComponent(btn.getAttribute('data-original'));
-      const translatedText = decodeURIComponent(btn.getAttribute('data-translated'));
-      const labelTranslate = btn.getAttribute('data-label-translate') || 'Dịch';
-      const labelOriginal = btn.getAttribute('data-label-original') || 'Bản gốc';
-
-      const isTranslated = btn.classList.toggle('is-translated');
-
-      if (isTranslated) {
-        const tagSpan = contentEl.querySelector('.text-primary.fw-semibold');
-        const tagHtml = tagSpan ? tagSpan.outerHTML + ' ' : '';
-        contentEl.innerHTML = tagHtml + translatedText;
-        if (spanEl) spanEl.textContent = labelOriginal;
-        btn.classList.add('text-primary');
-        btn.classList.remove('text-success'); // in case it had success before
-      } else {
-        const tagSpan = contentEl.querySelector('.text-primary.fw-semibold');
-        const tagHtml = tagSpan ? tagSpan.outerHTML + ' ' : '';
-        contentEl.innerHTML = tagHtml + originalText;
-        if (spanEl) spanEl.textContent = labelTranslate;
-        btn.classList.remove('text-primary');
-      }
-    }
-
-    function checkAuthOrSimulate() {
-      let currentUserStr = localStorage.getItem('currentUser');
-      if (!currentUserStr) {
-        const proceed = confirm('Bạn cần đăng nhập để bình luận hoặc trả lời! Bạn có muốn đăng nhập nhanh (Simulate Login) với tên "Hồ Quốc Tuấn" không?');
-        if (proceed) {
-          localStorage.setItem('currentUser', 'Hồ Quốc Tuấn');
-          return { name: 'Hồ Quốc Tuấn', avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=40&h=40" };
-        }
-        return null;
-      }
-      if (currentUserStr.startsWith('{')) {
-        try {
-          const userObj = JSON.parse(currentUserStr);
-          return { name: userObj.name, avatar: userObj.avatar || "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=40&h=40" };
-        } catch (e) {
-          return { name: currentUserStr, avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=40&h=40" };
-        }
-      }
-      return { name: currentUserStr, avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=40&h=40" };
-    }
-
-    function parseUserName(userStr) {
-      if (!userStr) return '';
-      if (userStr.startsWith && userStr.startsWith('{')) {
-        try { return JSON.parse(userStr).name; } catch (e) { }
-      }
-      return userStr;
-    }
-
-    function renderComments(postId) {
-      const comments = window.getCommentsForPost ? window.getCommentsForPost(postId) : [];
-      const container = document.getElementById('commentsListContainer');
-
-      // Calculate total count (roots + replies)
-      let totalCount = 0;
-      comments.forEach(c => {
-        totalCount += 1 + (c.replies ? c.replies.length : 0);
-      });
-      document.getElementById('commentCountText').textContent = totalCount;
-      const footerCountEl = document.getElementById('footerCommentCount');
-      if (footerCountEl) footerCountEl.textContent = totalCount;
-      if (window.globalPostsData[postId]) window.globalPostsData[postId].comments = totalCount;
-
-      if (comments.length === 0) {
-        container.innerHTML = `<p class="text-muted" data-i18n="no_comments">No comments yet. Be the first to comment!</p>`;
-        if (typeof window.applyUiTranslations === 'function') window.applyUiTranslations();
-        return;
-      }
-
-      const currentLang = localStorage.getItem('preferredLanguage') || 'en';
-      const dict = (window.uiTranslations && window.uiTranslations[currentLang]) || (window.uiTranslations && window.uiTranslations.en) || {};
-      const translateLabel = dict.translate_comment || "Dịch";
-      const originalLabel = dict.show_original || "Hiển thị nội dung gốc";
-      const currentUserStr = localStorage.getItem('currentUser');
-      const currentUser = parseUserName(currentUserStr) || 'Hồ Quốc Tuấn';
-      const post = window.globalPostsData[postId] || window.globalPostsData["1"];
-      const isPostAuthor = (post.author_name === currentUser);
-
-      let html = "";
-      comments.forEach(root => {
-        let repliesHtml = "";
-        if (root.replies && root.replies.length > 0) {
-          repliesHtml += `<div class="comment-reply-list">`;
-          root.replies.forEach(rep => {
-            const repReplyToName = parseUserName(rep.replyTo);
-            const repAuthorName = parseUserName(rep.author);
-            const rootAuthorName = parseUserName(root.author);
-            const tagHtml = (repReplyToName && repReplyToName !== rootAuthorName) ? `<span class="text-primary fw-semibold">@${repReplyToName}</span> ` : '';
-
-            let repTranslateBtnHtml = "";
-            if (rep.lang && rep.lang !== currentLang) {
-              const translatedText = window.getCommentTranslation ? window.getCommentTranslation(rep, currentLang) : ("[Dịch]: " + rep.content);
-              repTranslateBtnHtml = `
-                <button class="btn-reply btn-translate-toggle" 
-                        data-original="${encodeURIComponent(rep.content)}" 
-                        data-translated="${encodeURIComponent(translatedText)}" 
-                        data-tag="${encodeURIComponent(tagHtml)}"
-                        title="${translateLabel}" 
-                        onclick="if(window.toggleCommentTranslation) window.toggleCommentTranslation(this); else toggleCommentTranslation(this);">
-                  <i class="bi bi-translate"></i>
-                </button>
-              `;
-            }
-
-            let repOwnerActionsHtml = "";
-            if (repAuthorName === currentUser || (typeof window.isSelfAuthor === 'function' && window.isSelfAuthor(repAuthorName))) {
-              repOwnerActionsHtml = `
-                <button class="btn-reply text-secondary ms-2" onclick="editComment(${root.id}, ${rep.id}, true)" title="${dict.edit || 'Sửa'}"><i class="bi bi-pencil-square"></i></button>
-                <button class="btn-reply text-danger ms-1" onclick="deleteComment(${root.id}, ${rep.id}, true)" title="${dict.delete || 'Xóa'}"><i class="bi bi-trash"></i></button>
-              `;
-            } else if (isPostAuthor) {
-              repOwnerActionsHtml = `
-                <button class="btn-reply text-danger ms-1" onclick="deleteComment(${root.id}, ${rep.id}, true)" title="${dict.delete || 'Xóa'}"><i class="bi bi-trash"></i></button>
-              `;
-            }
-
-            repliesHtml += `
-              <div class="comment-reply-card" id="comment-${rep.id}">
-                <div class="d-flex align-items-center gap-2 mb-1">
-                  <div class="author-tooltip-container position-relative d-flex align-items-center gap-2" style="cursor: pointer;">
-                    <img src="${rep.avatar}" class="rounded-circle" width="28" height="28" alt="User">
-                    <span class="fw-bold fs-6">${repAuthorName}</span>
-                    
-                    <!-- Author Hover Card Tooltip -->
-                    <div class="author-hover-card shadow-lg border rounded-4 position-absolute overflow-hidden" style="padding: 0; left: 0; top: calc(100% + 5px);">
-                      <div style="height: 60px; background: linear-gradient(135deg, rgba(var(--bs-primary-rgb), 0.8), rgba(var(--bs-primary-rgb), 0.4));"></div>
-                      <div class="p-3 pt-0 position-relative">
-                        <div class="d-flex justify-content-between align-items-end mb-2" style="margin-top: -24px;">
-                          <img src="${rep.avatar}" class="rounded-circle" width="56" height="56" style="object-fit: cover; border: 3px solid var(--bg-panel); background: var(--bg-panel);" alt="Avatar">
-                          ${(repAuthorName === currentUser || (typeof window.isSelfAuthor === 'function' && window.isSelfAuthor(repAuthorName))) ? '' : `<button class="btn btn-primary btn-sm rounded-pill fw-bold px-4 py-1 shadow-sm btn-subscribe" onclick="if(typeof toggleSubscribe === 'function') toggleSubscribe(this, event); else { event.preventDefault(); alert('Subscribed'); }">Theo dõi</button>`}
-                        </div>
-                        <div class="mb-2">
-                          <h6 class="mb-0 fw-bold fs-6 text-main">${repAuthorName}</h6>
-                          <small class="text-muted">@${repAuthorName.replace(/\s+/g, '').toLowerCase()}</small>
-                        </div>
-                        <p class="small mb-3 text-muted" style="line-height: 1.4;">Active contributor sharing valuable knowledge.</p>
-                        <div class="d-flex gap-3 small">
-                          <div><span class="fw-bold text-main">120</span> <span class="text-muted">Followers</span></div>
-                          <div><span class="fw-bold text-main">8</span> <span class="text-muted">Posts</span></div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <span class="text-muted small ms-auto">${typeof window.formatTimestampI18n === 'function' ? window.formatTimestampI18n(rep.time) : rep.time}</span>
-                </div>
-                <p class="mb-1 text-secondary comment-content-text" style="font-size: 0.95rem;">${tagHtml}${rep.content}</p>
-                <div class="d-flex align-items-center gap-1 mt-2">
-                  <button class="btn-reply d-flex align-items-center gap-1 ${rep.isLiked ? 'liked text-danger' : ''}" onclick="if(window.toggleCommentLike) window.toggleCommentLike(this, ${root.id}, ${rep.id}, true, event); else toggleCommentLike(this);"><i class="bi ${rep.isLiked ? 'bi-heart-fill text-danger' : 'bi-heart'}"></i> <span class="like-count">${rep.likes || 0}</span></button>
-                  <button class="btn-reply" onclick="openReplyBox(${root.id}, '${repAuthorName}', true)"><i class="bi bi-chat"></i></button>
-                  ${repTranslateBtnHtml}
-                  ${repOwnerActionsHtml}
-                </div>
-                <div id="reply-box-child-${root.id}-${repAuthorName.replace(/\s+/g, '')}"></div>
-                <div id="edit-box-child-${root.id}-${rep.id}"></div>
-              </div>
-            `;
-          });
-          repliesHtml += `</div>`;
-        }
-
-        const rootAuthorName = parseUserName(root.author);
-        let rootTranslateBtnHtml = "";
-        if (root.lang && root.lang !== currentLang) {
-          const translatedText = window.getCommentTranslation ? window.getCommentTranslation(root, currentLang) : ("[Dịch]: " + root.content);
-          rootTranslateBtnHtml = `
-            <button class="btn-reply btn-translate-toggle" 
-                    data-original="${encodeURIComponent(root.content)}" 
-                    data-translated="${encodeURIComponent(translatedText)}" 
-                    data-tag=""
-                    title="${translateLabel}" 
-                    onclick="if(window.toggleCommentTranslation) window.toggleCommentTranslation(this); else toggleCommentTranslation(this);">
-              <i class="bi bi-translate"></i>
-            </button>
-          `;
-        }
-
-        let rootOwnerActionsHtml = "";
-        if (rootAuthorName === currentUser || (typeof window.isSelfAuthor === 'function' && window.isSelfAuthor(rootAuthorName))) {
-          rootOwnerActionsHtml = `
-            <button class="btn-reply text-secondary ms-2" onclick="editComment(${root.id}, null, false)" title="${dict.edit || 'Sửa'}"><i class="bi bi-pencil-square"></i></button>
-            <button class="btn-reply text-danger ms-1" onclick="deleteComment(${root.id}, null, false)" title="${dict.delete || 'Xóa'}"><i class="bi bi-trash"></i></button>
-          `;
-        } else if (isPostAuthor) {
-          rootOwnerActionsHtml = `
-            <button class="btn-reply text-danger ms-1" onclick="deleteComment(${root.id}, null, false)" title="${dict.delete || 'Xóa'}"><i class="bi bi-trash"></i></button>
-          `;
-        }
-
-        html += `
-          <div class="comment-card" id="comment-${root.id}">
-            <div class="d-flex align-items-center gap-2 mb-2">
-              <div class="author-tooltip-container position-relative d-flex align-items-center gap-2" style="cursor: pointer;">
-                <img src="${root.avatar}" class="rounded-circle" width="36" height="36" alt="User">
-                <span class="fw-bold fs-6">${rootAuthorName}</span>
-                
-                <!-- Author Hover Card Tooltip -->
-                <div class="author-hover-card shadow-lg border rounded-4 position-absolute overflow-hidden" style="padding: 0; left: 0; top: calc(100% + 5px);">
-                  <div style="height: 60px; background: linear-gradient(135deg, rgba(var(--bs-primary-rgb), 0.8), rgba(var(--bs-primary-rgb), 0.4));"></div>
-                  <div class="p-3 pt-0 position-relative">
-                    <div class="d-flex justify-content-between align-items-end mb-2" style="margin-top: -24px;">
-                      <img src="${root.avatar}" class="rounded-circle" width="56" height="56" style="object-fit: cover; border: 3px solid var(--bg-panel); background: var(--bg-panel);" alt="Avatar">
-                      ${(rootAuthorName === currentUser || (typeof window.isSelfAuthor === 'function' && window.isSelfAuthor(rootAuthorName))) ? '' : `<button class="btn btn-primary btn-sm rounded-pill fw-bold px-4 py-1 shadow-sm btn-subscribe" onclick="if(typeof toggleSubscribe === 'function') toggleSubscribe(this, event); else { event.preventDefault(); alert('Subscribed'); }">Theo dõi</button>`}
-                    </div>
-                    <div class="mb-2">
-                      <h6 class="mb-0 fw-bold fs-6 text-main">${rootAuthorName}</h6>
-                      <small class="text-muted">@${rootAuthorName.replace(/\s+/g, '').toLowerCase()}</small>
-                    </div>
-                    <p class="small mb-3 text-muted" style="line-height: 1.4;">Active community member, engaging in meaningful discussions.</p>
-                    <div class="d-flex gap-3 small">
-                      <div><span class="fw-bold text-main">340</span> <span class="text-muted">Followers</span></div>
-                      <div><span class="fw-bold text-main">21</span> <span class="text-muted">Posts</span></div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <span class="text-muted small ms-auto">${typeof window.formatTimestampI18n === 'function' ? window.formatTimestampI18n(root.time) : root.time}</span>
-            </div>
-            <p class="mb-1 text-secondary comment-content-text">${root.content}</p>
-            <div class="d-flex align-items-center gap-1 mt-2">
-              <button class="btn-reply d-flex align-items-center gap-1 ${root.isLiked ? 'liked text-danger' : ''}" onclick="if(window.toggleCommentLike) window.toggleCommentLike(this, ${root.id}, null, false, event); else toggleCommentLike(this);"><i class="bi ${root.isLiked ? 'bi-heart-fill text-danger' : 'bi-heart'}"></i> <span class="like-count">${root.likes || 0}</span></button>
-              <button class="btn-reply" onclick="openReplyBox(${root.id}, '${rootAuthorName}', false)"><i class="bi bi-chat"></i></button>
-              ${rootTranslateBtnHtml}
-              ${rootOwnerActionsHtml}
-            </div>
-            <div id="reply-box-root-${root.id}"></div>
-            <div id="edit-box-root-${root.id}"></div>
-            ${repliesHtml}
-          </div>
-        `;
-      });
-
-      container.innerHTML = html;
-      if (typeof window.applyUiTranslations === 'function') window.applyUiTranslations();
-    }
-
-    function openReplyBox(rootId, targetAuthor, isChildReply) {
-      const user = checkAuthOrSimulate();
-      if (!user) return;
-
-      // Close all existing open reply and edit boxes first
-      document.querySelectorAll('[id^="reply-box-"], [id^="edit-box-"]').forEach(el => el.innerHTML = '');
-
-      const boxId = isChildReply ? `reply-box-child-${rootId}-${targetAuthor.replace(/\s+/g, '')}` : `reply-box-root-${rootId}`;
-      const boxEl = document.getElementById(boxId);
-      if (!boxEl) return;
-
-      const lang = localStorage.getItem('preferredLanguage') || 'en';
-      const dict = (window.uiTranslations && window.uiTranslations[lang]) || (window.uiTranslations && window.uiTranslations.en) || {};
-      const replyPrefix = isChildReply ? (dict.replying_to || "Replying to @") : (dict.replying_to_comment || "Replying to comment by ");
-      const placeholderText = replyPrefix + targetAuthor + "...";
-      const replyToName = isChildReply ? targetAuthor : ""; // Nếu rep comment gốc thì replyTo = "" (không cần @)
-
-      boxEl.innerHTML = `
-        <div class="mt-2 pt-2 border-top">
-          <textarea id="input-reply-${rootId}" class="form-control form-control-sm mb-2" rows="2" placeholder="${placeholderText}"></textarea>
-          <div class="d-flex justify-content-end gap-2">
-            <button class="btn btn-sm btn-outline-secondary rounded-pill px-3" onclick="this.parentElement.parentElement.innerHTML=''" data-i18n="cancel">${dict.cancel || "Cancel"}</button>
-            <button class="btn btn-sm btn-primary rounded-pill px-3 fw-medium" onclick="submitReply(${rootId}, '${replyToName}')" data-i18n="submit_reply">${dict.submit_reply || "Submit Reply"}</button>
-          </div>
-        </div>
-      `;
-      setTimeout(() => {
-        const inputEl = document.getElementById(`input-reply-${rootId}`);
-        if (inputEl) inputEl.focus();
-      }, 50);
-    }
-
-    function submitReply(rootId, replyToName) {
-      const userObj = checkAuthOrSimulate();
-      if (!userObj) return;
-      const userName = userObj.name || userObj;
-      const userAvatar = userObj.avatar || "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=40&h=40";
-
-      const inputEl = document.getElementById(`input-reply-${rootId}`);
-      if (!inputEl || !inputEl.value.trim()) {
-        alert('Vui lòng nhập nội dung trả lời!');
-        return;
-      }
-
-      const urlParams = new URLSearchParams(window.location.search);
-      const postId = urlParams.get('id') || "1";
-      const comments = getCommentsForPost(postId);
-      const rootComment = comments.find(c => c.id === rootId);
-
-      if (rootComment) {
-        if (!rootComment.replies) rootComment.replies = [];
-        rootComment.replies.push({
-          id: Date.now(),
-          author: userName,
-          avatar: userAvatar,
-          time: "Vừa xong",
-          content: inputEl.value.trim(),
-          lang: localStorage.getItem('preferredLanguage') || "vi",
-          replyTo: replyToName // "" nếu rep gốc, hoặc tên người dùng nếu rep con
-        });
-        if (typeof window.saveCommentsForPost === 'function') {
-          window.saveCommentsForPost(postId, comments);
-        }
-        renderComments(postId);
-      }
-    }
-
-    function postNewComment() {
-      const userObj = checkAuthOrSimulate();
-      if (!userObj) return;
-      const userName = userObj.name || userObj;
-      const userAvatar = userObj.avatar || "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=40&h=40";
-
-      const inputEl = document.getElementById('newCommentInput');
-      if (!inputEl || !inputEl.value.trim()) {
-        alert('Vui lòng nhập nội dung bình luận!');
-        return;
-      }
-
-      const urlParams = new URLSearchParams(window.location.search);
-      const postId = urlParams.get('id') || "1";
-      const comments = getCommentsForPost(postId);
-
-      comments.unshift({
-        id: Date.now(),
-        author: userName,
-        avatar: userAvatar,
-        time: "Vừa xong",
-        content: inputEl.value.trim(),
-        lang: localStorage.getItem('preferredLanguage') || "vi",
-        replies: []
-      });
-
-      if (typeof window.saveCommentsForPost === 'function') {
-        window.saveCommentsForPost(postId, comments);
-      }
-      inputEl.value = '';
-      renderComments(postId);
-    }
-
-    async function deleteComment(rootId, repId, isChild) {
-      const urlParams = new URLSearchParams(window.location.search);
-      const postId = urlParams.get('id') || "1";
-      let comments = getCommentsForPost(postId);
-      const currentLang = localStorage.getItem('preferredLanguage') || 'en';
-      const dict = (window.uiTranslations && window.uiTranslations[currentLang]) || (window.uiTranslations && window.uiTranslations.en) || {};
-      const currentUserStr = localStorage.getItem('currentUser');
-      const currentUser = parseUserName(currentUserStr) || 'Hồ Quốc Tuấn';
-      const post = window.globalPostsData[postId] || window.globalPostsData["1"];
-      const isPostAuthor = (post.author_name === currentUser);
-
-      if (isChild) {
-        const root = comments.find(c => c.id === rootId);
-        if (!root || !root.replies) return;
-        const targetRep = root.replies.find(r => r.id === repId);
-        if (!targetRep) return;
-
-        // Kiểm tra quyền: Chỉ tác giả comment hoặc chủ bài viết mới được xóa
-        if (parseUserName(targetRep.author) !== currentUser && !isPostAuthor) {
-          alert("Bạn không có quyền xóa bình luận này! Chỉ tác giả bình luận hoặc chủ bài viết mới có quyền xóa.");
-          return;
-        }
-
-        const confirmMsg = dict.delete_confirm_reply || "Bạn có chắc muốn xóa câu trả lời này?";
-        if (!await window.confirmDestructive({ message: confirmMsg })) return;
-
-        // Xóa bình luận con: Chỉ xóa chính xác câu phản hồi đó khỏi danh sách replies
-        root.replies = root.replies.filter(r => r.id !== repId);
-        saveCommentsForPost(postId, comments);
-        renderComments(postId);
-      } else {
-        const targetRoot = comments.find(c => c.id === rootId);
-        if (!targetRoot) return;
-
-        // Kiểm tra quyền: Chỉ tác giả comment hoặc chủ bài viết mới được xóa
-        if (parseUserName(targetRoot.author) !== currentUser && !isPostAuthor) {
-          alert("Bạn không có quyền xóa bình luận này! Chỉ tác giả bình luận hoặc chủ bài viết mới có quyền xóa.");
-          return;
-        }
-
-        const confirmMsg = dict.delete_confirm_root || "Bạn có chắc muốn xóa bình luận này? Toàn bộ các bình luận phản hồi bên trong cũng sẽ bị xóa theo!";
-        if (!await window.confirmDestructive({ message: confirmMsg })) return;
-
-        // Nếu là comment gốc mà bị xóa thì toàn bộ comment con cũng bị xóa theo (vì replies nằm trong root)
-        comments = comments.filter(c => c.id !== rootId);
-        saveCommentsForPost(postId, comments);
-        renderComments(postId);
-      }
-    }
-
-    function editComment(rootId, repId, isChild) {
-      // Close all reply and edit boxes first
-      document.querySelectorAll('[id^="reply-box-"], [id^="edit-box-"]').forEach(el => el.innerHTML = '');
-
-      const urlParams = new URLSearchParams(window.location.search);
-      const postId = urlParams.get('id') || "1";
-      const comments = getCommentsForPost(postId);
-      const currentUserStr = localStorage.getItem('currentUser');
-      const currentUser = parseUserName(currentUserStr) || 'Hồ Quốc Tuấn';
-
-      let targetComment = null;
-      if (isChild) {
-        const root = comments.find(c => c.id === rootId);
-        if (root && root.replies) targetComment = root.replies.find(r => r.id === repId);
-      } else {
-        targetComment = comments.find(c => c.id === rootId);
-      }
-      if (!targetComment) return;
-
-      // Kiểm tra quyền: Chỉ tác giả bình luận mới có quyền Sửa
-      if (parseUserName(targetComment.author) !== currentUser) {
-        alert("Bạn chỉ có quyền chỉnh sửa bình luận do chính bạn viết!");
-        return;
-      }
-
-      const boxId = isChild ? `edit-box-child-${rootId}-${repId}` : `edit-box-root-${rootId}`;
-      const boxEl = document.getElementById(boxId);
-      if (!boxEl) return;
-
-      const lang = localStorage.getItem('preferredLanguage') || 'en';
-      const dict = (window.uiTranslations && window.uiTranslations[lang]) || (window.uiTranslations && window.uiTranslations.en) || {};
-
-      boxEl.innerHTML = `
-        <div class="mt-2 pt-2 border-top">
-          <textarea id="input-edit-${isChild ? repId : rootId}" class="form-control form-control-sm mb-2" rows="3">${targetComment.content}</textarea>
-          <div class="d-flex justify-content-end gap-2">
-            <button class="btn btn-sm btn-outline-secondary rounded-pill px-3" onclick="this.parentElement.parentElement.innerHTML=''" data-i18n="cancel">${dict.cancel || "Cancel"}</button>
-            <button class="btn btn-sm btn-success rounded-pill px-3 fw-medium" onclick="submitEdit(${rootId}, ${isChild ? repId : 'null'}, ${isChild})" data-i18n="save">${dict.save || "Save"}</button>
-          </div>
-        </div>
-      `;
-      setTimeout(() => {
-        const inputEl = document.getElementById(`input-edit-${isChild ? repId : rootId}`);
-        if (inputEl) {
-          inputEl.focus();
-          inputEl.selectionStart = inputEl.selectionEnd = inputEl.value.length;
-        }
-      }, 50);
-    }
-
-    function submitEdit(rootId, repId, isChild) {
-      const inputId = `input-edit-${isChild ? repId : rootId}`;
-      const inputEl = document.getElementById(inputId);
-      if (!inputEl || !inputEl.value.trim()) {
-        alert('Vui lòng nhập nội dung bình luận!');
-        return;
-      }
-
-      const urlParams = new URLSearchParams(window.location.search);
-      const postId = urlParams.get('id') || "1";
-      const comments = getCommentsForPost(postId);
-      const currentUserStr = localStorage.getItem('currentUser');
-      const currentUser = parseUserName(currentUserStr) || 'Hồ Quốc Tuấn';
-
-      let targetComment = null;
-      if (isChild) {
-        const root = comments.find(c => c.id === rootId);
-        if (root && root.replies) targetComment = root.replies.find(r => r.id === repId);
-      } else {
-        targetComment = comments.find(c => c.id === rootId);
-      }
-
-      if (targetComment) {
-        if (parseUserName(targetComment.author) !== currentUser) {
-          alert("Bạn chỉ có quyền chỉnh sửa bình luận do chính bạn viết!");
-          return;
-        }
-        targetComment.content = inputEl.value.trim();
-        if (targetComment.translations) {
-          const currentLang = localStorage.getItem('preferredLanguage') || 'vi';
-          targetComment.lang = currentLang;
-          targetComment.translations = {}; // Clear old translations so new text is translated dynamically
-        }
-        saveCommentsForPost(postId, comments);
-        renderComments(postId);
-      }
-    }
-
-    // ==========================================
-    // RELATED POSTS BY CATEGORY
-    // ==========================================
     function renderRelatedPosts(currentPostId, category) {
       const container = document.getElementById('relatedPostsContainer');
+      if (!container || !window.globalPostsData) return;
 
       // Find posts with matching category (excluding current post)
       const relatedIds = Object.keys(window.globalPostsData).filter(id => id !== String(currentPostId) && window.globalPostsData[id].category === category);
 
-      // If no other post in same category, fallback to showing all other posts
+      // If no other post in same category, fallback to showing top posts
       const idsToRender = relatedIds.length > 0 ? relatedIds : Object.keys(window.globalPostsData).filter(id => id !== String(currentPostId)).slice(0, 2);
 
       let html = "";
       idsToRender.forEach(id => {
         const p = window.globalPostsData[id];
-        // Calculate real count from database so it's consistent everywhere
-        const relComments = getCommentsForPost(id);
+        if (!p) return;
+        const relComments = window.getCommentsForPost ? window.getCommentsForPost(id) : [];
         let relCount = 0;
         relComments.forEach(c => {
           relCount += 1 + (c.replies ? c.replies.length : 0);
@@ -954,7 +236,7 @@
         p.comments = relCount;
 
         html += `
-          <a href="post-detail.html?id=${id}" class="related-post-card text-reset" data-supported-langs="${p.supported_langs}" data-category="${p.category}">
+          <a href="post-detail.html?id=${id}" class="related-post-card text-reset text-decoration-none p-3 rounded-4 border border-light-subtle d-block transition-all hover-shadow" data-supported-langs="${p.supported_langs || 'en,vi,zh'}" data-category="${p.category}">
             <div class="d-flex align-items-center justify-content-between mb-2">
               <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-2.5 py-0.5 rounded-pill small category-label" data-original-cat="${p.category}">${typeof window.translateCategory === 'function' ? window.translateCategory(p.category) : p.category}</span>
               <span class="text-muted small post-timestamp">${typeof window.formatTimestampI18n === 'function' ? window.formatTimestampI18n(p.timestamp) : p.timestamp}</span>
@@ -966,7 +248,7 @@
               ${p.title_en}
             </h5>
             <div class="d-flex align-items-center gap-2 text-muted small mt-3">
-              <img src="${p.author_avatar}" class="rounded-circle" width="24" height="24" alt="${p.author_name}">
+              <img src="${p.author_avatar}" class="rounded-circle" width="24" height="24" style="object-fit:cover;" alt="${p.author_name}">
               <span class="fw-medium text-main">${p.author_name}</span>
               <span class="ms-auto"><i class="bi bi-heart me-1"></i>${p.likes}</span>
               <span class="ms-2"><i class="bi bi-chat me-1"></i>${p.comments}</span>
@@ -976,45 +258,6 @@
       });
 
       container.innerHTML = html;
-    }
-
-    // Toggle Feed Likes simulation
-    function toggleLike(btn, baseCount, event) {
-      if (window.toggleLike && window.toggleLike !== toggleLike) {
-        return window.toggleLike(btn, baseCount, event);
-      }
-      const icon = btn.querySelector('i');
-      const text = btn.querySelector('.like-count');
-      const isLiked = btn.classList.toggle('liked');
-      const count = parseInt(text ? text.textContent : baseCount) || 0;
-
-      if (isLiked) {
-        btn.classList.add('text-danger');
-        if (icon) icon.className = 'bi bi-heart-fill text-danger';
-        if (text) text.textContent = count + 1;
-      } else {
-        btn.classList.remove('text-danger');
-        if (icon) icon.className = 'bi bi-heart';
-        if (text) text.textContent = Math.max(0, count - 1);
-      }
-    }
-
-    function toggleCommentLike(btn, rootId, repId, isChild, event) {
-      if (window.toggleCommentLike && window.toggleCommentLike !== toggleCommentLike) {
-        return window.toggleCommentLike(btn, rootId, repId, isChild, event);
-      }
-      const icon = btn.querySelector('i');
-      const text = btn.querySelector('.like-count');
-      const isLiked = btn.classList.toggle('text-danger');
-      let currentCount = parseInt(text ? text.textContent : 0) || 0;
-
-      if (isLiked) {
-        if (icon) icon.className = 'bi bi-heart-fill text-danger';
-        if (text) text.textContent = currentCount + 1;
-      } else {
-        if (icon) icon.className = 'bi bi-heart';
-        if (text) text.textContent = Math.max(0, currentCount - 1);
-      }
     }
 
     document.addEventListener('DOMContentLoaded', renderPostDetail);

@@ -18,7 +18,7 @@ function initSharedSidebars() {
   let activePage = '';
   if (path.includes('index.html') || path.endsWith('/guest/') || path.endsWith('/guest')) activePage = 'home';
   else if (path.includes('subscriptions.html')) activePage = 'subscriptions';
-  else if (path.includes('inbox.html')) activePage = 'inbox';
+
   else if (path.includes('explore.html')) activePage = 'explore';
   else if (path.includes('post-detail.html')) activePage = 'post-detail';
   else if (path.includes('settings.html')) activePage = 'settings';
@@ -47,10 +47,7 @@ function initSharedSidebars() {
           <a href="subscriptions.html" class="sidebar-nav-item ${activePage === 'subscriptions' ? 'active' : ''}">
             <i class="bi bi-person-lines-fill"></i> <span data-i18n="subscriptions">Subscriptions</span>
           </a>
-          <a href="inbox.html" class="sidebar-nav-item ${activePage === 'inbox' ? 'active' : ''}">
-            <i class="bi ${activePage === 'inbox' ? 'bi-bell-fill' : 'bi-bell'}"></i> <span data-i18n="activity">Activity</span>
-            <span class="badge bg-danger rounded-pill ms-auto notification-sidebar-badge" style="font-size: 0.72rem; padding: 0.25em 0.55em;">2</span>
-          </a>
+
           <a href="explore.html" class="sidebar-nav-item ${activePage === 'explore' ? 'active' : ''}">
             <i class="bi bi-compass-fill"></i> <span data-i18n="explore">Explore</span>
           </a>
@@ -126,7 +123,7 @@ function initSharedSidebars() {
         <nav class="sidebar-nav mb-auto">
           <a href="index.html" class="sidebar-nav-item ${activePage === 'home' ? 'active' : ''}"><i class="bi bi-house-door-fill"></i> <span data-i18n="home">Home</span></a>
           <a href="subscriptions.html" class="sidebar-nav-item ${activePage === 'subscriptions' ? 'active' : ''}"><i class="bi bi-person-lines-fill"></i> <span data-i18n="subscriptions">Subscriptions</span></a>
-          <a href="inbox.html" class="sidebar-nav-item ${activePage === 'inbox' ? 'active' : ''}"><i class="bi ${activePage === 'inbox' ? 'bi-bell-fill' : 'bi-bell'}"></i> <span data-i18n="activity">Activity</span> <span class="badge bg-danger rounded-pill ms-auto notification-sidebar-badge" style="font-size: 0.72rem; padding: 0.25em 0.55em;">2</span></a>
+
           <a href="explore.html" class="sidebar-nav-item ${activePage === 'explore' ? 'active' : ''}"><i class="bi bi-compass-fill"></i> <span data-i18n="explore">Explore</span></a>
           <a href="my-posts.html" class="sidebar-nav-item ${activePage === 'my-posts' ? 'active' : ''}"><i class="bi bi-journal-text"></i> <span data-i18n="my_articles">My Articles</span></a>
           <a href="profile.html" class="sidebar-nav-item ${activePage === 'profile' ? 'active' : ''}"><i class="bi bi-person"></i> <span data-i18n="profile">Profile</span></a>
@@ -785,24 +782,7 @@ window.renderFeedPosts = function(containerId, dataObj, categoryFilter = 'all') 
             <span class="post-timestamp" data-original-ts="${post.timestamp || 'Just now'}">${post.timestamp || 'Just now'}</span>
           </div>
           <!-- Author Hover Card Tooltip -->
-          <div class="author-hover-card shadow-lg border rounded-4 position-absolute overflow-hidden" style="padding: 0;">
-            <div style="height: 60px; background: linear-gradient(135deg, rgba(var(--bs-primary-rgb), 0.8), rgba(var(--bs-primary-rgb), 0.4));"></div>
-            <div class="p-3 pt-0 position-relative">
-              <div class="d-flex justify-content-between align-items-end mb-2" style="margin-top: -24px;">
-                <img src="${post.author_avatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=80&h=80'}" class="rounded-circle" width="56" height="56" style="object-fit: cover; border: 3px solid var(--bg-panel); background: var(--bg-panel);" alt="Avatar">
-                ${(typeof window.isSelfAuthor === 'function' && window.isSelfAuthor(post.author_name)) ? '' : `<button class="btn btn-primary btn-sm rounded-pill fw-bold px-4 py-1 shadow-sm btn-subscribe" onclick="toggleSubscribe(this, event)">Theo dõi</button>`}
-              </div>
-              <div class="mb-2">
-                <h6 class="mb-0 fw-bold fs-6 text-main">${post.author_name || 'Anonymous'}</h6>
-                <small class="text-muted">@${(post.author_name || 'anonymous').replace(/\\s+/g, '').toLowerCase()}</small>
-              </div>
-              <p class="small mb-3 text-muted" style="line-height: 1.4;">Writing about ${post.category || 'technology and life'}, sharing insightful thoughts with the community.</p>
-              <div class="d-flex gap-3 small">
-                <div><span class="fw-bold text-main">1.2K</span> <span class="text-muted">Followers</span></div>
-                <div><span class="fw-bold text-main">48</span> <span class="text-muted">Posts</span></div>
-              </div>
-            </div>
-          </div>
+          ${typeof window.getAuthorTooltipHtml === 'function' ? window.getAuthorTooltipHtml(post.author_name, post.author_avatar) : ''}
         </div>
       </div>
       <a href="post-detail.html?id=${id}" class="text-decoration-none text-reset d-block">
@@ -852,30 +832,22 @@ window.toggleSubscribe = function(btn, event) {
     event.preventDefault();
     event.stopPropagation();
   }
-  
+
   const isSubscribed = btn.classList.toggle('subscribed');
   const currentLang = localStorage.getItem('preferredLanguage') || 'en';
   const dict = (window.uiTranslations && window.uiTranslations[currentLang]) || {};
-  
-  const subscribedText = dict.following || 'Đang theo dõi';
-  const subscribeText = btn.classList.contains('px-5') ? (dict.subscribe_author || 'Theo dõi tác giả') : (dict.subscribe || 'Theo dõi');
+  const unfollowLabels = { en: 'Unfollow', vi: 'Bỏ theo dõi', zh: '取消关注' };
 
   if (isSubscribed) {
-    btn.textContent = subscribedText;
-    btn.classList.remove('btn-outline-primary');
-    btn.classList.add('btn-secondary'); // Use secondary to indicate "subscribed" state
-    btn.classList.remove('btn-primary');
+    const followingText = dict.btn_following || dict.following || 'Following';
+    btn.innerHTML = `<span class="btn-subscribe-label">${followingText}</span>`;
+    btn.setAttribute('data-unfollow-label', unfollowLabels[currentLang] || unfollowLabels.en);
   } else {
-    btn.textContent = subscribeText;
-    btn.classList.remove('btn-secondary');
-    
-    // Revert styling based on original button appearance
-    if (btn.classList.contains('px-3') && btn.classList.contains('py-0')) {
-       // Small button in header
-       btn.classList.add('btn-outline-primary');
-    } else {
-       // Large button in footer or tooltip
-       btn.classList.add('btn-primary');
-    }
+    const isAuthorCard = btn.classList.contains('px-5') || btn.getAttribute('data-btn-type') === 'author';
+    const followText = isAuthorCard
+      ? (dict.subscribe_author || dict.btn_follow || 'Follow')
+      : (dict.btn_follow || dict.subscribe || 'Follow');
+    btn.innerHTML = `<span class="btn-subscribe-label">${followText}</span>`;
+    btn.removeAttribute('data-unfollow-label');
   }
 };
