@@ -543,7 +543,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const langSelect = e.target.closest('.global-lang-select');
     if (langSelect) {
       e.preventDefault();
-      window.setLingoraLanguage(langSelect.getAttribute('data-lang'));
+      const lang = langSelect.getAttribute('data-lang');
+      localStorage.setItem('preferredLanguage', lang);
+      window.updateGlobalFlags(lang);
+
+      if (window.applyUiTranslations) window.applyUiTranslations(lang);
+      if (window.applyLanguageFilter) window.applyLanguageFilter(lang);
     }
   });
 
@@ -944,6 +949,10 @@ document.addEventListener('DOMContentLoaded', () => {
       chinese: "Chinese",
       all_dates: "All dates",
       all_categories: "All categories",
+      select_all: "Select all",
+      selected: "selected",
+      delete_selected: "Delete Selected",
+      restore_selected: "Restore Selected",
       cat_ai_translation: "AI Translation",
       cat_profile_branding: "Profile Branding",
       cat_design_general: "Design",
@@ -1306,6 +1315,10 @@ document.addEventListener('DOMContentLoaded', () => {
       chinese: "Tiếng Trung",
       all_dates: "Tất cả ngày",
       all_categories: "Tất cả danh mục",
+      select_all: "Chọn tất cả",
+      selected: "đã chọn",
+      delete_selected: "Xóa mục đã chọn",
+      restore_selected: "Khôi phục mục đã chọn",
       cat_ai_translation: "Dịch thuật AI",
       cat_profile_branding: "Thương hiệu hồ sơ",
       cat_design_general: "Thiết kế",
@@ -1670,6 +1683,10 @@ document.addEventListener('DOMContentLoaded', () => {
       chinese: "中文",
       all_dates: "所有日期",
       all_categories: "所有类别",
+      select_all: "全选",
+      selected: "已选择",
+      delete_selected: "删除所选",
+      restore_selected: "恢复所选",
       cat_ai_translation: "AI翻译",
       cat_profile_branding: "个人资料品牌",
       cat_design_general: "设计",

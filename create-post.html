@@ -10,7 +10,15 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>Create post | Lingora</title>
-<link href="assets/css/styles.css?v=7" rel="stylesheet"/>
+<link href="assets/css/styles.css?v=8" rel="stylesheet"/>
+<style>
+  /* Force black border on buttons when profile color is white/light */
+  html[data-accent-tone="light"] .btn-accent, 
+  html[data-accent-tone="light"] .fb-btn-primary {
+    border: 1px solid #000000 !important;
+    box-shadow: inset 0 0 0 1px #000000 !important;
+  }
+</style>
 </head>
 
 <body class="editor-page" data-page="create-post">
@@ -23,7 +31,7 @@
     </button>
     <div class="editor-topbar-spacer"></div>
     <button class="btn btn-light" data-preview-button="" type="button" data-i18n="btn_preview">Preview</button>
-    <button class="btn btn-white" data-publish-button="" type="button" data-i18n="btn_continue">Continue</button>
+    <button class="btn btn-accent" data-publish-button="" type="button" data-i18n="btn_continue">Continue</button>
   </header>
   <nav aria-label="Writing toolbar" class="editor-toolbar">
     <input accept="image/*" class="hidden-file-input" id="editorImageInput" type="file" />
@@ -677,7 +685,7 @@
       <main class="publish-modal-body">
         <div class="publish-form-group mb-4">
           <h3 class="fb-modal-heading" data-i18n="post_category">Post Category</h3>
-          <select class="form-select" id="post_category" style="border-radius: 8px;">
+          <select class="form-select category-select" id="post_category" style="width: 100%;">
             <option value="technology" data-i18n="cat_tech">Technology</option>
             <option value="lifestyle" data-i18n="cat_life">Lifestyle</option>
             <option value="education" data-i18n="cat_edu">Education</option>
@@ -698,7 +706,7 @@
         </div>
         <div class="publish-form-group">
           <h3 class="fb-modal-heading" data-i18n="allowed_translations">Allowed Translations</h3>
-          <div class="publish-checkbox-group d-flex flex-column gap-2">
+          <div class="publish-checkbox-group d-flex flex-column gap-2" style="max-height: 165px; overflow-y: auto; padding-right: 4px;">
             <div class="d-flex align-items-center justify-content-between p-2 rounded-2 border"
               style="background: var(--bg-body, #fff);">
               <label class="publish-checkbox-label mb-0" style="cursor: pointer;"><input type="checkbox"
