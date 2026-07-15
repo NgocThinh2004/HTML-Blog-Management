@@ -1747,48 +1747,46 @@ select.form-select-sm {
 
 /* ── Subscribe / Follow Button (Premium Redesign) ── */
 .btn-subscribe {
-  /* Prevent flexbox from squishing the button */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   flex-shrink: 0;
-  min-width: 115px; /* Enough for most standard words */
-  max-width: 200px;
-  text-align: center;
+  min-height: 32px;
+  padding: 0 1.15rem;
+  border: 1px solid transparent !important;
+  border-radius: 8px !important;
+  background: var(--primary-color) !important;
+  color: #ffffff !important;
+  font-size: 0.82rem !important;
+  font-weight: 600 !important;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  font-size: 0.875rem; /* 14px for better readability */
-  font-weight: 700;    /* Bolder, modern look */
-  padding: 0.35rem 1rem;
-  border-radius: 999px;
-  cursor: pointer;
   position: relative;
-  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
-  border: 1px solid transparent; /* Ensure border is always present to prevent jumping */
-}
-
-/* Unsubscribed — Modern high-contrast (dark on light theme, light on dark theme) */
-.btn-subscribe:not(.subscribed) {
-  background-color: var(--text-main) !important;
-  color: var(--bg-panel) !important;
-  border-color: var(--text-main) !important;
+  transition: all var(--transition-speed) ease;
+  cursor: pointer;
 }
 
 .btn-subscribe:not(.subscribed):hover {
-  opacity: 0.85;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  background: var(--primary-hover) !important;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(255, 103, 25, 0.15);
 }
 
 /* Subscribed state: subtle outlined pill */
 .btn-subscribe.subscribed {
-  background-color: transparent !important;
-  color: var(--text-main) !important;
-  border-color: var(--border-color) !important;
+  border: 1.5px solid var(--border-color) !important;
+  color: var(--text-muted) !important;
+  background: transparent !important;
+  box-shadow: none !important;
 }
 
 /* Subscribed hover → Twitter/X "Unfollow" red hint */
 .btn-subscribe.subscribed:hover {
-  background-color: rgba(244, 33, 46, 0.1) !important;
-  border-color: rgba(244, 33, 46, 0.5) !important;
-  color: #f4212e !important;
+  border-color: #dc2626 !important;
+  color: #dc2626 !important;
+  background: rgba(220, 38, 38, 0.08) !important;
+  transform: none;
 }
 
 /* Hide real text on hover, show unfollow label via data-attr */
