@@ -124,7 +124,7 @@
   <!-- Bootstrap 5 JS Bundle -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <!-- Core Script containing theme & language simulation -->
-<script src="assets/js/core.js?v=30"></script>
+<script src="assets/js/core.js?v=31"></script>
 <script src="assets/js/components.js?v=8"></script>
   
   <script>
@@ -241,18 +241,21 @@
             ${escapePostText(post.title_en)}
           </h1>
 
-          <div class="substack-post-header mb-4 pb-3 border-bottom">
-            <div class="author-badge-group d-flex align-items-center w-100 position-relative author-tooltip-container">
+          <div class="substack-post-header mb-4 pb-3 border-bottom d-flex align-items-center justify-content-between">
+            <div class="author-badge-group d-flex align-items-center position-relative author-tooltip-container" style="z-index: 2;">
               <img src="${escapePostText(post.author_avatar)}" alt="${escapePostText(post.author_name)}" class="author-avatar me-3 rounded-circle border" style="width:48px;height:48px;object-fit:cover;">
-              <div class="author-meta-info flex-grow-1">
-                <div class="d-flex align-items-center">
-                  <a href="profile.html?id=${escapePostText(post.author_id)}" class="author-name me-2 text-decoration-none fw-bold text-main">${escapePostText(post.author_name)}</a>
-                  ${(typeof window.isSelfAuthor === 'function' && window.isSelfAuthor(post.author_name)) ? '' : `<button class="btn-subscribe" data-unfollow-label="${typeof window.uiTranslations !== 'undefined' ? ((window.uiTranslations[localStorage.getItem('preferredLanguage') || 'en'] || {}).btn_unfollow || 'Unfollow') : 'Unfollow'}" onclick="if(typeof toggleSubscribe==='function') toggleSubscribe(this, event);"><span class="btn-subscribe-label">${typeof window.uiTranslations !== 'undefined' ? ((window.uiTranslations[localStorage.getItem('preferredLanguage') || 'en'] || {}).btn_follow || 'Follow') : 'Follow'}</span></button>`}
+              <div class="author-meta-info">
+                <div class="d-flex align-items-center flex-wrap">
+                  <a href="profile.html?id=${escapePostText(post.author_id)}" class="author-name me-1 text-decoration-none fw-bold text-main">${escapePostText(post.author_name)}</a>
+                  <span class="post-timestamp text-muted small ms-2">${typeof window.formatTimestampI18n === 'function' ? window.formatTimestampI18n(post.timestamp) : post.timestamp}</span>
                 </div>
-                <span class="post-timestamp text-muted small">${typeof window.formatTimestampI18n === 'function' ? window.formatTimestampI18n(post.timestamp) : post.timestamp}</span>
+                <div class="text-muted small">@${escapePostText(post.author_name.toLowerCase().replace(/\s+/g, '').replace(/[^\w]/g, ''))}</div>
               </div>
               ${typeof window.getAuthorTooltipHtml === 'function' ? window.getAuthorTooltipHtml(post.author_name, post.author_avatar) : ''}
             </div>
+            ${(typeof window.isSelfAuthor === 'function' && window.isSelfAuthor(post.author_name)) ? '' : `
+              <button class="btn-subscribe ms-auto" data-unfollow-label="${typeof window.uiTranslations !== 'undefined' ? ((window.uiTranslations[localStorage.getItem('preferredLanguage') || 'en'] || {}).btn_unfollow || 'Unfollow') : 'Unfollow'}" onclick="if(typeof toggleSubscribe==='function') toggleSubscribe(this, event);"><span class="btn-subscribe-label">${typeof window.uiTranslations !== 'undefined' ? ((window.uiTranslations[localStorage.getItem('preferredLanguage') || 'en'] || {}).btn_follow || 'Follow') : 'Follow'}</span></button>
+            `}
           </div>
 
           ${imageHtml}
