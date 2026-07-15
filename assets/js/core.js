@@ -544,11 +544,14 @@ document.addEventListener('DOMContentLoaded', () => {
     if (langSelect) {
       e.preventDefault();
       const lang = langSelect.getAttribute('data-lang');
-      localStorage.setItem('preferredLanguage', lang);
-      window.updateGlobalFlags(lang);
-
-      if (window.applyUiTranslations) window.applyUiTranslations(lang);
-      if (window.applyLanguageFilter) window.applyLanguageFilter(lang);
+      if (typeof window.setLingoraLanguage === 'function') {
+        window.setLingoraLanguage(lang);
+      } else {
+        localStorage.setItem('preferredLanguage', lang);
+        window.updateGlobalFlags(lang);
+        if (window.applyUiTranslations) window.applyUiTranslations(lang);
+        if (window.applyLanguageFilter) window.applyLanguageFilter(lang);
+      }
     }
   });
 
@@ -888,6 +891,10 @@ document.addEventListener('DOMContentLoaded', () => {
       show_subscribers_desc: "Allow others to see the list of people following you.",
       toast_show_subscribers_on: "Subscribers visibility turned on",
       toast_show_subscribers_off: "Subscribers visibility turned off",
+      show_following: "Show Following List",
+      show_following_desc: "Allow others to see the list of people you are following.",
+      toast_show_following_on: "Following list visibility turned on",
+      toast_show_following_off: "Following list visibility turned off",
       // Post Detail page
       comments: "Comments",
       comment_placeholder: "Write a comment in any language...",
@@ -972,6 +979,12 @@ document.addEventListener('DOMContentLoaded', () => {
       author_economics: "Economics Author",
       author_economics_lead: "Economics Lead",
       author_tech_lead: "Tech Lead",
+      featured_creators: "Featured Creators",
+      people_matching: "People matching \"{query}\"",
+      publications_matching: "Publications matching \"{query}\"",
+      posts_matching: "Posts matching \"{query}\"",
+      top_trending_posts: "Top Trending Posts",
+      suggestions: "Suggestions",
       // Admin Panel
       admin_dashboard: "Admin Dashboard",
       manage_users: "Manage Users",
@@ -1254,6 +1267,10 @@ document.addEventListener('DOMContentLoaded', () => {
       show_subscribers_desc: "Cho phép người khác xem danh sách những người đang theo dõi bạn.",
       toast_show_subscribers_on: "Đã bật hiển thị người đăng ký",
       toast_show_subscribers_off: "Đã tắt hiển thị người đăng ký",
+      show_following: "Hiển thị danh sách đang theo dõi",
+      show_following_desc: "Cho phép người khác xem danh sách những người bạn đang theo dõi.",
+      toast_show_following_on: "Đã bật hiển thị danh sách đang theo dõi",
+      toast_show_following_off: "Đã tắt hiển thị danh sách đang theo dõi",
       // Post Detail page
       comments: "Bình luận",
       comment_placeholder: "Viết bình luận bằng bất kỳ ngôn ngữ nào...",
@@ -1338,6 +1355,12 @@ document.addEventListener('DOMContentLoaded', () => {
       author_economics: "Chuyên gia Kinh tế",
       author_economics_lead: "Trưởng phòng Kinh tế",
       author_tech_lead: "Trưởng nhóm Kỹ thuật",
+      featured_creators: "Tác giả nổi bật",
+      people_matching: "Tác giả khớp với \"{query}\"",
+      publications_matching: "Chuyên mục khớp với \"{query}\"",
+      posts_matching: "Bài viết khớp với \"{query}\"",
+      top_trending_posts: "Bài viết thịnh hành",
+      suggestions: "Gợi ý tìm kiếm",
       showing_results_for: "Hiển thị kết quả cho ",
       yesterday: "Hôm qua",
       just_now: "Vừa xong",
@@ -1622,6 +1645,10 @@ document.addEventListener('DOMContentLoaded', () => {
       show_subscribers_desc: "允许其他人查看关注您的人的列表。",
       toast_show_subscribers_on: "订阅者可见性已开启",
       toast_show_subscribers_off: "订阅者可见性已关闭",
+      show_following: "显示关注列表",
+      show_following_desc: "允许其他人查看您关注的作者列表。",
+      toast_show_following_on: "关注列表可见性已开启",
+      toast_show_following_off: "关注列表可见性已关闭",
       // Post Detail page
       comments: "评论",
       comment_placeholder: "用任何语言写下你的评论...",
@@ -1706,6 +1733,12 @@ document.addEventListener('DOMContentLoaded', () => {
       author_economics: "经济学作者",
       author_economics_lead: "经济学主管",
       author_tech_lead: "技术主管",
+      featured_creators: "推荐作者",
+      people_matching: "与 \"{query}\" 匹配的作者",
+      publications_matching: "与 \"{query}\" 匹配的专栏",
+      posts_matching: "与 \"{query}\" 匹配的文章",
+      top_trending_posts: "热门趋势文章",
+      suggestions: "搜索建议",
       // Admin Panel
       admin_dashboard: "管理后台",
       manage_users: "用户管理",
@@ -2653,6 +2686,23 @@ document.addEventListener('DOMContentLoaded', () => {
     return cleanAuthor === cleanCurrent;
   }
 
+  function getAuthorProfileHref(authorName) {
+    if (!authorName) return 'profile.html';
+    const nameClean = parseUserName(authorName).trim().toLowerCase();
+    
+    const currentUserStr = localStorage.getItem('currentUser');
+    const selfName = parseUserName(currentUserStr || 'Hồ Quốc Tuấn').trim().toLowerCase();
+    if (nameClean === selfName) {
+      return 'profile.html';
+    }
+    
+    if (nameClean.includes('elena') || nameClean.includes('rostova')) return 'profile.html?id=101';
+    if (nameClean.includes('quốc tuấn') || nameClean.includes('tuan') || nameClean.includes('hồ quốc tuấn')) return 'profile.html?id=102';
+    if (nameClean.includes('thái dương') || nameClean.includes('duong') || nameClean.includes('thai duong')) return 'profile.html?id=103';
+    
+    return 'profile.html';
+  }
+
   function getAuthorTooltipHtml(authorName, avatar) {
     const isSelf = isSelfAuthor(authorName);
     const safeHandle = (authorName || 'user').replace(/\s+/g, '').toLowerCase();
@@ -2660,18 +2710,23 @@ document.addEventListener('DOMContentLoaded', () => {
     const dict = (window.uiTranslations && window.uiTranslations[currentLang]) || {};
     const followLabel = dict.btn_follow || dict.subscribe || 'Follow';
     const followBtnHtml = isSelf ? '' : `<button class="btn btn-primary btn-sm rounded-pill fw-bold px-3 py-1 shadow-sm btn-subscribe" onclick="if(typeof window.toggleSubscribe === 'function') window.toggleSubscribe(this, event); else alert('Subscribed');">${followLabel}</button>`;
+    const profileUrl = getAuthorProfileHref(authorName);
     
     return `
       <div class="author-hover-card shadow-lg border rounded-4 position-absolute overflow-hidden text-start" style="padding: 0; min-width: 280px; max-width: 320px; z-index: 1060; cursor: default;" onclick="event.stopPropagation()">
         <div style="height: 56px; background: linear-gradient(135deg, rgba(var(--bs-primary-rgb), 0.8), rgba(var(--bs-primary-rgb), 0.4));"></div>
         <div class="p-3 pt-0 position-relative">
           <div class="d-flex justify-content-between align-items-end mb-2" style="margin-top: -24px;">
-            <img src="${avatar || 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=80&h=80'}" class="rounded-circle" width="52" height="52" style="object-fit: cover; border: 3px solid var(--bg-panel); background: var(--bg-panel);" alt="Avatar">
+            <a href="${profileUrl}" class="d-inline-block text-decoration-none">
+              <img src="${avatar || 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=80&h=80'}" class="rounded-circle" width="52" height="52" style="object-fit: cover; border: 3px solid var(--bg-panel); background: var(--bg-panel);" alt="Avatar">
+            </a>
             ${followBtnHtml}
           </div>
           <div class="mb-2">
-            <h6 class="mb-0 fw-bold fs-6 text-main">${authorName}</h6>
-            <small class="text-muted">@${safeHandle}</small>
+            <a href="${profileUrl}" class="text-decoration-none text-main hover-text-primary">
+              <h6 class="mb-0 fw-bold fs-6" style="margin: 0; padding: 0;">${authorName}</h6>
+              <small class="text-muted">@${safeHandle}</small>
+            </a>
           </div>
           <p class="small mb-3 text-muted" style="line-height: 1.4;">Member of Lingora community, sharing insights and engaging in discussions.</p>
           <div class="d-flex gap-3 small">
@@ -2684,6 +2739,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   window.isSelfAuthor = isSelfAuthor;
+  window.getAuthorProfileHref = getAuthorProfileHref;
   window.getAuthorTooltipHtml = getAuthorTooltipHtml;
 
   function renderComments(postId) {

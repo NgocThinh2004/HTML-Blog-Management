@@ -370,6 +370,25 @@
                   </label>
                 </div>
               </div>
+
+              <hr class="my-1 border-light-subtle">
+
+              <div class="d-flex align-items-center justify-content-between p-2 rounded-3 hover-bg">
+                <div>
+                  <div class="fw-bold text-main" data-i18n="show_following">Hiển thị danh sách đang theo dõi (Show Following)</div>
+                  <small class="text-muted" data-i18n="show_following_desc">Cho phép người khác xem danh sách những người bạn đang theo dõi.</small>
+                </div>
+                <div class="form-check form-switch fs-5 mb-0">
+                  <label class="perfect-switch" id="showFollowingSwitchContainer">
+                    <input class="perfect-switch-input" type="checkbox" id="showFollowingSwitch" checked>
+                    <div class="perfect-switch-track">
+                      <div class="perfect-switch-thumb"></div>
+                      <span class="perfect-switch-text-on" data-i18n="on">On</span>
+                      <span class="perfect-switch-text-off" data-i18n="off">Off</span>
+                    </div>
+                  </label>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -700,6 +719,15 @@
         showSubscribersSwitch.addEventListener('change', () => {
           localStorage.setItem('allowShowSubscribers', showSubscribersSwitch.checked);
           showToast(settingsT(showSubscribersSwitch.checked ? 'toast_show_subscribers_on' : 'toast_show_subscribers_off'));
+        });
+      }
+
+      const showFollowingSwitch = document.getElementById('showFollowingSwitch');
+      if (showFollowingSwitch) {
+        showFollowingSwitch.checked = localStorage.getItem('allowShowFollowing') !== 'false';
+        showFollowingSwitch.addEventListener('change', () => {
+          localStorage.setItem('allowShowFollowing', showFollowingSwitch.checked);
+          showToast(settingsT(showFollowingSwitch.checked ? 'toast_show_following_on' : 'toast_show_following_off'));
         });
       }
     });

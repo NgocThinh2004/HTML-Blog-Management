@@ -143,7 +143,10 @@
           }
           
           if (matches.length > 0) {
-             suggestionsPanel.innerHTML = '<div class="suggestions-section-label">Suggestions</div>';
+             const currentLang = localStorage.getItem('preferredLanguage') || 'en';
+             const dict = (window.uiTranslations && window.uiTranslations[currentLang]) || (window.uiTranslations && window.uiTranslations.en) || {};
+             const suggestionsText = dict.suggestions || "Suggestions";
+             suggestionsPanel.innerHTML = `<div class="suggestions-section-label">${suggestionsText}</div>`;
              matches.slice(0, 5).forEach(m => {
                 const item = document.createElement('a');
                 item.href = '#';
@@ -264,7 +267,40 @@
         }
       };
       
+      // Re-render when language changes
+      window.addEventListener('lingora:languagechange', (e) => {
+        renderExploreResults(currentQuery, currentTab);
+      });
+      document.addEventListener('lingoraLangChange', (e) => {
+        renderExploreResults(currentQuery, currentTab);
+      });
     });
+
+    function isAuthorFollowed(authorName) {
+      try {
+        const stored = localStorage.getItem('lingoraSubscribedAuthors');
+        const list = stored ? JSON.parse(stored) : ['Elena Rostova', 'Hồ Quốc Tuấn', 'Thái Dương'];
+        return list.includes(authorName);
+      } catch (e) {
+        return false;
+      }
+    }
+
+    function toggleAuthorSubscriptionInExplore(authorName) {
+      try {
+        const stored = localStorage.getItem('lingoraSubscribedAuthors');
+        let list = stored ? JSON.parse(stored) : ['Elena Rostova', 'Hồ Quốc Tuấn', 'Thái Dương'];
+        const idx = list.indexOf(authorName);
+        if (idx >= 0) {
+          list.splice(idx, 1);
+        } else {
+          list.push(authorName);
+        }
+        localStorage.setItem('lingoraSubscribedAuthors', JSON.stringify(list));
+      } catch (e) {
+        console.error(e);
+      }
+    }
 
     function renderExploreResults(query, tab) {
       const container = document.getElementById('exploreResultsContainer');
@@ -407,8 +443,11 @@
       function renderPersonCard(person) {
         const countVal = authorCounts[person.id] || 3;
         const countTextVal = `${countVal} ${postWord}`;
-        const followLabel = dict.btn_follow || dict.subscribe || 'Follow';
-        const followBtnHtml = `<button class="btn btn-sm btn-outline-secondary rounded-pill px-3 fw-medium" data-i18n="btn_follow" onclick="if(typeof toggleSubscribe === 'function') toggleSubscribe(this, event); else alert('Subscribed');">${followLabel}</button>`;
+        const isFollowed = isAuthorFollowed(person.name);
+        const followLabel = isFollowed 
+          ? (dict.btn_following || 'Following') 
+          : (dict.btn_follow || dict.subscribe || 'Follow');
+        const followBtnHtml = `<button class="btn btn-sm ${isFollowed ? 'btn-outline-secondary subscribed' : 'btn-outline-primary'} rounded-pill px-3 fw-medium btn-subscribe" data-i18n="btn_follow" onclick="if(typeof toggleSubscribe === 'function') { toggleSubscribe(this, event); toggleAuthorSubscriptionInExplore('${person.name.replace(/'/g, "\\'")}'); } else alert('Subscribed');">${followLabel}</button>`;
 
         return `
           <div class="explore-card-item align-items-center">
@@ -474,24 +513,30 @@
 
         let html = '';
         if (qLower && filteredPeople.length > 0) {
-          html += `<div class="mb-4"><h6 class="fw-bold text-main mb-3 d-flex align-items-center gap-2"><i class="bi bi-people text-primary"></i><span>People matching "${currentQuery}"</span></h6>`;
+          const peopleHeading = (dict.people_matching || 'People matching "{query}"').replace('{query}', currentQuery);
+          html += `<div class="mb-4"><h6 class="fw-bold text-main mb-3 d-flex align-items-center gap-2"><i class="bi bi-people text-primary"></i><span>${peopleHeading}</span></h6>`;
           filteredPeople.slice(0, 2).forEach(p => { html += renderPersonCard(p); });
           html += `</div>`;
         } else if (!qLower && filteredPeople.length > 0) {
-          html += `<div class="mb-4"><h6 class="fw-bold text-main mb-3 d-flex align-items-center gap-2"><i class="bi bi-star-fill text-warning"></i><span data-i18n="featured_creators">Featured Creators</span></h6>`;
+          const featuredCreatorsHeading = dict.featured_creators || 'Featured Creators';
+          html += `<div class="mb-4"><h6 class="fw-bold text-main mb-3 d-flex align-items-center gap-2"><i class="bi bi-star-fill text-warning"></i><span data-i18n="featured_creators">${featuredCreatorsHeading}</span></h6>`;
           filteredPeople.forEach(p => { html += renderPersonCard(p); });
           html += `</div>`;
         }
 
         if (qLower && filteredPubs.length > 0) {
-          html += `<div class="mb-4"><h6 class="fw-bold text-main mb-3 d-flex align-items-center gap-2"><i class="bi bi-journal-text text-primary"></i><span>Publications matching "${currentQuery}"</span></h6>`;
+          const publicationsHeading = (dict.publications_matching || 'Publications matching "{query}"').replace('{query}', currentQuery);
+          html += `<div class="mb-4"><h6 class="fw-bold text-main mb-3 d-flex align-items-center gap-2"><i class="bi bi-journal-text text-primary"></i><span>${publicationsHeading}</span></h6>`;
           filteredPubs.slice(0, 2).forEach(pub => { html += renderPubCard(pub); });
           html += `</div>`;
         }
 
         if (matchingPosts.length > 0) {
           if (qLower || filteredPeople.length > 0) {
-            html += `<div class="mb-2"><h6 class="fw-bold text-main mb-3 d-flex align-items-center gap-2"><i class="bi bi-file-earmark-post text-primary"></i><span>${qLower ? `Posts matching "${currentQuery}"` : 'Top Trending Posts'}</span></h6>`;
+            const postsHeading = qLower 
+              ? (dict.posts_matching || 'Posts matching "{query}"').replace('{query}', currentQuery)
+              : (dict.top_trending_posts || 'Top Trending Posts');
+            html += `<div class="mb-2"><h6 class="fw-bold text-main mb-3 d-flex align-items-center gap-2"><i class="bi bi-file-earmark-post text-primary"></i><span>${postsHeading}</span></h6>`;
           }
           matchingPosts.forEach(post => { html += renderPostCard(post); });
           if (qLower || filteredPeople.length > 0) html += `</div>`;
@@ -576,6 +621,10 @@
         let html = '';
         filteredPeople.forEach(person => { html += renderPersonCard(person); });
         container.innerHTML = html;
+      }
+      
+      if (typeof window.applyUiTranslations === 'function') {
+        window.applyUiTranslations(currentLang);
       }
     }
   </script>

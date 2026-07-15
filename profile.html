@@ -1329,7 +1329,12 @@
                 </div>
               </div>
 
-              <div class="profile-avatar hero-avatar" data-hero-avatar><span>A</span></div>
+              <div class="d-flex flex-column align-items-center gap-3">
+                <div class="profile-avatar hero-avatar m-0" data-hero-avatar><span>A</span></div>
+                <button class="profile-action is-primary btn-subscribe d-none m-0" style="min-height: 32px; padding: 0 16px; width: 100%; border-radius: 8px; font-size: 0.85rem;" id="guestSubscribeBtn" type="button" onclick="window.toggleSubscribe ? window.toggleSubscribe(this, event) : (window.toggleAuthorSubscription && window.toggleAuthorSubscription(this, event))">
+                  <span data-i18n="subscribe">Theo dõi</span>
+                </button>
+              </div>
             </section>
             
             <div class="profile-stats" aria-label="Profile statistics">
@@ -1337,20 +1342,14 @@
                 <strong id="profileFollowersCount">840</strong>
                 <span data-i18n="followers">Followers</span>
               </a>
-              <span class="profile-stat">
+              <a class="profile-stat" href="#" id="btnSeeFollowing">
                 <strong id="profileFollowingCount">36</strong>
                 <span data-i18n="following">Following</span>
-              </span>
+              </a>
               <span class="profile-stat">
                 <strong id="profilePostsCount">0</strong>
                 <span data-i18n="posts">Posts</span>
               </span>
-            </div>
-
-            <div class="profile-guest-actions">
-              <button class="profile-action is-primary btn-subscribe d-none m-0" style="min-height: 44px; padding: 0 24px; width: auto;" id="guestSubscribeBtn" type="button" onclick="window.toggleSubscribe ? window.toggleSubscribe(this, event) : (window.toggleAuthorSubscription && window.toggleAuthorSubscription(this, event))">
-                <i class="bi bi-plus-lg me-1"></i> <span data-i18n="subscribe">Theo dõi</span>
-              </button>
             </div>
 
             <div class="action-row" id="profileActionRow">
@@ -2378,10 +2377,14 @@
             window.renderFeedPosts('profilePostsContainer', guestPosts, 'all');
           }
 
-          // Subscribers Visibility logic for guest
+          // Subscribers & Following Visibility logic for guest
           let guestAllowShowSubscribers = true;
+          let guestAllowShowFollowing = true;
           if (guestId === '102') {
             guestAllowShowSubscribers = false; // Mock: Hồ Quốc Tuấn hides his subscribers
+          }
+          if (guestId === '103') {
+            guestAllowShowFollowing = false; // Mock: Thái Dương hides his following
           }
 
           const btnSeeSubscribers = document.getElementById('btnSeeSubscribers');
@@ -2389,6 +2392,13 @@
             btnSeeSubscribers.dataset.subscribersVisible = String(guestAllowShowSubscribers);
             btnSeeSubscribers.classList.toggle('is-private', !guestAllowShowSubscribers);
             btnSeeSubscribers.setAttribute('aria-disabled', String(!guestAllowShowSubscribers));
+          }
+
+          const btnSeeFollowing = document.getElementById('btnSeeFollowing');
+          if (btnSeeFollowing) {
+            btnSeeFollowing.dataset.subscribersVisible = String(guestAllowShowFollowing);
+            btnSeeFollowing.classList.toggle('is-private', !guestAllowShowFollowing);
+            btnSeeFollowing.setAttribute('aria-disabled', String(!guestAllowShowFollowing));
           }
         } else {
           const ownPosts = {};
@@ -2440,46 +2450,113 @@
           }
 
           const profilePostsCount = document.getElementById('profilePostsCount');
-          if (profilePostsCount) profilePostsCount.textContent = Object.keys(ownPosts).length;
+           if (profilePostsCount) profilePostsCount.textContent = Object.keys(ownPosts).length;
           if (window.renderFeedPosts) {
             window.renderFeedPosts('profilePostsContainer', ownPosts, 'all');
           }
+
+          // Own Profile Followers/Following Visibility
+          const ownAllowSubscribers = localStorage.getItem('allowShowSubscribers') !== 'false';
+          const ownAllowFollowing = localStorage.getItem('allowShowFollowing') !== 'false';
+
+          const btnSeeSubscribers = document.getElementById('btnSeeSubscribers');
+          if (btnSeeSubscribers) {
+            btnSeeSubscribers.dataset.subscribersVisible = String(ownAllowSubscribers);
+            btnSeeSubscribers.classList.toggle('is-private', !ownAllowSubscribers);
+            btnSeeSubscribers.setAttribute('aria-disabled', String(!ownAllowSubscribers));
+          }
+
+          const btnSeeFollowing = document.getElementById('btnSeeFollowing');
+          if (btnSeeFollowing) {
+            btnSeeFollowing.dataset.subscribersVisible = String(ownAllowFollowing);
+            btnSeeFollowing.classList.toggle('is-private', !ownAllowFollowing);
+            btnSeeFollowing.setAttribute('aria-disabled', String(!ownAllowFollowing));
+          }
         }
 
-        // ======= SUBSCRIBERS MODAL LOGIC =======
+        // ======= SUBSCRIBERS & FOLLOWING MODAL LOGIC =======
         const btnSeeSubscribers = document.getElementById('btnSeeSubscribers');
+        const btnSeeFollowing = document.getElementById('btnSeeFollowing');
         const subscribersModal = document.getElementById('subscribersModal');
         const closeSubscribersModalBtn = document.getElementById('closeSubscribersModalBtn');
         const closeSubscribersModalBg = document.getElementById('closeSubscribersModalBg');
         const subscribersListContainer = document.getElementById('subscribersListContainer');
         const subscribersSearchInput = document.getElementById('subscribersSearchInput');
 
-        const mockSubscribers = [
-          { name: 'John Doe', avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=40&h=40' },
-          { name: 'Alice Smith', avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=40&h=40' },
-          { name: 'Bob Johnson', avatar: 'https://images.unsplash.com/photo-1599566150163-29194dcaad36?auto=format&fit=crop&q=80&w=40&h=40' },
-          { name: 'Emma Wilson', avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&q=80&w=40&h=40' },
-          { name: 'Michael Brown', avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=40&h=40' }
-        ];
+        let subscribersModalMode = 'followers';
+
+        const followersDataByUserId = {
+          'self': [
+            { name: 'John Doe', avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=40&h=40' },
+            { name: 'Alice Smith', avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=40&h=40' },
+            { name: 'Bob Johnson', avatar: 'https://images.unsplash.com/photo-1599566150163-29194dcaad36?auto=format&fit=crop&q=80&w=40&h=40' }
+          ],
+          '101': [
+            { name: 'Alice Smith', avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=40&h=40' },
+            { name: 'Bob Johnson', avatar: 'https://images.unsplash.com/photo-1599566150163-29194dcaad36?auto=format&fit=crop&q=80&w=40&h=40' },
+            { name: 'Thái Dương', avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=40&h=40' }
+          ],
+          '102': [
+            { name: 'Elena Rostova', avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=40&h=40' },
+            { name: 'Michael Brown', avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=40&h=40' }
+          ],
+          '103': [
+            { name: 'Elena Rostova', avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=40&h=40' },
+            { name: 'Hồ Quốc Tuấn', avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=40&h=40' }
+          ]
+        };
+
+        const followingDataByUserId = {
+          'self': [
+            { name: 'Elena Rostova', avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=40&h=40' },
+            { name: 'Hồ Quốc Tuấn', avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=40&h=40' },
+            { name: 'Thái Dương', avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=40&h=40' }
+          ],
+          '101': [
+            { name: 'Hồ Quốc Tuấn', avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=40&h=40' },
+            { name: 'Thái Dương', avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=40&h=40' }
+          ],
+          '102': [
+            { name: 'Elena Rostova', avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=40&h=40' },
+            { name: 'Thái Dương', avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=40&h=40' }
+          ],
+          '103': [
+            { name: 'Elena Rostova', avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=40&h=40' },
+            { name: 'Hồ Quốc Tuấn', avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=40&h=40' }
+          ]
+        };
 
         function renderSubscribers(filterText = '') {
           if (!subscribersListContainer) return;
-          const filtered = mockSubscribers.filter(sub => sub.name.toLowerCase().includes(filterText.toLowerCase()));
+          const urlParams = new URLSearchParams(window.location.search);
+          const userId = urlParams.get('id') || 'self';
+          const currentList = subscribersModalMode === 'followers' 
+            ? (followersDataByUserId[userId] || [])
+            : (followingDataByUserId[userId] || []);
+          const filtered = currentList.filter(sub => sub.name.toLowerCase().includes(filterText.toLowerCase()));
           
           if (filtered.length === 0) {
-            subscribersListContainer.innerHTML = '<div class="text-center text-muted py-4">Không tìm thấy người đăng ký nào.</div>';
+            const emptyText = subscribersModalMode === 'followers' 
+              ? getProfileTranslation('no_followers', 'Không tìm thấy người đăng ký nào.')
+              : getProfileTranslation('no_following', 'Không tìm thấy người nào đang theo dõi.');
+            subscribersListContainer.innerHTML = `<div class="text-center text-muted py-4">${emptyText}</div>`;
             return;
           }
 
           let html = '<div class="d-flex flex-column gap-3">';
           filtered.forEach(sub => {
+            const isSubscribed = subscribersModalMode === 'following';
+            const btnClass = isSubscribed ? 'btn-subscribe subscribed' : 'btn-subscribe';
+            const labelKey = isSubscribed ? 'subscribed' : 'subscribe';
+            const labelText = isSubscribed ? getProfileTranslation('subscribed', 'Đã theo dõi') : getProfileTranslation('subscribe', 'Theo dõi');
+
             html += `
               <div class="d-flex align-items-center justify-content-between">
                 <div class="d-flex align-items-center gap-3">
                   <img src="${sub.avatar}" class="rounded-circle" width="40" height="40" style="object-fit: cover;" alt="${sub.name}">
                   <span class="fw-bold text-main">${sub.name}</span>
                 </div>
-                <button class="btn btn-sm btn-outline-secondary rounded-pill fw-medium" data-i18n="subscribe">Theo dõi</button>
+                <button class="${btnClass} btn btn-sm btn-outline-secondary rounded-pill fw-medium" data-unfollow-label="${getProfileTranslation('btn_unfollow', 'Unfollow')}" onclick="if(typeof toggleSubscribe==='function') toggleSubscribe(this, event);"><span class="btn-subscribe-label">${labelText}</span></button>
               </div>
             `;
           });
@@ -2491,6 +2568,44 @@
           btnSeeSubscribers.addEventListener('click', (e) => {
             e.preventDefault();
             if (btnSeeSubscribers.dataset.subscribersVisible === 'false') return;
+            subscribersModalMode = 'followers';
+            
+            const modalTitle = document.getElementById('subscribersModalTitle');
+            if (modalTitle) {
+              modalTitle.textContent = getProfileTranslation('followers', 'Người đăng ký');
+              modalTitle.removeAttribute('data-i18n');
+            }
+            
+            const modalSearch = document.getElementById('subscribersSearchInput');
+            if (modalSearch) {
+              modalSearch.placeholder = getProfileTranslation('search_subscribers_placeholder', 'Tìm kiếm người đăng ký...');
+              modalSearch.removeAttribute('data-i18n');
+            }
+
+            subscribersModal.hidden = false;
+            renderSubscribers();
+            if (window.applyUiTranslations) window.applyUiTranslations();
+          });
+        }
+
+        if (btnSeeFollowing && subscribersModal) {
+          btnSeeFollowing.addEventListener('click', (e) => {
+            e.preventDefault();
+            if (btnSeeFollowing.dataset.subscribersVisible === 'false') return;
+            subscribersModalMode = 'following';
+            
+            const modalTitle = document.getElementById('subscribersModalTitle');
+            if (modalTitle) {
+              modalTitle.textContent = getProfileTranslation('following', 'Đang theo dõi');
+              modalTitle.removeAttribute('data-i18n');
+            }
+            
+            const modalSearch = document.getElementById('subscribersSearchInput');
+            if (modalSearch) {
+              modalSearch.placeholder = getProfileTranslation('search_following_placeholder', 'Tìm kiếm người đang theo dõi...');
+              modalSearch.removeAttribute('data-i18n');
+            }
+
             subscribersModal.hidden = false;
             renderSubscribers();
             if (window.applyUiTranslations) window.applyUiTranslations();
