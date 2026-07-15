@@ -184,10 +184,13 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  function setOriginalLanguage(language) {
+  let postOriginalLanguageOverride = null;
+
+  function syncOriginalLanguageWithSystem() {
     if (!originalLanguageSelect) return;
-    const interfaceLanguage = localStorage.getItem('preferredLanguage') || 'en';
-    const supportedLanguage = ['en', 'vi', 'zh'].includes(language) ? language : 'en';
+    const currentSystemLanguage = localStorage.getItem('preferredLanguage') || 'en';
+    const languageToUse = postOriginalLanguageOverride || currentSystemLanguage;
+    const supportedLanguage = ['en', 'vi', 'zh'].includes(languageToUse) ? languageToUse : 'en';
     originalLanguageSelect.value = supportedLanguage;
     if (originalLanguageDisplay) {
       const labels = {
@@ -195,30 +198,8 @@ document.addEventListener('DOMContentLoaded', () => {
         vi: { en: 'Tiếng Anh', vi: 'Tiếng Việt', zh: 'Tiếng Trung' },
         zh: { en: '英语', vi: '越南语', zh: '中文' }
       };
-      const interfaceLabels = labels[interfaceLanguage] || labels.en;
-      originalLanguageDisplay.textContent = interfaceLabels[supportedLanguage];
+      originalLanguageDisplay.textContent = labels[currentSystemLanguage][supportedLanguage];
     }
-    updateAllowedTranslationLanguages();
-  }
-
-  function syncOriginalLanguageWithSystem() {
-    if (!originalLanguageSelect) return;
-    const previousLanguage = originalLanguageSelect.value;
-    const systemLanguage = localStorage.getItem('preferredLanguage') || 'en';
-    const nextLanguage = ['en', 'vi', 'zh'].includes(systemLanguage) ? systemLanguage : 'en';
-
-    setOriginalLanguage(nextLanguage);
-
-    if (previousLanguage && previousLanguage !== nextLanguage) {
-      const previousLanguageCheckbox = document.querySelector(`input[name="allow_translate"][value="${previousLanguage}"]`);
-      if (previousLanguageCheckbox) {
-        previousLanguageCheckbox.checked = true;
-        delete previousLanguageCheckbox.dataset.restoreChecked;
-      }
-    }
-
-    const currentOriginalCheckbox = document.querySelector(`input[name="allow_translate"][value="${nextLanguage}"]`);
-    if (currentOriginalCheckbox) currentOriginalCheckbox.checked = false;
     updateAllowedTranslationLanguages();
   }
 
@@ -322,23 +303,8 @@ document.addEventListener('DOMContentLoaded', () => {
     if (from && aliases[from]) return aliases[from];
     if (isSafeGuestBackHref(from)) return from;
 
-    const storedBackHref = sessionStorage.getItem('mundiCreatePostBackHref');
-    if (isSafeGuestBackHref(storedBackHref)) return storedBackHref;
-
-    if (document.referrer) {
-      try {
-        const currentUrl = new URL(window.location.href);
-        const referrerUrl = new URL(document.referrer);
-        const currentDir = currentUrl.pathname.slice(0, currentUrl.pathname.lastIndexOf('/') + 1);
-        const referrerDir = referrerUrl.pathname.slice(0, referrerUrl.pathname.lastIndexOf('/') + 1);
-        const referrerPage = referrerUrl.pathname.slice(referrerUrl.pathname.lastIndexOf('/') + 1);
-
-        if (referrerDir === currentDir && referrerPage && referrerPage !== 'create-post.html') {
-          return `${referrerPage}${referrerUrl.search}${referrerUrl.hash}`;
-        }
-      } catch (error) {
-        return 'index.html';
-      }
+    if (window.history.length > 1) {
+      return 'javascript:history.back()';
     }
 
     return 'index.html';
@@ -828,7 +794,7 @@ document.addEventListener('DOMContentLoaded', () => {
         categoryLabel: categorySelect && categorySelect.selectedOptions[0] ? categorySelect.selectedOptions[0].textContent.trim() : 'Technology',
         originalLanguage,
         allowedTranslations,
-        status: 'pending',
+        status: sourceAction === 'draft' ? 'draft' : 'pending',
         previousStatus: existingPost ? existingPost.status || 'pending' : null,
         revision: existingPost ? Number(existingPost.revision || 1) + 1 : 1,
         createdAt: existingPost?.createdAt || new Date().toISOString(),
@@ -844,9 +810,11 @@ document.addEventListener('DOMContentLoaded', () => {
         posts.unshift(submittedPost);
       }
 
-      localStorage.setItem(submittedPostsKey, JSON.stringify(posts.slice(0, 50)));
+      localStorage.setItem(submittedPostsKey, JSON.stringify(posts.slice(0, 500)));
       localStorage.removeItem(draftKey);
-      window.location.href = 'my-posts.html?status=pending';
+      window.location.href = sourceAction === 'draft'
+        ? 'my-posts.html?status=draft'
+        : 'my-posts.html?status=pending';
     } catch (error) {
       const language = localStorage.getItem('preferredLanguage') || 'en';
       const messages = {
@@ -891,7 +859,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
       const categorySelect = document.getElementById('post_category');
       if (categorySelect && draft.category) categorySelect.value = draft.category;
-      setOriginalLanguage(draft.originalLanguage || localStorage.getItem('preferredLanguage') || 'en');
+      postOriginalLanguageOverride = draft.originalLanguage || localStorage.getItem('preferredLanguage') || 'en' || null;
       if (Array.isArray(draft.allowedTranslations)) {
         document.querySelectorAll('input[name="allow_translate"]').forEach(checkbox => {
           checkbox.checked = draft.allowedTranslations.includes(checkbox.value);
@@ -1597,8 +1565,24 @@ document.addEventListener('DOMContentLoaded', () => {
       if (actionButton) {
         const action = actionButton.dataset.draftAction;
         if (action === 'discard') {
+          localStorage.removeItem(draftKey);
           closeDraftConfirmModal();
-          window.location.href = getGuestBackHref(); // Redirect to home/previous page
+          localStorage.removeItem(draftKey);
+          if (submittedPostId) {
+            try {
+              const storedPosts = JSON.parse(localStorage.getItem(submittedPostsKey) || '[]');
+              if (Array.isArray(storedPosts)) {
+                const nextPosts = storedPosts.filter(post => (
+                  String(post.id) !== String(submittedPostId)
+                  || !['draft'].includes(String(post.status || '').toLowerCase())
+                ));
+                localStorage.setItem(submittedPostsKey, JSON.stringify(nextPosts));
+              }
+            } catch (error) {
+              // The local draft is already removed; continue back to the draft list.
+            }
+          }
+          window.location.href = 'my-posts.html?status=draft';
         } else if (action === 'save') {
           submitForReview('draft');
         }
@@ -1844,7 +1828,9 @@ document.addEventListener('DOMContentLoaded', () => {
       }
       const categorySelect = document.getElementById('post_category');
       if (categorySelect && submittedPost.category) categorySelect.value = submittedPost.category;
-      setOriginalLanguage(submittedPost.originalLanguage || localStorage.getItem('preferredLanguage') || 'en');
+      if (submittedPost.originalLanguage) {
+        postOriginalLanguageOverride = submittedPost.originalLanguage;
+      }
       document.querySelectorAll('input[name="allow_translate"]').forEach(checkbox => {
         checkbox.checked = Array.isArray(submittedPost.allowedTranslations)
           && submittedPost.allowedTranslations.includes(checkbox.value);
@@ -1882,7 +1868,7 @@ document.addEventListener('DOMContentLoaded', () => {
         editor.innerHTML = postData.body;
         normalizeEditorFontMarkup();
       }
-      setOriginalLanguage(postData.originalLanguage || localStorage.getItem('preferredLanguage') || 'en');
+      postOriginalLanguageOverride = postData.originalLanguage || localStorage.getItem('preferredLanguage') || 'en' || null;
       syncOriginalLanguageWithSystem();
       syncAvailableCategoriesWithSystem(postData.category || '', Boolean(postData.category));
       setSaveState(true);

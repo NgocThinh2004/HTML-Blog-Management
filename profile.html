@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="en" data-bs-theme="light">
-  <head>
+<head>
+  <link rel="icon" type="image/svg+xml" href="assets/images/lingora-mark.svg">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profile | Lingora</title>
@@ -172,6 +173,15 @@
         grid-template-columns: minmax(0, 1fr) 150px;
         gap: 36px;
         align-items: start;
+        padding: 28px;
+        border: 1px solid var(--line);
+        border-radius: 20px;
+        background: var(--panel);
+        box-shadow: 0 16px 40px rgba(20, 22, 22, 0.06);
+      }
+
+      [data-bs-theme="dark"] .profile-hero {
+        box-shadow: 0 16px 40px rgba(0, 0, 0, 0.2);
       }
 
       .profile-name {
@@ -203,7 +213,7 @@
         margin-top: 34px;
         padding: 4px 12px 4px 5px;
         border-radius: 999px;
-        color: #e7e7e7;
+        color: var(--text);
         background: var(--panel-soft);
         font-size: 14px;
         font-weight: 700;
@@ -220,6 +230,60 @@
         margin-top: 16px;
         color: var(--muted);
         font-size: 18px;
+      }
+
+      .profile-stats {
+        display: flex;
+        align-items: stretch;
+        gap: 8px;
+        margin-top: 14px;
+        padding: 8px;
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        background: var(--panel);
+      }
+
+      .profile-stat {
+        min-width: 0;
+        flex: 1 1 0;
+        display: flex;
+        align-items: baseline;
+        justify-content: center;
+        gap: 6px;
+        padding: 10px 12px;
+        border: 0;
+        border-radius: 10px;
+        color: var(--muted);
+        background: transparent;
+        font-size: 14px;
+        text-align: center;
+      }
+
+      a.profile-stat:hover,
+      button.profile-stat:hover {
+        color: var(--text);
+        background: var(--panel-soft);
+      }
+
+      .profile-stat.is-private {
+        cursor: default;
+      }
+
+      .profile-stat.is-private:hover {
+        color: var(--muted);
+        background: transparent;
+      }
+
+      .profile-stat strong {
+        color: var(--text);
+        font-size: 16px;
+        font-weight: 800;
+      }
+
+      .profile-guest-actions {
+        display: flex;
+        align-items: center;
+        margin-top: 12px;
       }
 
       .profile-avatar {
@@ -1123,6 +1187,18 @@
         .input-row {
           grid-template-columns: 1fr;
         }
+
+        .profile-hero {
+          padding: 22px;
+        }
+
+        .profile-stats {
+          flex-wrap: wrap;
+        }
+
+        .profile-stat {
+          flex-basis: calc(50% - 4px);
+        }
       }
       
       .mobile-bottom-nav {
@@ -1253,14 +1329,27 @@
                 </div>
               </div>
 
-              <div class="profile-avatar hero-avatar" data-hero-avatar><span>A</span></div>
+              <div class="d-flex flex-column align-items-center gap-3">
+                <div class="profile-avatar hero-avatar m-0" data-hero-avatar><span>A</span></div>
+                <button class="profile-action is-primary btn-subscribe d-none m-0" style="min-height: 32px; padding: 0 16px; width: 100%; border-radius: 8px; font-size: 0.85rem;" id="guestSubscribeBtn" type="button" onclick="window.toggleSubscribe ? window.toggleSubscribe(this, event) : (window.toggleAuthorSubscription && window.toggleAuthorSubscription(this, event))">
+                  <span data-i18n="subscribe">Theo dõi</span>
+                </button>
+              </div>
             </section>
             
-            <div class="d-flex align-items-center w-100 mt-4 mb-2">
-              <button class="profile-action is-primary btn-subscribe d-none m-0" style="min-height: 44px; padding: 0 24px; width: auto;" id="guestSubscribeBtn" type="button" onclick="window.toggleSubscribe ? window.toggleSubscribe(this, event) : (window.toggleAuthorSubscription && window.toggleAuthorSubscription(this, event))">
-                <i class="bi bi-plus-lg me-1"></i> <span data-i18n="subscribe">Theo dõi</span>
-              </button>
-              <a class="subscribers-link m-0 ms-auto" href="#" id="btnSeeSubscribers" data-i18n="profile_see_subscribers">See subscribers</a>
+            <div class="profile-stats" aria-label="Profile statistics">
+              <a class="profile-stat" href="#" id="btnSeeSubscribers">
+                <strong id="profileFollowersCount">840</strong>
+                <span data-i18n="followers">Followers</span>
+              </a>
+              <a class="profile-stat" href="#" id="btnSeeFollowing">
+                <strong id="profileFollowingCount">36</strong>
+                <span data-i18n="following">Following</span>
+              </a>
+              <span class="profile-stat">
+                <strong id="profilePostsCount">0</strong>
+                <span data-i18n="posts">Posts</span>
+              </span>
             </div>
 
             <div class="action-row" id="profileActionRow">
@@ -1426,7 +1515,7 @@
 
     <!-- Mobile Bottom Navigation -->
     <nav class="mobile-bottom-nav d-lg-none">
-      <a href="home.html" class="nav-item" aria-label="Home">
+      <a href="index.html" class="nav-item" aria-label="Home">
         <i class="bi bi-house"></i>
       </a>
       <a href="my-posts.html" class="nav-item" aria-label="My Articles">
@@ -1556,8 +1645,8 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-<script src="assets/js/components.js?v=1784089471951"></script>
-    <script src="assets/js/core.js?v=1784089471951"></script>
+<script src="assets/js/components.js?v=5"></script>
+    <script src="assets/js/core.js?v=23"></script>
     <script>
       document.addEventListener('DOMContentLoaded', () => {
         const storageKey = 'mundiBlogProfile';
@@ -1792,8 +1881,9 @@
 
         function applyBranding() {
           const root = document.documentElement;
-          const accent = profile.accentColor || defaults.accentColor;
-          const background = profile.backgroundColor || defaults.backgroundColor;
+          const isGuestProfile = new URLSearchParams(window.location.search).has('id');
+          const accent = isGuestProfile ? defaults.accentColor : (profile.accentColor || defaults.accentColor);
+          const background = isGuestProfile ? '' : (profile.backgroundColor || defaults.backgroundColor);
           const lightBackground = background && isLightColor(background);
           const sidebarText = getReadableTextColor(background);
 
@@ -1856,6 +1946,13 @@
           document.querySelectorAll('[data-hero-avatar], [data-sidebar-avatar], [data-chip-avatar], [data-composer-avatar], [data-edit-avatar]').forEach(node => {
             paintAvatar(node, profile.avatar, profile.displayName);
           });
+
+          const ownPostCount = document.getElementById('profilePostsCount');
+          if (ownPostCount && window.globalPostsData) {
+            ownPostCount.textContent = Object.values(window.globalPostsData)
+              .filter(post => post.author_name === profile.displayName)
+              .length;
+          }
         }
 
         function switchMode(mode) {
@@ -2213,22 +2310,30 @@
           let guestAvatar = '';
           let guestBio = 'This is a guest profile.';
           let guestHandle = `@author${guestId}`;
+          let guestFollowers = '0';
+          let guestFollowing = '0';
           
           if (guestId === '101') {
             guestName = 'Elena Rostova';
             guestAvatar = 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=80&h=80';
             guestBio = 'Researching agentic reasoning, speculative decoding & next-gen LLM architectures.';
             guestHandle = '@elenarostova';
+            guestFollowers = '12.4K';
+            guestFollowing = '186';
           } else if (guestId === '102') {
             guestName = 'Hồ Quốc Tuấn';
             guestAvatar = 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=80&h=80';
             guestBio = 'Macroeconomics and Finance.';
             guestHandle = '@hoquoctuan';
+            guestFollowers = '18.2K';
+            guestFollowing = '241';
           } else if (guestId === '103') {
             guestName = 'Thái Dương';
             guestAvatar = 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=80&h=80';
             guestBio = 'Security Engineer.';
             guestHandle = '@thaiduong';
+            guestFollowers = '15.6K';
+            guestFollowing = '128';
           } else if (window.globalPostsData) {
              const post = Object.values(window.globalPostsData).find(p => String(p.author_id) === guestId);
              if (post) {
@@ -2244,6 +2349,11 @@
           document.querySelectorAll('[data-hero-avatar], [data-chip-avatar]').forEach(node => {
             paintAvatar(node, guestAvatar, guestName);
           });
+          const profileFollowersCount = document.getElementById('profileFollowersCount');
+          const profileFollowingCount = document.getElementById('profileFollowingCount');
+          const profilePostsCount = document.getElementById('profilePostsCount');
+          if (profileFollowersCount) profileFollowersCount.textContent = guestFollowers;
+          if (profileFollowingCount) profileFollowingCount.textContent = guestFollowing;
 
           // Hide my-profile buttons and the action row container
           const profileActionRow = document.getElementById('profileActionRow');
@@ -2263,59 +2373,190 @@
                 guestPosts[key] = post;
               }
             });
+            if (profilePostsCount) profilePostsCount.textContent = Object.keys(guestPosts).length;
             window.renderFeedPosts('profilePostsContainer', guestPosts, 'all');
           }
 
-          // Subscribers Visibility logic for guest
+          // Subscribers & Following Visibility logic for guest
           let guestAllowShowSubscribers = true;
+          let guestAllowShowFollowing = true;
           if (guestId === '102') {
             guestAllowShowSubscribers = false; // Mock: Hồ Quốc Tuấn hides his subscribers
+          }
+          if (guestId === '103') {
+            guestAllowShowFollowing = false; // Mock: Thái Dương hides his following
           }
 
           const btnSeeSubscribers = document.getElementById('btnSeeSubscribers');
           if (btnSeeSubscribers) {
-            if (!guestAllowShowSubscribers) {
-              btnSeeSubscribers.classList.add('d-none');
-            } else {
-              btnSeeSubscribers.classList.remove('d-none');
+            btnSeeSubscribers.dataset.subscribersVisible = String(guestAllowShowSubscribers);
+            btnSeeSubscribers.classList.toggle('is-private', !guestAllowShowSubscribers);
+            btnSeeSubscribers.setAttribute('aria-disabled', String(!guestAllowShowSubscribers));
+          }
+
+          const btnSeeFollowing = document.getElementById('btnSeeFollowing');
+          if (btnSeeFollowing) {
+            btnSeeFollowing.dataset.subscribersVisible = String(guestAllowShowFollowing);
+            btnSeeFollowing.classList.toggle('is-private', !guestAllowShowFollowing);
+            btnSeeFollowing.setAttribute('aria-disabled', String(!guestAllowShowFollowing));
+          }
+        } else {
+          const ownPosts = {};
+          if (window.globalPostsData) {
+            Object.entries(window.globalPostsData).forEach(([key, post]) => {
+              if (post.author_name === profile.displayName) ownPosts[key] = post;
+            });
+          }
+
+          try {
+            const submittedPosts = JSON.parse(localStorage.getItem('mundiBlogSubmittedPosts') || '[]');
+            if (Array.isArray(submittedPosts)) {
+              submittedPosts.forEach(post => {
+                const status = String(post.status || '').toLowerCase();
+                const authors = Array.isArray(post.authors) ? post.authors : [];
+                if (!['approved', 'published'].includes(status) || !authors.includes(profile.displayName)) return;
+
+                const bodyContainer = document.createElement('div');
+                bodyContainer.innerHTML = typeof window.sanitizePostHtml === 'function'
+                  ? window.sanitizePostHtml(post.body || '')
+                  : (post.body || '');
+                const summary = String(bodyContainer.textContent || '').trim().slice(0, 320);
+                const language = post.originalLanguage || 'en';
+                const key = `submitted-${post.id}`;
+                ownPosts[key] = {
+                  author_name: profile.displayName,
+                  author_avatar: profile.avatar,
+                  author_id: 'self',
+                  profile_href: 'profile.html',
+                  detail_href: `post-detail.html?submitted=${encodeURIComponent(post.id)}`,
+                  timestamp: post.updatedAt ? new Date(post.updatedAt).toLocaleDateString() : 'Just now',
+                  category: post.category || post.categoryLabel || 'technology',
+                  supported_langs: language,
+                  likes: Number(post.likes || 0),
+                  comments: Number(post.comments || 0),
+                  views: Number(post.reads || 0),
+                  image: post.image || '',
+                  title_en: post.title || 'Untitled post',
+                  title_vi: post.title || 'Bài viết chưa có tiêu đề',
+                  title_zh: post.title || '未命名文章',
+                  content_en: summary,
+                  content_vi: summary,
+                  content_zh: summary
+                };
+              });
             }
+          } catch (error) {
+            // Keep the profile usable if local post data is malformed.
+          }
+
+          const profilePostsCount = document.getElementById('profilePostsCount');
+           if (profilePostsCount) profilePostsCount.textContent = Object.keys(ownPosts).length;
+          if (window.renderFeedPosts) {
+            window.renderFeedPosts('profilePostsContainer', ownPosts, 'all');
+          }
+
+          // Own Profile Followers/Following Visibility
+          const ownAllowSubscribers = localStorage.getItem('allowShowSubscribers') !== 'false';
+          const ownAllowFollowing = localStorage.getItem('allowShowFollowing') !== 'false';
+
+          const btnSeeSubscribers = document.getElementById('btnSeeSubscribers');
+          if (btnSeeSubscribers) {
+            btnSeeSubscribers.dataset.subscribersVisible = String(ownAllowSubscribers);
+            btnSeeSubscribers.classList.toggle('is-private', !ownAllowSubscribers);
+            btnSeeSubscribers.setAttribute('aria-disabled', String(!ownAllowSubscribers));
+          }
+
+          const btnSeeFollowing = document.getElementById('btnSeeFollowing');
+          if (btnSeeFollowing) {
+            btnSeeFollowing.dataset.subscribersVisible = String(ownAllowFollowing);
+            btnSeeFollowing.classList.toggle('is-private', !ownAllowFollowing);
+            btnSeeFollowing.setAttribute('aria-disabled', String(!ownAllowFollowing));
           }
         }
 
-        // ======= SUBSCRIBERS MODAL LOGIC =======
+        // ======= SUBSCRIBERS & FOLLOWING MODAL LOGIC =======
         const btnSeeSubscribers = document.getElementById('btnSeeSubscribers');
+        const btnSeeFollowing = document.getElementById('btnSeeFollowing');
         const subscribersModal = document.getElementById('subscribersModal');
         const closeSubscribersModalBtn = document.getElementById('closeSubscribersModalBtn');
         const closeSubscribersModalBg = document.getElementById('closeSubscribersModalBg');
         const subscribersListContainer = document.getElementById('subscribersListContainer');
         const subscribersSearchInput = document.getElementById('subscribersSearchInput');
 
-        const mockSubscribers = [
-          { name: 'John Doe', avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=40&h=40' },
-          { name: 'Alice Smith', avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=40&h=40' },
-          { name: 'Bob Johnson', avatar: 'https://images.unsplash.com/photo-1599566150163-29194dcaad36?auto=format&fit=crop&q=80&w=40&h=40' },
-          { name: 'Emma Wilson', avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&q=80&w=40&h=40' },
-          { name: 'Michael Brown', avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=40&h=40' }
-        ];
+        let subscribersModalMode = 'followers';
+
+        const followersDataByUserId = {
+          'self': [
+            { name: 'John Doe', avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=40&h=40' },
+            { name: 'Alice Smith', avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=40&h=40' },
+            { name: 'Bob Johnson', avatar: 'https://images.unsplash.com/photo-1599566150163-29194dcaad36?auto=format&fit=crop&q=80&w=40&h=40' }
+          ],
+          '101': [
+            { name: 'Alice Smith', avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=40&h=40' },
+            { name: 'Bob Johnson', avatar: 'https://images.unsplash.com/photo-1599566150163-29194dcaad36?auto=format&fit=crop&q=80&w=40&h=40' },
+            { name: 'Thái Dương', avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=40&h=40' }
+          ],
+          '102': [
+            { name: 'Elena Rostova', avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=40&h=40' },
+            { name: 'Michael Brown', avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=40&h=40' }
+          ],
+          '103': [
+            { name: 'Elena Rostova', avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=40&h=40' },
+            { name: 'Hồ Quốc Tuấn', avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=40&h=40' }
+          ]
+        };
+
+        const followingDataByUserId = {
+          'self': [
+            { name: 'Elena Rostova', avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=40&h=40' },
+            { name: 'Hồ Quốc Tuấn', avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=40&h=40' },
+            { name: 'Thái Dương', avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=40&h=40' }
+          ],
+          '101': [
+            { name: 'Hồ Quốc Tuấn', avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=40&h=40' },
+            { name: 'Thái Dương', avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=40&h=40' }
+          ],
+          '102': [
+            { name: 'Elena Rostova', avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=40&h=40' },
+            { name: 'Thái Dương', avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=40&h=40' }
+          ],
+          '103': [
+            { name: 'Elena Rostova', avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=40&h=40' },
+            { name: 'Hồ Quốc Tuấn', avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=40&h=40' }
+          ]
+        };
 
         function renderSubscribers(filterText = '') {
           if (!subscribersListContainer) return;
-          const filtered = mockSubscribers.filter(sub => sub.name.toLowerCase().includes(filterText.toLowerCase()));
+          const urlParams = new URLSearchParams(window.location.search);
+          const userId = urlParams.get('id') || 'self';
+          const currentList = subscribersModalMode === 'followers' 
+            ? (followersDataByUserId[userId] || [])
+            : (followingDataByUserId[userId] || []);
+          const filtered = currentList.filter(sub => sub.name.toLowerCase().includes(filterText.toLowerCase()));
           
           if (filtered.length === 0) {
-            subscribersListContainer.innerHTML = '<div class="text-center text-muted py-4">Không tìm thấy người đăng ký nào.</div>';
+            const emptyText = subscribersModalMode === 'followers' 
+              ? getProfileTranslation('no_followers', 'Không tìm thấy người đăng ký nào.')
+              : getProfileTranslation('no_following', 'Không tìm thấy người nào đang theo dõi.');
+            subscribersListContainer.innerHTML = `<div class="text-center text-muted py-4">${emptyText}</div>`;
             return;
           }
 
           let html = '<div class="d-flex flex-column gap-3">';
           filtered.forEach(sub => {
+            const isSubscribed = subscribersModalMode === 'following';
+            const btnClass = isSubscribed ? 'btn-subscribe subscribed' : 'btn-subscribe';
+            const labelKey = isSubscribed ? 'subscribed' : 'subscribe';
+            const labelText = isSubscribed ? getProfileTranslation('subscribed', 'Đã theo dõi') : getProfileTranslation('subscribe', 'Theo dõi');
+
             html += `
               <div class="d-flex align-items-center justify-content-between">
                 <div class="d-flex align-items-center gap-3">
                   <img src="${sub.avatar}" class="rounded-circle" width="40" height="40" style="object-fit: cover;" alt="${sub.name}">
                   <span class="fw-bold text-main">${sub.name}</span>
                 </div>
-                <button class="btn btn-sm btn-outline-secondary rounded-pill fw-medium" data-i18n="subscribe">Theo dõi</button>
+                <button class="${btnClass} btn btn-sm btn-outline-secondary rounded-pill fw-medium" data-unfollow-label="${getProfileTranslation('btn_unfollow', 'Unfollow')}" onclick="if(typeof toggleSubscribe==='function') toggleSubscribe(this, event);"><span class="btn-subscribe-label">${labelText}</span></button>
               </div>
             `;
           });
@@ -2326,6 +2567,45 @@
         if (btnSeeSubscribers && subscribersModal) {
           btnSeeSubscribers.addEventListener('click', (e) => {
             e.preventDefault();
+            if (btnSeeSubscribers.dataset.subscribersVisible === 'false') return;
+            subscribersModalMode = 'followers';
+            
+            const modalTitle = document.getElementById('subscribersModalTitle');
+            if (modalTitle) {
+              modalTitle.textContent = getProfileTranslation('followers', 'Người đăng ký');
+              modalTitle.removeAttribute('data-i18n');
+            }
+            
+            const modalSearch = document.getElementById('subscribersSearchInput');
+            if (modalSearch) {
+              modalSearch.placeholder = getProfileTranslation('search_subscribers_placeholder', 'Tìm kiếm người đăng ký...');
+              modalSearch.removeAttribute('data-i18n');
+            }
+
+            subscribersModal.hidden = false;
+            renderSubscribers();
+            if (window.applyUiTranslations) window.applyUiTranslations();
+          });
+        }
+
+        if (btnSeeFollowing && subscribersModal) {
+          btnSeeFollowing.addEventListener('click', (e) => {
+            e.preventDefault();
+            if (btnSeeFollowing.dataset.subscribersVisible === 'false') return;
+            subscribersModalMode = 'following';
+            
+            const modalTitle = document.getElementById('subscribersModalTitle');
+            if (modalTitle) {
+              modalTitle.textContent = getProfileTranslation('following', 'Đang theo dõi');
+              modalTitle.removeAttribute('data-i18n');
+            }
+            
+            const modalSearch = document.getElementById('subscribersSearchInput');
+            if (modalSearch) {
+              modalSearch.placeholder = getProfileTranslation('search_following_placeholder', 'Tìm kiếm người đang theo dõi...');
+              modalSearch.removeAttribute('data-i18n');
+            }
+
             subscribersModal.hidden = false;
             renderSubscribers();
             if (window.applyUiTranslations) window.applyUiTranslations();

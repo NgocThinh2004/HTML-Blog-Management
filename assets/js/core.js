@@ -471,6 +471,21 @@ document.addEventListener('DOMContentLoaded', () => {
   const htmlElement = document.documentElement;
   const supportedLanguages = new Set(['en', 'vi', 'zh']);
 
+  const mobileSidebarBody = document.querySelector('#mobileSidebar .offcanvas-body');
+  if (mobileSidebarBody && !mobileSidebarBody.querySelector('.mobile-preference-panel')) {
+    const currentLanguage = String(localStorage.getItem('preferredLanguage') || 'en').toLowerCase();
+    const flagMap = { en: 'gb', vi: 'vn', zh: 'cn' };
+    const preferencePanel = document.createElement('div');
+    preferencePanel.className = 'mobile-preference-panel';
+    preferencePanel.setAttribute('aria-label', 'Display preferences');
+    preferencePanel.innerHTML = `<div class="dropdown"><button class="mobile-preference-btn w-100" type="button" data-bs-toggle="dropdown" aria-expanded="false"><img id="mobileLangFlag" src="https://flagcdn.com/w20/${flagMap[currentLanguage] || 'gb'}.png" alt=""><span id="mobileCurrentLang">${supportedLanguages.has(currentLanguage) ? currentLanguage.toUpperCase() : 'EN'}</span><i class="bi bi-chevron-down ms-auto"></i></button><ul class="dropdown-menu shadow-sm w-100"><li><a class="dropdown-item global-lang-select" href="#" data-lang="en"><img src="https://flagcdn.com/w20/gb.png" width="18" class="me-2" alt="">English</a></li><li><a class="dropdown-item global-lang-select" href="#" data-lang="vi"><img src="https://flagcdn.com/w20/vn.png" width="18" class="me-2" alt="">Tiếng Việt</a></li><li><a class="dropdown-item global-lang-select" href="#" data-lang="zh"><img src="https://flagcdn.com/w20/cn.png" width="18" class="me-2" alt="">中文</a></li></ul></div><button class="mobile-preference-btn" id="mobileThemeToggle" type="button"><i class="bi bi-moon-fill" id="mobileThemeIcon"></i><span id="mobileThemeText" data-i18n="dark_mode">Dark mode</span></button>`;
+    preferencePanel.querySelector('[data-bs-toggle="dropdown"]')?.setAttribute('aria-label', 'Change language');
+    preferencePanel.querySelector('#mobileThemeToggle')?.setAttribute('aria-label', 'Toggle color theme');
+    const mobileFooter = mobileSidebarBody.querySelector('.mt-auto');
+    if (mobileFooter) mobileSidebarBody.insertBefore(preferencePanel, mobileFooter);
+    else mobileSidebarBody.appendChild(preferencePanel);
+  }
+
   window.getLingoraLanguage = function() {
     const storedLanguage = String(localStorage.getItem('preferredLanguage') || 'en').toLowerCase();
     return supportedLanguages.has(storedLanguage) ? storedLanguage : 'en';
@@ -493,6 +508,7 @@ document.addEventListener('DOMContentLoaded', () => {
     localStorage.setItem('preferredLanguage', language);
     window.syncLingoraLanguageUI(language);
     window.dispatchEvent(new CustomEvent('lingora:languagechange', { detail: { language } }));
+    document.dispatchEvent(new CustomEvent('lingoraLangChange', { detail: { lang: language } }));
     Promise.resolve().then(() => {
       if (window.getLingoraLanguage() === language) window.syncLingoraLanguageUI(language);
     });
@@ -528,14 +544,14 @@ document.addEventListener('DOMContentLoaded', () => {
     if (langSelect) {
       e.preventDefault();
       const lang = langSelect.getAttribute('data-lang');
-      localStorage.setItem('preferredLanguage', lang);
-      window.updateGlobalFlags(lang);
-
-      if (window.applyUiTranslations) window.applyUiTranslations(lang);
-      if (window.applyLanguageFilter) window.applyLanguageFilter(lang);
-
-      // Dispatch custom event so page-specific handlers (e.g. post-detail) can react
-      document.dispatchEvent(new CustomEvent('lingoraLangChange', { detail: { lang } }));
+      if (typeof window.setLingoraLanguage === 'function') {
+        window.setLingoraLanguage(lang);
+      } else {
+        localStorage.setItem('preferredLanguage', lang);
+        window.updateGlobalFlags(lang);
+        if (window.applyUiTranslations) window.applyUiTranslations(lang);
+        if (window.applyLanguageFilter) window.applyLanguageFilter(lang);
+      }
     }
   });
 
@@ -875,6 +891,10 @@ document.addEventListener('DOMContentLoaded', () => {
       show_subscribers_desc: "Allow others to see the list of people following you.",
       toast_show_subscribers_on: "Subscribers visibility turned on",
       toast_show_subscribers_off: "Subscribers visibility turned off",
+      show_following: "Show Following List",
+      show_following_desc: "Allow others to see the list of people you are following.",
+      toast_show_following_on: "Following list visibility turned on",
+      toast_show_following_off: "Following list visibility turned off",
       // Post Detail page
       comments: "Comments",
       comment_placeholder: "Write a comment in any language...",
@@ -936,6 +956,10 @@ document.addEventListener('DOMContentLoaded', () => {
       chinese: "Chinese",
       all_dates: "All dates",
       all_categories: "All categories",
+      select_all: "Select all",
+      selected: "selected",
+      delete_selected: "Delete Selected",
+      restore_selected: "Restore Selected",
       cat_ai_translation: "AI Translation",
       cat_profile_branding: "Profile Branding",
       cat_design_general: "Design",
@@ -955,6 +979,12 @@ document.addEventListener('DOMContentLoaded', () => {
       author_economics: "Economics Author",
       author_economics_lead: "Economics Lead",
       author_tech_lead: "Tech Lead",
+      featured_creators: "Featured Creators",
+      people_matching: "People matching \"{query}\"",
+      publications_matching: "Publications matching \"{query}\"",
+      posts_matching: "Posts matching \"{query}\"",
+      top_trending_posts: "Top Trending Posts",
+      suggestions: "Suggestions",
       // Admin Panel
       admin_dashboard: "Admin Dashboard",
       manage_users: "Manage Users",
@@ -1059,7 +1089,7 @@ document.addEventListener('DOMContentLoaded', () => {
       views_over_time: "Views over time",
       top_languages: "Top Languages",
       featured_posts: "Featured Articles",
-      featured_posts_desc: "Top 10 ranked by total views",
+      featured_posts_desc: "Base posts ranked by total views",
       lang_vi: "Vietnamese",
       lang_zh: "Chinese",
       lang_en: "English",
@@ -1089,6 +1119,8 @@ document.addEventListener('DOMContentLoaded', () => {
       find_more: "Find more",
       latest_from_following: "Latest from following",
       top: "Top",
+      followers: "Followers",
+      following: "Following",
       posts: "Posts",
       publications: "Publications",
       people: "People",
@@ -1235,6 +1267,10 @@ document.addEventListener('DOMContentLoaded', () => {
       show_subscribers_desc: "Cho phép người khác xem danh sách những người đang theo dõi bạn.",
       toast_show_subscribers_on: "Đã bật hiển thị người đăng ký",
       toast_show_subscribers_off: "Đã tắt hiển thị người đăng ký",
+      show_following: "Hiển thị danh sách đang theo dõi",
+      show_following_desc: "Cho phép người khác xem danh sách những người bạn đang theo dõi.",
+      toast_show_following_on: "Đã bật hiển thị danh sách đang theo dõi",
+      toast_show_following_off: "Đã tắt hiển thị danh sách đang theo dõi",
       // Post Detail page
       comments: "Bình luận",
       comment_placeholder: "Viết bình luận bằng bất kỳ ngôn ngữ nào...",
@@ -1296,6 +1332,10 @@ document.addEventListener('DOMContentLoaded', () => {
       chinese: "Tiếng Trung",
       all_dates: "Tất cả ngày",
       all_categories: "Tất cả danh mục",
+      select_all: "Chọn tất cả",
+      selected: "đã chọn",
+      delete_selected: "Xóa mục đã chọn",
+      restore_selected: "Khôi phục mục đã chọn",
       cat_ai_translation: "Dịch thuật AI",
       cat_profile_branding: "Thương hiệu hồ sơ",
       cat_design_general: "Thiết kế",
@@ -1315,6 +1355,12 @@ document.addEventListener('DOMContentLoaded', () => {
       author_economics: "Chuyên gia Kinh tế",
       author_economics_lead: "Trưởng phòng Kinh tế",
       author_tech_lead: "Trưởng nhóm Kỹ thuật",
+      featured_creators: "Tác giả nổi bật",
+      people_matching: "Tác giả khớp với \"{query}\"",
+      publications_matching: "Chuyên mục khớp với \"{query}\"",
+      posts_matching: "Bài viết khớp với \"{query}\"",
+      top_trending_posts: "Bài viết thịnh hành",
+      suggestions: "Gợi ý tìm kiếm",
       showing_results_for: "Hiển thị kết quả cho ",
       yesterday: "Hôm qua",
       just_now: "Vừa xong",
@@ -1424,7 +1470,7 @@ document.addEventListener('DOMContentLoaded', () => {
       views_over_time: "Lượt xem theo thời gian",
       top_languages: "Ngôn ngữ phổ biến",
       featured_posts: "Bài viết nổi bật",
-      featured_posts_desc: "Top 10 theo tổng lượt xem",
+      featured_posts_desc: "Xếp hạng bài gốc theo tổng lượt xem",
       lang_vi: "Tiếng Việt",
       lang_zh: "Tiếng Trung",
       lang_en: "Tiếng Anh",
@@ -1454,6 +1500,8 @@ document.addEventListener('DOMContentLoaded', () => {
       find_more: "Khám phá thêm",
       latest_from_following: "Mới nhất từ tác giả đang theo dõi",
       top: "Nổi bật",
+      followers: "Người theo dõi",
+      following: "Đang theo dõi",
       posts: "Bài viết",
       publications: "Chuyên mục",
       people: "Tác giả",
@@ -1597,6 +1645,10 @@ document.addEventListener('DOMContentLoaded', () => {
       show_subscribers_desc: "允许其他人查看关注您的人的列表。",
       toast_show_subscribers_on: "订阅者可见性已开启",
       toast_show_subscribers_off: "订阅者可见性已关闭",
+      show_following: "显示关注列表",
+      show_following_desc: "允许其他人查看您关注的作者列表。",
+      toast_show_following_on: "关注列表可见性已开启",
+      toast_show_following_off: "关注列表可见性已关闭",
       // Post Detail page
       comments: "评论",
       comment_placeholder: "用任何语言写下你的评论...",
@@ -1658,6 +1710,10 @@ document.addEventListener('DOMContentLoaded', () => {
       chinese: "中文",
       all_dates: "所有日期",
       all_categories: "所有类别",
+      select_all: "全选",
+      selected: "已选择",
+      delete_selected: "删除所选",
+      restore_selected: "恢复所选",
       cat_ai_translation: "AI翻译",
       cat_profile_branding: "个人资料品牌",
       cat_design_general: "设计",
@@ -1677,6 +1733,12 @@ document.addEventListener('DOMContentLoaded', () => {
       author_economics: "经济学作者",
       author_economics_lead: "经济学主管",
       author_tech_lead: "技术主管",
+      featured_creators: "推荐作者",
+      people_matching: "与 \"{query}\" 匹配的作者",
+      publications_matching: "与 \"{query}\" 匹配的专栏",
+      posts_matching: "与 \"{query}\" 匹配的文章",
+      top_trending_posts: "热门趋势文章",
+      suggestions: "搜索建议",
       // Admin Panel
       admin_dashboard: "管理后台",
       manage_users: "用户管理",
@@ -1786,7 +1848,7 @@ document.addEventListener('DOMContentLoaded', () => {
       views_over_time: "浏览量趋势",
       top_languages: "热门语言",
       featured_posts: "热门文章",
-      featured_posts_desc: "总浏览量排名前 10",
+      featured_posts_desc: "按总浏览量对原始文章排名",
       lang_vi: "越南语",
       lang_zh: "中文",
       lang_en: "英语",
@@ -1809,6 +1871,8 @@ document.addEventListener('DOMContentLoaded', () => {
       find_more: "发现更多",
       latest_from_following: "关注作者的最新发布",
       top: "热门",
+      followers: "关注者",
+      following: "正在关注",
       posts: "文章",
       publications: "专栏",
       people: "作者",
@@ -1827,6 +1891,28 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
   window.uiTranslations = uiTranslations;
+
+  window.renderAdminPagination = function (container, currentPage, totalItems, pageSize = 8) {
+    if (!container) return 1;
+    const totalPages = Math.max(1, Math.ceil(totalItems / pageSize));
+    const page = Math.min(Math.max(1, Number(currentPage) || 1), totalPages);
+    container.hidden = totalPages <= 1;
+    if (totalPages <= 1) {
+      container.innerHTML = '';
+      return page;
+    }
+    const pages = [];
+    for (let number = 1; number <= totalPages; number += 1) {
+      if (number === 1 || number === totalPages || Math.abs(number - page) <= 1) pages.push(number);
+    }
+    const items = [];
+    pages.forEach((number, index) => {
+      if (index && number - pages[index - 1] > 1) items.push('<span class="admin-page-gap" aria-hidden="true">…</span>');
+      items.push(`<button class="admin-page-btn${number === page ? ' is-active' : ''}" type="button" data-page="${number}" ${number === page ? 'aria-current="page"' : ''}>${number}</button>`);
+    });
+    container.innerHTML = `<button class="admin-page-btn" type="button" data-page="${page - 1}" aria-label="Previous page" ${page === 1 ? 'disabled' : ''}><i class="bi bi-chevron-left"></i></button>${items.join('')}<button class="admin-page-btn" type="button" data-page="${page + 1}" aria-label="Next page" ${page === totalPages ? 'disabled' : ''}><i class="bi bi-chevron-right"></i></button>`;
+    return page;
+  };
 
   window.showLingoraToast = function (message, options = {}) {
     document.querySelector('.lingora-app-toast')?.remove();
@@ -1925,6 +2011,7 @@ document.addEventListener('DOMContentLoaded', () => {
       ) : null;
       const managedTranslation = managedCategory?.translations?.[currentLang];
       if (managedTranslation?.name && !managedCategory?.deletedTranslations?.[currentLang]) return managedTranslation.name;
+      if (managedCategory) return '';
     } catch (error) {
       // Fall back to the built-in category dictionary.
     }
@@ -1949,9 +2036,14 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!category) return true;
       const translation = category.translations?.[language];
       const activeValue = translation?.active;
+      const categoryActive = category.active;
       return Boolean(
         translation &&
         !category.deletedTranslations?.[language] &&
+        categoryActive !== false &&
+        categoryActive !== 'false' &&
+        categoryActive !== 0 &&
+        categoryActive !== '0' &&
         activeValue !== false &&
         activeValue !== 'false' &&
         activeValue !== 0 &&
@@ -2121,7 +2213,9 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.category-label[data-original-cat]').forEach(el => {
       const originalCat = el.getAttribute('data-original-cat');
       if (typeof window.translateCategory === 'function') {
-        el.textContent = window.translateCategory(originalCat);
+        const translatedCategory = window.translateCategory(originalCat);
+        el.textContent = translatedCategory;
+        el.classList.toggle('d-none', !translatedCategory);
       }
     });
 
@@ -2592,6 +2686,23 @@ document.addEventListener('DOMContentLoaded', () => {
     return cleanAuthor === cleanCurrent;
   }
 
+  function getAuthorProfileHref(authorName) {
+    if (!authorName) return 'profile.html';
+    const nameClean = parseUserName(authorName).trim().toLowerCase();
+    
+    const currentUserStr = localStorage.getItem('currentUser');
+    const selfName = parseUserName(currentUserStr || 'Hồ Quốc Tuấn').trim().toLowerCase();
+    if (nameClean === selfName) {
+      return 'profile.html';
+    }
+    
+    if (nameClean.includes('elena') || nameClean.includes('rostova')) return 'profile.html?id=101';
+    if (nameClean.includes('quốc tuấn') || nameClean.includes('tuan') || nameClean.includes('hồ quốc tuấn')) return 'profile.html?id=102';
+    if (nameClean.includes('thái dương') || nameClean.includes('duong') || nameClean.includes('thai duong')) return 'profile.html?id=103';
+    
+    return 'profile.html';
+  }
+
   function getAuthorTooltipHtml(authorName, avatar) {
     const isSelf = isSelfAuthor(authorName);
     const safeHandle = (authorName || 'user').replace(/\s+/g, '').toLowerCase();
@@ -2599,18 +2710,23 @@ document.addEventListener('DOMContentLoaded', () => {
     const dict = (window.uiTranslations && window.uiTranslations[currentLang]) || {};
     const followLabel = dict.btn_follow || dict.subscribe || 'Follow';
     const followBtnHtml = isSelf ? '' : `<button class="btn btn-primary btn-sm rounded-pill fw-bold px-3 py-1 shadow-sm btn-subscribe" onclick="if(typeof window.toggleSubscribe === 'function') window.toggleSubscribe(this, event); else alert('Subscribed');">${followLabel}</button>`;
+    const profileUrl = getAuthorProfileHref(authorName);
     
     return `
       <div class="author-hover-card shadow-lg border rounded-4 position-absolute overflow-hidden text-start" style="padding: 0; min-width: 280px; max-width: 320px; z-index: 1060; cursor: default;" onclick="event.stopPropagation()">
         <div style="height: 56px; background: linear-gradient(135deg, rgba(var(--bs-primary-rgb), 0.8), rgba(var(--bs-primary-rgb), 0.4));"></div>
         <div class="p-3 pt-0 position-relative">
           <div class="d-flex justify-content-between align-items-end mb-2" style="margin-top: -24px;">
-            <img src="${avatar || 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=80&h=80'}" class="rounded-circle" width="52" height="52" style="object-fit: cover; border: 3px solid var(--bg-panel); background: var(--bg-panel);" alt="Avatar">
+            <a href="${profileUrl}" class="d-inline-block text-decoration-none">
+              <img src="${avatar || 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=80&h=80'}" class="rounded-circle" width="52" height="52" style="object-fit: cover; border: 3px solid var(--bg-panel); background: var(--bg-panel);" alt="Avatar">
+            </a>
             ${followBtnHtml}
           </div>
           <div class="mb-2">
-            <h6 class="mb-0 fw-bold fs-6 text-main">${authorName}</h6>
-            <small class="text-muted">@${safeHandle}</small>
+            <a href="${profileUrl}" class="text-decoration-none text-main hover-text-primary">
+              <h6 class="mb-0 fw-bold fs-6" style="margin: 0; padding: 0;">${authorName}</h6>
+              <small class="text-muted">@${safeHandle}</small>
+            </a>
           </div>
           <p class="small mb-3 text-muted" style="line-height: 1.4;">Member of Lingora community, sharing insights and engaging in discussions.</p>
           <div class="d-flex gap-3 small">
@@ -2623,6 +2739,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   window.isSelfAuthor = isSelfAuthor;
+  window.getAuthorProfileHref = getAuthorProfileHref;
   window.getAuthorTooltipHtml = getAuthorTooltipHtml;
 
   function renderComments(postId) {

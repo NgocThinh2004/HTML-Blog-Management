@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&display=swap');
+
 :root {
   --bg: #f4f5f3;
   --surface: #ffffff;
@@ -229,13 +231,15 @@ button {
 }
 
 .btn-accent {
-  color: #ffffff;
-  background: var(--accent);
+  color: var(--accent-contrast, #ffffff) !important;
+  background: var(--accent) !important;
+  border: 1px solid var(--accent-border-color, #d0d5dd) !important;
 }
 
 .btn-accent:hover,
 .btn-accent:focus-visible {
-  background: var(--accent-strong);
+  background: var(--accent-strong) !important;
+  border-color: var(--accent-border-color, var(--accent-strong)) !important;
 }
 
 .btn-dark {
@@ -441,6 +445,8 @@ button {
 
 .save-state {
   border: 1px solid var(--border);
+  pointer-events: none;
+  user-select: none;
 }
 
 .save-state.is-saved {
@@ -1085,7 +1091,7 @@ button {
   display: inline-flex;
   justify-content: center;
   color: #3c4141;
-  font-family: Georgia, "Times New Roman", serif;
+  font-family: 'Lora', Georgia, "Times New Roman", serif;
   font-size: 21px;
   font-weight: 500;
   line-height: 1;
@@ -1202,7 +1208,7 @@ button {
   display: block;
   margin: 18px 0 10px;
   color: #777d7d;
-  font-family: Georgia, "Times New Roman", serif;
+  font-family: 'Lora', Georgia, "Times New Roman", serif;
   font-size: 14px;
   letter-spacing: 1.8px;
 }
@@ -1253,7 +1259,7 @@ button {
   color: #596064;
   background: transparent;
   outline: none;
-  font-family: Georgia, "Times New Roman", serif;
+  font-family: 'Lora', Georgia, "Times New Roman", serif;
   font-variant-numeric: lining-nums proportional-nums;
   font-feature-settings: "lnum" 1, "onum" 0;
   resize: none;
@@ -1470,7 +1476,7 @@ button {
   padding: 10px 0 90px;
   color: #434949;
   outline: none;
-  font-family: Cambria, Georgia, "Times New Roman", serif;
+  font-family: 'Lora', Cambria, Georgia, "Times New Roman", serif;
   font-variant-numeric: lining-nums;
   font-size: 22px;
   line-height: 1.65;
@@ -1996,7 +2002,7 @@ button {
 .preview-title {
   margin: 0 0 8px;
   color: #343a3a;
-  font-family: Georgia, "Times New Roman", serif;
+  font-family: 'Lora', Georgia, "Times New Roman", serif;
   font-size: 24px;
 }
 
@@ -2450,6 +2456,17 @@ body.publish-modal-open {
   font-size: 1rem;
 }
 
+.category-select {
+  min-height: 40px;
+  padding: 8px 12px;
+  padding-right: 2.25rem; /* Space for the dropdown arrow */
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background-color: var(--surface-subtle, var(--bg-soft));
+  color: var(--text);
+  font-weight: 600;
+}
+
 .publish-form-label {
   display: block;
   font-weight: 600;
@@ -2575,17 +2592,18 @@ body.publish-modal-open {
 }
 
 .fb-btn-primary {
-  background-color: #0866ff; /* FB blue */
-  color: white;
+  background-color: var(--primary-color, #0866ff) !important;
+  color: var(--accent-contrast, white) !important;
   border-radius: 6px;
   font-weight: 600;
-  padding: 8px 24px;
-  border: none;
+  padding: 7px 24px; /* adjusted padding to account for border */
+  border: 1px solid var(--accent-border-color, #d0d5dd) !important;
   font-size: 0.95rem;
 }
 .fb-btn-primary:hover {
-  background-color: #0056e3;
-  color: white;
+  background-color: var(--primary-hover, #0056e3) !important;
+  border-color: var(--accent-border-color, var(--primary-hover)) !important;
+  color: var(--accent-contrast, white) !important;
 }
 
 .fb-btn-full {
@@ -3148,7 +3166,7 @@ body.draft-modal-open {
   max-width: 100%;
   margin: 0 0 34px;
   color: #687071;
-  font-family: Georgia, "Times New Roman", serif;
+  font-family: 'Lora', Georgia, "Times New Roman", serif;
   font-variant-numeric: lining-nums proportional-nums;
   font-feature-settings: "lnum" 1, "onum" 0;
   font-size: clamp(24px, 3vw, 32px);
@@ -3161,7 +3179,7 @@ body.draft-modal-open {
 
 .preview-post-body {
   color: #363d3d;
-  font-family: Cambria, Georgia, "Times New Roman", serif;
+  font-family: 'Lora', Cambria, Georgia, "Times New Roman", serif;
   font-variant-numeric: lining-nums;
   font-size: 22px;
   line-height: 1.65;

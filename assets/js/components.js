@@ -794,6 +794,8 @@ window.renderFeedPosts = function(containerId, dataObj, categoryFilter = 'all') 
 
   Object.keys(dataObj).forEach(id => {
     const post = dataObj[id];
+    const detailHref = post.detail_href || `post-detail.html?id=${encodeURIComponent(id)}`;
+    const authorHref = post.profile_href || `profile.html?id=${encodeURIComponent(post.author_id || 101)}`;
     
     // Support languages check
     const supportedLangs = post.supported_langs ? post.supported_langs.split(',') : ['en', 'vi', 'zh'];
@@ -805,7 +807,7 @@ window.renderFeedPosts = function(containerId, dataObj, categoryFilter = 'all') 
     html += `
     <article class="substack-post" data-supported-langs="${post.supported_langs || 'en,vi,zh'}" data-category="${post.category || 'Artificial Intelligence'}">
       <div class="substack-post-header">
-        <div class="author-badge-group position-relative author-tooltip-container" style="cursor: pointer; z-index: 2;" onclick="window.location.href='profile.html?id=${post.author_id || 101}'">
+        <div class="author-badge-group position-relative author-tooltip-container" style="cursor: pointer; z-index: 2;" onclick="window.location.href='${authorHref}'">
           <img src="${post.author_avatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=80&h=80'}" alt="${post.author_name}" class="author-avatar">
           <div class="author-meta-info">
             <span class="author-name hover-text-primary fw-bold" style="color: var(--text-main);">${post.author_name || 'Anonymous'}</span>
@@ -815,7 +817,7 @@ window.renderFeedPosts = function(containerId, dataObj, categoryFilter = 'all') 
           ${typeof window.getAuthorTooltipHtml === 'function' ? window.getAuthorTooltipHtml(post.author_name, post.author_avatar) : ''}
         </div>
       </div>
-      <a href="post-detail.html?id=${id}" class="text-decoration-none text-reset d-block">
+      <a href="${detailHref}" class="text-decoration-none text-reset d-block">
         <h2 class="post-title h4 fw-bold mt-2 mb-1" 
             data-translate-title-en="${(post.title_en || '').replace(/"/g, '&quot;')}"
             data-translate-title-vi="${(post.title_vi || post.title_en || '').replace(/"/g, '&quot;')}"
@@ -832,7 +834,7 @@ window.renderFeedPosts = function(containerId, dataObj, categoryFilter = 'all') 
       </a>
       <div class="substack-post-footer">
         <button class="footer-action-item" onclick="if(typeof toggleLike==='function'){toggleLike(this, ${post.likes || 0})}"><i class="bi bi-heart"></i> <span class="like-count">${post.likes || 0}</span></button>
-        <button class="footer-action-item" onclick="window.location.href='post-detail.html?id=${id}#comments'"><i class="bi bi-chat"></i> <span>${post.comments || 0}</span></button>
+        <button class="footer-action-item" onclick="window.location.href='${detailHref}#comments'"><i class="bi bi-chat"></i> <span>${post.comments || 0}</span></button>
         <span class="footer-action-item text-muted"><i class="bi bi-eye"></i> <span>${post.views || 0}</span></span>
       </div>
     </article>`;

@@ -2,6 +2,7 @@
 <html lang="en" data-bs-theme="light">
 
 <head>
+  <link rel="icon" type="image/svg+xml" href="assets/images/lingora-mark.svg">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Lingora - Post Details</title>
@@ -123,8 +124,8 @@
   <!-- Bootstrap 5 JS Bundle -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <!-- Core Script containing theme & language simulation -->
-<script src="assets/js/core.js?v=1784089471950"></script>
-  <script src="assets/js/components.js?v=1784089471950"></script>
+<script src="assets/js/core.js?v=23"></script>
+  <script src="assets/js/components.js?v=5"></script>
   
   <script>
     function escapePostText(value) {
@@ -213,6 +214,8 @@
 
       const container = document.getElementById('postDetailContainer');
       if (!container) return;
+      const likeCount = Number(post.like_count ?? post.likes ?? 0);
+      const viewCount = Number(post.view_count ?? post.views ?? 0);
 
       let imageHtml = "";
       if (post.image) {
@@ -262,9 +265,9 @@
           </div>
 
           <div class="substack-post-footer mt-5 pt-3 border-top d-flex align-items-center gap-4">
-            <button class="footer-action-item btn btn-link text-decoration-none text-secondary d-flex align-items-center gap-1 p-0" onclick="if(typeof toggleLike === 'function') toggleLike(this, ${post.likes}, event);"><i class="bi bi-heart"></i> <span class="like-count">${post.likes}</span></button>
+            <button class="footer-action-item btn btn-link text-decoration-none text-secondary d-flex align-items-center gap-1 p-0" onclick="if(typeof toggleLike === 'function') toggleLike(this, ${likeCount}, event);"><i class="bi bi-heart"></i> <span class="like-count">${likeCount}</span></button>
             <button class="footer-action-item btn btn-link text-decoration-none text-secondary d-flex align-items-center gap-1 p-0" onclick="document.getElementById('newCommentInput')?.focus()"><i class="bi bi-chat"></i> <span id="footerCommentCount">${post.comments}</span></button>
-            <span class="footer-action-item text-muted ms-auto d-flex align-items-center gap-1"><i class="bi bi-eye"></i> <span>${post.views || 500}</span></span>
+            <span class="footer-action-item text-muted d-flex align-items-center gap-1"><i class="bi bi-eye"></i> <span>${viewCount}</span></span>
           </div>
         </article>
       `;
