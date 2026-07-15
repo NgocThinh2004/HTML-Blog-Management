@@ -235,10 +235,10 @@
         const findMoreLabel = dict.find_more || "Find more";
         let html = `
           <div class="author-carousel-item ${authorFilter === '' ? 'active' : ''}" onclick="filterByAuthor('')">
-            <div class="author-carousel-avatar-wrapper d-flex align-items-center justify-content-center bg-light">
+            <div class="author-carousel-avatar-wrapper d-flex align-items-center justify-content-center" style="background: var(--bg-secondary);">
               <i class="bi bi-people fs-4 text-main"></i>
             </div>
-            <span class="author-carousel-name">${allAuthorsLabel}</span>
+            <span class="author-carousel-name" data-i18n="sub_all_authors_filter">${allAuthorsLabel}</span>
           </div>
         `;
 
@@ -265,10 +265,10 @@
 
         html += `
           <a href="explore.html" class="author-carousel-item text-decoration-none">
-            <div class="author-carousel-avatar-wrapper d-flex align-items-center justify-content-center bg-light">
+            <div class="author-carousel-avatar-wrapper d-flex align-items-center justify-content-center" style="background: var(--bg-secondary);">
               <i class="bi bi-plus-lg fs-5 text-muted"></i>
             </div>
-            <span class="author-carousel-name">${findMoreLabel}</span>
+            <span class="author-carousel-name" data-i18n="find_more">${findMoreLabel}</span>
           </a>
         `;
         carousel.innerHTML = html;
@@ -311,9 +311,12 @@
           manageHtml += `
             <div class="col-12">
               <div class="manage-author-card h-100">
-                <img src="${avatar}" class="rounded-circle border" width="54" height="54" style="object-fit: cover;" alt="${name}">
-                <div class="flex-grow-1">
-                  <h6 class="fw-bold mb-1 text-main">${name}</h6>
+                <div class="position-relative author-tooltip-container" style="cursor: pointer;" onclick="window.location.href='profile.html?id=101'">
+                  <img src="${avatar}" class="rounded-circle border" width="54" height="54" style="object-fit: cover;" alt="${name}">
+                  ${typeof window.getAuthorTooltipHtml === 'function' ? window.getAuthorTooltipHtml(name, avatar) : ''}
+                </div>
+                <div class="flex-grow-1 ms-3" style="cursor: pointer;" onclick="window.location.href='profile.html?id=101'">
+                  <h6 class="fw-bold mb-1 text-main hover-text-primary">${name}</h6>
                   <p class="text-muted small mb-0">${role}</p>
                 </div>
                 <button class="btn btn-outline-secondary btn-sm rounded-pill px-3 fw-medium subscribed btn-subscribe" data-unfollow-label="${dict.btn_unfollow || 'Bỏ theo dõi'}" onclick="toggleAuthorSubscription('${name.replace(/'/g, "\\'")}', event)"><span class="btn-subscribe-label">${followingLabel}</span></button>
@@ -381,9 +384,12 @@
         html += `
           <div class="col-12 mb-3">
             <div class="card bg-light border-0 rounded-4 p-3 d-flex flex-row align-items-center h-100">
-              <img src="${c.avatar}" class="rounded-circle border border-white shadow-sm me-3" width="50" height="50" alt="${c.name}" style="object-fit: cover;">
-              <div class="flex-grow-1">
-                <h6 class="fw-bold mb-0 text-main" style="font-size: 0.95rem;">${c.name}</h6>
+              <div class="position-relative author-tooltip-container me-3" style="cursor: pointer;" onclick="window.location.href='profile.html?id=101'">
+                <img src="${c.avatar}" class="rounded-circle border border-white shadow-sm" width="50" height="50" alt="${c.name}" style="object-fit: cover;">
+                ${typeof window.getAuthorTooltipHtml === 'function' ? window.getAuthorTooltipHtml(c.name, c.avatar) : ''}
+              </div>
+              <div class="flex-grow-1" style="cursor: pointer;" onclick="window.location.href='profile.html?id=101'">
+                <h6 class="fw-bold mb-0 text-main hover-text-primary" style="font-size: 0.95rem;">${c.name}</h6>
                 <p class="text-muted small mb-0">${c.role}</p>
               </div>
               <button class="btn ${isSubbed ? 'btn-outline-secondary subscribed' : 'btn-outline-primary'} btn-sm rounded-pill fw-medium btn-subscribe px-3" onclick="toggleAuthorSubscription('${c.name.replace(/'/g, "\\'")}', event)">${isSubbed ? followingBtnText : followBtnText}</button>

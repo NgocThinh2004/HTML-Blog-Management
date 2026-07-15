@@ -406,7 +406,8 @@
       function renderPersonCard(person) {
         const countVal = authorCounts[person.id] || 3;
         const countTextVal = `${countVal} ${postWord}`;
-        const followBtnHtml = `<button class="btn btn-sm btn-outline-secondary rounded-pill px-3 fw-medium" onclick="if(typeof toggleSubscribe === 'function') toggleSubscribe(this, event); else alert('Subscribed');">Theo dõi</button>`;
+        const followLabel = dict.btn_follow || dict.subscribe || 'Follow';
+        const followBtnHtml = `<button class="btn btn-sm btn-outline-secondary rounded-pill px-3 fw-medium" data-i18n="btn_follow" onclick="if(typeof toggleSubscribe === 'function') toggleSubscribe(this, event); else alert('Subscribed');">${followLabel}</button>`;
 
         return `
           <div class="explore-card-item align-items-center">

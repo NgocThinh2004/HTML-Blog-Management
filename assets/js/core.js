@@ -2593,8 +2593,8 @@ document.addEventListener('DOMContentLoaded', () => {
           </div>
           <p class="small mb-3 text-muted" style="line-height: 1.4;">Member of Lingora community, sharing insights and engaging in discussions.</p>
           <div class="d-flex gap-3 small">
-            <div><span class="fw-bold text-main">840</span> <span class="text-muted">Followers</span></div>
-            <div><span class="fw-bold text-main">15</span> <span class="text-muted">Comments</span></div>
+            <div><span class="fw-bold text-main">840</span> <span class="text-muted" data-i18n="followers">Followers</span></div>
+            <div><span class="fw-bold text-main">15</span> <span class="text-muted" data-i18n="posts">Posts</span></div>
           </div>
         </div>
       </div>
