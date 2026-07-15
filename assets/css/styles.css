@@ -231,13 +231,15 @@ button {
 }
 
 .btn-accent {
-  color: #ffffff;
-  background: var(--accent);
+  color: var(--accent-contrast, #ffffff) !important;
+  background: var(--accent) !important;
+  border: 1px solid var(--accent-border-color, #d0d5dd) !important;
 }
 
 .btn-accent:hover,
 .btn-accent:focus-visible {
-  background: var(--accent-strong);
+  background: var(--accent-strong) !important;
+  border-color: var(--accent-border-color, var(--accent-strong)) !important;
 }
 
 .btn-dark {
@@ -2577,17 +2579,18 @@ body.publish-modal-open {
 }
 
 .fb-btn-primary {
-  background-color: #0866ff; /* FB blue */
-  color: white;
+  background-color: var(--primary-color, #0866ff) !important;
+  color: var(--accent-contrast, white) !important;
   border-radius: 6px;
   font-weight: 600;
-  padding: 8px 24px;
-  border: none;
+  padding: 7px 24px; /* adjusted padding to account for border */
+  border: 1px solid var(--accent-border-color, #d0d5dd) !important;
   font-size: 0.95rem;
 }
 .fb-btn-primary:hover {
-  background-color: #0056e3;
-  color: white;
+  background-color: var(--primary-hover, #0056e3) !important;
+  border-color: var(--accent-border-color, var(--primary-hover)) !important;
+  color: var(--accent-contrast, white) !important;
 }
 
 .fb-btn-full {

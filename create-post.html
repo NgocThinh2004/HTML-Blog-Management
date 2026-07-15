@@ -5,7 +5,15 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>Create post | Lingora</title>
-<link href="assets/css/styles.css?v=6" rel="stylesheet"/>
+<link href="assets/css/styles.css?v=8" rel="stylesheet"/>
+<style>
+  /* Force black border on buttons when profile color is white/light */
+  html[data-accent-tone="light"] .btn-accent, 
+  html[data-accent-tone="light"] .fb-btn-primary {
+    border: 1px solid #000000 !important;
+    box-shadow: inset 0 0 0 1px #000000 !important;
+  }
+</style>
 </head>
 <body class="editor-page" data-page="create-post">
 <header aria-label="Post actions" class="editor-topbar">
@@ -17,7 +25,7 @@
 </button>
 <div class="editor-topbar-spacer"></div>
 <button class="btn btn-light" data-preview-button="" type="button" data-i18n="btn_preview">Preview</button>
-<button class="btn btn-white" data-publish-button="" type="button" data-i18n="btn_continue">Continue</button>
+<button class="btn btn-accent" data-publish-button="" type="button" data-i18n="btn_continue">Continue</button>
 </header>
 <nav aria-label="Writing toolbar" class="editor-toolbar">
 <input accept="image/*" class="hidden-file-input" id="editorImageInput" type="file"/>
