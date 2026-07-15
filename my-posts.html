@@ -1177,10 +1177,30 @@
 
         const currentLanguage = localStorage.getItem('preferredLanguage') || 'en';
         const locale = currentLanguage === 'vi' ? 'vi-VN' : currentLanguage === 'zh' ? 'zh-CN' : 'en-US';
-        const pendingLabels = { en: 'Pending', vi: 'Chờ duyệt', zh: '待审核' };
+        const statusLabels = {
+          pending: { en: 'Pending', vi: 'Chờ duyệt', zh: '待审核' },
+          published: { en: 'Published', vi: 'Đã đăng', zh: '已发布' },
+          draft: { en: 'Draft', vi: 'Bản nháp', zh: '草稿' },
+          trash: { en: 'Trash', vi: 'Thùng rác', zh: '回收站' },
+          rejected: { en: 'Rejected', vi: 'Bị từ chối', zh: '已拒绝' }
+        };
+        const statusIcons = {
+          pending: 'bi-hourglass-split', published: 'bi-check2-circle', draft: 'bi-file-earmark-text',
+          trash: 'bi-trash3', rejected: 'bi-x-circle'
+        };
         const dateFormatter = new Intl.DateTimeFormat(locale, { year: 'numeric', month: 'short', day: '2-digit' });
 
         submittedPosts.slice().reverse().forEach(post => {
+          const storedStatus = String(post.status || 'pending').toLowerCase();
+          const status = ['approved', 'published'].includes(storedStatus)
+            ? 'published'
+            : (statusLabels[storedStatus] ? storedStatus : 'pending');
+            
+          const categoryCode = post.category || post.categoryLabel || 'technology';
+          const categoryLabel = typeof window.translateCategory === 'function'
+            ? window.translateCategory(categoryCode)
+            : (post.categoryLabel || categoryCode);
+            
           const translations = Array.isArray(post.allowedTranslations) ? post.allowedTranslations : [];
           let translatedLanguagesHtml = '';
           if (translations.length > 0) {
@@ -1207,21 +1227,25 @@
             }
           }
           const updatedDate = post.updatedAt ? dateFormatter.format(new Date(post.updatedAt)) : '-';
-          const searchText = `${post.title || ''} ${post.subtitle || ''} ${post.categoryLabel || post.category || ''}`.toLowerCase();
+          const searchText = `${post.title || ''} ${post.subtitle || ''} ${categoryCode} ${categoryLabel}`.toLowerCase();
+          
+          const actionMarkup = status === 'trash'
+            ? `<a class="action-btn" href="#" data-tooltip-key="restore"><i class="bi bi-arrow-counterclockwise"></i></a>
+               <a class="action-btn text-danger" href="#" data-tooltip-key="delete"><i class="bi bi-trash3"></i></a>`
+            : `<a class="action-btn" href="post-detail.html?submitted=${encodeURIComponent(post.id)}" data-tooltip-key="open"><i class="bi bi-box-arrow-up-right"></i></a>
+               <a class="action-btn" href="create-post.html?submitted=${encodeURIComponent(post.id)}&amp;from=my-posts.html" data-tooltip-key="edit"><i class="bi bi-pencil"></i></a>
+               <a class="action-btn text-danger" href="#" data-tooltip-key="trash"><i class="bi bi-trash"></i></a>`;
+               
           tableBody.insertAdjacentHTML('afterbegin', `
-            <tr class="new-submission-row" data-submitted-id="${escapeHtml(post.id)}" data-category="${escapeHtml(post.category || '')}" data-language="${escapeHtml(post.originalLanguage || 'en')}" data-search="${escapeHtml(searchText)}" data-status="pending">
+            <tr class="new-submission-row" data-submitted-id="${escapeHtml(post.id)}" data-category="${escapeHtml(post.category || '')}" data-language="${escapeHtml(post.originalLanguage || 'en')}" data-search="${escapeHtml(searchText)}" data-status="${status}">
               <td class="select-col"><input aria-label="Select ${escapeHtml(post.title)}" class="row-check" type="checkbox"></td>
-              <td class="post-title-cell"><strong>${escapeHtml(post.title)}</strong><span>${escapeHtml(post.categoryLabel || post.category || '')}</span></td>
-              <td><span class="status-badge is-pending"><span data-i18n="status_pending">${pendingLabels[currentLanguage] || pendingLabels.en}</span></span></td>
+              <td class="post-title-cell"><strong>${escapeHtml(post.title)}</strong><span class="category-label" data-original-cat="${escapeHtml(categoryCode)}">${escapeHtml(categoryLabel)}</span></td>
+              <td><span class="status-badge is-${status}"><span data-i18n="status_${status}">${statusLabels[status][currentLanguage] || statusLabels[status].en}</span></span></td>
               <td>${languageBadge(post.originalLanguage || 'en')}</td>
               <td>${translatedLanguagesHtml || '<span class="text-muted small">-</span>'}</td>
               <td data-updated-at="${escapeHtml(post.updatedAt || '')}">${escapeHtml(updatedDate)}</td>
               <td>0</td>
-              <td><div class="action-group">
-                <a class="action-btn" href="post-detail.html?submitted=${encodeURIComponent(post.id)}" data-tooltip-key="open"><i class="bi bi-box-arrow-up-right"></i></a>
-                <a class="action-btn" href="create-post.html?submitted=${encodeURIComponent(post.id)}&amp;from=my-posts.html" data-tooltip-key="edit"><i class="bi bi-pencil"></i></a>
-                <a class="action-btn text-danger" href="#" data-tooltip-key="trash"><i class="bi bi-trash"></i></a>
-              </div></td>
+              <td><div class="action-group">${actionMarkup}</div></td>
             </tr>
           `);
         });

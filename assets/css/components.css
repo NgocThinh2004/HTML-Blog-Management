@@ -53,140 +53,6 @@
   color: var(--primary-color);
 }
 
-/* Category header in navigation */
-.sidebar-nav-header {
-  font-size: 0.75rem;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: var(--text-muted);
-  font-weight: 700;
-  margin-top: 1.75rem;
-  margin-bottom: 0.4rem;
-  padding-left: 0.75rem;
-}
-
-/* Post Cards (Substack style) */
-.post-card {
-  display: flex;
-  gap: 2rem;
-  padding: 2rem 0;
-  border-bottom: 1px solid var(--border-color);
-  transition: border-color var(--transition-speed) ease;
-}
-
-.post-card:last-of-type {
-  border-bottom: none;
-}
-
-.post-card-body {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-}
-
-.post-card-meta {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-size: 0.85rem;
-  color: var(--text-muted);
-  margin-bottom: 0.5rem;
-}
-
-.post-card-author-avatar {
-  width: 22px;
-  height: 22px;
-  border-radius: 50%;
-  object-fit: cover;
-}
-
-.post-card-category {
-  font-weight: 600;
-  color: var(--text-main);
-}
-
-.post-card-category:hover {
-  color: var(--primary-color);
-}
-
-.post-card-title {
-  font-size: 1.45rem;
-  line-height: 1.25;
-  margin-bottom: 0.5rem;
-  color: var(--text-main);
-  font-weight: 700;
-  letter-spacing: -0.02em;
-}
-
-.post-card-title a {
-  color: inherit;
-}
-
-.post-card-title a:hover {
-  color: var(--primary-color);
-}
-
-.post-card-summary {
-  font-size: 0.95rem;
-  color: var(--text-muted);
-  line-height: 1.5;
-  margin-bottom: 0.85rem;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-.post-card-metrics {
-  display: flex;
-  align-items: center;
-  gap: 1.25rem;
-  font-size: 0.85rem;
-  color: var(--text-muted);
-}
-
-.post-card-metric-item {
-  display: flex;
-  align-items: center;
-  gap: 0.35rem;
-}
-
-.post-card-metric-item i {
-  font-size: 0.95rem;
-}
-
-.post-card-image {
-  width: 150px;
-  height: 100px;
-  border-radius: 6px;
-  overflow: hidden;
-  flex-shrink: 0;
-  border: 1px solid var(--border-color);
-}
-
-.post-card-image img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 0.4s ease;
-}
-
-.post-card:hover .post-card-image img {
-  transform: scale(1.04);
-}
-
-@media (max-width: 576px) {
-  .post-card {
-    flex-direction: column-reverse;
-    gap: 1rem;
-  }
-
-  .post-card-image {
-    width: 100%;
-    height: 180px;
-  }
-}
-
 /* Featured Author Widget (White card on gray sidebar layout) */
 .featured-authors-widget {
   background-color: var(--bg-panel);
@@ -258,46 +124,6 @@
   color: #ffffff;
 }
 
-/* Warnings / Badges */
-.badge-translation-warning {
-  background-color: #fffbeb;
-  color: #d97706;
-  font-size: 0.75rem;
-  padding: 0.25rem 0.6rem;
-  border-radius: 99px;
-  font-weight: 500;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.3rem;
-  border: 1px solid #fef3c7;
-}
-
-[data-bs-theme="dark"] .badge-translation-warning {
-  background-color: rgba(217, 119, 6, 0.1);
-  color: #fbbf24;
-  border-color: rgba(217, 119, 6, 0.2);
-}
-
-/* Category Badge (Substack styled) */
-.category-badge {
-  display: inline-flex;
-  align-items: center;
-  font-size: 0.8rem;
-  font-weight: 600;
-  padding: 0.35rem 0.75rem;
-  border-radius: 99px;
-  background-color: var(--bg-sidebar);
-  color: var(--text-muted);
-  border: 1px solid var(--border-color);
-  transition: all var(--transition-speed) ease;
-}
-
-.category-badge:hover {
-  background-color: var(--primary-color);
-  color: #ffffff !important;
-  border-color: var(--primary-color);
-}
-
 /* Dropdown styling updates (Caret and focus outline resets) */
 .no-caret::after {
   display: none !important;
@@ -317,97 +143,6 @@
 select.form-select-sm {
   padding-right: 2rem !important;
   background-position: right 0.5rem center !important;
-}
-
-[data-bs-theme="dark"] .badge-translation-warning {
-  background-color: rgba(217, 119, 6, 0.1);
-  color: #fbbf24;
-  border-color: rgba(217, 119, 6, 0.2);
-}
-
-/* Footer layout */
-.footer-links {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.85rem;
-  font-size: 0.75rem;
-  color: var(--text-muted);
-  margin-top: 1.25rem;
-  padding-left: 0.5rem;
-}
-
-.footer-links a {
-  color: var(--text-muted);
-}
-
-.footer-links a:hover {
-  text-decoration: underline;
-  color: var(--text-main);
-}
-
-/* ==========================================================
-   PRETTIER SYSTEM CONTROLS (THEME & LANGUAGE PILLS)
-   ========================================================== */
-.lang-selector-group {
-  display: flex;
-  background-color: rgba(0, 0, 0, 0.04);
-  padding: 3px;
-  border-radius: 99px;
-  border: 1px solid var(--border-color);
-  align-items: center;
-}
-
-[data-bs-theme="dark"] .lang-selector-group {
-  background-color: rgba(255, 255, 255, 0.05);
-}
-
-.lang-pill-btn {
-  background: transparent;
-  border: none;
-  font-size: 0.75rem;
-  font-weight: 700;
-  color: var(--text-muted);
-  padding: 0.3rem 0.65rem;
-  border-radius: 99px;
-  transition: all var(--transition-speed) ease;
-  cursor: pointer;
-}
-
-.lang-pill-btn:hover {
-  color: var(--text-main);
-}
-
-.lang-pill-btn.active {
-  background-color: var(--bg-body);
-  color: var(--primary-color) !important;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
-}
-
-.theme-circle-btn {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  background-color: rgba(0, 0, 0, 0.03);
-  border: 1px solid var(--border-color);
-  color: var(--text-main);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all var(--transition-speed) ease;
-  cursor: pointer;
-}
-
-[data-bs-theme="dark"] .theme-circle-btn {
-  background-color: rgba(255, 255, 255, 0.05);
-}
-
-.theme-circle-btn:hover {
-  background-color: rgba(0, 0, 0, 0.08);
-  color: var(--primary-color);
-}
-
-[data-bs-theme="dark"] .theme-circle-btn:hover {
-  background-color: rgba(255, 255, 255, 0.1);
 }
 
 /* ==========================================================
@@ -692,6 +427,7 @@ select.form-select-sm {
   color: var(--text-muted);
   line-height: 1.45;
   display: -webkit-box;
+  line-clamp: 2;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
@@ -761,6 +497,58 @@ select.form-select-sm {
 .lingora-app-toast i {
   color: #16a34a;
   font-size: 1.1rem;
+}
+
+/* Admin create/edit forms use the same right-side motion as user details. */
+.modal.side-panel-modal {
+  padding-right: 0 !important;
+}
+
+.modal.side-panel-modal .modal-dialog {
+  width: min(92vw, 440px);
+  max-width: none;
+  min-height: 100%;
+  margin: 0 0 0 auto;
+  transform: translateX(100%);
+  transition: transform 0.3s ease-out;
+}
+
+.modal.side-panel-modal.show .modal-dialog {
+  transform: translateX(0);
+}
+
+.modal.side-panel-modal .modal-content {
+  height: 100dvh;
+  border: 0;
+  border-left: 1px solid var(--border-color);
+  border-radius: 0 !important;
+  background: var(--bg-panel);
+  box-shadow: -12px 0 32px rgba(15, 23, 42, 0.16) !important;
+}
+
+.modal.side-panel-modal form {
+  min-height: 0;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+}
+
+.modal.side-panel-modal .modal-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1.25rem;
+}
+
+.modal.side-panel-modal .modal-footer {
+  flex: 0 0 auto;
+  padding: 1rem 1.25rem;
+  background: var(--bg-panel);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .modal.side-panel-modal .modal-dialog {
+    transition: none;
+  }
 }
 
 /* The Lingora mark keeps its indigo-violet identity in every theme/accent. */
@@ -1122,7 +910,7 @@ select.form-select-sm {
   padding: 0 1.25rem 0.5rem;
 }
 
-/* Trending chips — horizontal pill row */
+/* Trending chips â€” horizontal pill row */
 .suggestions-trending-row {
   display: flex;
   flex-wrap: wrap;
@@ -1157,7 +945,7 @@ select.form-select-sm {
   border-color: rgba(255, 108, 31, 0.3);
 }
 
-/* Result items — compact rows */
+/* Result items â€” compact rows */
 .suggestion-item {
   display: flex;
   align-items: center;
@@ -1313,6 +1101,12 @@ select.form-select-sm {
   border-radius: 9999px;
   transition: all 0.2s ease;
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 90px;
+  max-width: 140px;
+  text-align: center;
+  display: inline-block;
 }
 
 .btn-subscribe-outline:hover {
@@ -1506,10 +1300,19 @@ select.form-select-sm {
   text-decoration: underline;
 }
 
-.substack-post-content {
-  font-size: 0.95rem;
+.post-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  line-height: 1.35;
   color: var(--text-main);
-  line-height: 1.55;
+  letter-spacing: -0.01em;
+  margin: 0;
+}
+
+.substack-post-content {
+  font-size: 1rem;
+  color: var(--text-main);
+  line-height: 1.7;
   letter-spacing: -0.01em;
   white-space: pre-line;
 }
@@ -1909,65 +1712,276 @@ select.form-select-sm {
   display: none !important;
 }
 
-/* Sidebar Control Item (Matches .sidebar-nav-item padding and alignment) */
-.sidebar-control-item {
-  padding: 0.65rem 0.75rem !important;
-  border-radius: 99px !important;
-  font-size: 1.05rem !important;
-  transition: all var(--transition-speed) ease;
+/* Compact pagination shared by admin directory pages. */
+.admin-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: .35rem;
+  min-height: 38px;
+  margin-top: 1rem;
 }
-.sidebar-control-item:hover {
-  background-color: var(--bg-secondary);
+.admin-pagination[hidden] { display: none !important; }
+.admin-page-btn {
+  min-width: 36px;
+  height: 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 .55rem;
+  border: 1px solid var(--border-color);
+  border-radius: 9px;
+  color: var(--text-main);
+  background: var(--bg-panel);
+  font-size: .82rem;
+  font-weight: 650;
+  transition: border-color .15s ease, background-color .15s ease, color .15s ease;
+}
+.admin-page-btn:hover:not(:disabled) { border-color: var(--primary-color); color: var(--primary-color); }
+.admin-page-btn.is-active { border-color: var(--primary-color); color: #fff; background: var(--primary-color); }
+.admin-page-btn:disabled { opacity: .42; cursor: not-allowed; }
+.admin-page-gap { min-width: 24px; color: var(--text-muted); text-align: center; }
+@media (max-width: 575px) {
+  .admin-pagination { gap: .25rem; }
+  .admin-page-btn { min-width: 34px; height: 34px; padding-inline: .45rem; }
 }
 
-/* Custom Sun/Moon Theme Switch */
-.custom-theme-switch {
-  position: relative;
-  display: inline-block;
-  width: 50px;
-  height: 26px;
-  background-color: #e9ecef;
-  border-radius: 50px;
+/* Mobile admin navigation controls injected by core.js. */
+.mobile-preference-panel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: .6rem;
+  margin-top: auto;
+  padding: .85rem 0;
+  border-top: 1px solid var(--border-color);
+}
+.mobile-preference-btn {
+  width: 42px;
+  min-width: 42px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  padding: 0;
   border: 1px solid var(--border-color);
-  transition: all 0.3s ease;
+  border-radius: 10px;
+  color: var(--text-main);
+  background: var(--bg-panel);
+  font-size: .9rem;
+}
+.mobile-preference-btn img { width: 20px; height: 15px; border-radius: 2px; object-fit: cover; }
+.mobile-preference-panel .dropdown { flex: 0 0 42px; }
+.mobile-preference-panel .dropdown > .mobile-preference-btn { width: 42px !important; }
+.mobile-preference-btn > span, .mobile-preference-btn > .bi-chevron-down { display: none; }
+@media (max-width: 991px) {
+  #mobileSidebar { width: min(88vw, 360px); }
+  #mobileSidebar .offcanvas-header { padding: 1rem 1.15rem; }
+  #mobileSidebar .offcanvas-body { display: flex; flex-direction: column; padding: .85rem !important; }
+  #mobileSidebar .sidebar-nav { display: grid; gap: .2rem; }
+  #mobileSidebar .sidebar-nav-item { min-height: 44px; padding: .65rem .75rem; border-radius: 10px; }
+  #mobileSidebar .sidebar-nav-item i { width: 22px; text-align: center; }
+  #mobileSidebar .mt-auto.pt-3 { margin-top: 0 !important; padding-top: .5rem !important; }
+}
+
+
+
+/* ==========================================================
+   SUBSCRIBE & TOOLTIP STYLES
+   ========================================================== */
+.author-tooltip-container .author-hover-card {
+  visibility: hidden;
+  pointer-events: none;
+  top: calc(100% + 5px);
+  left: -20px;
+  z-index: 1050;
+  min-width: 280px;
+  max-width: 340px; /* Constrain width so text wraps */
+  white-space: normal; /* Ensure text can wrap */
+  background-color: var(--bg-panel);
+  opacity: 0;
+  transform: translateY(10px) scale(0.95);
+  transform-origin: top left;
+  transition: opacity 0.25s cubic-bezier(0.4, 0, 0.2, 1), transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12), 0 4px 8px rgba(0, 0, 0, 0.04) !important;
+  border: 1px solid var(--border-color) !important;
+  border-radius: 16px !important;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.author-tooltip-container:hover .author-hover-card {
+  visibility: visible;
+  pointer-events: auto;
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+/* ── Subscribe / Follow Button (Premium Redesign) ── */
+.btn-subscribe {
+  /* Prevent flexbox from squishing the button */
+  flex-shrink: 0;
+  min-width: 115px; /* Enough for most standard words */
+  max-width: 200px;
+  text-align: center;
+  white-space: nowrap;
   overflow: hidden;
-  pointer-events: none; /* Let parent handle click */
+  text-overflow: ellipsis;
+  font-size: 0.875rem; /* 14px for better readability */
+  font-weight: 700;    /* Bolder, modern look */
+  padding: 0.35rem 1rem;
+  border-radius: 999px;
+  cursor: pointer;
+  position: relative;
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+  border: 1px solid transparent; /* Ensure border is always present to prevent jumping */
 }
-.custom-theme-switch i {
+
+/* Unsubscribed — Modern high-contrast (dark on light theme, light on dark theme) */
+.btn-subscribe:not(.subscribed) {
+  background-color: var(--text-main) !important;
+  color: var(--bg-panel) !important;
+  border-color: var(--text-main) !important;
+}
+
+.btn-subscribe:not(.subscribed):hover {
+  opacity: 0.85;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Subscribed state: subtle outlined pill */
+.btn-subscribe.subscribed {
+  background-color: transparent !important;
+  color: var(--text-main) !important;
+  border-color: var(--border-color) !important;
+}
+
+/* Subscribed hover → Twitter/X "Unfollow" red hint */
+.btn-subscribe.subscribed:hover {
+  background-color: rgba(244, 33, 46, 0.1) !important;
+  border-color: rgba(244, 33, 46, 0.5) !important;
+  color: #f4212e !important;
+}
+
+/* Hide real text on hover, show unfollow label via data-attr */
+.btn-subscribe.subscribed:hover .btn-subscribe-label {
+  visibility: hidden;
+}
+.btn-subscribe.subscribed:hover::after {
+  content: attr(data-unfollow-label);
   position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 13px;
-  z-index: 1;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
 }
-.custom-theme-switch .bi-sun-fill {
-  left: 6px;
-  color: #f39c12;
+
+
+/* Carousel */
+.authors-carousel-container { display: flex; gap: 1.25rem; overflow-x: auto; padding-bottom: 1rem; padding-top: 0.5rem; scrollbar-width: none; border-bottom: 1px solid var(--border-color); margin-bottom: 1.5rem; }
+.authors-carousel-container::-webkit-scrollbar { display: none; }
+.author-carousel-item { display: flex; flex-direction: column; align-items: center; gap: 0.5rem; text-decoration: none; min-width: 72px; cursor: pointer; transition: transform 0.2s ease; }
+.author-carousel-item:hover { transform: translateY(-2px); }
+.author-carousel-avatar-wrapper { width: 68px; height: 68px; border-radius: 50%; padding: 2px; position: relative; background: transparent; border: 1px solid var(--border-color); transition: border-color 0.2s ease; }
+.author-carousel-avatar-wrapper.has-new-update { background: transparent; border-color: var(--border-color); }
+.author-carousel-item.active .author-carousel-avatar-wrapper { border: 2px solid var(--text-main); background: var(--bg-secondary); }
+.author-carousel-avatar { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
+.author-carousel-name { font-size: 0.75rem; color: var(--text-main); font-weight: 500; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
+.author-carousel-item.active .author-carousel-name { font-weight: 700; color: var(--text-main); }
+
+/* Subscriptions Page Tabs */
+.subscriptions-tabs-nav {
+  display: flex;
+  gap: 1rem;
+  border-bottom: 1px solid var(--border-color);
+  margin-bottom: 1.5rem;
 }
-.custom-theme-switch .bi-moon-fill {
-  right: 6px;
-  color: #6c757d;
+.subscriptions-tab-btn {
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  color: var(--text-muted);
+  font-weight: 500;
+  font-size: 0.95rem;
+  padding: 0.5rem 0.25rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
-.custom-theme-switch-thumb {
-  position: absolute;
-  top: 1px;
-  left: 1px;
-  width: 22px;
-  height: 22px;
-  border-radius: 50%;
-  background-color: #fff;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-  transition: transform 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
-  z-index: 2;
+.subscriptions-tab-btn:hover {
+  color: var(--text-main);
 }
-[data-bs-theme="dark"] .custom-theme-switch {
-  background-color: #2c3e50;
-  border-color: #4a5568;
+.subscriptions-tab-btn.active {
+  color: var(--text-main);
+  font-weight: 600;
+  border-bottom-color: var(--text-main);
 }
-[data-bs-theme="dark"] .custom-theme-switch .bi-moon-fill {
-  color: #f1c40f;
+
+/* Subscribed Authors Manage Grid Item */
+.manage-author-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  transition: all 0.2s ease;
 }
-[data-bs-theme="dark"] .custom-theme-switch-thumb {
-  transform: translateX(24px);
-  background-color: #e2e8f0;
+.manage-author-card:hover {
+  border-color: var(--text-muted);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.04);
 }
+
+/* ==========================================================
+   COMMENT SECTION STYLES
+   ========================================================== */
+.comment-card {
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--border-color);
+}
+.comment-card:last-child {
+  border-bottom: none;
+}
+.comment-reply-list {
+  margin-left: 2.5rem;
+  margin-top: 0.75rem;
+  padding-left: 1rem;
+  border-left: 2px solid var(--border-color);
+}
+.comment-reply-card {
+  margin-bottom: 1rem;
+}
+.comment-reply-card:last-child {
+  margin-bottom: 0;
+}
+.comment-content-text {
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: var(--text-main) !important;
+}
+.btn-reply {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 0;
+  margin-right: 1rem;
+  transition: color var(--transition-speed) ease;
+}
+.btn-reply:hover {
+  color: var(--primary-color);
+}
+.btn-reply.text-danger {
+  color: var(--bs-danger);
+}
+.btn-reply.text-danger:hover {
+  opacity: 0.8;
+}
+.btn-translate-toggle {
+  font-size: 0.8rem;
+}
+
+

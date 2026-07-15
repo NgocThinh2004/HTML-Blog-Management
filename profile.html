@@ -1,18 +1,19 @@
 <!doctype html>
 <html lang="en" data-bs-theme="light">
-  <head>
+<head>
+  <link rel="icon" type="image/svg+xml" href="assets/images/lingora-mark.svg">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profile | Lingora</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 <link rel="stylesheet" href="assets/css/variables.css">
-    <link rel="stylesheet" href="assets/css/base.css?v=5">
-    <link rel="stylesheet" href="assets/css/layouts.css?v=4">
-    <link rel="stylesheet" href="assets/css/components.css?v=12">
+    <link rel="stylesheet" href="assets/css/base.css?v=1784089471951">
+    <link rel="stylesheet" href="assets/css/layouts.css?v=1784089471951">
+    <link rel="stylesheet" href="assets/css/components.css?v=1784089471951">
     <style>
       :root, [data-bs-theme="light"] {
         --bg: #ffffff;
@@ -61,7 +62,7 @@
         margin: 0;
         color: var(--text);
         background: var(--bg) !important;
-        font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        /* font-family is inherited from base.css via --font-family-base variable */
         letter-spacing: 0;
       }
 
@@ -172,6 +173,15 @@
         grid-template-columns: minmax(0, 1fr) 150px;
         gap: 36px;
         align-items: start;
+        padding: 28px;
+        border: 1px solid var(--line);
+        border-radius: 20px;
+        background: var(--panel);
+        box-shadow: 0 16px 40px rgba(20, 22, 22, 0.06);
+      }
+
+      [data-bs-theme="dark"] .profile-hero {
+        box-shadow: 0 16px 40px rgba(0, 0, 0, 0.2);
       }
 
       .profile-name {
@@ -203,7 +213,7 @@
         margin-top: 34px;
         padding: 4px 12px 4px 5px;
         border-radius: 999px;
-        color: #e7e7e7;
+        color: var(--text);
         background: var(--panel-soft);
         font-size: 14px;
         font-weight: 700;
@@ -220,6 +230,60 @@
         margin-top: 16px;
         color: var(--muted);
         font-size: 18px;
+      }
+
+      .profile-stats {
+        display: flex;
+        align-items: stretch;
+        gap: 8px;
+        margin-top: 14px;
+        padding: 8px;
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        background: var(--panel);
+      }
+
+      .profile-stat {
+        min-width: 0;
+        flex: 1 1 0;
+        display: flex;
+        align-items: baseline;
+        justify-content: center;
+        gap: 6px;
+        padding: 10px 12px;
+        border: 0;
+        border-radius: 10px;
+        color: var(--muted);
+        background: transparent;
+        font-size: 14px;
+        text-align: center;
+      }
+
+      a.profile-stat:hover,
+      button.profile-stat:hover {
+        color: var(--text);
+        background: var(--panel-soft);
+      }
+
+      .profile-stat.is-private {
+        cursor: default;
+      }
+
+      .profile-stat.is-private:hover {
+        color: var(--muted);
+        background: transparent;
+      }
+
+      .profile-stat strong {
+        color: var(--text);
+        font-size: 16px;
+        font-weight: 800;
+      }
+
+      .profile-guest-actions {
+        display: flex;
+        align-items: center;
+        margin-top: 12px;
       }
 
       .profile-avatar {
@@ -1123,6 +1187,18 @@
         .input-row {
           grid-template-columns: 1fr;
         }
+
+        .profile-hero {
+          padding: 22px;
+        }
+
+        .profile-stats {
+          flex-wrap: wrap;
+        }
+
+        .profile-stat {
+          flex-basis: calc(50% - 4px);
+        }
       }
       
       .mobile-bottom-nav {
@@ -1183,9 +1259,7 @@
             <a href="index.html" class="sidebar-nav-item">
               <i class="bi bi-house-door"></i> <span data-i18n="home">Home</span>
             </a>
-            <a href="#" class="sidebar-nav-item">
-              <i class="bi bi-inbox"></i> <span data-i18n="inbox">Inbox</span>
-            </a>
+
             <a href="my-posts.html" class="sidebar-nav-item">
               <i class="bi bi-journal-text"></i> <span data-i18n="my_articles">My Articles</span>
             </a>
@@ -1253,16 +1327,36 @@
                   <span class="profile-avatar avatar-badge" data-chip-avatar><span>A</span></span>
                   <span data-view-name>Alone</span>
                 </div>
-                <a class="subscribers-link" href="#" data-i18n="profile_see_subscribers">See subscribers</a>
               </div>
 
               <div class="profile-avatar hero-avatar" data-hero-avatar><span>A</span></div>
             </section>
+            
+            <div class="profile-stats" aria-label="Profile statistics">
+              <a class="profile-stat" href="#" id="btnSeeSubscribers">
+                <strong id="profileFollowersCount">840</strong>
+                <span data-i18n="followers">Followers</span>
+              </a>
+              <span class="profile-stat">
+                <strong id="profileFollowingCount">36</strong>
+                <span data-i18n="following">Following</span>
+              </span>
+              <span class="profile-stat">
+                <strong id="profilePostsCount">0</strong>
+                <span data-i18n="posts">Posts</span>
+              </span>
+            </div>
 
-            <div class="action-row">
-              <a class="profile-action is-primary" href="create-post.html?from=profile.html"><span data-i18n="create">Create</span> <i class="bi bi-caret-down-fill"></i></a>
-              <button class="profile-action" type="button" data-edit-profile data-i18n="profile_edit_profile">Edit profile</button>
-              <div class="profile-more">
+            <div class="profile-guest-actions">
+              <button class="profile-action is-primary btn-subscribe d-none m-0" style="min-height: 44px; padding: 0 24px; width: auto;" id="guestSubscribeBtn" type="button" onclick="window.toggleSubscribe ? window.toggleSubscribe(this, event) : (window.toggleAuthorSubscription && window.toggleAuthorSubscription(this, event))">
+                <i class="bi bi-plus-lg me-1"></i> <span data-i18n="subscribe">Theo dõi</span>
+              </button>
+            </div>
+
+            <div class="action-row" id="profileActionRow">
+              <a class="profile-action is-primary" id="profileCreateBtn" href="create-post.html?from=profile.html"><span data-i18n="create">Create</span> <i class="bi bi-caret-down-fill"></i></a>
+              <button class="profile-action" type="button" id="profileEditBtn" data-edit-profile data-i18n="profile_edit_profile">Edit profile</button>
+              <div class="profile-more" id="profileMoreWrap">
                 <button class="profile-action is-icon" type="button" aria-label="More" aria-expanded="false" data-profile-more-button>...</button>
                 <div class="profile-more-menu" data-profile-more-menu hidden>
                   <button class="profile-more-item" type="button" data-open-password-modal>
@@ -1273,13 +1367,9 @@
               </div>
             </div>
 
-            <section class="profile-notice" role="status" aria-live="polite">
-              <i class="bi bi-bell-fill" aria-hidden="true"></i>
-              <div>
-                <strong data-i18n="profile_notice_title">Thông báo</strong>
-                <span data-i18n="profile_notice_empty">Bạn chưa có thông báo mới.</span>
-              </div>
-            </section>
+            <div id="profilePostsContainer" class="mt-5"></div>
+
+
           </div>
         </section>
 
@@ -1535,9 +1625,29 @@
       </section>
     </div>
 
+    <!-- Subscribers Modal -->
+    <div class="password-modal" id="subscribersModal" hidden style="align-items: flex-start; padding-top: 15vh;">
+      <div class="password-modal-backdrop" id="closeSubscribersModalBg"></div>
+      <section class="password-modal-panel" role="dialog" aria-modal="true" aria-labelledby="subscribersModalTitle">
+        <header class="password-modal-head" style="padding-bottom: 12px;">
+          <button class="password-modal-close" type="button" id="closeSubscribersModalBtn" aria-label="Close">&times;</button>
+          <h2 class="password-modal-title" id="subscribersModalTitle" data-i18n="subscribers">Người đăng ký</h2>
+          <div class="mt-3">
+            <div class="right-search-box w-100" id="subscribersSearchWrap">
+              <i class="bi bi-search"></i>
+              <input type="text" id="subscribersSearchInput" placeholder="Tìm kiếm người đăng ký..." data-i18n="search_subscribers_placeholder">
+            </div>
+          </div>
+        </header>
+        <div id="subscribersListContainer" style="padding: 16px 24px; max-height: 400px; overflow-y: auto;">
+          <!-- Subscribers list will be injected here -->
+        </div>
+      </section>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-<script src="assets/js/components.js"></script>
-    <script src="assets/js/core.js?v=8"></script>
+<script src="assets/js/components.js?v=5"></script>
+    <script src="assets/js/core.js?v=23"></script>
     <script>
       document.addEventListener('DOMContentLoaded', () => {
         const storageKey = 'mundiBlogProfile';
@@ -1772,8 +1882,9 @@
 
         function applyBranding() {
           const root = document.documentElement;
-          const accent = profile.accentColor || defaults.accentColor;
-          const background = profile.backgroundColor || defaults.backgroundColor;
+          const isGuestProfile = new URLSearchParams(window.location.search).has('id');
+          const accent = isGuestProfile ? defaults.accentColor : (profile.accentColor || defaults.accentColor);
+          const background = isGuestProfile ? '' : (profile.backgroundColor || defaults.backgroundColor);
           const lightBackground = background && isLightColor(background);
           const sidebarText = getReadableTextColor(background);
 
@@ -1836,6 +1947,13 @@
           document.querySelectorAll('[data-hero-avatar], [data-sidebar-avatar], [data-chip-avatar], [data-composer-avatar], [data-edit-avatar]').forEach(node => {
             paintAvatar(node, profile.avatar, profile.displayName);
           });
+
+          const ownPostCount = document.getElementById('profilePostsCount');
+          if (ownPostCount && window.globalPostsData) {
+            ownPostCount.textContent = Object.values(window.globalPostsData)
+              .filter(post => post.author_name === profile.displayName)
+              .length;
+          }
         }
 
         function switchMode(mode) {
@@ -2182,6 +2300,217 @@
         profile = readStoredProfile();
         syncCreatePostLinks();
         render();
+
+        // ======= GUEST PROFILE LOGIC =======
+        const urlParams = new URLSearchParams(window.location.search);
+        const guestId = urlParams.get('id');
+        
+        if (guestId) {
+          // Identify Guest Data (Mock logic based on id)
+          let guestName = 'Unknown Author';
+          let guestAvatar = '';
+          let guestBio = 'This is a guest profile.';
+          let guestHandle = `@author${guestId}`;
+          let guestFollowers = '0';
+          let guestFollowing = '0';
+          
+          if (guestId === '101') {
+            guestName = 'Elena Rostova';
+            guestAvatar = 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=80&h=80';
+            guestBio = 'Researching agentic reasoning, speculative decoding & next-gen LLM architectures.';
+            guestHandle = '@elenarostova';
+            guestFollowers = '12.4K';
+            guestFollowing = '186';
+          } else if (guestId === '102') {
+            guestName = 'Hồ Quốc Tuấn';
+            guestAvatar = 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=80&h=80';
+            guestBio = 'Macroeconomics and Finance.';
+            guestHandle = '@hoquoctuan';
+            guestFollowers = '18.2K';
+            guestFollowing = '241';
+          } else if (guestId === '103') {
+            guestName = 'Thái Dương';
+            guestAvatar = 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=80&h=80';
+            guestBio = 'Security Engineer.';
+            guestHandle = '@thaiduong';
+            guestFollowers = '15.6K';
+            guestFollowing = '128';
+          } else if (window.globalPostsData) {
+             const post = Object.values(window.globalPostsData).find(p => String(p.author_id) === guestId);
+             if (post) {
+               guestName = post.author_name;
+               guestAvatar = post.author_avatar || '';
+             }
+          }
+
+          // Override DOM with guest data
+          document.querySelectorAll('[data-view-name]').forEach(node => node.textContent = guestName);
+          document.querySelectorAll('[data-view-handle]').forEach(node => node.textContent = guestHandle);
+          document.querySelectorAll('[data-view-bio]').forEach(node => node.textContent = guestBio);
+          document.querySelectorAll('[data-hero-avatar], [data-chip-avatar]').forEach(node => {
+            paintAvatar(node, guestAvatar, guestName);
+          });
+          const profileFollowersCount = document.getElementById('profileFollowersCount');
+          const profileFollowingCount = document.getElementById('profileFollowingCount');
+          const profilePostsCount = document.getElementById('profilePostsCount');
+          if (profileFollowersCount) profileFollowersCount.textContent = guestFollowers;
+          if (profileFollowingCount) profileFollowingCount.textContent = guestFollowing;
+
+          // Hide my-profile buttons and the action row container
+          const profileActionRow = document.getElementById('profileActionRow');
+          if (profileActionRow) profileActionRow.classList.add('d-none');
+
+          // Show Subscribe button
+          const guestSubscribeBtn = document.getElementById('guestSubscribeBtn');
+          if (guestSubscribeBtn) guestSubscribeBtn.classList.remove('d-none');
+
+          // Render guest posts
+          const postsContainer = document.getElementById('profilePostsContainer');
+          if (postsContainer && window.globalPostsData && window.renderFeedPosts) {
+            const guestPosts = {};
+            Object.keys(window.globalPostsData).forEach(key => {
+              const post = window.globalPostsData[key];
+              if (String(post.author_id) === guestId || (!post.author_id && guestId === '101' && post.author_name === 'Elena Rostova')) {
+                guestPosts[key] = post;
+              }
+            });
+            if (profilePostsCount) profilePostsCount.textContent = Object.keys(guestPosts).length;
+            window.renderFeedPosts('profilePostsContainer', guestPosts, 'all');
+          }
+
+          // Subscribers Visibility logic for guest
+          let guestAllowShowSubscribers = true;
+          if (guestId === '102') {
+            guestAllowShowSubscribers = false; // Mock: Hồ Quốc Tuấn hides his subscribers
+          }
+
+          const btnSeeSubscribers = document.getElementById('btnSeeSubscribers');
+          if (btnSeeSubscribers) {
+            btnSeeSubscribers.dataset.subscribersVisible = String(guestAllowShowSubscribers);
+            btnSeeSubscribers.classList.toggle('is-private', !guestAllowShowSubscribers);
+            btnSeeSubscribers.setAttribute('aria-disabled', String(!guestAllowShowSubscribers));
+          }
+        } else {
+          const ownPosts = {};
+          if (window.globalPostsData) {
+            Object.entries(window.globalPostsData).forEach(([key, post]) => {
+              if (post.author_name === profile.displayName) ownPosts[key] = post;
+            });
+          }
+
+          try {
+            const submittedPosts = JSON.parse(localStorage.getItem('mundiBlogSubmittedPosts') || '[]');
+            if (Array.isArray(submittedPosts)) {
+              submittedPosts.forEach(post => {
+                const status = String(post.status || '').toLowerCase();
+                const authors = Array.isArray(post.authors) ? post.authors : [];
+                if (!['approved', 'published'].includes(status) || !authors.includes(profile.displayName)) return;
+
+                const bodyContainer = document.createElement('div');
+                bodyContainer.innerHTML = typeof window.sanitizePostHtml === 'function'
+                  ? window.sanitizePostHtml(post.body || '')
+                  : (post.body || '');
+                const summary = String(bodyContainer.textContent || '').trim().slice(0, 320);
+                const language = post.originalLanguage || 'en';
+                const key = `submitted-${post.id}`;
+                ownPosts[key] = {
+                  author_name: profile.displayName,
+                  author_avatar: profile.avatar,
+                  author_id: 'self',
+                  profile_href: 'profile.html',
+                  detail_href: `post-detail.html?submitted=${encodeURIComponent(post.id)}`,
+                  timestamp: post.updatedAt ? new Date(post.updatedAt).toLocaleDateString() : 'Just now',
+                  category: post.category || post.categoryLabel || 'technology',
+                  supported_langs: language,
+                  likes: Number(post.likes || 0),
+                  comments: Number(post.comments || 0),
+                  views: Number(post.reads || 0),
+                  image: post.image || '',
+                  title_en: post.title || 'Untitled post',
+                  title_vi: post.title || 'Bài viết chưa có tiêu đề',
+                  title_zh: post.title || '未命名文章',
+                  content_en: summary,
+                  content_vi: summary,
+                  content_zh: summary
+                };
+              });
+            }
+          } catch (error) {
+            // Keep the profile usable if local post data is malformed.
+          }
+
+          const profilePostsCount = document.getElementById('profilePostsCount');
+          if (profilePostsCount) profilePostsCount.textContent = Object.keys(ownPosts).length;
+          if (window.renderFeedPosts) {
+            window.renderFeedPosts('profilePostsContainer', ownPosts, 'all');
+          }
+        }
+
+        // ======= SUBSCRIBERS MODAL LOGIC =======
+        const btnSeeSubscribers = document.getElementById('btnSeeSubscribers');
+        const subscribersModal = document.getElementById('subscribersModal');
+        const closeSubscribersModalBtn = document.getElementById('closeSubscribersModalBtn');
+        const closeSubscribersModalBg = document.getElementById('closeSubscribersModalBg');
+        const subscribersListContainer = document.getElementById('subscribersListContainer');
+        const subscribersSearchInput = document.getElementById('subscribersSearchInput');
+
+        const mockSubscribers = [
+          { name: 'John Doe', avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=40&h=40' },
+          { name: 'Alice Smith', avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=40&h=40' },
+          { name: 'Bob Johnson', avatar: 'https://images.unsplash.com/photo-1599566150163-29194dcaad36?auto=format&fit=crop&q=80&w=40&h=40' },
+          { name: 'Emma Wilson', avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&q=80&w=40&h=40' },
+          { name: 'Michael Brown', avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=40&h=40' }
+        ];
+
+        function renderSubscribers(filterText = '') {
+          if (!subscribersListContainer) return;
+          const filtered = mockSubscribers.filter(sub => sub.name.toLowerCase().includes(filterText.toLowerCase()));
+          
+          if (filtered.length === 0) {
+            subscribersListContainer.innerHTML = '<div class="text-center text-muted py-4">Không tìm thấy người đăng ký nào.</div>';
+            return;
+          }
+
+          let html = '<div class="d-flex flex-column gap-3">';
+          filtered.forEach(sub => {
+            html += `
+              <div class="d-flex align-items-center justify-content-between">
+                <div class="d-flex align-items-center gap-3">
+                  <img src="${sub.avatar}" class="rounded-circle" width="40" height="40" style="object-fit: cover;" alt="${sub.name}">
+                  <span class="fw-bold text-main">${sub.name}</span>
+                </div>
+                <button class="btn btn-sm btn-outline-secondary rounded-pill fw-medium" data-i18n="subscribe">Theo dõi</button>
+              </div>
+            `;
+          });
+          html += '</div>';
+          subscribersListContainer.innerHTML = html;
+        }
+
+        if (btnSeeSubscribers && subscribersModal) {
+          btnSeeSubscribers.addEventListener('click', (e) => {
+            e.preventDefault();
+            if (btnSeeSubscribers.dataset.subscribersVisible === 'false') return;
+            subscribersModal.hidden = false;
+            renderSubscribers();
+            if (window.applyUiTranslations) window.applyUiTranslations();
+          });
+        }
+
+        const closeSubModal = () => {
+          if (subscribersModal) subscribersModal.hidden = true;
+          if (subscribersSearchInput) subscribersSearchInput.value = '';
+        };
+
+        if (closeSubscribersModalBtn) closeSubscribersModalBtn.addEventListener('click', closeSubModal);
+        if (closeSubscribersModalBg) closeSubscribersModalBg.addEventListener('click', closeSubModal);
+
+        if (subscribersSearchInput) {
+          subscribersSearchInput.addEventListener('input', (e) => {
+            renderSubscribers(e.target.value);
+            if (window.applyUiTranslations) window.applyUiTranslations();
+          });
+        }
       });
     </script>
   </body>

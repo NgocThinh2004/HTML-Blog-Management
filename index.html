@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" data-bs-theme="light">
 <head>
+  <link rel="icon" type="image/svg+xml" href="assets/images/lingora-mark.svg">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Lingora - Multilingual AI-Translated Feed</title>
@@ -15,9 +16,9 @@
   
   <!-- Custom CSS (Standard Shared Assets) -->
   <link rel="stylesheet" href="assets/css/variables.css">
-  <link rel="stylesheet" href="assets/css/base.css">
-  <link rel="stylesheet" href="assets/css/layouts.css">
-  <link rel="stylesheet" href="assets/css/components.css?v=12">
+  <link rel="stylesheet" href="assets/css/base.css?v=1784089471948">
+  <link rel="stylesheet" href="assets/css/layouts.css?v=1784089471948">
+  <link rel="stylesheet" href="assets/css/components.css?v=1784089471948">
   <style>
     /* Center Column Elements matching user screenshot */
     .quick-draft-card {
@@ -137,17 +138,6 @@
       text-decoration: underline;
     }
     
-    .post-title {
-      letter-spacing: 0;
-    }
-    
-    .substack-post-content {
-      font-size: 1.05rem;
-      color: var(--text-main);
-      line-height: 1.6;
-      letter-spacing: 0;
-      white-space: pre-line;
-    }
     
     .post-image-embed {
       border-radius: 12px;
@@ -218,7 +208,8 @@
           <span class="fs-5 fw-bold text-main">Lingora</span>
         </a>
         <div class="d-flex align-items-center ms-auto gap-2">
-          <a href="create-post.html" class="btn btn-primary btn-sm fw-medium px-3 rounded-pill"><i class="bi bi-plus-lg me-1"></i> <span data-i18n="create">Create</span></a>
+          <a href="create-post.html" class="btn btn-primary btn-sm fw-medium px-2 px-sm-3 rounded-pill d-inline-flex align-items-center me-1"><i class="bi bi-plus-lg me-1"></i> <span data-i18n="create">Create</span></a>
+
           <a href="profile.html" class="text-decoration-none">
             <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=32&h=32" class="rounded-circle border" width="32" height="32" alt="Avatar">
           </a>
@@ -245,9 +236,7 @@
             <a href="index.html" class="sidebar-nav-item active">
               <i class="bi bi-house-door-fill"></i> <span data-i18n="home">Home</span>
             </a>
-            <a href="#" class="sidebar-nav-item">
-              <i class="bi bi-inbox"></i> <span data-i18n="inbox">Inbox</span>
-            </a>
+
             <a href="my-posts.html" class="sidebar-nav-item">
               <i class="bi bi-journal-text"></i> <span data-i18n="my_articles">My Articles</span>
             </a>
@@ -312,7 +301,7 @@
         </div>
 
         <!-- What do you have in mind? Quick draft input card -->
-        <div class="quick-draft-card" id="quickDraftCard" onclick="window.location.href='create-post.html'">
+        <div class="quick-draft-card" id="quickDraftCard" onclick="window.location.href='create-post.html?new=1'">
           <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=100&h=100" alt="Avatar" class="quick-draft-avatar" id="quickDraftAvatar">
           <div class="quick-draft-placeholder" data-i18n="what_on_mind">What is on your mind?</div>
         </div>
@@ -325,13 +314,13 @@
             </button>
             <ul class="dropdown-menu shadow border-light-subtle">
               <li><a class="dropdown-item active" href="#" onclick="selectCategory(event, 'all', 'for_you')"><span data-i18n="for_you">For you</span></a></li>
-              <li><a class="dropdown-item" href="#" onclick="selectCategory(event, 'Artificial Intelligence', 'cat_ai')"><span data-i18n="cat_ai">Artificial Intelligence</span></a></li>
-              <li><a class="dropdown-item" href="#" onclick="selectCategory(event, 'Backend Engineering', 'cat_backend')"><span data-i18n="cat_backend">Backend Engineering</span></a></li>
-              <li><a class="dropdown-item" href="#" onclick="selectCategory(event, 'Design', 'cat_design')"><span data-i18n="cat_design">Design</span></a></li>
-              <li><a class="dropdown-item" href="#" onclick="selectCategory(event, 'Frontend Development', 'cat_frontend')"><span data-i18n="cat_frontend">Frontend Development</span></a></li>
-              <li><a class="dropdown-item" href="#" onclick="selectCategory(event, 'Mobile Development', 'cat_mobile')"><span data-i18n="cat_mobile">Mobile Development</span></a></li>
-              <li><a class="dropdown-item" href="#" onclick="selectCategory(event, 'Data Science', 'cat_data')"><span data-i18n="cat_data">Data Science</span></a></li>
-              <li><a class="dropdown-item" href="#" onclick="selectCategory(event, 'Cybersecurity', 'cat_cyber')"><span data-i18n="cat_cyber">Cybersecurity</span></a></li>
+              <li><a class="dropdown-item" data-feed-category="Artificial Intelligence" href="#" onclick="selectCategory(event, 'Artificial Intelligence', 'cat_ai')"><span data-i18n="cat_ai">Artificial Intelligence</span></a></li>
+              <li><a class="dropdown-item" data-feed-category="Backend Engineering" href="#" onclick="selectCategory(event, 'Backend Engineering', 'cat_backend')"><span data-i18n="cat_backend">Backend Engineering</span></a></li>
+              <li><a class="dropdown-item" data-feed-category="Design" href="#" onclick="selectCategory(event, 'Design', 'cat_design')"><span data-i18n="cat_design">Design</span></a></li>
+              <li><a class="dropdown-item" data-feed-category="Frontend Development" href="#" onclick="selectCategory(event, 'Frontend Development', 'cat_frontend')"><span data-i18n="cat_frontend">Frontend Development</span></a></li>
+              <li><a class="dropdown-item" data-feed-category="Mobile Development" href="#" onclick="selectCategory(event, 'Mobile Development', 'cat_mobile')"><span data-i18n="cat_mobile">Mobile Development</span></a></li>
+              <li><a class="dropdown-item" data-feed-category="Data Science" href="#" onclick="selectCategory(event, 'Data Science', 'cat_data')"><span data-i18n="cat_data">Data Science</span></a></li>
+              <li><a class="dropdown-item" data-feed-category="Cybersecurity" href="#" onclick="selectCategory(event, 'Cybersecurity', 'cat_cyber')"><span data-i18n="cat_cyber">Cybersecurity</span></a></li>
             </ul>
           </div>
         </div>
@@ -432,9 +421,7 @@
         <a href="index.html" class="sidebar-nav-item active">
           <i class="bi bi-house-door-fill"></i> <span data-i18n="home">Home</span>
         </a>
-        <a href="#" class="sidebar-nav-item">
-          <i class="bi bi-inbox"></i> <span data-i18n="inbox">Inbox</span>
-        </a>
+
         <a href="my-posts.html" class="sidebar-nav-item">
           <i class="bi bi-journal-text"></i> <span data-i18n="my_articles">My Articles</span>
         </a>
@@ -460,8 +447,8 @@
   <!-- Bootstrap 5 JS Bundle -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <!-- Core Script containing theme & language simulation -->
-  <script src="assets/js/core.js?v=8"></script>
-  <script src="assets/js/components.js"></script>
+  <script src="assets/js/core.js?v=23"></script>
+  <script src="assets/js/components.js?v=5"></script>
   
   <script>
     // Live Search Filter for feed matching title or author name
