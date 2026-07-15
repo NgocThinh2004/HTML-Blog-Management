@@ -306,20 +306,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const storedBackHref = sessionStorage.getItem('mundiCreatePostBackHref');
     if (isSafeGuestBackHref(storedBackHref)) return storedBackHref;
 
-    if (document.referrer) {
-      try {
-        const currentUrl = new URL(window.location.href);
-        const referrerUrl = new URL(document.referrer);
-        const currentDir = currentUrl.pathname.slice(0, currentUrl.pathname.lastIndexOf('/') + 1);
-        const referrerDir = referrerUrl.pathname.slice(0, referrerUrl.pathname.lastIndexOf('/') + 1);
-        const referrerPage = referrerUrl.pathname.slice(referrerUrl.pathname.lastIndexOf('/') + 1);
-
-        if (referrerDir === currentDir && referrerPage && referrerPage !== 'create-post.html') {
-          return `${referrerPage}${referrerUrl.search}${referrerUrl.hash}`;
-        }
-      } catch (error) {
-        return 'index.html';
-      }
+    if (window.history.length > 1) {
+      return 'javascript:history.back()';
     }
 
     return 'index.html';

@@ -445,6 +445,8 @@ button {
 
 .save-state {
   border: 1px solid var(--border);
+  pointer-events: none;
+  user-select: none;
 }
 
 .save-state.is-saved {
