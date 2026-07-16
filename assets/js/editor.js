@@ -748,6 +748,35 @@ document.addEventListener('DOMContentLoaded', () => {
     };
   }
 
+  async function buildStoredTranslations(post, originalLanguage, allowedTranslations) {
+    const languages = [...new Set([originalLanguage, ...allowedTranslations].filter(Boolean))];
+    const translations = {
+      [originalLanguage]: {
+        title: post.title,
+        subtitle: post.subtitle,
+        body: post.body,
+        content: post.body
+      }
+    };
+
+    await Promise.all(languages.filter(language => language !== originalLanguage).map(async language => {
+      const results = await Promise.allSettled([
+        post.title ? translateText(post.title, language) : Promise.resolve(''),
+        post.subtitle ? translateText(post.subtitle, language) : Promise.resolve(''),
+        post.body ? translateHtml(post.body, language) : Promise.resolve('')
+      ]);
+      const title = results[0].status === 'fulfilled' ? results[0].value : post.title;
+      const subtitle = results[1].status === 'fulfilled' ? results[1].value : post.subtitle;
+      const body = results[2].status === 'fulfilled' ? results[2].value : post.body;
+      translations[language] = {
+        title, subtitle, body, content: body,
+        translationFailed: results.some(result => result.status === 'rejected')
+      };
+    }));
+
+    return translations;
+  }
+
   function saveDraft() {
     try {
       localStorage.setItem(draftKey, JSON.stringify(collectDraft()));
@@ -757,7 +786,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  function submitForReview(sourceAction) {
+  async function submitForReview(sourceAction) {
     try {
       if (!hasSelectableCategory()) {
         const language = localStorage.getItem('preferredLanguage') || 'en';
@@ -778,6 +807,8 @@ document.addEventListener('DOMContentLoaded', () => {
       const posts = Array.isArray(storedPosts) ? storedPosts : [];
       const language = localStorage.getItem('preferredLanguage') || 'en';
       const fallbackTitles = { en: 'Untitled post', vi: 'Bài viết chưa có tiêu đề', zh: '未命名文章' };
+      const translations = await buildStoredTranslations(post, originalLanguage, allowedTranslations);
+      const currentAuthor = typeof window.getLingoraCurrentUser === 'function' ? window.getLingoraCurrentUser() : null;
 
       const existingIndex = submittedPostId
         ? posts.findIndex(item => String(item.id) === String(submittedPostId))
@@ -801,10 +832,13 @@ document.addEventListener('DOMContentLoaded', () => {
         subtitle: post.subtitle,
         body: post.body,
         authors: post.authors,
+        authorName: currentAuthor?.name || post.authors?.[0] || 'Lingora Author',
+        authorAvatar: currentAuthor?.avatar || '',
         category: categorySelect ? categorySelect.value : 'technology',
         categoryLabel: categorySelect && categorySelect.selectedOptions[0] ? categorySelect.selectedOptions[0].textContent.trim() : 'Technology',
         originalLanguage,
         allowedTranslations,
+        translations,
         status: sourceAction === 'draft' ? 'draft' : 'pending',
         previousStatus: existingPost ? existingPost.status || 'pending' : null,
         revision: existingPost ? Number(existingPost.revision || 1) + 1 : 1,
@@ -963,6 +997,11 @@ document.addEventListener('DOMContentLoaded', () => {
   async function translateText(text, lang) {
     const source = String(text || '');
     if (lang === 'original' || !source.trim()) return source;
+    const normalized = source.trim().toLocaleLowerCase();
+    const untitledTranslations = { en: 'Untitled post', vi: 'Bài viết không tên', zh: '未命名文章' };
+    if (['untitled post', 'bài viết chưa có tiêu đề', 'bài viết không tên', '未命名文章'].includes(normalized)) {
+      return restoreTranslatedSpacing(source, untitledTranslations[lang] || untitledTranslations.en);
+    }
     if (isCodeLikeText(source)) return source;
 
     const chunkLength = 900;

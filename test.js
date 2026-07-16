@@ -1,134 +1,7 @@
-<!DOCTYPE html>
-<html lang="en" data-bs-theme="light">
 
-<head>
-  <link rel="icon" type="image/svg+xml" href="assets/images/lingora-mark.svg">
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Lingora - Post Details</title>
-  <!-- Google Fonts: Inter -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&display=swap"
-    rel="stylesheet">
-  <!-- Bootstrap 5.3 CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-  <!-- Bootstrap Icons -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
-  <!-- Custom CSS (Standard Shared Assets) -->
-  <link rel="stylesheet" href="assets/css/variables.css">
-  <link rel="stylesheet" href="assets/css/base.css?v=1784089471950">
-  <link rel="stylesheet" href="assets/css/layouts.css?v=1784089471950">
-<link rel="stylesheet" href="assets/css/components.css?v=14">
-</head>
 
-<body>
-  <div class="app-wrapper">
 
-    <!-- MOBILE HEADER -->
-    <header class="app-header">
-      <div class="header-container">
-        <button class="btn btn-link d-lg-none me-2 text-reset p-0" type="button" data-bs-toggle="offcanvas"
-          data-bs-target="#mobileSidebar" aria-controls="mobileSidebar">
-          <i class="bi bi-list fs-3"></i>
-        </button>
-        <a href="index.html" class="d-flex align-items-center text-decoration-none">
-          <i class="bi bi-feather fs-4 text-primary me-2"></i>
-          <span class="fs-5 fw-bold text-main">Lingora</span>
-        </a>
-        <div class="d-flex align-items-center ms-auto gap-2">
-          <a href="create-post.html" class="btn btn-primary btn-sm fw-medium px-2 px-sm-3 rounded-pill d-inline-flex align-items-center me-1"><i
-              class="bi bi-plus-lg me-1"></i> <span data-i18n="create">Create</span></a>
-
-          <a href="profile.html" class="text-decoration-none">
-            <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=32&h=32"
-              class="rounded-circle border" width="32" height="32" alt="Avatar">
-          </a>
-        </div>
-      </div>
-    </header>
-
-    <!-- 3-COLUMN LAYOUT -->
-    <main class="app-main-content">
-
-      <!-- COLUMN 1: LEFT SIDEBAR NAVIGATION (Rendered dynamically by components.js) -->
-      <aside class="left-sidebar"></aside>
-
-      <!-- COLUMN 2: CENTER WORKSPACE FEED (Post Details View) -->
-      <div class="center-feed">
-        <!-- Mobile Search Box (Visible only on screens where right sidebar is hidden) -->
-        <div class="d-lg-none w-100 mb-3">
-          <div class="right-search-box w-100">
-            <i class="bi bi-search"></i>
-            <input type="text" id="mobileFeedSearchInput" placeholder="Search Lingora..."
-              data-i18n="search_placeholder">
-          </div>
-        </div>
-
-        <a href="index.html" class="text-decoration-none text-muted mb-4 d-inline-flex align-items-center fw-medium">
-          <i class="bi bi-arrow-left me-2"></i> <span data-i18n="back_feed">Back to Feed</span>
-        </a>
-
-        <!-- Article Details Container -->
-        <div id="postDetailContainer">
-          <!-- Dynamically loaded by script below -->
-        </div>
-
-        <!-- Comments Section (Multi-language Support) -->
-        <div class="mt-5 pt-3 border-top">
-          <div class="d-flex justify-content-between align-items-center mb-4">
-            <h4 class="fw-bold mb-0"><span data-i18n="comments">Comments</span> (<span id="commentCountText">0</span>)
-            </h4>
-            <button class="btn btn-sm btn-outline-secondary rounded-pill px-3 shadow-sm d-flex align-items-center gap-1"
-              id="resetCommentsDemoButton" type="button" title="Khôi phục dữ liệu mẫu">
-              <i class="bi bi-arrow-counterclockwise"></i><span data-i18n="reset_demo">Khôi phục dữ liệu mẫu</span>
-            </button>
-          </div>
-
-          <div class="mb-4">
-            <textarea id="newCommentInput" class="form-control mb-2" rows="3"
-              placeholder="Write a comment in any language..." data-i18n="comment_placeholder"></textarea>
-            <div class="d-flex justify-content-end">
-              <button class="btn btn-primary px-4 rounded-pill fw-medium" id="postCommentButton" type="button" onclick="return window.submitStaticDemoComment ? window.submitStaticDemoComment(event) : false;"
-                data-i18n="post_comment">Post Comment</button>
-            </div>
-          </div>
-
-          <!-- Dynamic Comments Container -->
-          <div id="commentsListContainer" class="comments-list mt-4">
-            <!-- Rendered cleanly by core.js -->
-          </div>
-        </div>
-
-        <!-- Related Posts Section (Same Category) -->
-        <div class="mt-5 pt-4 border-top">
-          <h4 class="fw-bold mb-4" data-i18n="related_posts">Related Posts</h4>
-
-          <div id="relatedPostsContainer" class="d-flex flex-column gap-3">
-            <!-- Dynamically loaded related posts -->
-          </div>
-        </div>
-      </div>
-
-      <!-- COLUMN 3: RIGHT PANEL (Rendered dynamically by components.js) -->
-      <aside class="right-panel"></aside>
-
-    </main>
-  </div>
-
-  <!-- MOBILE SIDEBAR / OFFCANVAS (Rendered dynamically by components.js) -->
-  <div class="offcanvas offcanvas-start" tabindex="-1" id="mobileSidebar" aria-labelledby="mobileSidebarLabel"></div>
-
-  <script src="assets/js/comments-demo.js?v=5"></script>
-  <!-- Bootstrap 5 JS Bundle -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-  <!-- Core Script containing theme & language simulation -->
-<script src="assets/js/core.js?v=44"></script>
-<script src="assets/js/components.js?v=10"></script>
-  
-  <script>
     function escapePostText(value) {
       if (!value) return "";
       return String(value)
@@ -158,33 +31,37 @@
             ? storedPosts.find(item => String(item.id) === String(submittedId))
             : null;
           if (submittedPost) {
-            const currentUser = typeof window.getLingoraCurrentUser === 'function' ? window.getLingoraCurrentUser() : null;
+            let currentUser = null;
+            try {
+              currentUser = JSON.parse(localStorage.getItem('currentUser') || 'null');
+            } catch (error) {
+              currentUser = null;
+            }
             const supportedLanguages = [
               submittedPost.originalLanguage,
               ...(Array.isArray(submittedPost.allowedTranslations) ? submittedPost.allowedTranslations : [])
             ].filter(Boolean);
             const title = submittedPost.title || 'Untitled post';
             const body = submittedPost.body || '<p>No content yet.</p>';
-            const localized = {};
-            [...new Set(supportedLanguages)].forEach(language => {
-              const translation = submittedPost.translations?.[language] || {};
-              localized[`title_${language}`] = translation.title || title;
-              localized[`content_${language}`] = translation.body || translation.content || body;
-            });
             postId = submittedId;
             post = {
               category: submittedPost.category || submittedPost.categoryLabel || 'Technology',
-              categoryLabel: submittedPost.categoryLabel || submittedPost.category || 'Technology',
               originalLanguage: submittedPost.originalLanguage || 'en',
               supported_langs: [...new Set(supportedLanguages)].join(','),
-              title_en: localized.title_en || title,
-              title_vi: localized.title_vi || title,
-              title_zh: localized.title_zh || title,
-              content_en: localized.content_en || body,
-              content_vi: localized.content_vi || body,
-              content_zh: localized.content_zh || body,
-              author_name: submittedPost.authorName || currentUser?.name || submittedPost.authors?.[0] || 'Lingora Author',
-              author_avatar: submittedPost.authorAvatar || currentUser?.avatar || 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=80&h=80',
+              title_en: title,
+              title_vi: title,
+              title_zh: title,
+              content_en: body,
+              content_vi: body,
+              content_zh: body,
+              author_name: (() => {
+                if (currentUser && typeof currentUser === 'object') {
+                  return currentUser.name || currentUser.username || submittedPost.authors?.[0] || 'Lingora Author';
+                }
+                if (typeof currentUser === 'string') return currentUser;
+                return submittedPost.authors?.[0] || 'Lingora Author';
+              })(),
+              author_avatar: currentUser?.avatar || 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=80&h=80',
               author_id: currentUser?.id || 1,
               timestamp: 'Just now',
               likes: 0,
@@ -198,8 +75,13 @@
         }
       }
 
-      post = post || (window.globalPostsData && window.globalPostsData[postId]) || (window.globalPostsData && window.globalPostsData["1"]);
-      if (!post) return;
+      const publicPosts = window.getLingoraPostsData ? window.getLingoraPostsData() : window.globalPostsData;
+      post = post || (publicPosts && publicPosts[postId]);
+      if (!post) {
+        const container = document.getElementById('postDetailContainer');
+        if (container) container.innerHTML = '<div class="empty-state py-5 text-center"><i class="bi bi-file-earmark-x fs-1"></i><p class="mt-3 text-muted">This post is no longer available.</p></div>';
+        return;
+      }
 
       // Sync post.comments with actual comments database count
       const comments = window.getCommentsForPost ? window.getCommentsForPost(postId) : [];
@@ -213,10 +95,6 @@
       if (!container) return;
       const likeCount = Number(post.like_count ?? post.likes ?? 0);
       const viewCount = Number(post.view_count ?? post.views ?? 0);
-      const currentLanguage = localStorage.getItem('preferredLanguage') || 'en';
-      const displayedTitle = post[`title_${currentLanguage}`] || post.title_en || post.title_vi || post.title_zh || 'Untitled post';
-      const translatedCategory = typeof window.translateCategory === 'function' ? window.translateCategory(post.category) : post.category;
-      const categoryDisplay = translatedCategory || post.categoryLabel || post.category || 'Technology';
 
       let imageHtml = "";
       if (post.image) {
@@ -230,20 +108,19 @@
       const safeContentEn = window.sanitizePostHtml(post.content_en || '');
       const safeContentVi = window.sanitizePostHtml(post.content_vi || post.content_en || '');
       const safeContentZh = window.sanitizePostHtml(post.content_zh || post.content_en || '');
-      const displayedContent = { en: safeContentEn, vi: safeContentVi, zh: safeContentZh }[currentLanguage] || safeContentEn;
+      const authorProfileHref = post.profile_href
+        || (typeof window.getAuthorProfileHref === 'function' ? window.getAuthorProfileHref(post.author_name) : '')
+        || `profile.html?id=${encodeURIComponent(post.author_id || '')}`;
 
       container.innerHTML = `
         <article class="substack-post border-0 py-0" data-supported-langs="${escapePostText(post.supported_langs || 'en,vi,zh')}" data-category="${escapePostText(post.category)}">
           <div class="mb-3">
-            <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-3 py-1 rounded-pill fw-medium category-label"
-              data-original-cat="${escapePostText(post.category || categoryDisplay)}"
-              data-category-fallback="${escapePostText(categoryDisplay)}"
-              data-keep-category-visible="${submittedId ? 'true' : 'false'}">${escapePostText(categoryDisplay)}</span>
+            <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-3 py-1 rounded-pill fw-medium category-label" data-original-cat="${post.category}">${typeof window.translateCategory === 'function' ? window.translateCategory(post.category) : post.category}</span>
           </div>
           
           <h1 class="post-title fw-bold mb-4 text-main"
               style="font-size: 1.75rem; letter-spacing: -0.025em; line-height: 1.25;">
-            ${escapePostText(displayedTitle)}
+            ${escapePostText(post.title_en)}
           </h1>
 
           <div class="substack-post-header mb-4 pb-3 border-bottom d-flex align-items-center justify-content-between">
@@ -251,7 +128,7 @@
               <img src="${escapePostText(post.author_avatar)}" alt="${escapePostText(post.author_name)}" class="author-avatar me-3 rounded-circle border" style="width:48px;height:48px;object-fit:cover;">
               <div class="author-meta-info">
                 <div class="d-flex align-items-center flex-wrap">
-                  <a href="profile.html?id=${escapePostText(post.author_id)}" class="author-name me-1 text-decoration-none fw-bold text-main">${escapePostText(post.author_name)}</a>
+                  <a href="${escapePostText(authorProfileHref)}" class="author-name me-1 text-decoration-none fw-bold text-main">${escapePostText(post.author_name)}</a>
                   <span class="post-timestamp text-muted small ms-2">${typeof window.formatTimestampI18n === 'function' ? window.formatTimestampI18n(post.timestamp) : post.timestamp}</span>
                 </div>
                 <div class="text-muted small">@${escapePostText(post.author_name.toLowerCase().replace(/\s+/g, '').replace(/[^\w]/g, ''))}</div>
@@ -266,13 +143,13 @@
           ${imageHtml}
 
           <div class="substack-post-content post-content mt-4 text-main" style="line-height: 1.8;" id="postBodyContent">
-            ${displayedContent}
+            ${safeContentEn}
           </div>
 
           <div class="substack-post-footer mt-5 pt-3 border-top d-flex align-items-center gap-4">
             <button class="footer-action-item btn btn-link text-decoration-none text-secondary d-flex align-items-center gap-1 p-0" onclick="if(typeof toggleLike === 'function') toggleLike(this, ${likeCount}, event);"><i class="bi bi-heart"></i> <span class="like-count">${likeCount}</span></button>
             <button class="footer-action-item btn btn-link text-decoration-none text-secondary d-flex align-items-center gap-1 p-0" onclick="document.getElementById('newCommentInput')?.focus()"><i class="bi bi-chat"></i> <span id="footerCommentCount">${post.comments}</span></button>
-            <span class="footer-action-item d-flex align-items-center gap-1"><i class="bi bi-eye"></i> <span>${viewCount}</span></span>
+            <span class="footer-action-item text-muted d-flex align-items-center gap-1"><i class="bi bi-eye"></i> <span>${viewCount}</span></span>
           </div>
         </article>
       `;
@@ -436,17 +313,18 @@
 
     function renderRelatedPosts(currentPostId, category) {
       const container = document.getElementById('relatedPostsContainer');
-      if (!container || !window.globalPostsData) return;
+      const publicPosts = window.getLingoraPostsData ? window.getLingoraPostsData() : window.globalPostsData;
+      if (!container || !publicPosts) return;
 
       // Find posts with matching category (excluding current post)
-      const relatedIds = Object.keys(window.globalPostsData).filter(id => id !== String(currentPostId) && window.globalPostsData[id].category === category);
+      const relatedIds = Object.keys(publicPosts).filter(id => id !== String(currentPostId) && publicPosts[id].category === category);
 
       // If no other post in same category, fallback to showing top posts
-      const idsToRender = relatedIds.length > 0 ? relatedIds : Object.keys(window.globalPostsData).filter(id => id !== String(currentPostId)).slice(0, 2);
+      const idsToRender = relatedIds.length > 0 ? relatedIds : Object.keys(publicPosts).filter(id => id !== String(currentPostId)).slice(0, 2);
 
       let html = "";
       idsToRender.forEach(id => {
-        const p = window.globalPostsData[id];
+        const p = publicPosts[id];
         if (!p) return;
         const relComments = window.getCommentsForPost ? window.getCommentsForPost(id) : [];
         let relCount = 0;
@@ -480,10 +358,169 @@
       container.innerHTML = html;
     }
 
-    document.addEventListener('DOMContentLoaded', renderPostDetail);
-    window.addEventListener('lingora:languagechange', renderPostDetail);
-    window.addEventListener('lingora:submittedtranslationsready', renderPostDetail);
-  </script>
-</body>
+    function getDetailCommentPostId() {
+      const params = new URLSearchParams(window.location.search);
+      return params.get('id') || params.get('submitted') || '1';
+    }
 
-</html>
+    function readDetailComments(postId) {
+      try {
+        if (typeof window.getCommentsForPost === 'function') {
+          const comments = window.getCommentsForPost(postId);
+          if (Array.isArray(comments)) return comments;
+        }
+      } catch (error) {
+        console.warn('Falling back to the local comment store.', error);
+      }
+
+      let database = {};
+      try {
+        database = JSON.parse(localStorage.getItem('mundi_comments_db') || '{}') || {};
+      } catch (error) {
+        database = {};
+      }
+      if (!Array.isArray(database[postId])) database[postId] = [];
+      database._version = 3;
+      localStorage.setItem('mundi_comments_db', JSON.stringify(database));
+      return database[postId];
+    }
+
+    function saveDetailComments(postId, comments) {
+      try {
+        if (typeof window.saveCommentsForPost === 'function') {
+          window.saveCommentsForPost(postId, comments);
+          return;
+        }
+      } catch (error) {
+        console.warn('Saving comments with the local fallback.', error);
+      }
+
+      let database = {};
+      try {
+        database = JSON.parse(localStorage.getItem('mundi_comments_db') || '{}') || {};
+      } catch (error) {
+        database = {};
+      }
+      database._version = 3;
+      database[postId] = comments;
+      localStorage.setItem('mundi_comments_db', JSON.stringify(database));
+    }
+
+    function getDetailCommentUser() {
+      if (typeof window.getLingoraCurrentUser === 'function') {
+        const current = window.getLingoraCurrentUser();
+        if (current?.name) return current;
+      }
+
+      let profile = {};
+      try {
+        profile = JSON.parse(localStorage.getItem('mundiBlogProfile') || '{}') || {};
+      } catch (error) {}
+      return {
+        name: profile.displayName || 'Alone',
+        avatar: profile.avatar || 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=80&h=80'
+      };
+    }
+
+    function refreshDetailComments(postId) {
+      if (typeof window.renderComments === 'function') window.renderComments(postId);
+    }
+
+    function submitDetailComment() {
+      const input = document.getElementById('newCommentInput');
+      const content = input?.value.trim();
+      if (!content) {
+        input?.focus();
+        return;
+      }
+
+      const postId = getDetailCommentPostId();
+      const comments = readDetailComments(postId);
+      const user = getDetailCommentUser();
+      comments.unshift({
+        id: Date.now(), author: user.name, avatar: user.avatar, time: 'Just now',
+        content, lang: localStorage.getItem('preferredLanguage') || 'vi',
+        translations: {}, likes: 0, isLiked: false, replies: []
+      });
+      saveDetailComments(postId, comments);
+      input.value = '';
+      refreshDetailComments(postId);
+    }
+
+    function openDetailReply(rootId, author) {
+      document.querySelectorAll('[id^="reply-box-"]').forEach(element => { element.innerHTML = ''; });
+      const box = document.getElementById(`reply-box-root-${rootId}`);
+      if (!box) return;
+      box.innerHTML = `
+        <div class="mt-2 pt-2 border-top">
+          <textarea class="form-control form-control-sm mb-2" rows="2" data-detail-reply-input></textarea>
+          <div class="d-flex justify-content-end gap-2">
+            <button class="btn btn-sm btn-outline-secondary rounded-pill px-3" type="button" data-detail-cancel-reply>Cancel</button>
+            <button class="btn btn-sm btn-primary rounded-pill px-3 fw-medium" type="button" data-detail-submit-reply data-root-id="${rootId}" onclick="event.preventDefault(); event.stopPropagation(); window.submitDetailReply(this.dataset.rootId, this);">Reply</button>
+          </div>
+        </div>`;
+      const input = box.querySelector('[data-detail-reply-input]');
+      input.placeholder = `Replying to ${author || 'comment'}...`;
+      input.focus();
+    }
+
+    function submitDetailReply(rootId, button) {
+      const box = button.closest('[id^="reply-box-root-"]');
+      const input = box?.querySelector('[data-detail-reply-input]')
+        || document.getElementById(`input-reply-${rootId}`);
+      const content = input?.value.trim();
+      if (!content) {
+        input?.focus();
+        return;
+      }
+
+      const postId = getDetailCommentPostId();
+      const comments = readDetailComments(postId);
+      const root = comments.find(comment => String(comment.id) === String(rootId));
+      if (!root) return;
+      const user = getDetailCommentUser();
+      if (!Array.isArray(root.replies)) root.replies = [];
+      root.replies.push({
+        id: Date.now(), author: user.name, avatar: user.avatar, time: 'Just now',
+        content, lang: localStorage.getItem('preferredLanguage') || 'vi',
+        replyTo: '', translations: {}, likes: 0, isLiked: false
+      });
+      saveDetailComments(postId, comments);
+      refreshDetailComments(postId);
+    }
+
+    window.openDetailReply = openDetailReply;
+    window.submitDetailReply = submitDetailReply;
+
+    document.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('postCommentButton')?.addEventListener('click', () => {
+        submitDetailComment();
+      });
+      document.addEventListener('click', event => {
+        if (!(event.target instanceof Element)) return;
+        const commentArea = event.target.closest('#commentsListContainer');
+        if (!commentArea) return;
+
+        const openButton = event.target.closest('[data-open-comment-reply]');
+        if (openButton) {
+          event.preventDefault();
+          event.stopImmediatePropagation();
+          openDetailReply(openButton.dataset.rootId, decodeURIComponent(openButton.dataset.author || ''));
+          return;
+        }
+        const cancelButton = event.target.closest('[data-detail-cancel-reply]');
+        if (cancelButton) {
+          event.preventDefault();
+          cancelButton.closest('[id^="reply-box-root-"]').innerHTML = '';
+          return;
+        }
+        const submitButton = event.target.closest('[data-detail-submit-reply], [data-submit-comment-reply]');
+        if (submitButton) {
+          event.preventDefault();
+          event.stopImmediatePropagation();
+          submitDetailReply(submitButton.dataset.rootId, submitButton);
+        }
+      }, true);
+      renderPostDetail();
+    });
+  

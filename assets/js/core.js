@@ -25,6 +25,15 @@
       return;
     }
   }
+
+  if (path.includes('/profile.html')) {
+    const search = window.location.search.toLowerCase();
+    const isGuestProfile = search.includes('id=') || search.includes('author=');
+    if (!user && !isGuestProfile) {
+      window.location.replace('login.html');
+      return;
+    }
+  }
 })();
 
 window.sanitizePostHtml = function sanitizePostHtml(value) {
@@ -433,7 +442,9 @@ window.getLingoraPostsData = function () {
       : String(post.body || '');
     const summary = String(body.textContent || '').trim().slice(0, 320);
     const authors = Array.isArray(post.authors) ? post.authors : [];
-    const authorName = authors[0] || profile.displayName || 'Alone';
+    const currentUser = typeof window.getLingoraCurrentUser === 'function' ? window.getLingoraCurrentUser() : null;
+    const authorName = post.authorName || currentUser?.name || profile.displayName || authors[0] || 'Alone';
+    const authorAvatar = post.authorAvatar || currentUser?.avatar || profile.avatar || '';
     const allowedTranslations = Array.isArray(post.allowedTranslations) ? post.allowedTranslations : [];
     const supportedLanguages = [...new Set([language, ...allowedTranslations]
       .map(code => String(code || '').trim().toLowerCase())
@@ -441,17 +452,24 @@ window.getLingoraPostsData = function () {
     const localizedContent = {};
     supportedLanguages.forEach(code => {
       const storedTranslation = post.translations?.[code] || {};
+      const translatedBody = storedTranslation.content || storedTranslation.body || '';
+      const translatedBodyNode = document.createElement('div');
+      translatedBodyNode.innerHTML = typeof window.sanitizePostHtml === 'function'
+        ? window.sanitizePostHtml(translatedBody)
+        : translatedBody;
+      const translatedSummary = String(translatedBodyNode.textContent || '').trim().slice(0, 320);
       localizedContent[`title_${code}`] = storedTranslation.title || post.title || post.subtitle || 'Untitled post';
-      localizedContent[`content_${code}`] = storedTranslation.content || storedTranslation.body || summary || post.subtitle || '';
+      localizedContent[`content_${code}`] = translatedSummary || summary || post.subtitle || '';
     });
     posts[id] = {
       author_name: authorName,
-      author_avatar: profile.avatar || '',
+      author_avatar: authorAvatar,
       author_id: authorName === (profile.displayName || 'Alone') ? 'self' : String(post.authorId || 'self'),
       profile_href: authorName === (profile.displayName || 'Alone') ? 'profile.html' : undefined,
       detail_href: `post-detail.html?submitted=${encodeURIComponent(post.id)}`,
       timestamp: post.updatedAt ? new Date(post.updatedAt).toLocaleDateString() : 'Just now',
       category: post.category || post.categoryLabel || 'General',
+      categoryLabel: post.categoryLabel || post.category || 'General',
       supported_langs: supportedLanguages.join(','),
       image: post.coverImage || post.image || '',
       likes: Number(post.likes || 0),
@@ -464,6 +482,118 @@ window.getLingoraPostsData = function () {
 
   return posts;
 };
+
+window.ensureLingoraSubmittedTranslations = async function () {
+  let posts = [];
+  try {
+    posts = JSON.parse(localStorage.getItem('mundiBlogSubmittedPosts') || '[]');
+  } catch (error) {
+    return false;
+  }
+  if (!Array.isArray(posts) || !posts.length) return false;
+
+  const localizedUntitledTranslations = {
+    en: 'Untitled post',
+    vi: 'B\u00e0i vi\u1ebft kh\u00f4ng t\u00ean',
+    zh: '\u672a\u547d\u540d\u6587\u7ae0'
+  };
+  const normalizeTranslationText = value => {
+    const wrapper = document.createElement('div');
+    wrapper.innerHTML = String(value || '');
+    return String(wrapper.textContent || '').trim().replace(/\s+/g, ' ').toLocaleLowerCase();
+  };
+  const isUntitledPlaceholder = value => Object.values(localizedUntitledTranslations)
+    .some(label => normalizeTranslationText(label) === normalizeTranslationText(value));
+  const translationLooksCopied = (translation, post) => {
+    if (!translation || typeof translation !== 'object') return false;
+    const pairs = [
+      [translation.title, post.title],
+      [translation.subtitle, post.subtitle],
+      [translation.body || translation.content, post.body]
+    ].filter(([, source]) => normalizeTranslationText(source));
+    return pairs.length > 0 && pairs.every(([translated, source]) =>
+      normalizeTranslationText(translated) === normalizeTranslationText(source)
+    );
+  };
+
+  const translateText = async (text, language) => {
+    if (!String(text || '').trim()) return String(text || '');
+    const normalized = String(text).trim().toLocaleLowerCase();
+    const untitledTranslations = { en: 'Untitled post', vi: 'Bài viết không tên', zh: '未命名文章' };
+    if (['untitled post', 'bài viết chưa có tiêu đề', 'bài viết không tên', '未命名文章'].includes(normalized)) {
+      return untitledTranslations[language] || untitledTranslations.en;
+    }
+    const target = language === 'zh' ? 'zh-CN' : language;
+    const endpoint = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=${encodeURIComponent(target)}&dt=t&q=${encodeURIComponent(String(text).trim())}`;
+    const response = await fetch(endpoint);
+    if (!response.ok) throw new Error('Translation request failed');
+    const data = await response.json();
+    return Array.isArray(data?.[0]) ? data[0].map(part => part?.[0] || '').join('') : String(text);
+  };
+  const translateHtml = async (html, language) => {
+    const wrapper = document.createElement('div');
+    wrapper.innerHTML = typeof window.sanitizePostHtml === 'function' ? window.sanitizePostHtml(html || '') : String(html || '');
+    const walker = document.createTreeWalker(wrapper, NodeFilter.SHOW_TEXT);
+    const nodes = [];
+    let node;
+    while ((node = walker.nextNode())) {
+      if (node.nodeValue && node.nodeValue.trim() && !node.parentElement?.closest('code, pre')) nodes.push(node);
+    }
+    const values = await Promise.all(nodes.map(item => translateText(item.nodeValue, language)));
+    values.forEach((value, index) => { nodes[index].nodeValue = value; });
+    return wrapper.innerHTML;
+  };
+
+  let changed = false;
+  for (const post of posts) {
+    const status = String(post.status || '').toLowerCase();
+    if (!['approved', 'published'].includes(status)) continue;
+    const originalLanguage = String(post.originalLanguage || 'en').toLowerCase();
+    const languages = [...new Set([originalLanguage, ...(Array.isArray(post.allowedTranslations) ? post.allowedTranslations : [])])];
+    post.translations = post.translations && typeof post.translations === 'object' ? post.translations : {};
+    if (!post.translations[originalLanguage]) {
+      post.translations[originalLanguage] = {
+        title: isUntitledPlaceholder(post.title) ? (localizedUntitledTranslations[originalLanguage] || post.title || '') : post.title || '',
+        subtitle: post.subtitle || '', body: post.body || '', content: post.body || ''
+      };
+      changed = true;
+    } else if (isUntitledPlaceholder(post.translations[originalLanguage].title)) {
+      const localizedTitle = localizedUntitledTranslations[originalLanguage] || post.translations[originalLanguage].title;
+      if (post.translations[originalLanguage].title !== localizedTitle) {
+        post.translations[originalLanguage].title = localizedTitle;
+        changed = true;
+      }
+    }
+    for (const language of languages.filter(code => code && code !== originalLanguage)) {
+      const existingTranslation = post.translations[language];
+      const staleUntitled = isUntitledPlaceholder(existingTranslation?.title)
+        && normalizeTranslationText(existingTranslation.title) !== normalizeTranslationText(localizedUntitledTranslations[language]);
+      if (existingTranslation && !existingTranslation.translationFailed
+        && !translationLooksCopied(existingTranslation, post) && !staleUntitled) continue;
+      const results = await Promise.allSettled([
+        translateText(post.title || '', language),
+        translateText(post.subtitle || '', language),
+        translateHtml(post.body || '', language)
+      ]);
+      const title = results[0].status === 'fulfilled' ? results[0].value : post.title || '';
+      const subtitle = results[1].status === 'fulfilled' ? results[1].value : post.subtitle || '';
+      const body = results[2].status === 'fulfilled' ? results[2].value : post.body || '';
+      post.translations[language] = {
+        title, subtitle, body, content: body,
+        translationFailed: results.some(result => result.status === 'rejected')
+      };
+      changed = true;
+    }
+  }
+  if (!changed) return false;
+  localStorage.setItem('mundiBlogSubmittedPosts', JSON.stringify(posts));
+  window.dispatchEvent(new CustomEvent('lingora:submittedtranslationsready'));
+  return true;
+};
+
+window.addEventListener('DOMContentLoaded', () => {
+  window.ensureLingoraSubmittedTranslations().catch(() => {});
+});
 
 // Keep every current-user avatar consumer on the same profile source. Older
 // sessions can still have a string in `currentUser`, so normalize that shape
@@ -2340,8 +2470,10 @@ document.addEventListener('DOMContentLoaded', () => {
       const originalCat = el.getAttribute('data-original-cat');
       if (typeof window.translateCategory === 'function') {
         const translatedCategory = window.translateCategory(originalCat);
-        el.textContent = translatedCategory;
-        el.classList.toggle('d-none', !translatedCategory);
+        const keepVisible = el.dataset.keepCategoryVisible === 'true';
+        const fallbackCategory = el.dataset.categoryFallback || originalCat;
+        el.textContent = translatedCategory || (keepVisible ? fallbackCategory : '');
+        el.classList.toggle('d-none', !translatedCategory && !keepVisible);
       }
     });
 
@@ -2665,15 +2797,31 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   function getCommentsForPost(postId) {
-    let db = JSON.parse(localStorage.getItem('mundi_comments_db'));
+    let db = null;
+    try {
+      db = JSON.parse(localStorage.getItem('mundi_comments_db') || 'null');
+    } catch (error) {
+      db = null;
+    }
     if (!db || db._version !== 3) {
       db = JSON.parse(JSON.stringify(defaultCommentsDatabase));
       db._version = 3;
       localStorage.setItem('mundi_comments_db', JSON.stringify(db));
     }
 
-    // Don't auto-generate sample comments for user-submitted posts
-    if (!db[postId] && String(postId).startsWith('pending-')) {
+    // Older builds could leave a truthy non-array value at a post key. That
+    // value passed the old existence check and later crashed on `.forEach()`;
+    // resetting demo data only appeared to fix it because it removed the key.
+    if (Object.prototype.hasOwnProperty.call(db, postId) && !Array.isArray(db[postId])) {
+      delete db[postId];
+    }
+
+    // Don't auto-generate sample comments for user-submitted posts.
+    const submittedPostId = new URLSearchParams(window.location.search).get('submitted');
+    const isSubmittedPost = String(submittedPostId || '') === String(postId)
+      || String(postId).startsWith('pending-')
+      || String(postId).startsWith('submitted-');
+    if (!db[postId] && isSubmittedPost) {
       db[postId] = [];
       localStorage.setItem('mundi_comments_db', JSON.stringify(db));
     }
@@ -2709,6 +2857,27 @@ document.addEventListener('DOMContentLoaded', () => {
       ];
       localStorage.setItem('mundi_comments_db', JSON.stringify(db));
     }
+
+
+    // Repair malformed individual comments/replies without discarding the
+    // user's valid comments for this or any other post.
+    let repaired = false;
+    db[postId] = db[postId].filter(comment => {
+      const valid = comment && typeof comment === 'object' && !Array.isArray(comment);
+      if (!valid) repaired = true;
+      return valid;
+    }).map(comment => {
+      if (!Array.isArray(comment.replies)) {
+        comment.replies = [];
+        repaired = true;
+      } else {
+        const validReplies = comment.replies.filter(reply => reply && typeof reply === 'object' && !Array.isArray(reply));
+        if (validReplies.length !== comment.replies.length) repaired = true;
+        comment.replies = validReplies;
+      }
+      return comment;
+    });
+    if (repaired) localStorage.setItem('mundi_comments_db', JSON.stringify(db));
     return db[postId];
   }
 
@@ -2728,8 +2897,17 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function saveCommentsForPost(postId, comments) {
-    let db = JSON.parse(localStorage.getItem('mundi_comments_db')) || defaultCommentsDatabase;
-    db[postId] = comments;
+    let db = null;
+    try {
+      db = JSON.parse(localStorage.getItem('mundi_comments_db') || 'null');
+    } catch (error) {
+      db = null;
+    }
+    if (!db || typeof db !== 'object') {
+      db = JSON.parse(JSON.stringify(defaultCommentsDatabase));
+      db._version = 3;
+    }
+    db[postId] = Array.isArray(comments) ? comments : [];
     localStorage.setItem('mundi_comments_db', JSON.stringify(db));
   }
 
@@ -2751,17 +2929,23 @@ document.addEventListener('DOMContentLoaded', () => {
     try {
       db = JSON.parse(localStorage.getItem('mundi_comments_db'));
     } catch(e) { db = null; }
-    if (!db || db._version !== 3) return; // Skip if DB not initialized
+    if (!db || db._version !== 3) {
+      db = JSON.parse(JSON.stringify(defaultCommentsDatabase));
+      db._version = 3;
+      localStorage.setItem('mundi_comments_db', JSON.stringify(db));
+    }
 
     posts.forEach(post => {
-      const linkEl = post.querySelector('a[href*="post-detail.html?id="]');
+      const linkEl = post.querySelector('a[href*="post-detail.html?"]');
       if (!linkEl) return;
       const href = linkEl.getAttribute('href');
-      const match = href.match(/id=(\d+)/);
-      if (match && match[1]) {
-        const postId = match[1];
-        const comments = db[postId];
-        if (!comments || !Array.isArray(comments)) return;
+      let postId = '';
+      try {
+        const params = new URL(href, window.location.href).searchParams;
+        postId = params.get('submitted') || params.get('id') || '';
+      } catch (error) {}
+      if (postId) {
+        const comments = Array.isArray(db[postId]) ? db[postId] : getCommentsForPost(postId);
         let totalCount = 0;
         comments.forEach(c => {
           totalCount += 1 + (c.replies ? c.replies.length : 0);
@@ -2787,20 +2971,27 @@ document.addEventListener('DOMContentLoaded', () => {
       }
       return null;
     }
-    if (currentUserStr.startsWith('{')) {
-      try {
-        const userObj = JSON.parse(currentUserStr);
-        return { name: userObj.name, avatar: userObj.avatar || "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=40&h=40" };
-      } catch (e) {
-        return { name: currentUserStr, avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=40&h=40" };
+    const fallbackAvatar = "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=40&h=40";
+    try {
+      const parsed = JSON.parse(currentUserStr);
+      if (parsed && typeof parsed === 'object') {
+        let savedProfile = {};
+        try {
+          savedProfile = JSON.parse(localStorage.getItem('mundiBlogProfile') || '{}') || {};
+        } catch (error) {}
+        return {
+          name: parsed.name || parsed.displayName || savedProfile.displayName || parsed.username || 'Lingora user',
+          avatar: savedProfile.avatar || parsed.avatar || fallbackAvatar
+        };
       }
-    }
-    return { name: currentUserStr, avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=40&h=40" };
+      if (typeof parsed === 'string' && parsed.trim()) return { name: parsed.trim(), avatar: fallbackAvatar };
+    } catch (error) {}
+    return { name: currentUserStr.trim() || 'Lingora user', avatar: fallbackAvatar };
   }
 
   function getCurrentPostCommentId() {
     const urlParams = new URLSearchParams(window.location.search);
-    return urlParams.get('id') || urlParams.get('submitted') || '1';
+    return urlParams.get('submitted') || urlParams.get('id') || '1';
   }
 
   function parseUserName(userStr) {
@@ -2811,29 +3002,40 @@ document.addEventListener('DOMContentLoaded', () => {
     return userStr;
   }
 
-  function isSelfAuthor(authorName) {
-    if (!authorName) return false;
-    const cleanAuthor = parseUserName(authorName).trim().toLowerCase();
-    const currentUserStr = localStorage.getItem('currentUser');
-    const cleanCurrent = parseUserName(currentUserStr || 'Hồ Quốc Tuấn').trim().toLowerCase();
-    return cleanAuthor === cleanCurrent;
+  function normalizeAuthorName(value) {
+    return parseUserName(value || '').trim().toLocaleLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
   }
 
-  function getAuthorProfileHref(authorName) {
+  function isSelfAuthor(authorName) {
+    if (!authorName) return false;
+    const cleanAuthor = normalizeAuthorName(authorName);
+    const cleanCurrent = normalizeAuthorName(localStorage.getItem('currentUser') || '');
+    return Boolean(cleanCurrent) && cleanAuthor === cleanCurrent;
+  }
+
+  function getAuthorProfileHref(authorName, authorAvatar) {
     if (!authorName) return 'profile.html';
-    const nameClean = parseUserName(authorName).trim().toLowerCase();
-    
-    const currentUserStr = localStorage.getItem('currentUser');
-    const selfName = parseUserName(currentUserStr || 'Hồ Quốc Tuấn').trim().toLowerCase();
-    if (nameClean === selfName) {
-      return 'profile.html';
+    const nameClean = normalizeAuthorName(authorName);
+    const selfName = normalizeAuthorName(localStorage.getItem('currentUser') || '');
+    if (selfName && nameClean === selfName) return 'profile.html';
+
+    const publicPosts = window.getLingoraPostsData ? window.getLingoraPostsData() : window.globalPostsData;
+    const matchingPost = Object.values(publicPosts || {}).find(post => normalizeAuthorName(post && post.author_name) === nameClean);
+    if (matchingPost && matchingPost.author_id && matchingPost.author_id !== 'self') {
+      return `profile.html?id=${encodeURIComponent(matchingPost.author_id)}`;
     }
-    
-    if (nameClean.includes('elena') || nameClean.includes('rostova')) return 'profile.html?id=101';
-    if (nameClean.includes('quốc tuấn') || nameClean.includes('tuan') || nameClean.includes('hồ quốc tuấn')) return 'profile.html?id=102';
-    if (nameClean.includes('thái dương') || nameClean.includes('duong') || nameClean.includes('thai duong')) return 'profile.html?id=103';
-    
-    return 'profile.html';
+
+    const knownAuthors = [
+      ['101', ['elena rostova']], ['102', ['ho quoc tuan']], ['103', ['李明 (li ming)', 'li ming']],
+      ['104', ['sarah connor']], ['105', ['alex rivera']], ['106', ['maya lin']],
+      ['107', ['kenji sato']], ['108', ['vu thu ha']], ['109', ['thai duong']]
+    ];
+    const known = knownAuthors.find(([, names]) => names.some(name => nameClean === normalizeAuthorName(name)));
+    if (known) return `profile.html?id=${known[0]}`;
+
+    const params = new URLSearchParams({ author: parseUserName(authorName).trim() });
+    if (authorAvatar) params.set('avatar', authorAvatar);
+    return `profile.html?${params.toString()}`;
   }
 
   function getAuthorTooltipHtml(authorName, avatar) {
@@ -2843,7 +3045,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const dict = (window.uiTranslations && window.uiTranslations[currentLang]) || {};
     const followLabel = dict.btn_follow || dict.subscribe || 'Follow';
     const followBtnHtml = isSelf ? '' : `<button class="btn btn-primary btn-sm rounded-pill fw-bold px-3 py-1 shadow-sm btn-subscribe" onclick="if(typeof window.toggleSubscribe === 'function') window.toggleSubscribe(this, event); else alert('Subscribed');">${followLabel}</button>`;
-    const profileUrl = getAuthorProfileHref(authorName);
+    const profileUrl = getAuthorProfileHref(authorName, avatar);
     
     return `
       <div class="author-hover-card shadow-lg border rounded-4 position-absolute overflow-hidden text-start" style="padding: 0; min-width: 280px; max-width: 320px; z-index: 1060; cursor: default;" onclick="event.stopPropagation()">
@@ -3012,7 +3214,7 @@ document.addEventListener('DOMContentLoaded', () => {
           <p class="mb-1 text-secondary comment-content-text">${root.content}</p>
           <div class="d-flex align-items-center gap-1 mt-2">
             <button class="btn-reply d-flex align-items-center gap-1 ${root.isLiked ? 'liked text-danger' : ''}" onclick="if(window.toggleCommentLike) window.toggleCommentLike(this, ${root.id}, null, false, event);"><i class="bi ${root.isLiked ? 'bi-heart-fill text-danger' : 'bi-heart'}"></i> <span class="like-count">${root.likes || 0}</span></button>
-            <button class="btn-reply" onclick="window.openReplyBox(${root.id}, '${rootAuthorName.replace(/'/g, "\\'")}', false)"><i class="bi bi-chat"></i></button>
+            <button class="btn-reply" type="button" data-comment-action="open-reply" data-root-id="${root.id}" data-author="${encodeURIComponent(rootAuthorName)}"><i class="bi bi-chat"></i></button>
             ${rootTranslateBtnHtml}
             ${rootOwnerActionsHtml}
           </div>
@@ -3049,7 +3251,7 @@ document.addEventListener('DOMContentLoaded', () => {
         <textarea id="input-reply-${rootId}" class="form-control form-control-sm mb-2" rows="2" placeholder="${placeholderText}"></textarea>
         <div class="d-flex justify-content-end gap-2">
           <button class="btn btn-sm btn-outline-secondary rounded-pill px-3" onclick="this.parentElement.parentElement.innerHTML=''" data-i18n="cancel">${dict.cancel || "Cancel"}</button>
-          <button class="btn btn-sm btn-primary rounded-pill px-3 fw-medium" onclick="window.submitReply(${rootId}, ${isChildReply}, '${targetAuthor.replace(/'/g, "\\'")}')" data-i18n="reply">${dict.reply || "Reply"}</button>
+          <button class="btn btn-sm btn-primary rounded-pill px-3 fw-medium" type="button" data-comment-action="submit-reply" data-root-id="${rootId}" data-i18n="reply">${dict.reply || "Reply"}</button>
         </div>
       </div>
     `;
@@ -3075,13 +3277,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const currentLang = localStorage.getItem('preferredLanguage') || 'vi';
     const newReply = {
-      id: Date.now(),
+      id: (Date.now() * 1000) + Math.floor(Math.random() * 1000),
       author: user.name,
       avatar: user.avatar,
       time: "Just now",
       content: inputEl.value.trim(),
       lang: currentLang,
-      replyTo: "",
+      replyTo: replyToAuthor || "",
       translations: {},
       likes: 0,
       isLiked: false
@@ -3093,7 +3295,10 @@ document.addEventListener('DOMContentLoaded', () => {
       targetRoot.replies.push(newReply);
       saveCommentsForPost(postId, comments);
       renderComments(postId);
+      return true;
     }
+    console.warn('Reply target was not found for post', postId, rootId);
+    return false;
   }
 
   function postNewComment() {
@@ -3110,7 +3315,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const currentLang = localStorage.getItem('preferredLanguage') || 'vi';
     const newComment = {
-      id: Date.now(),
+      id: (Date.now() * 1000) + Math.floor(Math.random() * 1000),
       author: user.name,
       avatar: user.avatar,
       time: "Just now",
@@ -3126,6 +3331,7 @@ document.addEventListener('DOMContentLoaded', () => {
     saveCommentsForPost(postId, comments);
     inputEl.value = '';
     renderComments(postId);
+    return true;
   }
 
   async function deleteComment(rootId, repId, isChild) {
@@ -3299,6 +3505,41 @@ document.addEventListener('DOMContentLoaded', () => {
   window.getCommentTranslation = getCommentTranslation;
   window.syncFeedCommentCounts = syncFeedCommentCounts;
 
+  // One delegated controller is shared by every post-detail URL. Capturing the
+  // click prevents inline handlers or nested comment markup from swallowing it.
+  document.addEventListener('click', event => {
+    if (!(event.target instanceof Element)) return;
+
+    const postButton = event.target.closest('#postCommentButton');
+    if (postButton) {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      postNewComment();
+      return;
+    }
+
+    if (!event.target.closest('#commentsListContainer')) return;
+    const actionButton = event.target.closest('[data-comment-action]');
+    if (!actionButton) return;
+
+    event.preventDefault();
+    event.stopImmediatePropagation();
+    const rootId = actionButton.dataset.rootId;
+    if (actionButton.dataset.commentAction === 'open-reply') {
+      let author = '';
+      try {
+        author = decodeURIComponent(actionButton.dataset.author || '');
+      } catch (error) {
+        author = actionButton.dataset.author || '';
+      }
+      openReplyBox(rootId, author, false);
+      return;
+    }
+    if (actionButton.dataset.commentAction === 'submit-reply') {
+      submitReply(rootId, false, '');
+    }
+  }, true);
+
   // Global Toggle Like (Posts)
   function toggleLike(btn, postIdOrBaseCount, event) {
     if (event && typeof event.stopPropagation === 'function') {
@@ -3445,9 +3686,20 @@ document.addEventListener('DOMContentLoaded', () => {
     // 1. Dynamic Profile & Feed Avatar Syncing
     const defaultPlaceholder = `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23b0bac5"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/></svg>`;
 
+    const ownProfileLinks = Array.from(document.querySelectorAll('a[href*="profile.html"]')).filter(link => {
+      try {
+        const url = new URL(link.getAttribute('href') || '', window.location.href);
+        return url.pathname.toLowerCase().endsWith('/profile.html')
+          && !url.searchParams.has('id')
+          && !url.searchParams.has('author');
+      } catch (error) {
+        return false;
+      }
+    });
+
     if (user) {
       if (user.avatar) {
-        document.querySelectorAll('a[href*="profile.html"]').forEach(link => {
+        ownProfileLinks.forEach(link => {
           const existingImg = link.querySelector('img');
           if (existingImg) {
             existingImg.src = user.avatar;
@@ -3475,9 +3727,11 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       }
     } else {
-      document.querySelectorAll('a[href*="profile.html"] img.rounded-circle').forEach(img => {
-        img.src = defaultPlaceholder;
-        img.style.opacity = '0.6';
+      ownProfileLinks.forEach(link => {
+        link.querySelectorAll('img.rounded-circle').forEach(img => {
+          img.src = defaultPlaceholder;
+          img.style.opacity = '0.6';
+        });
       });
       const draftAvatar = document.getElementById('quickDraftAvatar');
       if (draftAvatar) {
@@ -3853,6 +4107,7 @@ window.addEventListener('pageshow', (event) => {
 // Global mouseenter handler (NOT mouseover — mouseenter doesn't bubble into children,
 // so it fires once per container entry instead of continuously on nested elements)
 document.addEventListener('mouseenter', function(e) {
+  if (!e.target || typeof e.target.closest !== 'function') return;
   const container = e.target.closest('.author-tooltip-container');
   if (container) {
     const nameEl = container.querySelector('.author-name, .fw-bold.fs-6, h6.text-main, .author-meta-info a');

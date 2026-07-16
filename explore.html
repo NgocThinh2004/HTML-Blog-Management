@@ -19,7 +19,7 @@
 <link rel="stylesheet" href="assets/css/variables.css">
   <link rel="stylesheet" href="assets/css/base.css?v=1784089471947">
   <link rel="stylesheet" href="assets/css/layouts.css?v=1784089471947">
-  <link rel="stylesheet" href="assets/css/components.css?v=1784089471947">
+<link rel="stylesheet" href="assets/css/components.css?v=14">
 </head>
 <body>
   <div class="app-wrapper">
@@ -97,8 +97,8 @@
 
   <!-- Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-<script src="assets/js/core.js?v=31"></script>
-  <script src="assets/js/components.js?v=8"></script>
+<script src="assets/js/core.js?v=44"></script>
+<script src="assets/js/components.js?v=10"></script>
   
   <!-- Explore Page Specific Logic -->
   <script>
@@ -431,6 +431,9 @@
         const content = post[`content_${currentLang}`] || post.content_en;
         const tsLabel = typeof window.formatTimestampI18n === 'function' ? window.formatTimestampI18n(post.timestamp) : post.timestamp;
         const catLabel = typeof window.translateCategory === 'function' ? window.translateCategory(post.category) : post.category;
+        const authorHref = post.profile_href
+          || (typeof window.getAuthorProfileHref === 'function' ? window.getAuthorProfileHref(post.author_name) : '')
+          || `profile.html?id=${encodeURIComponent(post.author_id || '')}`;
         const tooltipHtml = typeof window.getAuthorTooltipHtml === 'function' 
           ? window.getAuthorTooltipHtml(post.author_name, post.author_avatar)
           : '';
@@ -441,7 +444,7 @@
               <div class="author-badge-group position-relative author-tooltip-container">
                 <img src="${post.author_avatar}" alt="${post.author_name}" class="author-avatar">
                 <div class="author-meta-info">
-                  <a href="profile.html?id=${post.author_id || '101'}" class="author-name">${post.author_name}</a>
+                  <a href="${authorHref}" class="author-name">${post.author_name}</a>
                   <span class="post-timestamp">${tsLabel}</span>
                 </div>
                 <span class="badge bg-primary-subtle text-primary border border-primary-subtle rounded-pill small px-2 ms-auto category-label" data-original-cat="${post.category}">${catLabel}</span>

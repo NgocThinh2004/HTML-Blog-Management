@@ -797,7 +797,11 @@ window.renderFeedPosts = function(containerId, dataObj, categoryFilter = 'all', 
   Object.keys(dataObj).forEach(id => {
     const post = dataObj[id];
     const detailHref = post.detail_href || `post-detail.html?id=${encodeURIComponent(id)}`;
-    const authorHref = post.profile_href || `profile.html?id=${encodeURIComponent(post.author_id || 101)}`;
+    const authorHref = post.profile_href
+      || (typeof window.getAuthorProfileHref === 'function' ? window.getAuthorProfileHref(post.author_name, post.author_avatar) : '')
+      || `profile.html?id=${encodeURIComponent(post.author_id || '')}`;
+    const translatedCategory = typeof window.translateCategory === 'function' ? window.translateCategory(post.category) : post.category;
+    const categoryDisplay = translatedCategory || post.categoryLabel || post.category || 'General';
     
     // Support languages check
     const supportedLangs = post.supported_langs ? post.supported_langs.split(',') : ['en', 'vi', 'zh'];
@@ -822,6 +826,11 @@ window.renderFeedPosts = function(containerId, dataObj, categoryFilter = 'all', 
           ${typeof window.getAuthorTooltipHtml === 'function' ? window.getAuthorTooltipHtml(post.author_name, post.author_avatar) : ''}
         </div>
       </div>
+      <div class="mt-2 mb-1">
+        <span class="badge bg-primary-subtle text-primary border border-primary-subtle rounded-pill px-2 py-1 category-label"
+          data-original-cat="${post.category || categoryDisplay}"
+          data-category-fallback="${categoryDisplay}">${categoryDisplay}</span>
+      </div>
       <a href="${detailHref}" class="text-decoration-none text-reset d-block">
         <h2 class="post-title h4 fw-bold mt-2 mb-1" 
             data-translate-title-en="${(post.title_en || '').replace(/"/g, '&quot;')}"
@@ -840,7 +849,7 @@ window.renderFeedPosts = function(containerId, dataObj, categoryFilter = 'all', 
       <div class="substack-post-footer">
         <button class="footer-action-item" onclick="if(typeof toggleLike==='function'){toggleLike(this, ${post.likes || 0})}"><i class="bi bi-heart"></i> <span class="like-count">${post.likes || 0}</span></button>
         <button class="footer-action-item" onclick="window.location.href='${detailHref}#comments'"><i class="bi bi-chat"></i> <span>${post.comments || 0}</span></button>
-        <span class="footer-action-item text-muted"><i class="bi bi-eye"></i> <span>${post.views || 0}</span></span>
+        <span class="footer-action-item"><i class="bi bi-eye"></i> <span>${post.views || 0}</span></span>
       </div>
     </article>`;
   });

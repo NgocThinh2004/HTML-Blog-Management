@@ -1360,6 +1360,12 @@ select.form-select-sm {
   color: var(--primary-color, #ff6c1f);
 }
 
+.footer-action-item .bi-eye,
+.footer-action-item .bi-eye + span {
+  color: inherit;
+  opacity: 1;
+}
+
 /* Right Panel recommended container */
 .subscriptions-widget {
   background-color: var(--bg-panel);
@@ -1942,6 +1948,38 @@ select.form-select-sm {
 .manage-author-card:hover {
   border-color: var(--text-muted);
   box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+}
+.manage-author-card.author-tooltip-container,
+#suggestedAuthorsGrid .author-tooltip-container {
+  overflow: visible;
+}
+.manage-author-card.author-tooltip-container:hover,
+#suggestedAuthorsGrid .author-tooltip-container:hover {
+  z-index: 1080;
+}
+.manage-author-card.author-tooltip-container:hover .author-hover-card,
+#suggestedAuthorsGrid .card.author-tooltip-container:hover .author-hover-card {
+  visibility: visible !important;
+  pointer-events: auto !important;
+  opacity: 1 !important;
+  transform: translateY(0) scale(1) !important;
+}
+.manage-author-card.author-tooltip-container .author-hover-card,
+#suggestedAuthorsGrid .card.author-tooltip-container .author-hover-card {
+  top: calc(100% + 10px);
+  left: 0;
+}
+.authors-carousel-container .author-carousel-item.author-tooltip-container:hover {
+  z-index: 1080;
+}
+.authors-carousel-container .author-carousel-item.author-tooltip-container .author-hover-card {
+  top: calc(100% + 10px);
+  left: 0;
+}
+@media (min-width: 768px) {
+  .authors-carousel-container {
+    overflow: visible;
+  }
 }
 
 /* ==========================================================

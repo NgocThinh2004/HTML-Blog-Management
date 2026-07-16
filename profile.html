@@ -13,7 +13,7 @@
 <link rel="stylesheet" href="assets/css/variables.css">
     <link rel="stylesheet" href="assets/css/base.css?v=1784089471951">
     <link rel="stylesheet" href="assets/css/layouts.css?v=1784089471951">
-    <link rel="stylesheet" href="assets/css/components.css?v=1784089471951">
+<link rel="stylesheet" href="assets/css/components.css?v=14">
     <style>
       :root, [data-bs-theme="light"] {
         --bg: #ffffff;
@@ -1739,8 +1739,8 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-<script src="assets/js/components.js?v=8"></script>
-    <script src="assets/js/core.js?v=31"></script>
+<script src="assets/js/components.js?v=10"></script>
+    <script src="assets/js/core.js?v=44"></script>
     <script>
       document.addEventListener('DOMContentLoaded', () => {
         const storageKey = 'mundiBlogProfile';
@@ -1896,7 +1896,26 @@
           try {
             const storedProfile = JSON.parse(localStorage.getItem(storageKey) || '{}');
             const storedHandle = normalizeHandle(storedProfile.username) || defaults.username;
-            return { ...defaults, ...storedProfile, username: storedHandle };
+            let currentProfile = { ...defaults, ...storedProfile, username: storedHandle };
+
+            const currentUserStr = localStorage.getItem('currentUser');
+            if (currentUserStr) {
+               let currentUserName = currentUserStr;
+               let currentUserAvatar = '';
+               if (currentUserStr.startsWith('{')) {
+                  try {
+                     const u = JSON.parse(currentUserStr);
+                     currentUserName = u.name;
+                     currentUserAvatar = u.avatar;
+                  } catch(e) {}
+               }
+               if (currentUserName && currentProfile.displayName !== currentUserName) {
+                  currentProfile.displayName = currentUserName;
+                  if (currentUserAvatar) currentProfile.avatar = currentUserAvatar;
+                  localStorage.setItem(storageKey, JSON.stringify(currentProfile));
+               }
+            }
+            return currentProfile;
           } catch (error) {
             return { ...defaults };
           }
@@ -1992,7 +2011,8 @@
 
         function applyBranding() {
           const root = document.documentElement;
-          const isGuestProfile = new URLSearchParams(window.location.search).has('id');
+          const profileParams = new URLSearchParams(window.location.search);
+          const isGuestProfile = profileParams.has('id') || profileParams.has('author');
           const accent = isGuestProfile ? defaults.accentColor : (profile.accentColor || defaults.accentColor);
           const background = isGuestProfile ? '' : (profile.backgroundColor || defaults.backgroundColor);
           const lightBackground = background && isLightColor(background);
@@ -2417,13 +2437,22 @@
         // ======= GUEST PROFILE LOGIC =======
         const urlParams = new URLSearchParams(window.location.search);
         const guestId = urlParams.get('id');
+        const guestAuthorName = (urlParams.get('author') || '').trim();
+        const guestAvatarParam = urlParams.get('avatar') || '';
+        const normalizedGuestAuthor = guestAuthorName.toLocaleLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+        const isGuestProfile = Boolean(guestId || guestAuthorName);
+        const matchesGuestAuthor = post => {
+          if (!post) return false;
+          if (guestId) return String(post.author_id) === guestId || (!post.author_id && guestId === '101' && post.author_name === 'Elena Rostova');
+          return String(post.author_name || '').trim().toLocaleLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '') === normalizedGuestAuthor;
+        };
         
-        if (guestId) {
+        if (isGuestProfile) {
           // Identify Guest Data (Mock logic based on id)
-          let guestName = 'Unknown Author';
-          let guestAvatar = '';
+          let guestName = guestAuthorName || 'Unknown Author';
+          let guestAvatar = guestAvatarParam;
           let guestBio = 'This is a guest profile.';
-          let guestHandle = `@author${guestId}`;
+          let guestHandle = guestId ? `@author${guestId}` : `@${guestName.replace(/\s+/g, '').toLowerCase()}`;
           let guestFollowers = '0';
           let guestFollowing = '0';
           
@@ -2439,7 +2468,7 @@
             '109': { handle: '@thaiduong', bio: 'Engineering culture and deep work.', followers: '15.6K', following: '173' }
           };
           const publicPosts = window.getLingoraPostsData ? window.getLingoraPostsData() : window.globalPostsData;
-          const authorPost = Object.values(publicPosts || {}).find(post => String(post.author_id) === guestId);
+          const authorPost = Object.values(publicPosts || {}).find(matchesGuestAuthor);
           const authorProfile = authorProfiles[guestId] || {};
           if (authorPost) {
             guestName = authorPost.author_name;
@@ -2495,7 +2524,7 @@
               const post = renderPostsData[key];
               const supportsLanguage = String(post.supported_langs || '').split(',').includes(currentLang);
               const categoryIsVisible = !window.isCategoryTranslationActive || window.isCategoryTranslationActive(post.category, currentLang);
-              if (String(post.author_id) === guestId || (!post.author_id && guestId === '101' && post.author_name === 'Elena Rostova')) {
+              if (matchesGuestAuthor(post)) {
                 if (supportsLanguage && categoryIsVisible) guestPosts[key] = post;
               }
             });
@@ -2561,25 +2590,31 @@
           const changedProfile = event && event.detail && event.detail.profile;
           const visiblePosts = {};
           Object.entries(publicPosts || {}).forEach(([key, post]) => {
-            const isOwner = guestId
-              ? (String(post.author_id) === guestId || (!post.author_id && guestId === '101' && post.author_name === 'Elena Rostova'))
+            const isOwner = isGuestProfile
+              ? matchesGuestAuthor(post)
               : (post.author_name === profile.displayName || post.author_id === 'self');
             const supportsLanguage = String(post.supported_langs || '').split(',').includes(currentLang);
-            const categoryIsVisible = !guestId || !window.isCategoryTranslationActive || window.isCategoryTranslationActive(post.category, currentLang);
+            const categoryIsVisible = !isGuestProfile || !window.isCategoryTranslationActive || window.isCategoryTranslationActive(post.category, currentLang);
             if (isOwner && supportsLanguage && categoryIsVisible) {
-              visiblePosts[key] = !guestId && changedProfile
+              visiblePosts[key] = !isGuestProfile && changedProfile
                 ? { ...post, author_name: changedProfile.displayName || post.author_name, author_avatar: changedProfile.avatar || '' }
                 : post;
             }
           });
           const count = document.getElementById('profilePostsCount');
           if (count) count.textContent = Object.keys(visiblePosts).length;
-          if (window.renderFeedPosts) window.renderFeedPosts('profilePostsContainer', visiblePosts, 'all', { includeInactiveCategories: !guestId });
+          if (window.renderFeedPosts) {
+            window.renderFeedPosts('profilePostsContainer', visiblePosts, 'all', { includeInactiveCategories: !isGuestProfile });
+          }
+          if (typeof window.applyLanguageFilter === 'function') {
+            setTimeout(() => window.applyLanguageFilter(), 0);
+          }
         }
 
         window.addEventListener('lingora:languagechange', refreshProfilePostsForLanguage);
         window.addEventListener('lingora:profilechange', refreshProfilePostsForLanguage);
-        if (!guestId) {
+        window.addEventListener('lingora:submittedtranslationsready', refreshProfilePostsForLanguage);
+        if (!isGuestProfile) {
           const followingCount = document.getElementById('profileFollowingCount');
           if (followingCount) followingCount.textContent = window.getLingoraSubscribedAuthors().length;
         }
@@ -2721,7 +2756,7 @@
         }
 
         window.addEventListener('lingora:subscriptionschange', () => {
-          if (!guestId) {
+          if (!isGuestProfile) {
             const count = document.getElementById('profileFollowingCount');
             if (count) count.textContent = window.getLingoraSubscribedAuthors().length;
           }
