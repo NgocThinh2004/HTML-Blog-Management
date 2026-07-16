@@ -51,36 +51,41 @@
       <aside class="left-sidebar"></aside>
 
       <!-- COLUMN 2: CENTER WORKSPACE FEED -->
-      <div class="center-feed">
+      <div class="center-feed" id="exploreCenterFeed">
         
-        <!-- Explore Search Bar with YouTube-style dropdown -->
-        <div class="explore-search-header position-relative mb-3 mt-2">
-          <div class="explore-search-input-box" id="exploreSearchBox">
-            <i class="bi bi-search text-muted fs-5"></i>
-            <input type="text" id="explorePageSearchInput" class="explore-page-search-input" placeholder="Search Lingora..." data-i18n="search_placeholder" autocomplete="off">
-            <button type="button" class="btn-clear-search d-none" id="exploreClearBtn" aria-label="Clear"><i class="bi bi-x-lg fs-6"></i></button>
-          </div>
-          <!-- Suggestions Panel -->
-          <div id="exploreSuggestionsPanel" class="explore-suggestions-panel d-none">
-            <!-- populated by JS -->
-          </div>
-        </div>
+        <!-- Sticky Search + Tabs Header -->
+        <div class="explore-sticky-header">
 
-        <!-- Substack Explore Tabs -->
-        <div class="explore-tabs-nav border-bottom mb-4">
-          <button class="explore-tab-btn active" data-tab="top" data-i18n="top">Top</button>
-          <button class="explore-tab-btn" data-tab="posts" data-i18n="posts">Posts</button>
-          <button class="explore-tab-btn" data-tab="publications" data-i18n="publications">Publications</button>
-          <button class="explore-tab-btn" data-tab="people" data-i18n="people">People</button>
-        </div>
+          <!-- Explore Search Bar with YouTube-style dropdown -->
+          <div class="explore-search-header position-relative" id="exploreSearchBox">
+            <div class="explore-search-input-box">
+              <i class="bi bi-search text-muted fs-5"></i>
+              <input type="text" id="explorePageSearchInput" class="explore-page-search-input" placeholder="Search Lingora..." data-i18n="search_placeholder" autocomplete="off">
+              <button type="button" class="btn-clear-search d-none" id="exploreClearBtn" aria-label="Clear"><i class="bi bi-x-lg fs-6"></i></button>
+            </div>
+            <!-- Suggestions Panel -->
+            <div id="exploreSuggestionsPanel" class="explore-suggestions-panel d-none">
+              <!-- populated by JS -->
+            </div>
+          </div>
+
+          <!-- Substack Explore Tabs -->
+          <div class="explore-tabs-nav border-bottom">
+            <button class="explore-tab-btn active" data-tab="top" data-i18n="top">Top</button>
+            <button class="explore-tab-btn" data-tab="posts" data-i18n="posts">Posts</button>
+            <button class="explore-tab-btn" data-tab="publications" data-i18n="publications">Publications</button>
+            <button class="explore-tab-btn" data-tab="people" data-i18n="people">People</button>
+          </div>
+
+        </div><!-- /explore-sticky-header -->
 
         <!-- Search Query Header / Results Count -->
-        <div id="exploreQueryHeader" class="mb-3 text-muted small d-none">
+        <div id="exploreQueryHeader" class="mb-3 text-muted small d-none mt-4">
           <span data-i18n="showing_results_for">Showing results for </span><strong id="exploreQueryText" class="text-main"></strong><span> &bull; </span><span id="exploreCountText">0 results</span>
         </div>
 
         <!-- Results Feed Container -->
-        <div id="exploreResultsContainer" class="explore-results-list pb-5">
+        <div id="exploreResultsContainer" class="explore-results-list pb-5 mt-4">
           <!-- Dynamic contents loaded via JS -->
         </div>
 
@@ -100,6 +105,23 @@
   <script src="assets/js/core.js?v=50"></script>
   <script src="assets/js/components.js?v=20"></script>
   
+  <!-- Sticky header detection: add shadow when stuck -->
+  <script>
+    (function() {
+      const stickyEl = document.querySelector('.explore-sticky-header');
+      if (!stickyEl) return;
+      // Sentinel element: placed just above the sticky header
+      const sentinel = document.createElement('div');
+      sentinel.style.cssText = 'position:absolute;top:0;left:0;height:1px;width:100%;pointer-events:none;';
+      stickyEl.parentElement.insertBefore(sentinel, stickyEl);
+      const observer = new IntersectionObserver(
+        ([entry]) => stickyEl.classList.toggle('is-stuck', !entry.isIntersecting),
+        { threshold: 0, rootMargin: '0px' }
+      );
+      observer.observe(sentinel);
+    })();
+  </script>
+
   <!-- Explore Page Specific Logic -->
   <script>
     document.addEventListener('DOMContentLoaded', () => {

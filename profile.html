@@ -146,6 +146,10 @@
         display: grid;
         place-items: center;
         border-bottom: 1px solid var(--line);
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        background-color: var(--bg);
       }
 
       .profile-view-top h1 {
@@ -1507,18 +1511,6 @@
               <h2 class="branding-title" data-i18n="profile_branding">Branding</h2>
               <p class="branding-copy" data-i18n="profile_branding_desc">Customize the look of your profile.</p>
 
-              <div class="field">
-                <label for="headerImage" data-i18n="profile_header_image">Header image</label>
-                <label class="upload-box" for="headerImage">
-                  <span>
-                    <i class="bi bi-card-image"></i>
-                    <strong data-i18n="profile_header_drop">Drop your header image here</strong>
-                    <p data-i18n="profile_header_hint">At least 1344x256px - 3:2 to 21:4 aspect ratio</p>
-                    <span class="small-outline" data-i18n="profile_select_image">Select image</span>
-                  </span>
-                </label>
-                <input class="hidden-file" id="headerImage" type="file" accept="image/*">
-              </div>
 
               <div class="brand-row">
                 <label for="accentColor" data-i18n="profile_accent_color">Accent color</label>

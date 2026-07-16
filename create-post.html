@@ -382,22 +382,7 @@
           <path d="m16 11 5-3v8l-5-3z"></path>
         </svg>
       </button>
-      <div class="tool-menu">
-        <button aria-expanded="false" aria-label="Insert quote" class="tool-btn icon-tool" data-menu-trigger=""
-          title="Insert quote" type="button">
-          <svg aria-hidden="true" class="tool-svg" viewbox="0 0 24 24">
-            <path d="M21 15a4 4 0 0 1-4 4H7l-4 4V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"></path>
-            <path d="M8 9h8"></path>
-            <path d="M8 13h5"></path>
-          </svg>
-        </button>
-        <div class="tool-menu-panel quote-menu">
-          <button class="tool-menu-item quote-menu-item" data-insert-quote="block" type="button">Block quote</button>
-          <button class="tool-menu-item quote-menu-item" data-insert-quote="pull" type="button">Pull quote</button>
-          <button class="tool-menu-item quote-menu-item" data-insert-quote="callout" type="button">Callout
-            block</button>
-        </div>
-      </div>
+
     </div>
     <div aria-label="Lists and alignment" class="toolbar-group">
       <button aria-label="Bullet list" class="tool-btn icon-tool" data-command="insertUnorderedList" type="button">
@@ -471,33 +456,7 @@
       </div>
     </div>
     <div aria-label="Blocks" class="toolbar-group">
-      <div class="tool-menu">
-        <button aria-expanded="false" class="tool-btn tool-label-btn block-menu-trigger" data-menu-trigger=""
-          type="button">
-          Button <span aria-hidden="true" class="tool-caret"></span>
-        </button>
-        <div class="tool-menu-panel button-menu align-right">
-          <button class="tool-menu-item button-menu-item" data-insert-button="subscribe"
-            type="button">Subscribe</button>
-          <button class="tool-menu-item button-menu-item" data-insert-button="subscribe-caption" type="button">Subscribe
-            w/ caption</button>
-          <span aria-hidden="true" class="tool-menu-divider"></span>
-          <button class="tool-menu-item button-menu-item" data-insert-button="share-post" type="button">Share
-            post</button>
-          <button class="tool-menu-item button-menu-item" data-insert-button="share-post-caption" type="button">Share
-            post w/ caption</button>
-          <button class="tool-menu-item button-menu-item" data-insert-button="share-publication" type="button">Share
-            publication</button>
-          <span aria-hidden="true" class="tool-menu-divider"></span>
-          <button class="tool-menu-item button-menu-item" data-insert-button="leave-comment" type="button">Leave a
-            comment</button>
-          <button class="tool-menu-item button-menu-item" data-insert-button="send-message" type="button">Send a
-            message</button>
-          <span aria-hidden="true" class="tool-menu-divider"></span>
-          <button class="tool-menu-item button-menu-item" data-insert-button="custom" type="button">Custom...</button>
-          <button class="tool-menu-item button-menu-item" data-insert-button="more" type="button">More...</button>
-        </div>
-      </div>
+
       <div class="tool-menu">
         <button aria-expanded="false" class="tool-btn tool-label-btn block-menu-trigger" data-menu-trigger=""
           type="button">
@@ -538,21 +497,9 @@
         <div class="writing-limit" id="postSubtitleLimit" aria-live="polite"><span data-subtitle-word-count>0</span>
         </div>
         <div aria-label="Authors" class="author-row" data-author-row="">
-          <span class="language-chip" data-author-chip="Alone">
+          <span class="language-chip" data-author-chip="Alone" style="padding-right: 12px; cursor: default;">
             <span>Alone</span>
-            <button aria-label="Remove author" class="chip-remove" type="button"></button>
           </span>
-          <div class="author-add-wrap">
-            <button aria-expanded="false" aria-label="Add author" class="chip-add" data-author-menu-trigger=""
-              type="button">+</button>
-            <div class="author-menu" data-author-menu="">
-              <button class="author-menu-item" data-author-name="Hoang Quoc Tuan" type="button">Hoang Quoc Tuan</button>
-              <button class="author-menu-item" data-author-name="Hoang Anh" type="button">Hoang Anh</button>
-              <button class="author-menu-item" data-author-name="Minh Anh" type="button">Minh Anh</button>
-              <span aria-hidden="true" class="author-menu-divider"></span>
-              <button class="author-menu-item" data-author-action="custom" type="button">Custom author...</button>
-            </div>
-          </div>
         </div>
         <label class="sr-only" for="postBody">Post body</label>
         <div aria-describedby="postBodyLimit" aria-label="Post body" class="rich-editor" contenteditable="true"

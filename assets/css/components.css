@@ -857,6 +857,37 @@ select.form-select-sm {
   position: relative;
 }
 
+/* Fix: cho phép sticky hoạt động với window scroll thay vì center-feed scroll */
+#exploreCenterFeed {
+  overflow-y: visible;
+}
+
+/* Sticky search + tabs container for explore page */
+.explore-sticky-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background-color: var(--bg-body);
+  padding-top: 1rem;
+  padding-bottom: 0;
+  transition: background-color var(--transition-speed) ease;
+  /* Shadow nhẹ khi sticky để tách biệt với nội dung bên dưới */
+  box-shadow: 0 2px 8px -2px transparent;
+}
+
+.explore-sticky-header.is-stuck {
+  box-shadow: 0 2px 8px -2px rgba(0, 0, 0, 0.08);
+}
+
+[data-bs-theme="dark"] .explore-sticky-header.is-stuck {
+  box-shadow: 0 2px 12px -2px rgba(0, 0, 0, 0.4);
+}
+
+.explore-sticky-header .explore-search-header {
+  margin-bottom: 0.75rem;
+}
+
+
 /* When dropdown is open, flatten the search box bottom radius */
 .explore-search-header:has(.explore-suggestions-panel:not(.d-none)) .explore-search-input-box {
   border-radius: 24px 24px 0 0 !important;
@@ -2037,6 +2068,47 @@ select.form-select-sm {
 }
 .btn-translate-toggle {
   font-size: 0.8rem;
+}
+
+/* Editor Code Block Styles */
+.editor-code-body {
+  min-height: 64px;
+  margin: 0 !important;
+  padding: 16px !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  color: #252a2a !important;
+  background: #ffffff !important;
+  font-family: "Cascadia Code", Consolas, monospace;
+  font-size: 16px;
+  white-space: pre-wrap;
+  counter-reset: line;
+}
+
+.code-line {
+  display: block;
+  counter-increment: line;
+}
+
+.code-line::before {
+  content: counter(line);
+  display: inline-block;
+  width: 2em;
+  margin-right: 1.5em;
+  color: #adb5bd;
+  text-align: right;
+  user-select: none;
+}
+
+.content-html .editor-code-block {
+  margin: 24px 0;
+  border: 1px solid var(--border-color, #e5e8e6);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.content-html .editor-code-toolbar {
+  display: none !important;
 }
 
 
