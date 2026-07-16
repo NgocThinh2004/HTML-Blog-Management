@@ -21,7 +21,7 @@
   <link rel="stylesheet" href="assets/css/variables.css">
   <link rel="stylesheet" href="assets/css/base.css?v=1784089471953">
   <link rel="stylesheet" href="assets/css/layouts.css?v=1784089471953">
-<link rel="stylesheet" href="assets/css/components.css?v=17">
+  <link rel="stylesheet" href="assets/css/components.css?v=17">
   
 </head>
 
@@ -71,6 +71,11 @@
 
         <!-- Authors Carousel & Feed (Visible when having subscriptions) -->
         <div id="subscriptionsContent">
+          <!-- Authors Carousel without colored ring -->
+          <div class="authors-carousel-container" id="subscriptionsAuthorsCarousel">
+            <!-- Dynamically rendered by JS -->
+          </div>
+
           <!-- 3-Tabs Navigation for Subscriptions Feed -->
           <div class="subscriptions-tabs-nav">
             <button class="subscriptions-tab-btn active" data-tab="all" data-i18n="sub_tab_all">All Posts</button>
@@ -112,8 +117,8 @@
   <!-- Bootstrap 5 JS Bundle -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" defer></script>
   <!-- Core Script containing theme & language simulation -->
-<script src="assets/js/core.js?v=50" defer></script>
-<script src="assets/js/components.js?v=20" defer></script>
+  <script src="assets/js/core.js?v=50" defer></script>
+  <script src="assets/js/components.js?v=20" defer></script>
 
   <script>
     // Subscribed Authors state management
@@ -159,6 +164,18 @@
 
       // 3. Precise DOM update to avoid full re-render
       if (!isSubscribing) {
+        // Unfollow: remove from carousel
+        const carousel = document.getElementById('subscriptionsAuthorsCarousel');
+        if (carousel) {
+          const items = carousel.querySelectorAll('.author-carousel-item');
+          items.forEach(item => {
+            const nameEl = item.querySelector('.author-carousel-name');
+            if (nameEl && nameEl.textContent === authorName) {
+              item.remove();
+            }
+          });
+        }
+        
         // Unfollow: remove posts from feed if on 'all' tab
         if (window.currentSubTab === 'all') {
           const feedContainer = document.getElementById('postsFeedContainer');
@@ -212,7 +229,51 @@
         if (emptyDiv) emptyDiv.style.display = 'none';
       }
 
+      // 1. Render Authors Carousel without colored borders
+      const carousel = document.getElementById('subscriptionsAuthorsCarousel');
+      if (carousel) {
+        const allAuthorsLabel = dict.sub_all_authors_filter || "All Authors";
+        const findMoreLabel = dict.find_more || "Find more";
+        let html = `
+          <div class="author-carousel-item ${authorFilter === '' ? 'active' : ''}" onclick="filterByAuthor('')">
+            <div class="author-carousel-avatar-wrapper d-flex align-items-center justify-content-center" style="background: var(--bg-secondary);">
+              <i class="bi bi-people fs-4 text-main"></i>
+            </div>
+            <span class="author-carousel-name" data-i18n="sub_all_authors_filter">${allAuthorsLabel}</span>
+          </div>
+        `;
 
+        const authorProfiles = {
+          'Elena Rostova': 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=80&h=80',
+          'Hồ Quốc Tuấn': 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=80&h=80',
+          'Thái Dương': 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=80&h=80',
+          'Hoàng Anh': 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=80&h=80',
+          'Sarah Connor': 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&q=80&w=80&h=80'
+        };
+
+        subs.forEach(name => {
+          const avatar = authorProfiles[name] || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=80&h=80';
+          const isActive = authorFilter === name ? 'active' : '';
+          html += `
+            <div class="author-carousel-item ${isActive}" onclick="filterByAuthor('${name.replace(/'/g, "\\'")}')">
+              <div class="author-carousel-avatar-wrapper">
+                <img src="${avatar}" alt="${name}" class="author-carousel-avatar">
+              </div>
+              <span class="author-carousel-name">${name}</span>
+            </div>
+          `;
+        });
+
+        html += `
+          <a href="explore.html" class="author-carousel-item text-decoration-none">
+            <div class="author-carousel-avatar-wrapper d-flex align-items-center justify-content-center" style="background: var(--bg-secondary);">
+              <i class="bi bi-plus-lg fs-5 text-muted"></i>
+            </div>
+            <span class="author-carousel-name" data-i18n="find_more">${findMoreLabel}</span>
+          </a>
+        `;
+        carousel.innerHTML = html;
+      }
 
       // 2. Update Tabs Active State
       document.querySelectorAll('.subscriptions-tab-btn').forEach(btn => {
@@ -248,17 +309,14 @@
           const avatar = authorProfiles[name] || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=80&h=80';
           const role = authorRoles[name] || 'MundiBlog Creator';
           const followingLabel = dict.btn_following || "Following";
-          const profileHref = typeof window.getAuthorProfileHref === 'function'
-            ? window.getAuthorProfileHref(name, avatar)
-            : `profile.html?author=${encodeURIComponent(name)}`;
           manageHtml += `
             <div class="col-12">
-              <div class="manage-author-card h-100 position-relative author-tooltip-container">
-                <div style="cursor: pointer;" onclick="window.location.href='${profileHref}'">
+              <div class="manage-author-card h-100">
+                <div class="position-relative author-tooltip-container" style="cursor: pointer;" onclick="window.location.href='profile.html?id=101'">
                   <img src="${avatar}" class="rounded-circle border" width="54" height="54" style="object-fit: cover;" alt="${name}">
                   ${typeof window.getAuthorTooltipHtml === 'function' ? window.getAuthorTooltipHtml(name, avatar) : ''}
                 </div>
-                <div class="flex-grow-1 ms-3" style="cursor: pointer;" onclick="window.location.href='${profileHref}'">
+                <div class="flex-grow-1 ms-3" style="cursor: pointer;" onclick="window.location.href='profile.html?id=101'">
                   <h6 class="fw-bold mb-1 text-main hover-text-primary">${name}</h6>
                   <p class="text-muted small mb-0">${role}</p>
                 </div>
@@ -271,7 +329,7 @@
         feedContainer.innerHTML = manageHtml;
       } else {
         // Render Posts matching Subscribed Authors (and authorFilter)
-        const dataObj = window.getLingoraPostsData ? window.getLingoraPostsData() : (window.globalPostsData || {});
+        const dataObj = window.globalPostsData || {};
         let matchingPosts = {};
         let count = 0;
 
@@ -324,17 +382,14 @@
 
       candidates.forEach(c => {
         const isSubbed = subs.includes(c.name);
-        const profileHref = typeof window.getAuthorProfileHref === 'function'
-          ? window.getAuthorProfileHref(c.name, c.avatar)
-          : `profile.html?author=${encodeURIComponent(c.name)}`;
         html += `
           <div class="col-12 mb-3">
-            <div class="card bg-light border-0 rounded-4 p-3 d-flex flex-row align-items-center h-100 position-relative author-tooltip-container">
-              <div class="me-3" style="cursor: pointer;" onclick="window.location.href='${profileHref}'">
+            <div class="card bg-light border-0 rounded-4 p-3 d-flex flex-row align-items-center h-100">
+              <div class="position-relative author-tooltip-container me-3" style="cursor: pointer;" onclick="window.location.href='profile.html?id=101'">
                 <img src="${c.avatar}" class="rounded-circle border border-white shadow-sm" width="50" height="50" alt="${c.name}" style="object-fit: cover;">
                 ${typeof window.getAuthorTooltipHtml === 'function' ? window.getAuthorTooltipHtml(c.name, c.avatar) : ''}
               </div>
-              <div class="flex-grow-1" style="cursor: pointer;" onclick="window.location.href='${profileHref}'">
+              <div class="flex-grow-1" style="cursor: pointer;" onclick="window.location.href='profile.html?id=101'">
                 <h6 class="fw-bold mb-0 text-main hover-text-primary" style="font-size: 0.95rem;">${c.name}</h6>
                 <p class="text-muted small mb-0">${c.role}</p>
               </div>
@@ -378,10 +433,6 @@
 
       // Render initial
       renderSubscriptionsPage('all', '');
-      // core.js creates the shared profile-card helper in its own
-      // DOMContentLoaded handler. Re-render on the next task so the initial
-      // carousel also receives profile cards, not only later tab renders.
-      setTimeout(() => renderSubscriptionsPage(currentSubTab, currentAuthorFilter), 0);
     });
 
     // Toggle Feed Likes simulation

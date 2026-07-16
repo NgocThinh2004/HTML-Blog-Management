@@ -847,7 +847,7 @@ window.renderFeedPosts = function(containerId, dataObj, categoryFilter = 'all', 
       </a>
       ${(post.video || post.image) ? (
         ((post.video || post.image).toLowerCase().endsWith('.mp4') || (post.video || post.image).toLowerCase().includes('.mp4') || (post.video || post.image).toLowerCase().includes('/video/upload/'))
-        ? `<div class="post-image-embed" style="background-color: #000000; display: flex; align-items: center; justify-content: center; max-height: 360px; height: 360px; overflow: hidden;"><video src="${post.video || post.image}" muted playsinline autoplay loop controls style="width: 100%; height: 100%; object-fit: contain; background-color: #000000;"></video></div>`
+        ? `<div class="post-image-embed" style="background-color: #000000; display: flex; align-items: center; justify-content: center; max-height: 360px; height: 360px; overflow: hidden;"><video src="${post.video || post.image}" muted playsinline ${localStorage.getItem('autoPlayMedia') !== 'false' ? 'autoplay' : ''} loop controls style="width: 100%; height: 100%; object-fit: contain; background-color: #000000;"></video></div>`
         : `<a href="${detailHref}" class="text-decoration-none text-reset d-block"><div class="post-image-embed"><img src="${post.image}" alt="Post cover"></div></a>`
       ) : ''}
       <div class="substack-post-footer">
@@ -876,9 +876,12 @@ window.renderFeedPosts = function(containerId, dataObj, categoryFilter = 'all', 
   if (typeof window.playAllVideosGlobal === 'function') {
     window.playAllVideosGlobal();
   } else {
+    const isAutoPlay = localStorage.getItem('autoPlayMedia') !== 'false';
     container.querySelectorAll('video').forEach(video => {
       video.muted = true;
-      video.play().catch(err => console.log('Autoplay play() error:', err));
+      if (isAutoPlay) {
+        video.play().catch(err => console.log('Autoplay play() error:', err));
+      }
     });
   }
 };
@@ -924,16 +927,32 @@ window.toggleSubscribe = function(btn, event) {
 // Global Unified Autoplay & Mute Recovery Manager
 (function() {
   function playAllVideos() {
+    const isAutoPlay = localStorage.getItem('autoPlayMedia') !== 'false';
     document.querySelectorAll('video').forEach(video => {
       // Force muted, playsinline, and attempt play
       video.muted = true;
-      if (video.paused) {
-        video.play().catch(e => {
-          // Silent catch to prevent console spam from browser policy blocks
-        });
+      if (isAutoPlay && video.hasAttribute('autoplay')) {
+        if (video.paused && !video.dataset.userPaused) {
+          video.play().catch(e => {
+            // Silent catch to prevent console spam from browser policy blocks
+          });
+        }
       }
     });
   }
+
+  // Track manual user pauses to prevent scrolling from overwriting their choice
+  document.addEventListener('pause', (e) => {
+    if (e.target.tagName === 'VIDEO') {
+      e.target.dataset.userPaused = "true";
+    }
+  }, true);
+
+  document.addEventListener('play', (e) => {
+    if (e.target.tagName === 'VIDEO') {
+      e.target.dataset.userPaused = "false";
+    }
+  }, true);
 
   // Expose it globally so other scripts/pages can force play
   window.playAllVideosGlobal = playAllVideos;

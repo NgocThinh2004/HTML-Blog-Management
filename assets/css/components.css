@@ -1946,6 +1946,7 @@ select.form-select-sm {
 .author-carousel-item.active .author-carousel-name { font-weight: 700; color: var(--text-main); }
 
 /* Subscriptions Page Tabs */
+
 .subscriptions-tabs-nav {
   display: flex;
   gap: 1rem;
@@ -1982,10 +1983,6 @@ select.form-select-sm {
   align-items: center;
   gap: 1rem;
   transition: all 0.2s ease;
-}
-.manage-author-card:hover {
-  border-color: var(--text-muted);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.04);
 }
 .manage-author-card.author-tooltip-container,
 #suggestedAuthorsGrid .author-tooltip-container {

@@ -222,9 +222,10 @@
         const mediaUrl = post.video || post.image;
         const isVideo = mediaUrl.toLowerCase().endsWith('.mp4') || mediaUrl.toLowerCase().includes('.mp4') || mediaUrl.toLowerCase().includes('/video/upload/');
         if (isVideo) {
+          const autoPlayAttr = localStorage.getItem('autoPlayMedia') !== 'false' ? 'autoplay' : '';
           imageHtml = `
             <div class="post-image-embed mb-4" style="max-height: none; height: auto; border: none; background: transparent; overflow: visible;">
-              <video src="${mediaUrl}" muted playsinline autoplay loop controls class="w-100 rounded-4 shadow-sm" style="max-height: 480px; object-fit: contain; background-color: #000000;"></video>
+              <video src="${mediaUrl}" muted playsinline ${autoPlayAttr} loop controls class="w-100 rounded-4 shadow-sm" style="max-height: 480px; object-fit: contain; background-color: #000000;"></video>
             </div>
           `;
         } else {
@@ -295,9 +296,12 @@
       if (typeof window.playAllVideosGlobal === 'function') {
         window.playAllVideosGlobal();
       } else {
+        const isAutoPlay = localStorage.getItem('autoPlayMedia') !== 'false';
         container.querySelectorAll('video').forEach(video => {
           video.muted = true;
-          video.play().catch(err => console.log('Autoplay play() error:', err));
+          if (isAutoPlay) {
+            video.play().catch(err => console.log('Autoplay play() error:', err));
+          }
         });
       }
 
