@@ -1,6 +1,8 @@
 (function () {
   'use strict';
 
+  window.mundiSimpleCommentsDemoActive = true;
+
   const STORAGE_KEY = 'mundi_comments_db';
   let database = readDatabase();
   const initialSnapshots = {};
@@ -169,6 +171,7 @@
     const currentLanguage = localStorage.getItem('preferredLanguage') || 'vi';
     const count = document.getElementById('commentCountText');
     const footerCount = document.getElementById('footerCommentCount');
+    const demoUser = getDemoUser();
     if (count) count.textContent = total;
     if (footerCount) footerCount.textContent = total;
     const postKey = currentPostKey();
@@ -176,18 +179,27 @@
 
     container.dataset.staticCommentsReady = 'true';
     container.innerHTML = comments.map(comment => {
-      const replies = comment.replies.map(reply => `
+      const replies = comment.replies.map(reply => {
+        const replyToName = String(reply.replyTo || '').trim();
+        const mentionHtml = replyToName
+          ? `<span class="text-primary fw-semibold" data-demo-reply-mention>@${escapeHtml(replyToName)}</span> `
+          : '';
+        return `
         <div class="comment-reply-card py-3 border-bottom border-light-subtle" data-demo-reply-id="${reply.id}">
           <div class="d-flex align-items-center gap-2 mb-2">
             ${authorIdentityHtml(reply.author, reply.avatar, 30, 'fw-bold text-main author-name')}
             <span class="text-muted small ms-auto">${escapeHtml(reply.time || 'Vừa xong')}</span>
           </div>
-          <p class="mb-2 text-secondary" data-demo-comment-content>${escapeHtml(reply.content)}</p>
+          <p class="mb-2 text-secondary">${mentionHtml}<span data-demo-comment-content>${escapeHtml(reply.content)}</span></p>
           <div class="d-flex align-items-center gap-2">
             <button class="btn-reply" type="button" data-demo-like><i class="bi bi-heart"></i> <span>${Number(reply.likes) || 0}</span></button>
+            <button class="btn-reply" type="button" data-demo-open-reply="${comment.id}" data-demo-reply-id="${reply.id}" data-demo-reply-to="${encodeURIComponent(reply.author || '')}" aria-label="Reply to ${escapeHtml(reply.author || '')}"><i class="bi bi-chat"></i></button>
             ${translationButtonHtml(reply, currentLanguage)}
+            ${(reply.isDemoUser || String(reply.author || '').trim() === String(demoUser.name || '').trim()) ? `<button class="btn-reply text-danger" type="button" data-demo-delete-reply="${reply.id}" data-demo-root-id="${comment.id}" aria-label="Delete reply"><i class="bi bi-trash"></i></button>` : ''}
           </div>
-        </div>`).join('');
+          <div data-demo-child-reply-box="${comment.id}-${reply.id}"></div>
+        </div>`;
+      }).join('');
 
       return `
         <div class="comment-card py-3 border-bottom border-light-subtle" data-demo-root-id="${comment.id}">
@@ -200,7 +212,7 @@
             <button class="btn-reply" type="button" data-demo-like><i class="bi bi-heart"></i> <span>${Number(comment.likes) || 0}</span></button>
             <button class="btn-reply" type="button" data-demo-open-reply="${comment.id}" aria-label="Reply"><i class="bi bi-chat"></i></button>
             ${translationButtonHtml(comment, currentLanguage)}
-            ${comment.isDemoUser ? `<button class="btn-reply text-danger" type="button" data-demo-delete="${comment.id}" aria-label="Delete"><i class="bi bi-trash"></i></button>` : ''}
+            ${(comment.isDemoUser || String(comment.author || '').trim() === String(demoUser.name || '').trim()) ? `<button class="btn-reply text-danger" type="button" data-demo-delete="${comment.id}" aria-label="Delete"><i class="bi bi-trash"></i></button>` : ''}
           </div>
           <div data-demo-reply-box="${comment.id}"></div>
           ${replies ? `<div class="comment-reply-list mt-3 ps-3 border-start border-2">${replies}</div>` : ''}
@@ -227,23 +239,27 @@
     input.focus();
   }
 
-  function openReply(rootId) {
-    document.querySelectorAll('[data-demo-reply-box]').forEach(box => { box.innerHTML = ''; });
-    const box = document.querySelector(`[data-demo-reply-box="${CSS.escape(String(rootId))}"]`);
+  function openReply(rootId, targetAuthor = '', replyId = '') {
+    document.querySelectorAll('[data-demo-reply-box], [data-demo-child-reply-box]').forEach(box => { box.innerHTML = ''; });
+    const box = replyId
+      ? document.querySelector(`[data-demo-child-reply-box="${CSS.escape(`${rootId}-${replyId}`)}"]`)
+      : document.querySelector(`[data-demo-reply-box="${CSS.escape(String(rootId))}"]`);
     if (!box) return;
+    const replyTo = String(targetAuthor || '').trim();
+    const placeholder = replyTo ? `Trả lời @${replyTo}...` : 'Nhập phản hồi...';
     box.innerHTML = `
       <div class="mt-3 pt-3 border-top">
-        <textarea class="form-control mb-2" rows="2" data-demo-reply-input placeholder="Nhập phản hồi..."></textarea>
+        <textarea class="form-control mb-2" rows="2" data-demo-reply-input placeholder="${escapeHtml(placeholder)}"></textarea>
         <div class="d-flex justify-content-end gap-2">
           <button class="btn btn-sm btn-outline-secondary rounded-pill px-3" type="button" data-demo-cancel>Hủy</button>
-          <button class="btn btn-sm btn-primary rounded-pill px-3 fw-medium" type="button" data-demo-submit-reply="${rootId}">Trả lời</button>
+          <button class="btn btn-sm btn-primary rounded-pill px-3 fw-medium" type="button" data-demo-submit-reply="${rootId}" data-demo-reply-to="${encodeURIComponent(replyTo)}" data-demo-reply-to-id="${escapeHtml(replyId)}">Trả lời</button>
         </div>
       </div>`;
     box.querySelector('[data-demo-reply-input]').focus();
   }
 
   function addReply(rootId, button) {
-    const box = button.closest('[data-demo-reply-box]');
+    const box = button.closest('[data-demo-reply-box], [data-demo-child-reply-box]');
     const input = box?.querySelector('[data-demo-reply-input]');
     const content = input ? input.value.trim() : '';
     if (!content) {
@@ -254,9 +270,12 @@
     const root = comments.find(comment => String(comment.id) === String(rootId));
     if (!root) return;
     const user = getDemoUser();
+    let replyTo = '';
+    try { replyTo = decodeURIComponent(button.dataset.demoReplyTo || ''); } catch (error) { replyTo = button.dataset.demoReplyTo || ''; }
+    const replyToId = button.dataset.demoReplyToId || '';
     root.replies.push({
       id: createId(), author: user.name, avatar: user.avatar, time: 'Vừa xong', content,
-      lang: localStorage.getItem('preferredLanguage') || 'vi', translations: {}, isDemoUser: true
+      lang: localStorage.getItem('preferredLanguage') || 'vi', replyTo, replyToId, translations: {}, isDemoUser: true
     });
     saveCurrentComments(comments);
     renderComments();
@@ -278,28 +297,54 @@
     const commentsArea = event.target.closest('#commentsListContainer');
     if (!postButton && !resetButton && !commentsArea) return;
 
+    const open = event.target.closest('[data-demo-open-reply]');
+    const submit = event.target.closest('[data-demo-submit-reply]');
+    const cancel = event.target.closest('[data-demo-cancel]');
+    const remove = event.target.closest('[data-demo-delete]');
+    const removeReply = event.target.closest('[data-demo-delete-reply]');
+    const translate = event.target.closest('[data-demo-translate]');
+    const like = event.target.closest('[data-demo-like]');
+    const handledDemoAction = postButton || resetButton || open || submit || cancel || remove || removeReply || translate || like;
+
+    // Core-rendered comments use data-comment-action and inline actions. Let
+    // those events continue instead of swallowing clicks during initial load.
+    if (!handledDemoAction) return;
+
     event.preventDefault();
     event.stopImmediatePropagation();
     if (postButton) return addComment();
     if (resetButton) return resetCurrentPost();
 
-    const open = event.target.closest('[data-demo-open-reply]');
-    if (open) return openReply(open.dataset.demoOpenReply);
-    const submit = event.target.closest('[data-demo-submit-reply]');
+    if (open) {
+      let replyTo = '';
+      try { replyTo = decodeURIComponent(open.dataset.demoReplyTo || ''); } catch (error) { replyTo = open.dataset.demoReplyTo || ''; }
+      return openReply(open.dataset.demoOpenReply, replyTo, open.dataset.demoReplyId || '');
+    }
     if (submit) return addReply(submit.dataset.demoSubmitReply, submit);
-    const cancel = event.target.closest('[data-demo-cancel]');
     if (cancel) {
-      const box = cancel.closest('[data-demo-reply-box]');
+      const box = cancel.closest('[data-demo-reply-box], [data-demo-child-reply-box]');
       if (box) box.innerHTML = '';
       return;
     }
-    const remove = event.target.closest('[data-demo-delete]');
     if (remove) {
       saveCurrentComments(commentsForCurrentPost().filter(comment => String(comment.id) !== String(remove.dataset.demoDelete)));
       renderComments();
       return;
     }
-    const translate = event.target.closest('[data-demo-translate]');
+    if (removeReply) {
+      const comments = commentsForCurrentPost();
+      const root = comments.find(comment => String(comment.id) === String(removeReply.dataset.demoRootId));
+      if (!root) return;
+      const removedReplyId = String(removeReply.dataset.demoDeleteReply);
+      root.replies = root.replies
+        .filter(reply => String(reply.id) !== removedReplyId)
+        .map(reply => String(reply.replyToId || '') === removedReplyId
+          ? { ...reply, replyTo: '', replyToId: '' }
+          : reply);
+      saveCurrentComments(comments);
+      renderComments();
+      return;
+    }
     if (translate) {
       const card = translate.closest('[data-demo-reply-id], [data-demo-root-id]');
       const content = card?.querySelector('[data-demo-comment-content]');
@@ -311,7 +356,6 @@
       translate.classList.toggle('text-primary', !showingTranslation);
       return;
     }
-    const like = event.target.closest('[data-demo-like]');
     if (like) {
       const icon = like.querySelector('i');
       const value = like.querySelector('span');
@@ -322,6 +366,7 @@
   }, true);
 
   window.resetStaticDemoComments = resetCurrentPost;
+  window.renderStaticDemoComments = renderComments;
   window.submitStaticDemoComment = function(event) {
     if (event) event.preventDefault();
     addComment();

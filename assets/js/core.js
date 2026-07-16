@@ -3002,6 +3002,12 @@ document.addEventListener('DOMContentLoaded', () => {
     return userStr;
   }
 
+  function escapeCommentHtml(value) {
+    return String(value ?? '').replace(/[&<>"']/g, character => ({
+      '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+    })[character]);
+  }
+
   function normalizeAuthorName(value) {
     return parseUserName(value || '').trim().toLocaleLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
   }
@@ -3118,8 +3124,7 @@ document.addEventListener('DOMContentLoaded', () => {
         root.replies.forEach(rep => {
           const repReplyToName = parseUserName(rep.replyTo);
           const repAuthorName = parseUserName(rep.author);
-          const rootAuthorName = parseUserName(root.author);
-          const tagHtml = (repReplyToName && repReplyToName !== rootAuthorName) ? `<span class="text-primary fw-semibold">@${repReplyToName}</span> ` : '';
+          const tagHtml = repReplyToName ? `<span class="text-primary fw-semibold">@${escapeCommentHtml(repReplyToName)}</span> ` : '';
 
           let repTranslateBtnHtml = "";
           if (rep.lang && rep.lang !== currentLang) {
@@ -3162,9 +3167,11 @@ document.addEventListener('DOMContentLoaded', () => {
               <p class="mb-1 text-secondary comment-content-text" style="font-size: 0.95rem;">${tagHtml}${rep.content}</p>
               <div class="d-flex align-items-center gap-1 mt-2">
                 <button class="btn-reply d-flex align-items-center gap-1 ${rep.isLiked ? 'liked text-danger' : ''}" onclick="if(window.toggleCommentLike) window.toggleCommentLike(this, ${root.id}, ${rep.id}, true, event);"><i class="bi ${rep.isLiked ? 'bi-heart-fill text-danger' : 'bi-heart'}"></i> <span class="like-count">${rep.likes || 0}</span></button>
+                <button class="btn-reply" type="button" data-comment-action="open-reply" data-root-id="${root.id}" data-reply-id="${rep.id}" data-author="${encodeURIComponent(repAuthorName)}" aria-label="${escapeCommentHtml(dict.reply || 'Reply')} @${escapeCommentHtml(repAuthorName)}"><i class="bi bi-chat"></i></button>
                 ${repTranslateBtnHtml}
                 ${repOwnerActionsHtml}
               </div>
+              <div id="reply-box-child-${root.id}-${rep.id}"></div>
               <div id="edit-box-child-${root.id}-${rep.id}"></div>
             </div>
           `;
@@ -3228,16 +3235,13 @@ document.addEventListener('DOMContentLoaded', () => {
     container.innerHTML = html;
   }
 
-  function openReplyBox(rootId, targetAuthor, isChildReply) {
-    // Comments are strictly two levels: only a root comment can receive replies.
-    if (isChildReply) return;
+  function openReplyBox(rootId, targetAuthor, isChildReply, targetReplyId = '') {
     const user = checkAuthOrSimulate();
     if (!user) return;
 
     document.querySelectorAll('[id^="reply-box-"], [id^="edit-box-"]').forEach(el => el.innerHTML = '');
 
-    const safeAuthorId = (targetAuthor || 'user').replace(/\s+/g, '');
-    const boxId = isChildReply ? `reply-box-child-${rootId}-${safeAuthorId}` : `reply-box-root-${rootId}`;
+    const boxId = isChildReply ? `reply-box-child-${rootId}-${targetReplyId}` : `reply-box-root-${rootId}`;
     const boxEl = document.getElementById(boxId);
     if (!boxEl) return;
 
@@ -3245,26 +3249,25 @@ document.addEventListener('DOMContentLoaded', () => {
     const dict = (uiTranslations && uiTranslations[lang]) || (uiTranslations && uiTranslations.en) || {};
     const replyPrefix = isChildReply ? (dict.replying_to || "Replying to @") : (dict.replying_to_comment || "Replying to comment by ");
     const placeholderText = replyPrefix + targetAuthor + "...";
+    const inputId = `input-reply-${rootId}-${isChildReply ? targetReplyId : 'root'}`;
 
     boxEl.innerHTML = `
       <div class="mt-2 pt-2 border-top">
-        <textarea id="input-reply-${rootId}" class="form-control form-control-sm mb-2" rows="2" placeholder="${placeholderText}"></textarea>
+        <textarea id="${inputId}" class="form-control form-control-sm mb-2" rows="2" placeholder="${escapeCommentHtml(placeholderText)}"></textarea>
         <div class="d-flex justify-content-end gap-2">
           <button class="btn btn-sm btn-outline-secondary rounded-pill px-3" onclick="this.parentElement.parentElement.innerHTML=''" data-i18n="cancel">${dict.cancel || "Cancel"}</button>
-          <button class="btn btn-sm btn-primary rounded-pill px-3 fw-medium" type="button" data-comment-action="submit-reply" data-root-id="${rootId}" data-i18n="reply">${dict.reply || "Reply"}</button>
+          <button class="btn btn-sm btn-primary rounded-pill px-3 fw-medium" type="button" data-comment-action="submit-reply" data-root-id="${rootId}" data-is-child-reply="${isChildReply}" data-reply-to="${encodeURIComponent(isChildReply ? targetAuthor : '')}" data-input-id="${inputId}" data-i18n="reply">${dict.reply || "Reply"}</button>
         </div>
       </div>
     `;
     setTimeout(() => {
-      const inputEl = document.getElementById(`input-reply-${rootId}`);
+      const inputEl = document.getElementById(inputId);
       if (inputEl) inputEl.focus();
     }, 50);
   }
 
-  function submitReply(rootId, isChildReply, replyToAuthor) {
-    // Defense-in-depth for stale markup or direct calls from the console.
-    if (isChildReply) return;
-    const inputEl = document.getElementById(`input-reply-${rootId}`);
+  function submitReply(rootId, isChildReply, replyToAuthor, inputId = '') {
+    const inputEl = document.getElementById(inputId || `input-reply-${rootId}-root`);
     if (!inputEl || !inputEl.value.trim()) {
       alert('Vui lòng nhập nội dung phản hồi!');
       return;
@@ -3283,7 +3286,7 @@ document.addEventListener('DOMContentLoaded', () => {
       time: "Just now",
       content: inputEl.value.trim(),
       lang: currentLang,
-      replyTo: replyToAuthor || "",
+      replyTo: isChildReply ? (replyToAuthor || "") : "",
       translations: {},
       likes: 0,
       isLiked: false
@@ -3509,6 +3512,15 @@ document.addEventListener('DOMContentLoaded', () => {
   // click prevents inline handlers or nested comment markup from swallowing it.
   document.addEventListener('click', event => {
     if (!(event.target instanceof Element)) return;
+    if (window.mundiSimpleCommentsDemoActive) return;
+
+    const resetCommentsButton = event.target.closest('#resetCommentsDemoButton');
+    if (resetCommentsButton) {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      resetDemoComments();
+      return;
+    }
 
     const postButton = event.target.closest('#postCommentButton');
     if (postButton) {
@@ -3532,11 +3544,18 @@ document.addEventListener('DOMContentLoaded', () => {
       } catch (error) {
         author = actionButton.dataset.author || '';
       }
-      openReplyBox(rootId, author, false);
+      const replyId = actionButton.dataset.replyId || '';
+      openReplyBox(rootId, author, Boolean(replyId), replyId);
       return;
     }
     if (actionButton.dataset.commentAction === 'submit-reply') {
-      submitReply(rootId, false, '');
+      let replyTo = '';
+      try {
+        replyTo = decodeURIComponent(actionButton.dataset.replyTo || '');
+      } catch (error) {
+        replyTo = actionButton.dataset.replyTo || '';
+      }
+      submitReply(rootId, actionButton.dataset.isChildReply === 'true', replyTo, actionButton.dataset.inputId || '');
     }
   }, true);
 

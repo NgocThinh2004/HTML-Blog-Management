@@ -91,7 +91,7 @@
             <textarea id="newCommentInput" class="form-control mb-2" rows="3"
               placeholder="Write a comment in any language..." data-i18n="comment_placeholder"></textarea>
             <div class="d-flex justify-content-end">
-              <button class="btn btn-primary px-4 rounded-pill fw-medium" id="postCommentButton" type="button" onclick="return window.submitStaticDemoComment ? window.submitStaticDemoComment(event) : false;"
+              <button class="btn btn-primary px-4 rounded-pill fw-medium" id="postCommentButton" type="button"
                 data-i18n="post_comment">Post Comment</button>
             </div>
           </div>
@@ -121,11 +121,11 @@
   <!-- MOBILE SIDEBAR / OFFCANVAS (Rendered dynamically by components.js) -->
   <div class="offcanvas offcanvas-start" tabindex="-1" id="mobileSidebar" aria-labelledby="mobileSidebarLabel"></div>
 
-  <script src="assets/js/comments-demo.js?v=5"></script>
+  <script src="assets/js/comments-demo.js?v=10"></script>
   <!-- Bootstrap 5 JS Bundle -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <!-- Core Script containing theme & language simulation -->
-<script src="assets/js/core.js?v=44"></script>
+<script src="assets/js/core.js?v=47"></script>
 <script src="assets/js/components.js?v=10"></script>
   
   <script>
@@ -277,8 +277,10 @@
         </article>
       `;
 
-      // Render comments and related posts from core.js
-      if (typeof window.renderComments === 'function') {
+      // Keep the post-detail demo on one stable comments controller.
+      if (typeof window.renderStaticDemoComments === 'function') {
+        window.renderStaticDemoComments();
+      } else if (typeof window.renderComments === 'function') {
         window.renderComments(postId);
       }
       renderRelatedPosts(postId, post.category);
