@@ -19,7 +19,7 @@
 <link rel="stylesheet" href="assets/css/variables.css">
   <link rel="stylesheet" href="assets/css/base.css?v=1784089471947">
   <link rel="stylesheet" href="assets/css/layouts.css?v=1784089471947">
-  <link rel="stylesheet" href="assets/css/components.css?v=1784089471947">
+<link rel="stylesheet" href="assets/css/components.css?v=14">
 </head>
 <body>
   <div class="app-wrapper">
@@ -97,8 +97,8 @@
 
   <!-- Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-<script src="assets/js/core.js?v=23"></script>
-  <script src="assets/js/components.js?v=5"></script>
+<script src="assets/js/core.js?v=44"></script>
+<script src="assets/js/components.js?v=10"></script>
   
   <!-- Explore Page Specific Logic -->
   <script>
@@ -119,6 +119,7 @@
 
       // Render initial results
       renderExploreResults(currentQuery, currentTab);
+      window.addEventListener('lingora:languagechange', () => renderExploreResults(currentQuery, currentTab));
 
       // Input events
       const suggestionsPanel = document.getElementById('exploreSuggestionsPanel');
@@ -129,15 +130,18 @@
           clearBtn.classList.remove('d-none');
           
           let matches = [];
-          if (window.globalPostsData) {
-            Object.keys(window.globalPostsData).forEach(id => {
-              const post = window.globalPostsData[id];
+          const suggestionsData = window.getLingoraPostsData ? window.getLingoraPostsData() : window.globalPostsData;
+          if (suggestionsData) {
+            Object.keys(suggestionsData).forEach(id => {
+              const post = suggestionsData[id];
               const currentLang = localStorage.getItem('preferredLanguage') || 'en';
+              if (post.supported_langs && !post.supported_langs.split(',').includes(currentLang)) return;
               if (typeof window.isCategoryTranslationActive === 'function' && !window.isCategoryTranslationActive(post.category, currentLang)) return;
-              const titleEn = (post.title_en || '').toLowerCase();
+              const localizedTitle = post[`title_${currentLang}`] || '';
+              const titleEn = localizedTitle.toLowerCase();
               const cat = (post.category || '').toLowerCase();
               if (titleEn.includes(query) || cat.includes(query)) {
-                matches.push({ id, title: post.title_en || 'Untitled', type: 'post' });
+                matches.push({ id, title: localizedTitle || 'Untitled', type: 'post' });
               }
             });
           }
@@ -309,7 +313,7 @@
       const queryText = document.getElementById('exploreQueryText');
       const countText = document.getElementById('exploreCountText');
       
-      const dataObj = window.globalPostsData || {};
+      const dataObj = window.getLingoraPostsData ? window.getLingoraPostsData() : (window.globalPostsData || {});
       const currentLang = localStorage.getItem('preferredLanguage') || 'en';
       const dict = (window.uiTranslations && window.uiTranslations[currentLang]) || (window.uiTranslations && window.uiTranslations.en) || {};
       const noResultsText = dict.no_results || "No matching results found.";
@@ -335,6 +339,7 @@
         Object.keys(dataObj).forEach(id => {
           const post = dataObj[id];
           if (post.supported_langs && !post.supported_langs.split(',').includes(currentLang)) return;
+          if (typeof window.isCategoryTranslationActive === 'function' && !window.isCategoryTranslationActive(post.category, currentLang)) return;
           
           const cat = post.category || "General";
           categoryCounts[cat] = (categoryCounts[cat] || 0) + 1;
@@ -356,29 +361,49 @@
         });
       }
 
+      const categoryDescriptions = {
+        en: {
+          "Artificial Intelligence": "Agentic coding, LLM inference optimization, and neural architectures.", "Backend Engineering": "Distributed systems, microservices, gRPC, and high-concurrency architecture.", Design: "Glassmorphism, color psychology, and responsive interface design.", "Frontend Development": "React, Vue, Web Components, and modern rendering architectures.", "Mobile Development": "Flutter, React Native, iOS, Android, and cross-platform solutions.", "Data Science": "Pandas, Polars, machine learning pipelines, and big data analysis.", Cybersecurity: "Zero Trust, network defense, penetration testing, and cryptography.", "Economics & Markets": "Global macro outlook, interest rates, financial liquidity, and capital reallocation.", "Life & Philosophy": "Deep work culture, asynchronous writing, and engineering craftsmanship."
+        },
+        vi: {
+          "Artificial Intelligence": "Lập trình tác tử, tối ưu suy luận LLM và kiến trúc mạng nơ-ron.", "Backend Engineering": "Hệ thống phân tán, microservices, gRPC và kiến trúc chịu tải cao.", Design: "Glassmorphism, tâm lý học màu sắc và thiết kế giao diện thích ứng.", "Frontend Development": "React, Vue, Web Components và các kiến trúc kết xuất hiện đại.", "Mobile Development": "Flutter, React Native, iOS, Android và giải pháp đa nền tảng.", "Data Science": "Pandas, Polars, quy trình máy học và phân tích dữ liệu lớn.", Cybersecurity: "Zero Trust, phòng thủ mạng, kiểm thử xâm nhập và mật mã học.", "Economics & Markets": "Kinh tế vĩ mô, lãi suất, thanh khoản tài chính và phân bổ vốn.", "Life & Philosophy": "Làm việc sâu, văn hóa viết bất đồng bộ và kỹ nghệ phần mềm."
+        },
+        zh: {
+          "Artificial Intelligence": "智能体编程、LLM 推理优化与神经网络架构。", "Backend Engineering": "分布式系统、微服务、gRPC 与高并发架构。", Design: "毛玻璃效果、色彩心理学与响应式界面设计。", "Frontend Development": "React、Vue、Web Components 与现代渲染架构。", "Mobile Development": "Flutter、React Native、iOS、Android 与跨平台方案。", "Data Science": "Pandas、Polars、机器学习流程与大数据分析。", Cybersecurity: "零信任、网络防御、渗透测试与密码学。", "Economics & Markets": "全球宏观、利率、金融流动性与资本再配置。", "Life & Philosophy": "深度工作、异步写作文化与软件工程技艺。"
+        }
+      };
+      const descriptions = categoryDescriptions[currentLang] || categoryDescriptions.en;
       const catMetadata = {
-        "Artificial Intelligence": { name: dict.cat_ai || "Artificial Intelligence", icon: "bi-cpu", desc: dict.desc_ai || "Agentic coding, LLM inference optimization, and neural architectures." },
-        "Backend Engineering": { name: dict.cat_backend || "Backend Engineering", icon: "bi-hdd-network", desc: dict.desc_backend || "Distributed systems, microservices, gRPC, and high-concurrency architecture." },
-        "Design": { name: dict.cat_design || "Design & UX", icon: "bi-palette", desc: dict.desc_design || "Glassmorphism, color psychology, and responsive interface design." },
-        "Frontend Development": { name: dict.cat_frontend || "Frontend Development", icon: "bi-browser-edge", desc: dict.desc_frontend || "React, Vue, Web Components, and modern rendering architectures." },
-        "Mobile Development": { name: dict.cat_mobile || "Mobile Development", icon: "bi-phone", desc: dict.desc_mobile || "Flutter, React Native, iOS, Android, and cross-platform solutions." },
-        "Data Science": { name: dict.cat_data || "Data Science", icon: "bi-bar-chart", desc: dict.desc_data || "Pandas, Polars, machine learning pipelines, and big data analysis." },
-        "Cybersecurity": { name: dict.cat_cyber || "Cybersecurity", icon: "bi-shield-lock", desc: dict.desc_cyber || "Zero Trust, network defense, penetration testing, and cryptography." },
-        "Economics & Markets": { name: dict.cat_economics || "Economics & Markets", icon: "bi-graph-up-arrow", desc: dict.desc_economics || "Global macro outlook, interest rates, financial liquidity, and capital reallocation." },
-        "Life & Philosophy": { name: dict.cat_life || "Life & Philosophy", icon: "bi-lightbulb", desc: dict.desc_life || "Deep work culture, asynchronous writing, and engineering craftsmanship." }
+        "Artificial Intelligence": { name: dict.cat_ai || "Artificial Intelligence", icon: "bi-cpu", desc: descriptions["Artificial Intelligence"] },
+        "Backend Engineering": { name: dict.cat_backend || "Backend Engineering", icon: "bi-hdd-network", desc: descriptions["Backend Engineering"] },
+        "Design": { name: dict.cat_design || "Design & UX", icon: "bi-palette", desc: descriptions.Design },
+        "Frontend Development": { name: dict.cat_frontend || "Frontend Development", icon: "bi-browser-edge", desc: descriptions["Frontend Development"] },
+        "Mobile Development": { name: dict.cat_mobile || "Mobile Development", icon: "bi-phone", desc: descriptions["Mobile Development"] },
+        "Data Science": { name: dict.cat_data || "Data Science", icon: "bi-bar-chart", desc: descriptions["Data Science"] },
+        "Cybersecurity": { name: dict.cat_cyber || "Cybersecurity", icon: "bi-shield-lock", desc: descriptions.Cybersecurity },
+        "Economics & Markets": { name: dict.cat_economics || "Economics & Markets", icon: "bi-graph-up-arrow", desc: descriptions["Economics & Markets"] },
+        "Life & Philosophy": { name: dict.cat_life || "Life & Philosophy", icon: "bi-lightbulb", desc: descriptions["Life & Philosophy"] }
       };
 
-      const knownCats = Object.keys(catMetadata);
+      const knownCats = Array.from(new Set([...Object.keys(catMetadata), ...Object.keys(categoryCounts)]));
       const postWord = currentLang === 'vi' ? 'bài viết' : (currentLang === 'zh' ? '篇文章' : 'posts');
+      let managedCategories = [];
+      try {
+        const storedCategories = JSON.parse(localStorage.getItem('admin_categories_v2') || '[]');
+        managedCategories = Array.isArray(storedCategories) ? storedCategories : [];
+      } catch (_) {}
 
-      const pubList = knownCats.map(cat => {
-        const meta = catMetadata[cat] || { name: cat, icon: "bi-folder", desc: "Articles and discussions in this category." };
-        const countVal = categoryCounts[cat] || 2;
+      const pubList = knownCats.filter(cat => (categoryCounts[cat] || 0) > 0).map(cat => {
+        const genericDescription = currentLang === 'vi' ? 'Các bài viết và thảo luận trong chuyên mục này.' : (currentLang === 'zh' ? '此分类中的文章和讨论。' : 'Articles and discussions in this category.');
+        const meta = catMetadata[cat] || { name: cat, icon: "bi-folder", desc: genericDescription };
+        const managedCategory = managedCategories.find(item => String(item.name || '').toLowerCase() === String(cat).toLowerCase());
+        const managedDescription = managedCategory?.translations?.[currentLang]?.description;
+        const countVal = categoryCounts[cat];
         return {
           key: cat,
-          name: meta.name,
+          name: typeof window.translateCategory === 'function' ? window.translateCategory(cat, currentLang) : meta.name,
           icon: meta.icon,
-          desc: meta.desc,
+          desc: managedDescription || meta.desc,
           count: `${countVal} ${postWord}`
         };
       });
@@ -398,8 +423,7 @@
       // Exclude self account from author query/listing (tác giả tôi k muốn truy vấn ra chính tài khoản của mình)
       const peopleList = allPeopleList.filter(p => {
         if (typeof window.isSelfAuthor === 'function' && window.isSelfAuthor(p.name)) return false;
-        if (p.name === 'Hồ Quốc Tuấn') return false;
-        return true;
+        return (authorCounts[p.id] || 0) > 0;
       });
 
       function renderPostCard(post) {
@@ -407,6 +431,9 @@
         const content = post[`content_${currentLang}`] || post.content_en;
         const tsLabel = typeof window.formatTimestampI18n === 'function' ? window.formatTimestampI18n(post.timestamp) : post.timestamp;
         const catLabel = typeof window.translateCategory === 'function' ? window.translateCategory(post.category) : post.category;
+        const authorHref = post.profile_href
+          || (typeof window.getAuthorProfileHref === 'function' ? window.getAuthorProfileHref(post.author_name) : '')
+          || `profile.html?id=${encodeURIComponent(post.author_id || '')}`;
         const tooltipHtml = typeof window.getAuthorTooltipHtml === 'function' 
           ? window.getAuthorTooltipHtml(post.author_name, post.author_avatar)
           : '';
@@ -417,7 +444,7 @@
               <div class="author-badge-group position-relative author-tooltip-container">
                 <img src="${post.author_avatar}" alt="${post.author_name}" class="author-avatar">
                 <div class="author-meta-info">
-                  <a href="profile.html?id=${post.author_id || '101'}" class="author-name">${post.author_name}</a>
+                  <a href="${authorHref}" class="author-name">${post.author_name}</a>
                   <span class="post-timestamp">${tsLabel}</span>
                 </div>
                 <span class="badge bg-primary-subtle text-primary border border-primary-subtle rounded-pill small px-2 ms-auto category-label" data-original-cat="${post.category}">${catLabel}</span>
@@ -425,29 +452,29 @@
               </div>
             </div>
 
-            <a href="post-detail.html?id=${post.id}" class="text-decoration-none text-reset d-block">
+            <a href="${post.detail_href || `post-detail.html?id=${post.id}`}" class="text-decoration-none text-reset d-block">
               <h2 class="post-title h4 fw-bold mt-2 mb-1">${title}</h2>
               <div class="substack-post-content post-content">${content}</div>
               ${post.image ? `<div class="post-image-embed"><img src="${post.image}" alt="${title}"></div>` : ''}
             </a>
 
             <div class="substack-post-footer">
-              <button class="footer-action-item" onclick="toggleLike(this, ${post.likes || 12})"><i class="bi bi-heart"></i> <span class="like-count">${post.likes || 12}</span></button>
-              <button class="footer-action-item"><i class="bi bi-chat"></i> <span>${post.comments_count || post.comments || 5}</span></button>
-              <span class="footer-action-item text-muted"><i class="bi bi-eye"></i> <span>${post.views || 300}</span></span>
+              <button class="footer-action-item" onclick="toggleLike(this, ${post.likes ?? 0})"><i class="bi bi-heart"></i> <span class="like-count">${post.likes ?? 0}</span></button>
+              <button class="footer-action-item"><i class="bi bi-chat"></i> <span>${post.comments_count ?? post.comments ?? 0}</span></button>
+              <span class="footer-action-item text-muted"><i class="bi bi-eye"></i> <span>${post.views ?? 0}</span></span>
             </div>
           </article>
         `;
       }
 
       function renderPersonCard(person) {
-        const countVal = authorCounts[person.id] || 3;
+        const countVal = authorCounts[person.id] || 0;
         const countTextVal = `${countVal} ${postWord}`;
-        const isFollowed = isAuthorFollowed(person.name);
+        const isFollowed = typeof isAuthorFollowed === 'function' ? isAuthorFollowed(person.name) : false;
         const followLabel = isFollowed 
           ? (dict.btn_following || 'Following') 
           : (dict.btn_follow || dict.subscribe || 'Follow');
-        const followBtnHtml = `<button class="btn btn-sm ${isFollowed ? 'btn-outline-secondary subscribed' : 'btn-outline-primary'} rounded-pill px-3 fw-medium btn-subscribe" data-i18n="btn_follow" onclick="if(typeof toggleSubscribe === 'function') { toggleSubscribe(this, event); toggleAuthorSubscriptionInExplore('${person.name.replace(/'/g, "\\'")}'); } else alert('Subscribed');">${followLabel}</button>`;
+        const followBtnHtml = `<button class="btn btn-sm ${isFollowed ? 'btn-outline-secondary subscribed' : 'btn-outline-secondary'} rounded-pill px-3 fw-medium btn-subscribe" data-author-name="${person.name}" data-i18n="btn_follow" onclick="if(typeof toggleSubscribe === 'function') { toggleSubscribe(this, event); if(typeof toggleAuthorSubscriptionInExplore === 'function') toggleAuthorSubscriptionInExplore('${person.name.replace(/'/g, "\\'")}'); }">${followLabel}</button>`;
 
         return `
           <div class="explore-card-item align-items-center">
@@ -622,7 +649,6 @@
         filteredPeople.forEach(person => { html += renderPersonCard(person); });
         container.innerHTML = html;
       }
-      
       if (typeof window.applyUiTranslations === 'function') {
         window.applyUiTranslations(currentLang);
       }

@@ -659,7 +659,7 @@
   <!-- Bootstrap 5 JS Bundle -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <!-- Core Script -->
-  <script src="../assets/js/core.js?v=23"></script>
+  <script src="../assets/js/core.js?v=29"></script>
 
   <script>
     document.addEventListener('DOMContentLoaded', () => {
@@ -677,12 +677,13 @@
       
       // Dynamic Dashboard Stats
       function updateDashboardStats() {
-        if (!window.globalPostsData) return;
+        const postsData = window.getLingoraPostsData ? window.getLingoraPostsData() : window.globalPostsData;
+        if (!postsData) return;
         let totalArticles = 0;
         let totalComments = 0;
         let totalLikes = 0;
         
-        Object.values(window.globalPostsData).forEach(post => {
+        Object.values(postsData).forEach(post => {
           totalArticles++;
           totalComments += (post.comments || 0);
           totalLikes += (post.likes || 0);
@@ -707,11 +708,12 @@
           .replace(/'/g, '&#039;');
       }
 
-      function renderFeaturedPosts() {
+      function renderFeaturedPosts(event) {
         const container = document.getElementById('featuredPostsList');
-        if (!container || !window.globalPostsData) return;
+        const postsData = window.getLingoraPostsData ? window.getLingoraPostsData() : window.globalPostsData;
+        if (!container || !postsData) return;
 
-        const lang = localStorage.getItem('preferredLanguage') || 'en';
+        const lang = event?.detail?.language || event?.detail?.lang || (window.getLingoraLanguage ? window.getLingoraLanguage() : (localStorage.getItem('preferredLanguage') || 'en'));
         const localeMap = { en: 'en-US', vi: 'vi-VN', zh: 'zh-CN' };
         const dict = (window.uiTranslations && (window.uiTranslations[lang] || window.uiTranslations.en)) || {};
         const getSharedMetric = (post, databaseField, legacyField) => {
@@ -731,7 +733,7 @@
 
         // Xếp hạng một lần trên bài viết gốc vì lượt xem/like thuộc bảng posts.
         // Sau đó bỏ qua bài chưa có bản dịch hiện tại và lấy bài kế tiếp trong bảng xếp hạng.
-        const rankedBasePosts = Object.entries(window.globalPostsData)
+        const rankedBasePosts = Object.entries(postsData)
           .filter(([, post]) => !post.deleted_at && !['draft', 'hidden'].includes(String(post.status || '').toLowerCase()))
           .sort(([, a], [, b]) => {
             const viewDifference = getSharedMetric(b, 'view_count', 'views') - getSharedMetric(a, 'view_count', 'views');
@@ -776,8 +778,12 @@
 
       renderFeaturedPosts();
       window.addEventListener('lingora:languagechange', renderFeaturedPosts);
+      document.addEventListener('lingoraLangChange', renderFeaturedPosts);
       window.addEventListener('storage', (event) => {
-        if (event.key === 'preferredLanguage') renderFeaturedPosts();
+        if (event.key === 'preferredLanguage' || event.key === 'mundiBlogSubmittedPosts') {
+          updateDashboardStats();
+          renderFeaturedPosts();
+        }
       });
 
       const handleSignOut = (e) => {

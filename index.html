@@ -18,7 +18,7 @@
   <link rel="stylesheet" href="assets/css/variables.css">
   <link rel="stylesheet" href="assets/css/base.css?v=1784089471948">
   <link rel="stylesheet" href="assets/css/layouts.css?v=1784089471948">
-  <link rel="stylesheet" href="assets/css/components.css?v=1784089471948">
+<link rel="stylesheet" href="assets/css/components.css?v=14">
   <style>
     /* Center Column Elements matching user screenshot */
     .quick-draft-card {
@@ -369,7 +369,7 @@
                 <span class="featured-author-count">Economics Author</span>
               </div>
             </div>
-            <button class="btn-profile-view" onclick="window.location.href='profile.html?id=1'" data-i18n="view_profile">View Profile</button>
+            <button class="btn-profile-view" onclick="window.location.href='profile.html?id=102'" data-i18n="view_profile">View Profile</button>
           </div>
           
           <div class="featured-author-item">
@@ -380,7 +380,7 @@
                 <span class="featured-author-count">UX Designer</span>
               </div>
             </div>
-            <button class="btn-profile-view" onclick="window.location.href='profile.html?id=2'" data-i18n="view_profile">View Profile</button>
+            <button class="btn-profile-view" onclick="window.location.href='profile.html?author=Ho%C3%A0ng%20Anh'" data-i18n="view_profile">View Profile</button>
           </div>
 
           <div class="featured-author-item">
@@ -391,7 +391,7 @@
                 <span class="featured-author-count">Tech Lead</span>
               </div>
             </div>
-            <button class="btn-profile-view" onclick="window.location.href='profile.html?id=3'" data-i18n="view_profile">View Profile</button>
+            <button class="btn-profile-view" onclick="window.location.href='profile.html?id=109'" data-i18n="view_profile">View Profile</button>
           </div>
         </div>
       </aside>
@@ -447,8 +447,8 @@
   <!-- Bootstrap 5 JS Bundle -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <!-- Core Script containing theme & language simulation -->
-  <script src="assets/js/core.js?v=23"></script>
-  <script src="assets/js/components.js?v=5"></script>
+<script src="assets/js/core.js?v=44"></script>
+<script src="assets/js/components.js?v=10"></script>
   
   <script>
     // Live Search Filter for feed matching title or author name
@@ -490,8 +490,24 @@
 
       // Render posts dynamically from core data
       if (typeof window.renderFeedPosts === 'function') {
-        window.renderFeedPosts('postsFeedContainer', window.globalPostsData, window.currentSelectedCategory || 'all');
+        const posts = window.getLingoraPostsData ? window.getLingoraPostsData() : window.globalPostsData;
+        window.renderFeedPosts('postsFeedContainer', posts, window.currentSelectedCategory || 'all');
       }
+    });
+
+    // Rebuild the feed immediately when the language changes. Merely translating
+    // existing nodes leaves posts without that translation visible until reload.
+    window.addEventListener('lingora:languagechange', () => {
+      if (typeof window.renderFeedPosts !== 'function') return;
+      const posts = window.getLingoraPostsData ? window.getLingoraPostsData() : window.globalPostsData;
+      window.renderFeedPosts('postsFeedContainer', posts, window.currentSelectedCategory || 'all');
+      if (typeof window.syncFeedCategoryMenu === 'function') window.syncFeedCategoryMenu();
+    });
+
+    window.addEventListener('lingora:submittedtranslationsready', () => {
+      if (typeof window.renderFeedPosts !== 'function') return;
+      const posts = window.getLingoraPostsData ? window.getLingoraPostsData() : window.globalPostsData;
+      window.renderFeedPosts('postsFeedContainer', posts, window.currentSelectedCategory || 'all');
     });
 
     // Toggle Feed Likes simulation (Maps to post_likes table)

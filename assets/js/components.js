@@ -544,7 +544,7 @@ function initGlobalSearchModal() {
     resultsContainer.style.display = 'block';
     resultsList.innerHTML = '';
 
-    const dataObj = window.globalPostsData || (typeof postsData !== 'undefined' ? postsData : null);
+    const dataObj = window.getLingoraPostsData ? window.getLingoraPostsData() : (window.globalPostsData || (typeof postsData !== 'undefined' ? postsData : null));
     if (!dataObj) {
       resultsList.innerHTML = `<div class="text-muted p-3 text-center">No post data available.</div>`;
       return;
@@ -709,8 +709,10 @@ window.renderTrendingWidgets = function() {
 
   // 1. Update Sidebar & Explore Trending Widgets
   const dynamicCatViews = {};
-  if (window.globalPostsData) {
-    Object.values(window.globalPostsData).forEach(post => {
+  const publicPosts = window.getLingoraPostsData ? window.getLingoraPostsData() : window.globalPostsData;
+  if (publicPosts) {
+    Object.values(publicPosts).forEach(post => {
+      if (post.supported_langs && !post.supported_langs.split(',').includes(currentLang)) return;
       const c = post.category || "General";
       if (typeof window.isCategoryTranslationActive === 'function' && !window.isCategoryTranslationActive(c, currentLang)) return;
       dynamicCatViews[c] = (dynamicCatViews[c] || 0) + (post.views || 0);
@@ -785,7 +787,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 100);
 });
 
-window.renderFeedPosts = function(containerId, dataObj, categoryFilter = 'all') {
+window.renderFeedPosts = function(containerId, dataObj, categoryFilter = 'all', options = {}) {
   const container = document.getElementById(containerId);
   if (!container || !dataObj) return;
 
@@ -795,17 +797,24 @@ window.renderFeedPosts = function(containerId, dataObj, categoryFilter = 'all') 
   Object.keys(dataObj).forEach(id => {
     const post = dataObj[id];
     const detailHref = post.detail_href || `post-detail.html?id=${encodeURIComponent(id)}`;
-    const authorHref = post.profile_href || `profile.html?id=${encodeURIComponent(post.author_id || 101)}`;
+    const authorHref = post.profile_href
+      || (typeof window.getAuthorProfileHref === 'function' ? window.getAuthorProfileHref(post.author_name, post.author_avatar) : '')
+      || `profile.html?id=${encodeURIComponent(post.author_id || '')}`;
+    const translatedCategory = typeof window.translateCategory === 'function' ? window.translateCategory(post.category) : post.category;
+    const categoryDisplay = translatedCategory || post.categoryLabel || post.category || 'General';
     
     // Support languages check
     const supportedLangs = post.supported_langs ? post.supported_langs.split(',') : ['en', 'vi', 'zh'];
     if (!supportedLangs.includes(currentLang)) return;
 
+    // A post must not expose a category translation that an admin disabled.
+    if (!options.includeInactiveCategories && typeof window.isCategoryTranslationActive === 'function' && !window.isCategoryTranslationActive(post.category, currentLang)) return;
+
     // Category filter check
     if (categoryFilter !== 'all' && post.category !== categoryFilter) return;
 
     html += `
-    <article class="substack-post" data-supported-langs="${post.supported_langs || 'en,vi,zh'}" data-category="${post.category || 'Artificial Intelligence'}">
+    <article class="substack-post" data-supported-langs="${post.supported_langs || 'en,vi,zh'}" data-category="${post.category || 'Artificial Intelligence'}"${options.includeInactiveCategories ? ' data-include-inactive-category="true"' : ''}>
       <div class="substack-post-header">
         <div class="author-badge-group position-relative author-tooltip-container" style="cursor: pointer; z-index: 2;" onclick="window.location.href='${authorHref}'">
           <img src="${post.author_avatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=80&h=80'}" alt="${post.author_name}" class="author-avatar">
@@ -816,6 +825,11 @@ window.renderFeedPosts = function(containerId, dataObj, categoryFilter = 'all') 
           <!-- Author Hover Card Tooltip -->
           ${typeof window.getAuthorTooltipHtml === 'function' ? window.getAuthorTooltipHtml(post.author_name, post.author_avatar) : ''}
         </div>
+      </div>
+      <div class="mt-2 mb-1">
+        <span class="badge bg-primary-subtle text-primary border border-primary-subtle rounded-pill px-2 py-1 category-label"
+          data-original-cat="${post.category || categoryDisplay}"
+          data-category-fallback="${categoryDisplay}">${categoryDisplay}</span>
       </div>
       <a href="${detailHref}" class="text-decoration-none text-reset d-block">
         <h2 class="post-title h4 fw-bold mt-2 mb-1" 
@@ -835,7 +849,7 @@ window.renderFeedPosts = function(containerId, dataObj, categoryFilter = 'all') 
       <div class="substack-post-footer">
         <button class="footer-action-item" onclick="if(typeof toggleLike==='function'){toggleLike(this, ${post.likes || 0})}"><i class="bi bi-heart"></i> <span class="like-count">${post.likes || 0}</span></button>
         <button class="footer-action-item" onclick="window.location.href='${detailHref}#comments'"><i class="bi bi-chat"></i> <span>${post.comments || 0}</span></button>
-        <span class="footer-action-item text-muted"><i class="bi bi-eye"></i> <span>${post.views || 0}</span></span>
+        <span class="footer-action-item"><i class="bi bi-eye"></i> <span>${post.views || 0}</span></span>
       </div>
     </article>`;
   });
@@ -866,6 +880,16 @@ window.toggleSubscribe = function(btn, event) {
   }
 
   const isSubscribed = btn.classList.toggle('subscribed');
+  const authorName = String(btn.dataset.authorName || btn.closest('[data-author-name]')?.dataset.authorName || '').trim();
+  if (authorName) {
+    const list = typeof window.getLingoraSubscribedAuthors === 'function'
+      ? window.getLingoraSubscribedAuthors()
+      : (() => { try { return JSON.parse(localStorage.getItem('lingoraSubscribedAuthors') || '[]'); } catch (_) { return []; } })();
+    const next = Array.isArray(list) ? list.filter(name => name !== authorName) : [];
+    if (isSubscribed) next.push(authorName);
+    localStorage.setItem('lingoraSubscribedAuthors', JSON.stringify(next));
+    window.dispatchEvent(new CustomEvent('lingora:subscriptionschange', { detail: { authors: next } }));
+  }
   const currentLang = localStorage.getItem('preferredLanguage') || 'en';
   const dict = (window.uiTranslations && window.uiTranslations[currentLang]) || {};
   const unfollowLabels = { en: 'Unfollow', vi: 'Bỏ theo dõi', zh: '取消关注' };
