@@ -857,6 +857,37 @@ select.form-select-sm {
   position: relative;
 }
 
+/* Fix: cho phép sticky hoạt động với window scroll thay vì center-feed scroll */
+#exploreCenterFeed {
+  overflow-y: visible;
+}
+
+/* Sticky search + tabs container for explore page */
+.explore-sticky-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background-color: var(--bg-body);
+  padding-top: 1rem;
+  padding-bottom: 0;
+  transition: background-color var(--transition-speed) ease;
+  /* Shadow nhẹ khi sticky để tách biệt với nội dung bên dưới */
+  box-shadow: 0 2px 8px -2px transparent;
+}
+
+.explore-sticky-header.is-stuck {
+  box-shadow: 0 2px 8px -2px rgba(0, 0, 0, 0.08);
+}
+
+[data-bs-theme="dark"] .explore-sticky-header.is-stuck {
+  box-shadow: 0 2px 12px -2px rgba(0, 0, 0, 0.4);
+}
+
+.explore-sticky-header .explore-search-header {
+  margin-bottom: 0.75rem;
+}
+
+
 /* When dropdown is open, flatten the search box bottom radius */
 .explore-search-header:has(.explore-suggestions-panel:not(.d-none)) .explore-search-input-box {
   border-radius: 24px 24px 0 0 !important;
@@ -1329,6 +1360,13 @@ select.form-select-sm {
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+
+.post-image-embed video {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  background-color: #000000;
 }
 
 /* Interactive stats footer matching Substack icons */
@@ -1908,6 +1946,7 @@ select.form-select-sm {
 .author-carousel-item.active .author-carousel-name { font-weight: 700; color: var(--text-main); }
 
 /* Subscriptions Page Tabs */
+
 .subscriptions-tabs-nav {
   display: flex;
   gap: 1rem;
@@ -1944,10 +1983,6 @@ select.form-select-sm {
   align-items: center;
   gap: 1rem;
   transition: all 0.2s ease;
-}
-.manage-author-card:hover {
-  border-color: var(--text-muted);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.04);
 }
 .manage-author-card.author-tooltip-container,
 #suggestedAuthorsGrid .author-tooltip-container {
