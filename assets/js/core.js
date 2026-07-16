@@ -3124,7 +3124,8 @@ document.addEventListener('DOMContentLoaded', () => {
         root.replies.forEach(rep => {
           const repReplyToName = parseUserName(rep.replyTo);
           const repAuthorName = parseUserName(rep.author);
-          const tagHtml = repReplyToName ? `<span class="text-primary fw-semibold">@${escapeCommentHtml(repReplyToName)}</span> ` : '';
+          const rootAuthorName = parseUserName(root.author);
+          const tagHtml = (repReplyToName && repReplyToName !== rootAuthorName) ? `<span class="text-primary fw-semibold">@${repReplyToName}</span> ` : '';
 
           let repTranslateBtnHtml = "";
           if (rep.lang && rep.lang !== currentLang) {
@@ -3153,6 +3154,7 @@ document.addEventListener('DOMContentLoaded', () => {
             `;
           }
 
+          const safeRepAuthorId = (repAuthorName || 'user').replace(/\s+/g, '');
           const repTooltipHtml = getAuthorTooltipHtml(repAuthorName, rep.avatar);
           repliesHtml += `
             <div class="comment-reply-card py-2 border-bottom border-light-subtle" id="comment-${rep.id}">
@@ -3167,11 +3169,11 @@ document.addEventListener('DOMContentLoaded', () => {
               <p class="mb-1 text-secondary comment-content-text" style="font-size: 0.95rem;">${tagHtml}${rep.content}</p>
               <div class="d-flex align-items-center gap-1 mt-2">
                 <button class="btn-reply d-flex align-items-center gap-1 ${rep.isLiked ? 'liked text-danger' : ''}" onclick="if(window.toggleCommentLike) window.toggleCommentLike(this, ${root.id}, ${rep.id}, true, event);"><i class="bi ${rep.isLiked ? 'bi-heart-fill text-danger' : 'bi-heart'}"></i> <span class="like-count">${rep.likes || 0}</span></button>
-                <button class="btn-reply" type="button" data-comment-action="open-reply" data-root-id="${root.id}" data-reply-id="${rep.id}" data-author="${encodeURIComponent(repAuthorName)}" aria-label="${escapeCommentHtml(dict.reply || 'Reply')} @${escapeCommentHtml(repAuthorName)}"><i class="bi bi-chat"></i></button>
+                <button class="btn-reply" onclick="window.openReplyBox(${root.id}, '${repAuthorName.replace(/'/g, "\\'")}', true)"><i class="bi bi-chat"></i></button>
                 ${repTranslateBtnHtml}
                 ${repOwnerActionsHtml}
               </div>
-              <div id="reply-box-child-${root.id}-${rep.id}"></div>
+              <div id="reply-box-child-${root.id}-${safeRepAuthorId}"></div>
               <div id="edit-box-child-${root.id}-${rep.id}"></div>
             </div>
           `;
@@ -3221,7 +3223,7 @@ document.addEventListener('DOMContentLoaded', () => {
           <p class="mb-1 text-secondary comment-content-text">${root.content}</p>
           <div class="d-flex align-items-center gap-1 mt-2">
             <button class="btn-reply d-flex align-items-center gap-1 ${root.isLiked ? 'liked text-danger' : ''}" onclick="if(window.toggleCommentLike) window.toggleCommentLike(this, ${root.id}, null, false, event);"><i class="bi ${root.isLiked ? 'bi-heart-fill text-danger' : 'bi-heart'}"></i> <span class="like-count">${root.likes || 0}</span></button>
-            <button class="btn-reply" type="button" data-comment-action="open-reply" data-root-id="${root.id}" data-author="${encodeURIComponent(rootAuthorName)}"><i class="bi bi-chat"></i></button>
+            <button class="btn-reply" onclick="window.openReplyBox(${root.id}, '${rootAuthorName.replace(/'/g, "\\'")}', false)"><i class="bi bi-chat"></i></button>
             ${rootTranslateBtnHtml}
             ${rootOwnerActionsHtml}
           </div>
@@ -3235,13 +3237,14 @@ document.addEventListener('DOMContentLoaded', () => {
     container.innerHTML = html;
   }
 
-  function openReplyBox(rootId, targetAuthor, isChildReply, targetReplyId = '') {
+  function openReplyBox(rootId, targetAuthor, isChildReply) {
     const user = checkAuthOrSimulate();
     if (!user) return;
 
     document.querySelectorAll('[id^="reply-box-"], [id^="edit-box-"]').forEach(el => el.innerHTML = '');
 
-    const boxId = isChildReply ? `reply-box-child-${rootId}-${targetReplyId}` : `reply-box-root-${rootId}`;
+    const safeAuthorId = (targetAuthor || 'user').replace(/\s+/g, '');
+    const boxId = isChildReply ? `reply-box-child-${rootId}-${safeAuthorId}` : `reply-box-root-${rootId}`;
     const boxEl = document.getElementById(boxId);
     if (!boxEl) return;
 
@@ -3249,44 +3252,44 @@ document.addEventListener('DOMContentLoaded', () => {
     const dict = (uiTranslations && uiTranslations[lang]) || (uiTranslations && uiTranslations.en) || {};
     const replyPrefix = isChildReply ? (dict.replying_to || "Replying to @") : (dict.replying_to_comment || "Replying to comment by ");
     const placeholderText = replyPrefix + targetAuthor + "...";
-    const inputId = `input-reply-${rootId}-${isChildReply ? targetReplyId : 'root'}`;
 
     boxEl.innerHTML = `
       <div class="mt-2 pt-2 border-top">
-        <textarea id="${inputId}" class="form-control form-control-sm mb-2" rows="2" placeholder="${escapeCommentHtml(placeholderText)}"></textarea>
+        <textarea id="input-reply-${rootId}" class="form-control form-control-sm mb-2" rows="2" placeholder="${placeholderText}"></textarea>
         <div class="d-flex justify-content-end gap-2">
           <button class="btn btn-sm btn-outline-secondary rounded-pill px-3" onclick="this.parentElement.parentElement.innerHTML=''" data-i18n="cancel">${dict.cancel || "Cancel"}</button>
-          <button class="btn btn-sm btn-primary rounded-pill px-3 fw-medium" type="button" data-comment-action="submit-reply" data-root-id="${rootId}" data-is-child-reply="${isChildReply}" data-reply-to="${encodeURIComponent(isChildReply ? targetAuthor : '')}" data-input-id="${inputId}" data-i18n="reply">${dict.reply || "Reply"}</button>
+          <button class="btn btn-sm btn-primary rounded-pill px-3 fw-medium" onclick="window.submitReply(${rootId}, ${isChildReply}, '${targetAuthor.replace(/'/g, "\\'")}')" data-i18n="reply">${dict.reply || "Reply"}</button>
         </div>
       </div>
     `;
     setTimeout(() => {
-      const inputEl = document.getElementById(inputId);
+      const inputEl = document.getElementById(`input-reply-${rootId}`);
       if (inputEl) inputEl.focus();
     }, 50);
   }
 
-  function submitReply(rootId, isChildReply, replyToAuthor, inputId = '') {
-    const inputEl = document.getElementById(inputId || `input-reply-${rootId}-root`);
+  function submitReply(rootId, isChildReply, replyToAuthor) {
+    const inputEl = document.getElementById(`input-reply-${rootId}`);
     if (!inputEl || !inputEl.value.trim()) {
       alert('Vui lòng nhập nội dung phản hồi!');
       return;
     }
 
-    const postId = getCurrentPostCommentId();
+    const urlParams = new URLSearchParams(window.location.search);
+    const postId = urlParams.get('id') || "1";
     const comments = window.getCommentsForPost(postId);
     const user = checkAuthOrSimulate();
     if (!user) return;
 
     const currentLang = localStorage.getItem('preferredLanguage') || 'vi';
     const newReply = {
-      id: (Date.now() * 1000) + Math.floor(Math.random() * 1000),
+      id: Date.now(),
       author: user.name,
       avatar: user.avatar,
       time: "Just now",
       content: inputEl.value.trim(),
       lang: currentLang,
-      replyTo: isChildReply ? (replyToAuthor || "") : "",
+      replyTo: isChildReply ? replyToAuthor : "",
       translations: {},
       likes: 0,
       isLiked: false
@@ -3298,10 +3301,7 @@ document.addEventListener('DOMContentLoaded', () => {
       targetRoot.replies.push(newReply);
       saveCommentsForPost(postId, comments);
       renderComments(postId);
-      return true;
     }
-    console.warn('Reply target was not found for post', postId, rootId);
-    return false;
   }
 
   function postNewComment() {
@@ -3311,14 +3311,15 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
-    const postId = getCurrentPostCommentId();
+    const urlParams = new URLSearchParams(window.location.search);
+    const postId = urlParams.get('id') || "1";
     const comments = window.getCommentsForPost(postId);
     const user = checkAuthOrSimulate();
     if (!user) return;
 
     const currentLang = localStorage.getItem('preferredLanguage') || 'vi';
     const newComment = {
-      id: (Date.now() * 1000) + Math.floor(Math.random() * 1000),
+      id: Date.now(),
       author: user.name,
       avatar: user.avatar,
       time: "Just now",
@@ -3334,11 +3335,11 @@ document.addEventListener('DOMContentLoaded', () => {
     saveCommentsForPost(postId, comments);
     inputEl.value = '';
     renderComments(postId);
-    return true;
   }
 
   async function deleteComment(rootId, repId, isChild) {
-    const postId = getCurrentPostCommentId();
+    const urlParams = new URLSearchParams(window.location.search);
+    const postId = urlParams.get('id') || "1";
     let comments = window.getCommentsForPost(postId);
     const currentUserStr = localStorage.getItem('currentUser');
     const currentUser = parseUserName(currentUserStr) || 'Hồ Quốc Tuấn';
@@ -3390,7 +3391,8 @@ document.addEventListener('DOMContentLoaded', () => {
   function editComment(rootId, repId, isChild) {
     document.querySelectorAll('[id^="reply-box-"], [id^="edit-box-"]').forEach(el => el.innerHTML = '');
 
-    const postId = getCurrentPostCommentId();
+    const urlParams = new URLSearchParams(window.location.search);
+    const postId = urlParams.get('id') || "1";
     const comments = window.getCommentsForPost(postId);
     const currentUserStr = localStorage.getItem('currentUser');
     const currentUser = parseUserName(currentUserStr) || 'Hồ Quốc Tuấn';
@@ -3442,7 +3444,8 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
-    const postId = getCurrentPostCommentId();
+    const urlParams = new URLSearchParams(window.location.search);
+    const postId = urlParams.get('id') || "1";
     const comments = window.getCommentsForPost(postId);
     const currentUserStr = localStorage.getItem('currentUser');
     const currentUser = parseUserName(currentUserStr) || 'Hồ Quốc Tuấn';
@@ -3508,57 +3511,6 @@ document.addEventListener('DOMContentLoaded', () => {
   window.getCommentTranslation = getCommentTranslation;
   window.syncFeedCommentCounts = syncFeedCommentCounts;
 
-  // One delegated controller is shared by every post-detail URL. Capturing the
-  // click prevents inline handlers or nested comment markup from swallowing it.
-  document.addEventListener('click', event => {
-    if (!(event.target instanceof Element)) return;
-    if (window.mundiSimpleCommentsDemoActive) return;
-
-    const resetCommentsButton = event.target.closest('#resetCommentsDemoButton');
-    if (resetCommentsButton) {
-      event.preventDefault();
-      event.stopImmediatePropagation();
-      resetDemoComments();
-      return;
-    }
-
-    const postButton = event.target.closest('#postCommentButton');
-    if (postButton) {
-      event.preventDefault();
-      event.stopImmediatePropagation();
-      postNewComment();
-      return;
-    }
-
-    if (!event.target.closest('#commentsListContainer')) return;
-    const actionButton = event.target.closest('[data-comment-action]');
-    if (!actionButton) return;
-
-    event.preventDefault();
-    event.stopImmediatePropagation();
-    const rootId = actionButton.dataset.rootId;
-    if (actionButton.dataset.commentAction === 'open-reply') {
-      let author = '';
-      try {
-        author = decodeURIComponent(actionButton.dataset.author || '');
-      } catch (error) {
-        author = actionButton.dataset.author || '';
-      }
-      const replyId = actionButton.dataset.replyId || '';
-      openReplyBox(rootId, author, Boolean(replyId), replyId);
-      return;
-    }
-    if (actionButton.dataset.commentAction === 'submit-reply') {
-      let replyTo = '';
-      try {
-        replyTo = decodeURIComponent(actionButton.dataset.replyTo || '');
-      } catch (error) {
-        replyTo = actionButton.dataset.replyTo || '';
-      }
-      submitReply(rootId, actionButton.dataset.isChildReply === 'true', replyTo, actionButton.dataset.inputId || '');
-    }
-  }, true);
-
   // Global Toggle Like (Posts)
   function toggleLike(btn, postIdOrBaseCount, event) {
     if (event && typeof event.stopPropagation === 'function') {
@@ -3607,7 +3559,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     if (rootId && typeof window.getCommentsForPost === 'function') {
-      const postId = getCurrentPostCommentId();
+      const urlParams = new URLSearchParams(window.location.search);
+      const postId = urlParams.get('id') || "1";
       const comments = window.getCommentsForPost(postId);
       const targetRoot = comments.find(c => String(c.id) === String(rootId));
       if (targetRoot) {
