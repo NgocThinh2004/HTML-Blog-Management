@@ -1818,6 +1818,22 @@ button {
   font-family: "Cascadia Code", Consolas, monospace;
   font-size: 16px;
   white-space: pre-wrap;
+  counter-reset: line;
+}
+
+.code-line {
+  display: block;
+  counter-increment: line;
+}
+
+.code-line::before {
+  content: counter(line);
+  display: inline-block;
+  width: 2em;
+  margin-right: 1.5em;
+  color: #adb5bd;
+  text-align: right;
+  user-select: none;
 }
 
 .rich-editor img,
@@ -3204,12 +3220,17 @@ body.draft-modal-open {
   display: none;
 }
 
-.preview-post-body .editor-code-block {
+.preview-post-body .editor-code-block,
+.content-html .editor-code-block {
   margin: 24px 0;
+  border: 1px solid var(--border-color, #e5e8e6);
+  border-radius: 8px;
+  overflow: hidden;
 }
 
-.preview-post-body .editor-code-toolbar {
-  pointer-events: none;
+.preview-post-body .editor-code-toolbar,
+.content-html .editor-code-toolbar {
+  display: none !important;
 }
 
 .preview-engagement-row {

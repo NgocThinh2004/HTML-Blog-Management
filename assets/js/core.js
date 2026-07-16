@@ -82,6 +82,20 @@ window.sanitizePostHtml = function sanitizePostHtml(value) {
     }
   });
 
+  template.content.querySelectorAll('.editor-code-body').forEach(pre => {
+    const code = pre.querySelector('code') || pre;
+    let html = code.innerHTML;
+    html = html.replace(/<br\s*[\/]?>/gi, '\n');
+    html = html.replace(/<div>/gi, '\n').replace(/<\/div>/gi, '');
+    html = html.replace(/\r\n/g, '\n');
+    let lines = html.split('\n');
+    if (lines.length > 0 && lines[lines.length - 1] === '') {
+       lines.pop();
+    }
+    const numberedHtml = lines.map(line => `<span class="code-line">${line || ' '}</span>`).join('\n');
+    code.innerHTML = numberedHtml;
+  });
+
   return template.innerHTML;
 };
 
@@ -592,7 +606,7 @@ window.ensureLingoraSubmittedTranslations = async function () {
 };
 
 window.addEventListener('DOMContentLoaded', () => {
-  window.ensureLingoraSubmittedTranslations().catch(() => {});
+  window.ensureLingoraSubmittedTranslations().catch(() => { });
 });
 
 // Keep every current-user avatar consumer on the same profile source. Older
@@ -725,12 +739,12 @@ document.addEventListener('DOMContentLoaded', () => {
     else mobileSidebarBody.appendChild(preferencePanel);
   }
 
-  window.getLingoraLanguage = function() {
+  window.getLingoraLanguage = function () {
     const storedLanguage = String(localStorage.getItem('preferredLanguage') || 'en').toLowerCase();
     return supportedLanguages.has(storedLanguage) ? storedLanguage : 'en';
   };
 
-  window.syncLingoraLanguageUI = function(requestedLanguage) {
+  window.syncLingoraLanguageUI = function (requestedLanguage) {
     const normalizedLanguage = String(requestedLanguage || window.getLingoraLanguage()).toLowerCase();
     const language = supportedLanguages.has(normalizedLanguage) ? normalizedLanguage : 'en';
     htmlElement.setAttribute('lang', language === 'zh' ? 'zh-CN' : language);
@@ -741,7 +755,7 @@ document.addEventListener('DOMContentLoaded', () => {
     return language;
   };
 
-  window.setLingoraLanguage = function(requestedLanguage) {
+  window.setLingoraLanguage = function (requestedLanguage) {
     const normalizedLanguage = String(requestedLanguage || '').toLowerCase();
     const language = supportedLanguages.has(normalizedLanguage) ? normalizedLanguage : 'en';
     localStorage.setItem('preferredLanguage', language);
@@ -1343,7 +1357,7 @@ document.addEventListener('DOMContentLoaded', () => {
       mon: "Mon", tue: "Tue", wed: "Wed", thu: "Thu", fri: "Fri", sat: "Sat", sun: "Sun",
       post_ai_1: "The Future of AI Agent Programming in 2026",
       post_ai_2: "Next-Gen LLM Reasoning & Tool Use in 2026",
-      
+
 
 
 
@@ -1724,7 +1738,7 @@ document.addEventListener('DOMContentLoaded', () => {
       mon: "T2", tue: "T3", wed: "T4", thu: "T5", fri: "T6", sat: "T7", sun: "CN",
       post_ai_1: "Tương lai của Lập trình Tác tử AI năm 2026",
       post_ai_2: "Suy luận LLM thế hệ mới & Sử dụng Công cụ năm 2026",
-      
+
 
 
 
@@ -2102,7 +2116,7 @@ document.addEventListener('DOMContentLoaded', () => {
       mon: "周一", tue: "周二", wed: "周三", thu: "周四", fri: "周五", sat: "周六", sun: "周日",
       post_ai_1: "2026 年 AI 代理编程的未来",
       post_ai_2: "2026 年下一代 LLM 推理与工具使用",
-      
+
 
       manage_subscriptions: "管理订阅",
       subscriptions_desc: "管理您关注的创作者及其通知设置。",
@@ -2928,7 +2942,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let db;
     try {
       db = JSON.parse(localStorage.getItem('mundi_comments_db'));
-    } catch(e) { db = null; }
+    } catch (e) { db = null; }
     if (!db || db._version !== 3) {
       db = JSON.parse(JSON.stringify(defaultCommentsDatabase));
       db._version = 3;
@@ -2943,7 +2957,7 @@ document.addEventListener('DOMContentLoaded', () => {
       try {
         const params = new URL(href, window.location.href).searchParams;
         postId = params.get('submitted') || params.get('id') || '';
-      } catch (error) {}
+      } catch (error) { }
       if (postId) {
         const comments = Array.isArray(db[postId]) ? db[postId] : getCommentsForPost(postId);
         let totalCount = 0;
@@ -2978,14 +2992,14 @@ document.addEventListener('DOMContentLoaded', () => {
         let savedProfile = {};
         try {
           savedProfile = JSON.parse(localStorage.getItem('mundiBlogProfile') || '{}') || {};
-        } catch (error) {}
+        } catch (error) { }
         return {
           name: parsed.name || parsed.displayName || savedProfile.displayName || parsed.username || 'Lingora user',
           avatar: savedProfile.avatar || parsed.avatar || fallbackAvatar
         };
       }
       if (typeof parsed === 'string' && parsed.trim()) return { name: parsed.trim(), avatar: fallbackAvatar };
-    } catch (error) {}
+    } catch (error) { }
     return { name: currentUserStr.trim() || 'Lingora user', avatar: fallbackAvatar };
   }
 
@@ -3052,7 +3066,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const followLabel = dict.btn_follow || dict.subscribe || 'Follow';
     const followBtnHtml = isSelf ? '' : `<button class="btn btn-primary btn-sm rounded-pill fw-bold px-3 py-1 shadow-sm btn-subscribe" onclick="if(typeof window.toggleSubscribe === 'function') window.toggleSubscribe(this, event); else alert('Subscribed');">${followLabel}</button>`;
     const profileUrl = getAuthorProfileHref(authorName, avatar);
-    
+
     return `
       <div class="author-hover-card shadow-lg border rounded-4 position-absolute overflow-hidden text-start" style="padding: 0; min-width: 280px; max-width: 320px; z-index: 1060; cursor: default;" onclick="event.stopPropagation()">
         <div style="height: 56px; background: linear-gradient(135deg, rgba(var(--bs-primary-rgb), 0.8), rgba(var(--bs-primary-rgb), 0.4));"></div>
@@ -3500,7 +3514,7 @@ document.addEventListener('DOMContentLoaded', () => {
   window.applyUiTranslations = applyUiTranslations;
   window.applyLanguageFilter = applyLanguageFilter;
   window.selectCategory = selectCategory;
-  window.getCommentsForPost = function(postId) {
+  window.getCommentsForPost = function (postId) {
     const comments = getCommentsForPost(postId);
     if (ensureCommentsLikesInitialized(comments)) {
       saveCommentsForPost(postId, comments);
@@ -4039,7 +4053,7 @@ window.addEventListener('pageshow', (event) => {
 
 // Helper: check if authorName matches currently logged in user
 // Cached to avoid JSON.parse on every call (especially from mouseover)
-(function() {
+(function () {
   let _cachedSelfName = null;
   let _cacheInitialized = false;
 
@@ -4048,10 +4062,10 @@ window.addEventListener('pageshow', (event) => {
     let name = '';
     if (currentStr) {
       if (typeof currentStr === 'string' && currentStr.startsWith('{')) {
-        try { 
+        try {
           const obj = JSON.parse(currentStr);
-          name = obj.name || obj.username || ''; 
-        } catch(e){}
+          name = obj.name || obj.username || '';
+        } catch (e) { }
       } else {
         name = currentStr;
       }
@@ -4059,7 +4073,7 @@ window.addEventListener('pageshow', (event) => {
     return name.toString().trim().toLowerCase();
   }
 
-  window.isSelfAuthor = function(authorName) {
+  window.isSelfAuthor = function (authorName) {
     if (!authorName) return false;
     if (!_cacheInitialized) {
       _cachedSelfName = _resolveSelfName();
@@ -4069,7 +4083,7 @@ window.addEventListener('pageshow', (event) => {
   };
 
   // Invalidate cache when localStorage changes (login/logout)
-  window.addEventListener('storage', function(e) {
+  window.addEventListener('storage', function (e) {
     if (e.key === 'currentUser') {
       _cachedSelfName = _resolveSelfName();
     }
@@ -4078,7 +4092,7 @@ window.addEventListener('pageshow', (event) => {
 
 // Global mouseenter handler (NOT mouseover — mouseenter doesn't bubble into children,
 // so it fires once per container entry instead of continuously on nested elements)
-document.addEventListener('mouseenter', function(e) {
+document.addEventListener('mouseenter', function (e) {
   if (!e.target || typeof e.target.closest !== 'function') return;
   const container = e.target.closest('.author-tooltip-container');
   if (container) {

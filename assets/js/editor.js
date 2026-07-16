@@ -422,7 +422,19 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!authorRow) return;
 
     const addWrap = authorRow.querySelector('.author-add-wrap');
-    if (!addWrap) return;
+    if (!addWrap) {
+      // Fixed author mode: update the existing single chip
+      const singleChip = authorRow.querySelector('[data-author-chip]');
+      if (singleChip && authors.length > 0) {
+        const name = normalizeAuthorName(authors[0]);
+        if (name) {
+          singleChip.setAttribute('data-author-chip', name);
+          const span = singleChip.querySelector('span');
+          if (span) span.textContent = name;
+        }
+      }
+      return;
+    }
 
     authorRow.querySelectorAll('[data-author-chip]').forEach(chip => chip.remove());
     authors
@@ -1086,6 +1098,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (previewBody) {
       previewBody.innerHTML = content.bodyHtml;
+      
+      previewBody.querySelectorAll('.editor-code-body').forEach(pre => {
+        const code = pre.querySelector('code') || pre;
+        let html = code.innerHTML;
+        html = html.replace(/<br\s*[\/]?>/gi, '\n');
+        html = html.replace(/<div>/gi, '\n').replace(/<\/div>/gi, '');
+        html = html.replace(/\r\n/g, '\n');
+        let lines = html.split('\n');
+        if (lines.length > 0 && lines[lines.length - 1] === '') {
+           lines.pop();
+        }
+        const numberedHtml = lines.map(line => `<span class="code-line">${line || ' '}</span>`).join('\n');
+        code.innerHTML = numberedHtml;
+      });
+
       normalizeEditorFontMarkup(previewBody);
       markCodeLikeTextNodes(previewBody);
       previewBody.querySelectorAll('[contenteditable]').forEach(node => {
@@ -1951,6 +1978,13 @@ document.addEventListener('DOMContentLoaded', () => {
   } else {
     loadDraft();
   }
+  
+  // Force fixed author to current logged in user
+  const currentUser = typeof window.getLingoraCurrentUser === 'function' ? window.getLingoraCurrentUser() : null;
+  if (currentUser && currentUser.name) {
+    renderAuthors([currentUser.name]);
+  }
+
   updateAuthorMenuState();
   updateToolbarState();
   updateAllWritingLimits();

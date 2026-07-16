@@ -2032,4 +2032,45 @@ select.form-select-sm {
   font-size: 0.8rem;
 }
 
+/* Editor Code Block Styles */
+.editor-code-body {
+  min-height: 64px;
+  margin: 0 !important;
+  padding: 16px !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  color: #252a2a !important;
+  background: #ffffff !important;
+  font-family: "Cascadia Code", Consolas, monospace;
+  font-size: 16px;
+  white-space: pre-wrap;
+  counter-reset: line;
+}
+
+.code-line {
+  display: block;
+  counter-increment: line;
+}
+
+.code-line::before {
+  content: counter(line);
+  display: inline-block;
+  width: 2em;
+  margin-right: 1.5em;
+  color: #adb5bd;
+  text-align: right;
+  user-select: none;
+}
+
+.content-html .editor-code-block {
+  margin: 24px 0;
+  border: 1px solid var(--border-color, #e5e8e6);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.content-html .editor-code-toolbar {
+  display: none !important;
+}
+
 
