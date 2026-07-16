@@ -96,7 +96,7 @@ window.globalPostsData = {
     timestamp: "2 hours ago",
     category: "Artificial Intelligence",
     supported_langs: "en,vi,zh",
-    image: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&q=80&w=720&h=360",
+    image: "https://res.cloudinary.com/ddizrhk7g/video/upload/v1784192503/Top_5_m%C3%B3n_%C4%83n_nguy_hi%E1%BB%83m_nh%E1%BA%A5t_Vi%E1%BB%87t_Nam-_food_shorts_health_-_YouTube_lyyec7.mp4",
     likes: 142,
     comments: 28,
     title_en: "The Future of AI Agentic Coding in 2026",

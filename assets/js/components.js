@@ -844,8 +844,12 @@ window.renderFeedPosts = function(containerId, dataObj, categoryFilter = 'all', 
              data-translate-content-zh="${(post.content_zh || post.content_en || '').replace(/"/g, '&quot;')}">
           ${post.content_en || ''}
         </div>
-        ${post.image ? `<div class="post-image-embed"><img src="${post.image}" alt="Post cover"></div>` : ''}
       </a>
+      ${(post.video || post.image) ? (
+        ((post.video || post.image).toLowerCase().endsWith('.mp4') || (post.video || post.image).toLowerCase().includes('.mp4') || (post.video || post.image).toLowerCase().includes('/video/upload/'))
+        ? `<div class="post-image-embed" style="background-color: #000000; display: flex; align-items: center; justify-content: center; max-height: 360px; height: 360px; overflow: hidden;"><video src="${post.video || post.image}" muted playsinline autoplay loop controls style="width: 100%; height: 100%; object-fit: contain; background-color: #000000;"></video></div>`
+        : `<a href="${detailHref}" class="text-decoration-none text-reset d-block"><div class="post-image-embed"><img src="${post.image}" alt="Post cover"></div></a>`
+      ) : ''}
       <div class="substack-post-footer">
         <button class="footer-action-item" onclick="if(typeof toggleLike==='function'){toggleLike(this, ${post.likes || 0})}"><i class="bi bi-heart"></i> <span class="like-count">${post.likes || 0}</span></button>
         <button class="footer-action-item" onclick="window.location.href='${detailHref}#comments'"><i class="bi bi-chat"></i> <span>${post.comments || 0}</span></button>
@@ -866,6 +870,16 @@ window.renderFeedPosts = function(containerId, dataObj, categoryFilter = 'all', 
   // Apply translations to the newly generated HTML
   if (typeof applyUiTranslations === 'function') {
     applyUiTranslations(currentLang);
+  }
+
+  // Ensure all videos autoplay and are muted properly
+  if (typeof window.playAllVideosGlobal === 'function') {
+    window.playAllVideosGlobal();
+  } else {
+    container.querySelectorAll('video').forEach(video => {
+      video.muted = true;
+      video.play().catch(err => console.log('Autoplay play() error:', err));
+    });
   }
 };
 
@@ -904,6 +918,33 @@ window.toggleSubscribe = function(btn, event) {
       ? (dict.subscribe_author || dict.btn_follow || 'Follow')
       : (dict.btn_follow || dict.subscribe || 'Follow');
     btn.innerHTML = `<span class="btn-subscribe-label">${followText}</span>`;
-    btn.removeAttribute('data-unfollow-label');
   }
 };
+
+// Global Unified Autoplay & Mute Recovery Manager
+(function() {
+  function playAllVideos() {
+    document.querySelectorAll('video').forEach(video => {
+      // Force muted, playsinline, and attempt play
+      video.muted = true;
+      if (video.paused) {
+        video.play().catch(e => {
+          // Silent catch to prevent console spam from browser policy blocks
+        });
+      }
+    });
+  }
+
+  // Expose it globally so other scripts/pages can force play
+  window.playAllVideosGlobal = playAllVideos;
+
+  // Use capture phase (true) on window to run before any event.stopPropagation() is called
+  window.addEventListener('click', playAllVideos, { capture: true, passive: true });
+  window.addEventListener('touchstart', playAllVideos, { capture: true, passive: true });
+  window.addEventListener('scroll', playAllVideos, { capture: true, passive: true });
+  window.addEventListener('keydown', playAllVideos, { capture: true, passive: true });
+
+  // Fallbacks for load and pageshow
+  window.addEventListener('load', playAllVideos);
+  window.addEventListener('pageshow', playAllVideos);
+})();

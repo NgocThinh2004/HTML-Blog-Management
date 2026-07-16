@@ -1331,6 +1331,13 @@ select.form-select-sm {
   object-fit: cover;
 }
 
+.post-image-embed video {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  background-color: #000000;
+}
+
 /* Interactive stats footer matching Substack icons */
 .substack-post-footer {
   display: flex;
