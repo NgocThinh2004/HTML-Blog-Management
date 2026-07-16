@@ -500,7 +500,7 @@
         const followLabel = isFollowed 
           ? (dict.btn_following || 'Following') 
           : (dict.btn_follow || dict.subscribe || 'Follow');
-        const followBtnHtml = `<button class="btn btn-sm ${isFollowed ? 'btn-outline-secondary subscribed' : 'btn-outline-secondary'} rounded-pill px-3 fw-medium btn-subscribe" data-author-name="${person.name}" data-i18n="btn_follow" onclick="if(typeof toggleSubscribe === 'function') { toggleSubscribe(this, event); if(typeof toggleAuthorSubscriptionInExplore === 'function') toggleAuthorSubscriptionInExplore('${person.name.replace(/'/g, "\\'")}'); }">${followLabel}</button>`;
+        const followBtnHtml = `<button class="btn ${isFollowed ? 'subscribed' : ''} rounded-pill fw-medium btn-subscribe" data-author-name="${person.name}" data-unfollow-label="${typeof window.uiTranslations !== 'undefined' ? ((window.uiTranslations[localStorage.getItem('preferredLanguage') || 'en'] || {}).btn_unfollow || 'Unfollow') : 'Unfollow'}" data-i18n="btn_follow" onclick="if(typeof toggleSubscribe === 'function') { toggleSubscribe(this, event); if(typeof toggleAuthorSubscriptionInExplore === 'function') toggleAuthorSubscriptionInExplore('${person.name.replace(/'/g, "\\'")}'); }"><span class="btn-subscribe-label">${followLabel}</span></button>`;
 
         return `
           <div class="explore-card-item align-items-center">
@@ -512,7 +512,7 @@
               </div>
             </a>
             <div class="d-flex align-items-center gap-2">
-              <a href="profile.html?id=${person.id}" class="btn btn-sm btn-outline-secondary rounded-pill px-3 fw-medium" data-i18n="view_profile">${dict.view_profile || 'View Profile'}</a>
+              <a href="profile.html?id=${person.id}" class="btn btn-outline-secondary rounded-pill fw-medium" style="min-height: 32px; display: inline-flex; align-items: center; justify-content: center; padding: 0 1.15rem; font-size: 0.82rem;" data-i18n="view_profile">${dict.view_profile || 'View Profile'}</a>
               ${followBtnHtml}
             </div>
           </div>

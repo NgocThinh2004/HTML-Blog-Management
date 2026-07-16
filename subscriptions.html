@@ -320,7 +320,7 @@
                   <h6 class="fw-bold mb-1 text-main hover-text-primary">${name}</h6>
                   <p class="text-muted small mb-0">${role}</p>
                 </div>
-                <button class="btn btn-outline-secondary btn-sm rounded-pill px-3 fw-medium subscribed btn-subscribe" data-unfollow-label="${dict.btn_unfollow || 'Bỏ theo dõi'}" onclick="toggleAuthorSubscription('${name.replace(/'/g, "\\'")}', event)"><span class="btn-subscribe-label">${followingLabel}</span></button>
+                <button class="btn btn-sm rounded-pill px-3 fw-medium subscribed btn-subscribe" data-unfollow-label="${dict.btn_unfollow || 'Bỏ theo dõi'}" onclick="toggleAuthorSubscription('${name.replace(/'/g, "\\'")}', event)"><span class="btn-subscribe-label">${followingLabel}</span></button>
               </div>
             </div>
           `;
@@ -393,7 +393,7 @@
                 <h6 class="fw-bold mb-0 text-main hover-text-primary" style="font-size: 0.95rem;">${c.name}</h6>
                 <p class="text-muted small mb-0">${c.role}</p>
               </div>
-              <button class="btn ${isSubbed ? 'btn-outline-secondary subscribed' : 'btn-outline-primary'} btn-sm rounded-pill fw-medium btn-subscribe px-3" onclick="toggleAuthorSubscription('${c.name.replace(/'/g, "\\'")}', event)">${isSubbed ? followingBtnText : followBtnText}</button>
+              <button class="btn ${isSubbed ? 'subscribed' : ''} btn-sm rounded-pill fw-medium btn-subscribe px-3" data-unfollow-label="${dict.btn_unfollow || 'Bỏ theo dõi'}" onclick="toggleAuthorSubscription('${c.name.replace(/'/g, "\\'")}', event)"><span class="btn-subscribe-label">${isSubbed ? followingBtnText : followBtnText}</span></button>
             </div>
           </div>
         `;
