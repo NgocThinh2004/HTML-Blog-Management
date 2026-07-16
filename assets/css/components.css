@@ -1881,9 +1881,10 @@ select.form-select-sm {
   justify-content: center;
   flex-shrink: 0;
   min-height: 32px;
+  min-width: 120px;
   padding: 0 1.15rem;
   border: 1px solid transparent !important;
-  border-radius: 8px !important;
+  border-radius: 50rem !important;
   background: var(--primary-color) !important;
   color: #ffffff !important;
   font-size: 0.82rem !important;
@@ -1892,7 +1893,7 @@ select.form-select-sm {
   overflow: hidden;
   text-overflow: ellipsis;
   position: relative;
-  transition: all var(--transition-speed) ease;
+  transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
   cursor: pointer;
 }
 
