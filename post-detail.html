@@ -82,7 +82,7 @@
             <h4 class="fw-bold mb-0"><span data-i18n="comments">Comments</span> (<span id="commentCountText">0</span>)
             </h4>
             <button class="btn btn-sm btn-outline-secondary rounded-pill px-3 shadow-sm d-flex align-items-center gap-1"
-              id="resetCommentsDemoButton" type="button" title="Khôi phục dữ liệu mẫu">
+              onclick="if(typeof resetDemoComments==='function') resetDemoComments();" title="Khôi phục dữ liệu mẫu">
               <i class="bi bi-arrow-counterclockwise"></i><span data-i18n="reset_demo">Khôi phục dữ liệu mẫu</span>
             </button>
           </div>
@@ -91,7 +91,7 @@
             <textarea id="newCommentInput" class="form-control mb-2" rows="3"
               placeholder="Write a comment in any language..." data-i18n="comment_placeholder"></textarea>
             <div class="d-flex justify-content-end">
-              <button class="btn btn-primary px-4 rounded-pill fw-medium" id="postCommentButton" type="button"
+              <button class="btn btn-primary px-4 rounded-pill fw-medium" onclick="if(typeof postNewComment==='function') postNewComment();"
                 data-i18n="post_comment">Post Comment</button>
             </div>
           </div>
@@ -121,7 +121,6 @@
   <!-- MOBILE SIDEBAR / OFFCANVAS (Rendered dynamically by components.js) -->
   <div class="offcanvas offcanvas-start" tabindex="-1" id="mobileSidebar" aria-labelledby="mobileSidebarLabel"></div>
 
-  <script src="assets/js/comments-demo.js?v=10"></script>
   <!-- Bootstrap 5 JS Bundle -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <!-- Core Script containing theme & language simulation -->
@@ -277,10 +276,8 @@
         </article>
       `;
 
-      // Keep the post-detail demo on one stable comments controller.
-      if (typeof window.renderStaticDemoComments === 'function') {
-        window.renderStaticDemoComments();
-      } else if (typeof window.renderComments === 'function') {
+      // Render comments and related posts from core.js
+      if (typeof window.renderComments === 'function') {
         window.renderComments(postId);
       }
       renderRelatedPosts(postId, post.category);
