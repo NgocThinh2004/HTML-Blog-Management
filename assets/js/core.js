@@ -92,7 +92,7 @@ window.sanitizePostHtml = function sanitizePostHtml(value) {
     if (lines.length > 0 && lines[lines.length - 1] === '') {
       lines.pop();
     }
-    const numberedHtml = lines.map(line => `<span class="code-line">${line || ' '}</span>`).join('\n');
+    const numberedHtml = lines.map(line => `<div class="code-line">${line || ' '}</div>`).join('');
     code.innerHTML = numberedHtml;
   });
 
