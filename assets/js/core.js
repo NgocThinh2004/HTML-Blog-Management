@@ -36,6 +36,76 @@
   }
 })();
 
+window.numberLingoraCodeBlocks = function numberLingoraCodeBlocks(root = document) {
+  const scope = root && typeof root.querySelectorAll === 'function' ? root : document;
+  const blocks = [];
+
+  if (scope.nodeType === Node.ELEMENT_NODE && scope.matches('.editor-code-body')) {
+    blocks.push(scope);
+  }
+  scope.querySelectorAll('.editor-code-body').forEach(block => blocks.push(block));
+
+  blocks.forEach(pre => {
+    if (pre.closest('.rich-editor') && (pre.isContentEditable || pre.closest('[contenteditable="true"]'))) {
+      return;
+    }
+
+    const existingLines = Array.from(pre.querySelectorAll('.code-line'));
+    const outsideNumberedLines = pre.cloneNode(true);
+    outsideNumberedLines.querySelectorAll('.code-line').forEach(line => line.remove());
+    outsideNumberedLines.querySelectorAll('code').forEach(code => {
+      if (String(code.textContent || '').trim()) {
+        code.replaceWith(...Array.from(code.childNodes));
+      } else {
+        code.remove();
+      }
+    });
+    const hasContentOutsideNumberedLines = Boolean(String(outsideNumberedLines.textContent || '').trim());
+
+    if (existingLines.length && !hasContentOutsideNumberedLines) {
+      existingLines.forEach((line, index) => {
+        let lineNumber = Array.from(line.children).find(child => child.classList.contains('line-number'));
+        if (!lineNumber) {
+          lineNumber = document.createElement('span');
+          lineNumber.className = 'line-number';
+          line.prepend(lineNumber);
+        }
+        lineNumber.textContent = String(index + 1);
+        lineNumber.setAttribute('aria-hidden', 'true');
+
+        if (!Array.from(line.children).some(child => child.classList.contains('line-content'))) {
+          const lineContent = document.createElement('span');
+          lineContent.className = 'line-content';
+          Array.from(line.childNodes).forEach(child => {
+            if (child !== lineNumber) lineContent.appendChild(child);
+          });
+          line.appendChild(lineContent);
+        }
+      });
+      return;
+    }
+
+    const code = pre.querySelector('code');
+    const hasCodeContent = Boolean(code && String(code.textContent || '').trim());
+    const source = hasContentOutsideNumberedLines
+      ? outsideNumberedLines
+      : (hasCodeContent ? code : outsideNumberedLines);
+    let html = source.innerHTML;
+    html = html.replace(/<br\s*[\/]?>/gi, '\n');
+    html = html.replace(/<div>/gi, '\n').replace(/<\/div>/gi, '');
+    html = html.replace(/\r\n/g, '\n');
+
+    const lines = html.split('\n');
+    if (lines.length > 1 && lines[lines.length - 1] === '') {
+      lines.pop();
+    }
+
+    pre.innerHTML = lines.map((line, index) =>
+      `<span class="code-line"><span class="line-number" aria-hidden="true">${index + 1}</span><span class="line-content">${line || '&nbsp;'}</span></span>`
+    ).join('');
+  });
+};
+
 window.sanitizePostHtml = function sanitizePostHtml(value) {
   const template = document.createElement('template');
   template.innerHTML = String(value ?? '');
@@ -82,24 +152,34 @@ window.sanitizePostHtml = function sanitizePostHtml(value) {
     }
   });
 
-  template.content.querySelectorAll('.editor-code-body').forEach(pre => {
-    const code = pre.querySelector('code') || pre;
-    let html = code.innerHTML;
-    html = html.replace(/<br\s*[\/]?>/gi, '\n');
-    html = html.replace(/<div>/gi, '\n').replace(/<\/div>/gi, '');
-    html = html.replace(/\r\n/g, '\n');
-    let lines = html.split('\n');
-    if (lines.length > 0 && lines[lines.length - 1] === '') {
-      lines.pop();
-    }
-    const numberedHtml = lines.map((line, index) => 
-      `<div class="code-line"><span class="line-number">${index + 1}</span><span class="line-content">${line || ' '}</span></div>`
-    ).join('');
-    code.innerHTML = numberedHtml;
-  });
+  if (typeof window.numberLingoraCodeBlocks === 'function') {
+    window.numberLingoraCodeBlocks(template.content);
+  }
 
   return template.innerHTML;
 };
+
+document.addEventListener('DOMContentLoaded', () => {
+  if (typeof window.numberLingoraCodeBlocks === 'function') {
+    window.numberLingoraCodeBlocks(document);
+  }
+
+  if (!document.body || typeof MutationObserver === 'undefined') return;
+
+  const codeObserver = new MutationObserver(mutations => {
+    mutations.forEach(mutation => {
+      mutation.addedNodes.forEach(node => {
+        if (node.nodeType !== Node.ELEMENT_NODE) return;
+        if (node.matches('.editor-code-body') || node.querySelector('.editor-code-body')) {
+          window.numberLingoraCodeBlocks(node);
+        }
+      });
+    });
+  });
+
+  codeObserver.observe(document.body, { childList: true, subtree: true });
+});
+
 
 // ========================================================
 // Global Posts Data (Accessible across all pages for Live Search)

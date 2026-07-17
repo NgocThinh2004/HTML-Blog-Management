@@ -1817,30 +1817,44 @@ button {
   background: #ffffff !important;
   font-family: "Cascadia Code", Consolas, monospace;
   font-size: 16px;
+  line-height: 1.6;
+  overflow-x: auto;
+  tab-size: 2;
   white-space: pre-wrap;
   counter-reset: line;
   position: relative;
+}
+
+.editor-code-body code {
+  padding: 0;
+  color: inherit;
+  background: transparent;
+  font: inherit;
+  font-size: inherit;
 }
 
 [data-bs-theme="dark"] .content-html .editor-code-body { background: #1a1d1e !important; color: #e5e8e6 !important; }
 
 .code-line {
   display: flex;
+  align-items: baseline;
+  min-width: max-content;
 }
 
 .line-number {
-  display: inline-block;
-  min-width: 24px;
+  flex: 0 0 40px;
   color: #adb5bd;
   text-align: right;
-  margin-right: 16px;
   border-right: 1px solid #dee2e6;
-  padding-right: 8px;
+  padding-right: 12px;
   user-select: none;
 }
 
 .line-content {
-  flex: 1;
+  flex: 1 1 auto;
+  min-width: 0;
+  padding-left: 14px;
+  white-space: pre-wrap;
 }
 
 .rich-editor img,
