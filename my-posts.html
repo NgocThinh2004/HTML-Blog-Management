@@ -1282,7 +1282,7 @@
         };
         const dateFormatter = new Intl.DateTimeFormat(locale, { year: 'numeric', month: 'short', day: '2-digit' });
 
-        submittedPosts.forEach(post => {
+        [...submittedPosts].reverse().forEach(post => {
           const storedStatus = String(post.status || 'pending').toLowerCase();
           const previousStatus = String(post.previousStatus || '').toLowerCase();
           const isApproved = ['approved', 'published'].includes(storedStatus)
