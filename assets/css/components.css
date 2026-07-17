@@ -2118,7 +2118,7 @@ select.form-select-sm {
 .editor-code-body {
   min-height: 64px;
   margin: 0 !important;
-  padding: 16px !important;
+  padding: 16px 16px 16px 48px !important;
   border: 0 !important;
   border-radius: 0 !important;
   color: #252a2a !important;
@@ -2127,6 +2127,7 @@ select.form-select-sm {
   font-size: 16px;
   white-space: pre-wrap;
   counter-reset: line;
+  position: relative;
 }
 
 [data-bs-theme="dark"] .editor-code-body {
@@ -2137,13 +2138,15 @@ select.form-select-sm {
 .code-line {
   display: block;
   counter-increment: line;
+  position: relative;
 }
 
 .code-line::before {
   content: counter(line);
-  display: inline-block;
-  width: 2em;
-  margin-right: 1.5em;
+  position: absolute;
+  left: -40px;
+  top: 0;
+  width: 24px;
   color: #adb5bd;
   text-align: right;
   user-select: none;
