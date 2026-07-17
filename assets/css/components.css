@@ -2074,6 +2074,16 @@ select.form-select-sm {
 .comment-card:last-child {
   border-bottom: none;
 }
+
+.post-content a,
+.content-html a {
+  color: #0ea5e9;
+  cursor: pointer;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.14em;
+}
+
 .comment-reply-list {
   margin-left: 2.5rem;
   margin-top: 0.75rem;

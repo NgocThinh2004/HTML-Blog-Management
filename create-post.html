@@ -35,6 +35,8 @@
   </header>
   <nav aria-label="Writing toolbar" class="editor-toolbar">
     <input accept="image/*" class="hidden-file-input" id="editorImageInput" type="file" />
+    <input accept="audio/*" class="hidden-file-input" id="editorAudioInput" type="file" />
+    <input accept="video/*" class="hidden-file-input" id="editorVideoInput" type="file" />
     <div aria-label="History" class="toolbar-group">
       <button aria-label="Undo" class="tool-btn icon-tool" data-command="undo" type="button">
         <svg aria-hidden="true" class="tool-svg" viewbox="0 0 24 24">
@@ -479,11 +481,6 @@
         <textarea autocomplete="off" aria-describedby="postTitleLimit" class="title-input" id="postTitle"
           placeholder="Title" rows="1"></textarea>
         <div class="writing-limit" id="postTitleLimit" aria-live="polite"><span data-title-word-count>0</span></div>
-        <label class="sr-only" for="postSubtitle">Subtitle</label>
-        <textarea autocomplete="off" aria-describedby="postSubtitleLimit" class="subtitle-input" id="postSubtitle"
-          placeholder="Add a subtitle..." rows="1"></textarea>
-        <div class="writing-limit" id="postSubtitleLimit" aria-live="polite"><span data-subtitle-word-count>0</span>
-        </div>
         <div aria-label="Authors" class="author-row" data-author-row="">
           <span class="language-chip" data-author-chip="Alone" style="padding-right: 12px; cursor: default;">
             <span>Alone</span>
@@ -497,6 +494,36 @@
       </div>
     </section>
   </main>
+  <div aria-label="Create a link" aria-modal="false" class="link-modal" data-link-modal="" hidden="" role="dialog">
+    <form class="link-modal-panel" data-link-form="">
+      <header class="link-modal-header">
+        <h2 data-i18n="link_create_title">Create a link</h2>
+      </header>
+      <main class="link-modal-body">
+        <label class="link-modal-field">
+          <span class="sr-only">Text</span>
+          <input autocomplete="off" data-i18n="link_text_placeholder" data-link-text-input=""
+            placeholder="Enter text..." type="text">
+        </label>
+        <label class="link-modal-field">
+          <span class="sr-only">URL</span>
+          <input autocomplete="off" data-i18n="link_url_placeholder" data-link-url-input=""
+            placeholder="Enter URL..." required type="text">
+        </label>
+      </main>
+      <footer class="link-modal-footer">
+        <button class="btn btn-accent" data-i18n="link_apply" type="submit">Link</button>
+        <button class="btn btn-light" data-i18n="cancel" data-link-close="" type="button">Cancel</button>
+      </footer>
+    </form>
+  </div>
+  <div aria-label="Link options" class="link-bubble" data-link-bubble="" hidden="" role="dialog">
+    <a data-link-bubble-url="" href="#" rel="noopener noreferrer" target="_blank"></a>
+    <span aria-hidden="true">-</span>
+    <button data-i18n="link_change" data-link-change="" type="button">Change</button>
+    <span aria-hidden="true">|</span>
+    <button data-i18n="link_remove" data-link-remove="" type="button">Remove</button>
+  </div>
   <div aria-label="Post preview" aria-modal="true" class="preview-modal" data-preview-modal="" hidden="" role="dialog">
     <div class="preview-modal-backdrop" data-preview-close=""></div>
     <section class="preview-modal-panel">
@@ -560,7 +587,6 @@
             </header>
             <article class="preview-article">
               <h1 data-preview-title="">Untitled post</h1>
-              <p class="preview-subtitle" data-preview-subtitle="" hidden=""></p>
               <div class="preview-author-row">
                 <span class="preview-avatar" data-preview-avatar="">A</span>
                 <div class="preview-author-meta">
