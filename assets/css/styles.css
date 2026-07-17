@@ -1825,20 +1825,22 @@ button {
 [data-bs-theme="dark"] .preview-post-body .editor-code-body, [data-bs-theme="dark"] .content-html .editor-code-body { background: #1a1d1e !important; color: #e5e8e6 !important; }
 
 .code-line {
-  display: block;
-  counter-increment: line;
-  position: relative;
+  display: flex;
 }
 
-.code-line::before {
-  content: counter(line);
-  position: absolute;
-  left: -40px;
-  top: 0;
-  width: 24px;
+.line-number {
+  display: inline-block;
+  min-width: 24px;
   color: #adb5bd;
   text-align: right;
+  margin-right: 16px;
+  border-right: 1px solid #dee2e6;
+  padding-right: 8px;
   user-select: none;
+}
+
+.line-content {
+  flex: 1;
 }
 
 .rich-editor img,
@@ -3617,6 +3619,6 @@ body.draft-modal-open {
 [data-bs-theme="dark"] .preview-post-body .editor-code-body, [data-bs-theme="dark"] .content-html .editor-code-body { background: #1a1d1e !important; color: #e5e8e6 !important; }
 
 
-.preview-post-body .editor-code-body, .content-html .editor-code-body { padding-left: 48px !important; }
+/* removed 48px padding for line numbers since they are explicit now */
 
 

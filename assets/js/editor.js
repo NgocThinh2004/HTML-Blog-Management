@@ -1109,7 +1109,9 @@ document.addEventListener('DOMContentLoaded', () => {
         if (lines.length > 0 && lines[lines.length - 1] === '') {
            lines.pop();
         }
-        const numberedHtml = lines.map(line => `<div class="code-line">${line || ' '}</div>`).join('');
+        const numberedHtml = lines.map((line, index) => 
+          `<div class="code-line"><span class="line-number">${index + 1}</span><span class="line-content">${line || ' '}</span></div>`
+        ).join('');
         code.innerHTML = numberedHtml;
       });
 

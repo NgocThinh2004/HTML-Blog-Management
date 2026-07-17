@@ -2132,7 +2132,7 @@ select.form-select-sm {
 
 .preview-post-body .editor-code-body,
 .content-html .editor-code-body {
-  padding-left: 48px !important;
+  
 }
 
 [data-bs-theme="dark"] .preview-post-body .editor-code-body,
