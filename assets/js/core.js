@@ -3039,8 +3039,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 <button type="button" class="btn-close shadow-none" data-bs-dismiss="modal" aria-label="Close" style="font-size: 0.85rem;"></button>
               </div>
               <div class="modal-body text-center p-0">
-                <div class="d-inline-flex align-items-center justify-content-center rounded-3 mb-4" style="width: 56px; height: 56px; background-color: var(--primary-bg-subtle, #fff0e6); border: 1px solid rgba(255, 108, 31, 0.2);">
-                  <i class="bi bi-bookmark-fill" style="color: var(--primary-color, #ff6c1f); font-size: 1.5rem;"></i>
+                <div class="d-inline-flex align-items-center justify-content-center rounded-3 mb-4" style="width: 56px; height: 56px; background-color: transparent; border: none;">
+                  <img src="${window.location.pathname.includes('/admin/') ? '../' : ''}assets/images/lingora-mark.svg" width="48" height="48" alt="Lingora Logo">
                 </div>
                 <h4 class="fw-bold text-main mb-2" id="authRequiredTitle" data-i18n="auth_modal_title">${dict.auth_modal_title || 'Sign in to Lingora'}</h4>
                 <p class="text-secondary mb-4" style="font-size: 0.95rem;">
