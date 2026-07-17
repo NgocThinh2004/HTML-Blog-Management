@@ -1098,20 +1098,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (previewBody) {
       previewBody.innerHTML = content.bodyHtml;
-      
-      previewBody.querySelectorAll('.editor-code-body').forEach(pre => {
-        const code = pre.querySelector('code') || pre;
-        let html = code.innerHTML;
-        html = html.replace(/<br\s*[\/]?>/gi, '\n');
-        html = html.replace(/<div>/gi, '\n').replace(/<\/div>/gi, '');
-        html = html.replace(/\r\n/g, '\n');
-        let lines = html.split('\n');
-        if (lines.length > 0 && lines[lines.length - 1] === '') {
-           lines.pop();
-        }
-        const numberedHtml = lines.map(line => `<div class="code-line">${line || ' '}</div>`).join('');
-        code.innerHTML = numberedHtml;
-      });
+
+      if (typeof window.numberLingoraCodeBlocks === 'function') {
+        window.numberLingoraCodeBlocks(previewBody);
+      }
 
       normalizeEditorFontMarkup(previewBody);
       markCodeLikeTextNodes(previewBody);
