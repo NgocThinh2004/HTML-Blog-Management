@@ -1282,7 +1282,13 @@
         };
         const dateFormatter = new Intl.DateTimeFormat(locale, { year: 'numeric', month: 'short', day: '2-digit' });
 
-        submittedPosts.forEach(post => {
+        const sortedPosts = [...submittedPosts].sort((a, b) => {
+          const dateA = new Date(a.updatedAt || a.createdAt || 0).getTime();
+          const dateB = new Date(b.updatedAt || b.createdAt || 0).getTime();
+          return dateA - dateB;
+        });
+
+        sortedPosts.forEach(post => {
           const storedStatus = String(post.status || 'pending').toLowerCase();
           const previousStatus = String(post.previousStatus || '').toLowerCase();
           const isApproved = ['approved', 'published'].includes(storedStatus)
