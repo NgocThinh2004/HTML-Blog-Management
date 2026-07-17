@@ -2129,6 +2129,11 @@ select.form-select-sm {
   counter-reset: line;
 }
 
+[data-bs-theme="dark"] .editor-code-body {
+  background: #1a1d1e !important;
+  color: #e5e8e6 !important;
+}
+
 .code-line {
   display: block;
   counter-increment: line;

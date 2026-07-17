@@ -3608,3 +3608,6 @@ body.draft-modal-open {
     text-align: center;
   }
 }
+
+[data-bs-theme="dark"] .editor-code-body { background: #1a1d1e !important; color: #e5e8e6 !important; }
+
