@@ -1822,7 +1822,7 @@ button {
   position: relative;
 }
 
-[data-bs-theme="dark"] .preview-post-body .editor-code-body, [data-bs-theme="dark"] .content-html .editor-code-body { background: #1a1d1e !important; color: #e5e8e6 !important; }
+[data-bs-theme="dark"] .content-html .editor-code-body { background: #1a1d1e !important; color: #e5e8e6 !important; }
 
 .code-line {
   display: flex;
@@ -3616,7 +3616,7 @@ body.draft-modal-open {
   }
 }
 
-[data-bs-theme="dark"] .preview-post-body .editor-code-body, [data-bs-theme="dark"] .content-html .editor-code-body { background: #1a1d1e !important; color: #e5e8e6 !important; }
+[data-bs-theme="dark"] .content-html .editor-code-body { background: #1a1d1e !important; color: #e5e8e6 !important; }
 
 
 /* removed 48px padding for line numbers since they are explicit now */
