@@ -895,6 +895,8 @@ window.toggleSubscribe = function(btn, event) {
     event.preventDefault();
     event.stopPropagation();
   }
+  
+  if (typeof window.checkAuthOrSimulate === 'function' && !window.checkAuthOrSimulate()) return;
 
   const isSubscribed = btn.classList.toggle('subscribed');
   const authorName = String(btn.dataset.authorName || btn.closest('[data-author-name]')?.dataset.authorName || '').trim();

@@ -19,9 +19,9 @@
 
   <!-- Custom CSS (Standard Shared Assets) -->
   <link rel="stylesheet" href="assets/css/variables.css">
-  <link rel="stylesheet" href="assets/css/base.css?v=1784089471950">
-  <link rel="stylesheet" href="assets/css/layouts.css?v=1784089471950">
-<link rel="stylesheet" href="assets/css/components.css?v=15">
+  <link rel="stylesheet" href="assets/css/base.css?v=1784285113">
+  <link rel="stylesheet" href="assets/css/layouts.css?v=1784285113">
+<link rel="stylesheet" href="assets/css/components.css?v=1784285113">
 </head>
 
 <body>
@@ -81,15 +81,12 @@
           <div class="d-flex justify-content-between align-items-center mb-4">
             <h4 class="fw-bold mb-0"><span data-i18n="comments">Comments</span> (<span id="commentCountText">0</span>)
             </h4>
-            <button class="btn btn-sm btn-outline-secondary rounded-pill px-3 shadow-sm d-flex align-items-center gap-1"
-              onclick="if(typeof resetDemoComments==='function') resetDemoComments();" title="Khôi phục dữ liệu mẫu">
-              <i class="bi bi-arrow-counterclockwise"></i><span data-i18n="reset_demo">Khôi phục dữ liệu mẫu</span>
-            </button>
           </div>
 
           <div class="mb-4">
             <textarea id="newCommentInput" class="form-control mb-2" rows="3"
-              placeholder="Write a comment in any language..." data-i18n="comment_placeholder"></textarea>
+              placeholder="Write a comment in any language..." data-i18n="comment_placeholder"
+              onfocus="if(typeof window.checkAuthOrSimulate === 'function' && !window.checkAuthOrSimulate()) this.blur();"></textarea>
             <div class="d-flex justify-content-end">
               <button class="btn btn-primary px-4 rounded-pill fw-medium" onclick="if(typeof postNewComment==='function') postNewComment();"
                 data-i18n="post_comment">Post Comment</button>
@@ -124,8 +121,8 @@
   <!-- Bootstrap 5 JS Bundle -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <!-- Core Script containing theme & language simulation -->
-<script src="assets/js/core.js?v=50"></script>
-<script src="assets/js/components.js?v=20"></script>
+<script src="assets/js/core.js?v=1784285113"></script>
+<script src="assets/js/components.js?v=1784285113"></script>
   
   <script>
     function escapePostText(value) {
@@ -224,13 +221,13 @@
         if (isVideo) {
           const autoPlayAttr = localStorage.getItem('autoPlayMedia') !== 'false' ? 'autoplay' : '';
           imageHtml = `
-            <div class="post-image-embed mb-4" style="max-height: none; height: auto; border: none; background: transparent; overflow: visible;">
+            <div class="post-image-embed mb-4 mt-4" style="max-height: none; height: auto; border: none; background: transparent; overflow: visible;">
               <video src="${mediaUrl}" muted playsinline ${autoPlayAttr} loop controls class="w-100 rounded-4 shadow-sm" style="max-height: 480px; object-fit: contain; background-color: #000000;"></video>
             </div>
           `;
         } else {
           imageHtml = `
-            <div class="post-image-embed mb-4">
+            <div class="post-image-embed mb-4 mt-4">
               <img src="${post.image}" alt="Cover Image" class="w-100 rounded-4 shadow-sm" style="max-height: 420px; object-fit: cover;">
             </div>
           `;
@@ -273,11 +270,11 @@
             `}
           </div>
 
-          ${imageHtml}
-
           <div class="substack-post-content post-content mt-4 text-main" style="line-height: 1.8;" id="postBodyContent">
             ${displayedContent}
           </div>
+
+          ${imageHtml}
 
           <div class="substack-post-footer mt-5 pt-3 border-top d-flex align-items-center gap-4">
             <button class="footer-action-item btn btn-link text-decoration-none text-secondary d-flex align-items-center gap-1 p-0" onclick="if(typeof toggleLike === 'function') toggleLike(this, ${likeCount}, event);"><i class="bi bi-heart"></i> <span class="like-count">${likeCount}</span></button>
@@ -359,6 +356,16 @@
         return tempContainer.innerHTML;
       }
 
+      function replaceHtmlWithoutCollapse(el, newHtml) {
+        if (!el) return;
+        const prevHeight = el.getBoundingClientRect().height;
+        el.style.minHeight = prevHeight + 'px';
+        el.innerHTML = newHtml;
+        setTimeout(() => {
+          el.style.minHeight = '';
+        }, 150); // give the browser a moment to render images and prevent collapse
+      }
+
       async function applyPostDetailLang(lang) {
         lastRequestedLang = lang;
         const translationCacheKey = `${postId}:${lang}`;
@@ -367,9 +374,9 @@
         // 1. If it's the original language, use the original content directly
         if (lang === originalLang) {
           if (postBodyEl) {
-            postBodyEl.innerHTML = typeof window.sanitizePostHtml === 'function'
+            replaceHtmlWithoutCollapse(postBodyEl, typeof window.sanitizePostHtml === 'function'
               ? window.sanitizePostHtml(postContentMap[originalLang])
-              : postContentMap[originalLang];
+              : postContentMap[originalLang]);
           }
           if (postTitleEl) {
             postTitleEl.textContent = postTitleMap[originalLang];
@@ -380,7 +387,7 @@
         // 2. Check if we already have it in the cache
         if (postTranslationCache[translationCacheKey]) {
           const cached = postTranslationCache[translationCacheKey];
-          if (postBodyEl) postBodyEl.innerHTML = cached.body;
+          if (postBodyEl) replaceHtmlWithoutCollapse(postBodyEl, cached.body);
           if (postTitleEl) postTitleEl.textContent = cached.title;
           return;
         }
@@ -388,9 +395,9 @@
         // 3. If the translation map has pre-translated different content, use it!
         if (postContentMap[lang] && postContentMap[lang] !== postContentMap[originalLang]) {
           if (postBodyEl) {
-            postBodyEl.innerHTML = typeof window.sanitizePostHtml === 'function'
+            replaceHtmlWithoutCollapse(postBodyEl, typeof window.sanitizePostHtml === 'function'
               ? window.sanitizePostHtml(postContentMap[lang])
-              : postContentMap[lang];
+              : postContentMap[lang]);
           }
           if (postTitleEl) {
             postTitleEl.textContent = postTitleMap[lang];
@@ -399,9 +406,8 @@
         }
         
         // 4. Otherwise, perform dynamic translation using Google Translate
-        if (postTitleEl) {
-          postTitleEl.textContent = "...";
-        }
+        if (postTitleEl) postTitleEl.style.opacity = '0.5';
+        if (postBodyEl) postBodyEl.style.opacity = '0.5';
         
         try {
           const originalTitle = postTitleMap[originalLang];
@@ -420,19 +426,27 @@
           };
           
           if (lastRequestedLang === lang) {
-            if (postBodyEl) postBodyEl.innerHTML = postTranslationCache[translationCacheKey].body;
-            if (postTitleEl) postTitleEl.textContent = postTranslationCache[translationCacheKey].title;
+            if (postBodyEl) {
+              replaceHtmlWithoutCollapse(postBodyEl, postTranslationCache[translationCacheKey].body);
+              postBodyEl.style.opacity = '1';
+            }
+            if (postTitleEl) {
+              postTitleEl.textContent = postTranslationCache[translationCacheKey].title;
+              postTitleEl.style.opacity = '1';
+            }
           }
         } catch (err) {
           console.error('Failed to translate post detail:', err);
           if (lastRequestedLang === lang) {
             if (postBodyEl) {
-              postBodyEl.innerHTML = typeof window.sanitizePostHtml === 'function'
+              replaceHtmlWithoutCollapse(postBodyEl, typeof window.sanitizePostHtml === 'function'
                 ? window.sanitizePostHtml(postContentMap[originalLang])
-                : postContentMap[originalLang];
+                : postContentMap[originalLang]);
+              postBodyEl.style.opacity = '1';
             }
             if (postTitleEl) {
               postTitleEl.textContent = postTitleMap[originalLang];
+              postTitleEl.style.opacity = '1';
             }
           }
         }
