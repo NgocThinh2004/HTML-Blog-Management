@@ -3396,10 +3396,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     boxEl.innerHTML = `
       <div class="mt-2 pt-2 border-top">
-        <textarea id="input-reply-${rootId}" class="form-control form-control-sm mb-2" rows="2" placeholder="${placeholderText}"></textarea>
+        <textarea id="input-reply-${rootId}" class="form-control form-control-sm mb-2" rows="2" placeholder="${placeholderText}" oninput="document.getElementById('btn-reply-${rootId}').disabled = !this.value.trim();"></textarea>
         <div class="d-flex justify-content-end gap-2">
           <button class="btn btn-sm btn-outline-secondary rounded-pill px-3" onclick="this.parentElement.parentElement.innerHTML=''" data-i18n="cancel">${dict.cancel || "Cancel"}</button>
-          <button class="btn btn-sm btn-primary rounded-pill px-3 fw-medium" onclick="window.submitReply(${rootId}, ${isChildReply}, '${targetAuthor.replace(/'/g, "\\'")}')" data-i18n="reply">${dict.reply || "Reply"}</button>
+          <button id="btn-reply-${rootId}" class="btn btn-sm btn-primary rounded-pill px-3 fw-medium" disabled onclick="window.submitReply(${rootId}, ${isChildReply}, '${targetAuthor.replace(/'/g, "\\'")}')" data-i18n="reply">${dict.reply || "Reply"}</button>
         </div>
       </div>
     `;
@@ -3412,7 +3412,6 @@ document.addEventListener('DOMContentLoaded', () => {
   function submitReply(rootId, isChildReply, replyToAuthor) {
     const inputEl = document.getElementById(`input-reply-${rootId}`);
     if (!inputEl || !inputEl.value.trim()) {
-      alert('Vui lòng nhập nội dung phản hồi!');
       return;
     }
 
@@ -3448,7 +3447,6 @@ document.addEventListener('DOMContentLoaded', () => {
   function postNewComment() {
     const inputEl = document.getElementById('newCommentInput');
     if (!inputEl || !inputEl.value.trim()) {
-      alert('Vui lòng nhập nội dung bình luận!');
       return;
     }
 
@@ -3475,6 +3473,8 @@ document.addEventListener('DOMContentLoaded', () => {
     comments.unshift(newComment);
     saveCommentsForPost(postId, comments);
     inputEl.value = '';
+    const submitBtn = document.getElementById('submitCommentBtn');
+    if (submitBtn) submitBtn.disabled = true;
     renderComments(postId);
   }
 
@@ -3561,10 +3561,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     boxEl.innerHTML = `
       <div class="mt-2 pt-2 border-top">
-        <textarea id="input-edit-${isChild ? repId : rootId}" class="form-control form-control-sm mb-2" rows="3">${targetComment.content}</textarea>
+        <textarea id="input-edit-${isChild ? repId : rootId}" class="form-control form-control-sm mb-2" rows="3" oninput="document.getElementById('btn-edit-${isChild ? repId : rootId}').disabled = !this.value.trim();">${targetComment.content}</textarea>
         <div class="d-flex justify-content-end gap-2">
           <button class="btn btn-sm btn-outline-secondary rounded-pill px-3" onclick="this.parentElement.parentElement.innerHTML=''" data-i18n="cancel">${dict.cancel || "Cancel"}</button>
-          <button class="btn btn-sm btn-success rounded-pill px-3 fw-medium" onclick="window.submitEdit(${rootId}, ${isChild ? repId : 'null'}, ${isChild})" data-i18n="save">${dict.save || "Save"}</button>
+          <button id="btn-edit-${isChild ? repId : rootId}" class="btn btn-sm btn-success rounded-pill px-3 fw-medium" ${targetComment.content.trim() ? '' : 'disabled'} onclick="window.submitEdit(${rootId}, ${isChild ? repId : 'null'}, ${isChild})" data-i18n="save">${dict.save || "Save"}</button>
         </div>
       </div>
     `;
@@ -3581,7 +3581,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const inputId = `input-edit-${isChild ? repId : rootId}`;
     const inputEl = document.getElementById(inputId);
     if (!inputEl || !inputEl.value.trim()) {
-      alert('Vui lòng nhập nội dung bình luận!');
       return;
     }
 

@@ -86,9 +86,10 @@
           <div class="mb-4">
             <textarea id="newCommentInput" class="form-control mb-2" rows="3"
               placeholder="Write a comment in any language..." data-i18n="comment_placeholder"
-              onfocus="if(typeof window.checkAuthOrSimulate === 'function' && !window.checkAuthOrSimulate()) this.blur();"></textarea>
+              onfocus="if(typeof window.checkAuthOrSimulate === 'function' && !window.checkAuthOrSimulate()) this.blur();"
+              oninput="document.getElementById('submitCommentBtn').disabled = !this.value.trim();"></textarea>
             <div class="d-flex justify-content-end">
-              <button class="btn btn-primary px-4 rounded-pill fw-medium" onclick="if(typeof postNewComment==='function') postNewComment();"
+              <button id="submitCommentBtn" class="btn btn-primary px-4 rounded-pill fw-medium" disabled onclick="if(typeof postNewComment==='function') postNewComment();"
                 data-i18n="post_comment">Post Comment</button>
             </div>
           </div>

@@ -3018,6 +3018,7 @@ body.draft-modal-open {
   height: 9px;
   border-radius: 2px;
   background: currentColor;
+  transform: translateY(2px);
 }
 
 .preview-lock::before {
