@@ -90,7 +90,7 @@ window.sanitizePostHtml = function sanitizePostHtml(value) {
     html = html.replace(/\r\n/g, '\n');
     let lines = html.split('\n');
     if (lines.length > 0 && lines[lines.length - 1] === '') {
-       lines.pop();
+      lines.pop();
     }
     const numberedHtml = lines.map(line => `<span class="code-line">${line || ' '}</span>`).join('\n');
     code.innerHTML = numberedHtml;
@@ -889,7 +889,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // querySelectorAll is intentional: a few layouts contain desktop/mobile
     // language controls at the same time, and every visible flag must stay synced.
-    const flags = ['currentLangFlag', 'sidebarLangFlag', 'mobileLangFlag'];
+    const flags = ['currentLangFlag', 'sidebarLangFlag', 'mobileLangFlag', 'authModalLangFlag'];
     flags.forEach(id => {
       document.querySelectorAll(`[id="${id}"]`).forEach(el => {
         const nextSource = `https://flagcdn.com/w20/${language.flag}.png`;
@@ -1016,7 +1016,10 @@ document.addEventListener('DOMContentLoaded', () => {
   // ========================================================
   const uiTranslations = {
     en: {
-
+      auth_modal_title: "Sign in to Lingora",
+      auth_modal_subtitle: "First time here?",
+      auth_modal_register: "Create account",
+      auth_modal_login: "Sign in",
       btn_save: "Save",
       btn_saved: "Saved",
       btn_preview: "Preview",
@@ -1402,7 +1405,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     },
     vi: {
-
+      auth_modal_title: "Đăng nhập vào Lingora",
+      auth_modal_subtitle: "Lần đầu đến đây?",
+      auth_modal_register: "Tạo tài khoản",
+      auth_modal_login: "Đăng nhập",
       btn_save: "Lưu",
       btn_saved: "Đã lưu",
       btn_preview: "Xem trước",
@@ -1791,7 +1797,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     },
     zh: {
-
+      auth_modal_title: "登录 Lingora",
+      auth_modal_subtitle: "第一次来这里？",
+      auth_modal_register: "创建账户",
+      auth_modal_login: "登录",
       btn_save: "保存",
       btn_saved: "已保存",
       btn_preview: "预览",
@@ -2999,14 +3008,82 @@ document.addEventListener('DOMContentLoaded', () => {
   // ==========================================
   // MULTILINGUAL COMMENTS ENGINE (CENTRALLY MANAGED)
   // ==========================================
-  function checkAuthOrSimulate() {
+  function showAuthRequiredModal(redirectUrl) {
+    let modalEl = document.getElementById('authRequiredModal');
+    
+    // Setup translations based on current preferred language
+    const currentLang = localStorage.getItem('preferredLanguage') || 'en';
+    const dict = (window.uiTranslations && window.uiTranslations[currentLang]) || (window.uiTranslations && window.uiTranslations.en) || {};
+    const flagMap = { 'en': 'gb', 'vi': 'vn', 'zh': 'cn' };
+    const currentFlag = flagMap[currentLang] || 'gb';
+    
+    const targetUrl = redirectUrl || encodeURIComponent(window.location.pathname + window.location.search + window.location.hash);
+    
+    if (!modalEl) {
+      const modalHtml = `
+        <div class="modal fade" id="authRequiredModal" tabindex="-1" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered" style="max-width: 440px;">
+            <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden p-3 p-sm-4">
+              <div class="d-flex justify-content-between align-items-center mb-2">
+                <div class="dropdown">
+                  <button class="btn btn-sm btn-outline-secondary d-inline-flex align-items-center gap-1 shadow-none rounded-pill" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="border: none;">
+                    <img id="authModalLangFlag" src="https://flagcdn.com/w20/${currentFlag}.png" width="18" alt="Language">
+                    <i class="bi bi-chevron-down" style="font-size: 0.75rem;"></i>
+                  </button>
+                  <ul class="dropdown-menu shadow-sm" style="min-width: 120px; font-size: 0.9rem;">
+                    <li><a class="dropdown-item global-lang-select" href="#" data-lang="en"><img src="https://flagcdn.com/w20/gb.png" width="18" class="me-2" alt="">English</a></li>
+                    <li><a class="dropdown-item global-lang-select" href="#" data-lang="vi"><img src="https://flagcdn.com/w20/vn.png" width="18" class="me-2" alt="">Tiếng Việt</a></li>
+                    <li><a class="dropdown-item global-lang-select" href="#" data-lang="zh"><img src="https://flagcdn.com/w20/cn.png" width="18" class="me-2" alt="">中文</a></li>
+                  </ul>
+                </div>
+                <button type="button" class="btn-close shadow-none" data-bs-dismiss="modal" aria-label="Close" style="font-size: 0.85rem;"></button>
+              </div>
+              <div class="modal-body text-center p-0">
+                <div class="d-inline-flex align-items-center justify-content-center rounded-3 mb-4" style="width: 56px; height: 56px; background-color: var(--primary-bg-subtle, #fff0e6); border: 1px solid rgba(255, 108, 31, 0.2);">
+                  <i class="bi bi-bookmark-fill" style="color: var(--primary-color, #ff6c1f); font-size: 1.5rem;"></i>
+                </div>
+                <h4 class="fw-bold text-main mb-2" id="authRequiredTitle" data-i18n="auth_modal_title">${dict.auth_modal_title || 'Sign in to Lingora'}</h4>
+                <p class="text-secondary mb-4" style="font-size: 0.95rem;">
+                  <span id="authRequiredSubtitle" data-i18n="auth_modal_subtitle">${dict.auth_modal_subtitle || 'First time here?'}</span> <a href="register.html?redirect=${targetUrl}" id="authRequiredRegisterBtn" class="text-decoration-none fw-medium" data-i18n="auth_modal_register" style="color: var(--primary-color, #ff6c1f);">${dict.auth_modal_register || 'Create account'}</a>
+                </p>
+                <div class="d-grid gap-3 mb-3">
+                  <a href="login.html?redirect=${targetUrl}" id="authRequiredLoginBtn" class="btn btn-primary fw-bold py-2" data-i18n="auth_modal_login" style="border-radius: 8px; font-size: 1rem;">${dict.auth_modal_login || 'Sign in'}</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+      document.body.insertAdjacentHTML('beforeend', modalHtml);
+      modalEl = document.getElementById('authRequiredModal');
+    } else {
+      // Update text in existing modal
+      const titleEl = document.getElementById('authRequiredTitle');
+      if (titleEl) titleEl.textContent = dict.auth_modal_title || 'Sign in to Lingora';
+      
+      const subtitleEl = document.getElementById('authRequiredSubtitle');
+      if (subtitleEl) subtitleEl.textContent = dict.auth_modal_subtitle || 'First time here?';
+      
+      const registerEl = document.getElementById('authRequiredRegisterBtn');
+      if (registerEl) {
+        registerEl.textContent = dict.auth_modal_register || 'Create account';
+        registerEl.href = `register.html?redirect=${targetUrl}`;
+      }
+      
+      const loginEl = document.getElementById('authRequiredLoginBtn');
+      if (loginEl) {
+        loginEl.textContent = dict.auth_modal_login || 'Sign in';
+        loginEl.href = `login.html?redirect=${targetUrl}`;
+      }
+    }
+    const modal = bootstrap.Modal.getOrCreateInstance(modalEl);
+    modal.show();
+  }
+
+  function checkAuthOrSimulate(redirectUrl) {
     let currentUserStr = localStorage.getItem('currentUser');
     if (!currentUserStr) {
-      const proceed = confirm('Bạn cần đăng nhập để bình luận hoặc trả lời! Bạn có muốn đăng nhập nhanh (Simulate Login) với tên "Hồ Quốc Tuấn" không?');
-      if (proceed) {
-        localStorage.setItem('currentUser', 'Hồ Quốc Tuấn');
-        return { name: 'Hồ Quốc Tuấn', avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=40&h=40" };
-      }
+      showAuthRequiredModal(redirectUrl);
       return null;
     }
     const fallbackAvatar = "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=40&h=40";
@@ -3026,6 +3103,32 @@ document.addEventListener('DOMContentLoaded', () => {
     } catch (error) { }
     return { name: currentUserStr.trim() || 'Lingora user', avatar: fallbackAvatar };
   }
+
+  // Intercept protected routes for unauthenticated users
+  document.addEventListener('click', (e) => {
+    const link = e.target.closest('a[href]');
+    if (!link) return;
+    
+    const href = link.getAttribute('href');
+    if (href.includes('login.html') || href.includes('register.html')) return;
+    
+    const isProtected = 
+      href.includes('my-posts.html') || 
+      href.includes('create-post.html') || 
+      href.includes('settings.html') || 
+      href.includes('subscriptions.html') ||
+      (href.includes('profile.html') && !href.includes('id=') && !href.includes('author='));
+      
+    if (isProtected) {
+      if (typeof window.checkAuthOrSimulate === 'function') {
+        const currentUserStr = localStorage.getItem('currentUser');
+        if (!currentUserStr) {
+          e.preventDefault();
+          window.checkAuthOrSimulate(encodeURIComponent(href));
+        }
+      }
+    }
+  });
 
   function getCurrentPostCommentId() {
     const urlParams = new URLSearchParams(window.location.search);
@@ -3512,16 +3615,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  function resetDemoComments() {
-    const lang = localStorage.getItem('preferredLanguage') || 'vi';
-    const confirmMsg = lang === 'en' ? "Do you want to reset all demo comments to initial state?" :
-      lang === 'zh' ? "确定要恢复所有初始演示评论数据吗？" :
-        "Bạn có muốn khôi phục lại toàn bộ dữ liệu bình luận mẫu ban đầu để demo không?";
-    if (confirm(confirmMsg)) {
-      localStorage.removeItem('mundi_comments_db');
-      window.location.reload();
-    }
-  }
+
 
   // Expose functions globally
   window.checkAuthOrSimulate = checkAuthOrSimulate;
@@ -3533,7 +3627,6 @@ document.addEventListener('DOMContentLoaded', () => {
   window.deleteComment = deleteComment;
   window.editComment = editComment;
   window.submitEdit = submitEdit;
-  window.resetDemoComments = resetDemoComments;
   window.uiTranslations = uiTranslations;
   window.applyUiTranslations = applyUiTranslations;
   window.applyLanguageFilter = applyLanguageFilter;
@@ -3554,6 +3647,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (event && typeof event.stopPropagation === 'function') {
       event.stopPropagation();
     }
+    if (!checkAuthOrSimulate()) return;
     const icon = btn.querySelector('i');
     const text = btn.querySelector('.like-count');
     const isLiked = !btn.classList.contains('liked');
@@ -3581,6 +3675,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (event && typeof event.stopPropagation === 'function') {
       event.stopPropagation();
     }
+    if (!checkAuthOrSimulate()) return;
     const icon = btn.querySelector('i');
     const text = btn.querySelector('.like-count');
     const isLiked = !btn.classList.contains('liked') && !btn.classList.contains('text-danger');
@@ -3829,7 +3924,12 @@ document.addEventListener('DOMContentLoaded', () => {
       btn.addEventListener('click', (e) => {
         if (!localStorage.getItem('currentUser')) {
           e.preventDefault();
-          window.location.href = loginUrl;
+          const href = btn.getAttribute('href') || writeUrl;
+          if (typeof window.checkAuthOrSimulate === 'function') {
+            window.checkAuthOrSimulate(encodeURIComponent(href));
+          } else {
+            window.location.href = loginUrl;
+          }
         }
       });
     });
@@ -3840,7 +3940,11 @@ document.addEventListener('DOMContentLoaded', () => {
       quickDraftCard.onclick = (e) => {
         if (!localStorage.getItem('currentUser')) {
           e.preventDefault();
-          window.location.href = loginUrl;
+          if (typeof window.checkAuthOrSimulate === 'function') {
+            window.checkAuthOrSimulate(encodeURIComponent('create-post.html?new=1'));
+          } else {
+            window.location.href = loginUrl;
+          }
         } else {
           window.location.href = writeUrl;
         }
