@@ -2118,7 +2118,7 @@ select.form-select-sm {
 .editor-code-body {
   min-height: 64px;
   margin: 0 !important;
-  padding: 16px 16px 16px 48px !important;
+  padding: 16px !important;
   border: 0 !important;
   border-radius: 0 !important;
   color: #252a2a !important;
@@ -2128,6 +2128,11 @@ select.form-select-sm {
   white-space: pre-wrap;
   counter-reset: line;
   position: relative;
+}
+
+.preview-post-body .editor-code-body,
+.content-html .editor-code-body {
+  padding-left: 48px !important;
 }
 
 [data-bs-theme="dark"] .editor-code-body {

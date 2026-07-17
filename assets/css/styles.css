@@ -1810,7 +1810,7 @@ button {
 .editor-code-body {
   min-height: 64px;
   margin: 0 !important;
-  padding: 16px 16px 16px 48px !important;
+  padding: 16px !important;
   border: 0 !important;
   border-radius: 0 !important;
   color: #252a2a !important;
@@ -3618,4 +3618,7 @@ body.draft-modal-open {
 }
 
 [data-bs-theme="dark"] .editor-code-body { background: #1a1d1e !important; color: #e5e8e6 !important; }
+
+
+.preview-post-body .editor-code-body, .content-html .editor-code-body { padding-left: 48px !important; }
 
