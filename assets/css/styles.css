@@ -1822,10 +1822,7 @@ button {
   position: relative;
 }
 
-[data-bs-theme="dark"] .editor-code-body {
-  background: #1a1d1e !important;
-  color: #e5e8e6 !important;
-}
+[data-bs-theme="dark"] .preview-post-body .editor-code-body, [data-bs-theme="dark"] .content-html .editor-code-body { background: #1a1d1e !important; color: #e5e8e6 !important; }
 
 .code-line {
   display: block;
@@ -3617,8 +3614,9 @@ body.draft-modal-open {
   }
 }
 
-[data-bs-theme="dark"] .editor-code-body { background: #1a1d1e !important; color: #e5e8e6 !important; }
+[data-bs-theme="dark"] .preview-post-body .editor-code-body, [data-bs-theme="dark"] .content-html .editor-code-body { background: #1a1d1e !important; color: #e5e8e6 !important; }
 
 
 .preview-post-body .editor-code-body, .content-html .editor-code-body { padding-left: 48px !important; }
+
 
