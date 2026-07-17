@@ -1108,6 +1108,12 @@ document.addEventListener('DOMContentLoaded', () => {
       btn_continue: "Continue",
       btn_share: "Share",
       btn_done: "Done",
+      link_create_title: "Create a link",
+      link_text_placeholder: "Enter text...",
+      link_url_placeholder: "Enter URL...",
+      link_apply: "Link",
+      link_change: "Change",
+      link_remove: "Remove",
 
 
       cat_tech: "Technology",
@@ -1497,6 +1503,12 @@ document.addEventListener('DOMContentLoaded', () => {
       btn_continue: "Tiếp tục",
       btn_share: "Chia sẻ",
       btn_done: "Xong",
+      link_create_title: "T\u1ea1o li\u00ean k\u1ebft",
+      link_text_placeholder: "Nh\u1eadp t\u00ean hi\u1ec3n th\u1ecb...",
+      link_url_placeholder: "Nh\u1eadp URL...",
+      link_apply: "Li\u00ean k\u1ebft",
+      link_change: "S\u1eeda",
+      link_remove: "X\u00f3a",
 
 
       cat_tech: "Công nghệ",
@@ -1889,6 +1901,12 @@ document.addEventListener('DOMContentLoaded', () => {
       btn_continue: "继续",
       btn_share: "分享",
       btn_done: "完成",
+      link_create_title: "\u521b\u5efa\u94fe\u63a5",
+      link_text_placeholder: "\u8f93\u5165\u663e\u793a\u6587\u5b57...",
+      link_url_placeholder: "\u8f93\u5165 URL...",
+      link_apply: "\u94fe\u63a5",
+      link_change: "\u66f4\u6539",
+      link_remove: "\u79fb\u9664",
 
 
       cat_tech: "科技",

@@ -4,10 +4,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const toolbar = document.querySelector('.editor-toolbar');
   const imageInput = document.getElementById('editorImageInput');
+  const audioInput = document.getElementById('editorAudioInput');
+  const videoInput = document.getElementById('editorVideoInput');
   const titleInput = document.getElementById('postTitle');
-  const subtitleInput = document.getElementById('postSubtitle');
   const titleLimit = document.getElementById('postTitleLimit');
-  const subtitleLimit = document.getElementById('postSubtitleLimit');
   const bodyLimit = document.getElementById('postBodyLimit');
   const saveButton = document.getElementById('saveButton');
   const saveLabel = saveButton ? saveButton.querySelector('[data-save-label]') : null;
@@ -24,12 +24,17 @@ document.addEventListener('DOMContentLoaded', () => {
   const previewLanguageSelect = previewModal ? previewModal.querySelector('[data-preview-language]') : null;
   const previewTranslationStatus = previewModal ? previewModal.querySelector('[data-preview-translation-status]') : null;
   const previewTitle = previewModal ? previewModal.querySelector('[data-preview-title]') : null;
-  const previewSubtitle = previewModal ? previewModal.querySelector('[data-preview-subtitle]') : null;
   const previewBody = previewModal ? previewModal.querySelector('[data-preview-body]') : null;
   const previewAuthor = previewModal ? previewModal.querySelector('[data-preview-author]') : null;
   const previewAvatar = previewModal ? previewModal.querySelector('[data-preview-avatar]') : null;
   const previewDate = previewModal ? previewModal.querySelector('[data-preview-date]') : null;
   const previewShareButton = previewModal ? previewModal.querySelector('[data-share-preview]') : null;
+  const linkModal = document.querySelector('[data-link-modal]');
+  const linkForm = linkModal ? linkModal.querySelector('[data-link-form]') : null;
+  const linkTextInput = linkModal ? linkModal.querySelector('[data-link-text-input]') : null;
+  const linkUrlInput = linkModal ? linkModal.querySelector('[data-link-url-input]') : null;
+  const linkBubble = document.querySelector('[data-link-bubble]');
+  const linkBubbleUrl = linkBubble ? linkBubble.querySelector('[data-link-bubble-url]') : null;
   const draftKey = 'mundiBlogCreatePostDraft';
   const previewLanguageKey = 'mundiBlogPreviewLanguage';
   const submittedPostsKey = 'mundiBlogSubmittedPosts';
@@ -38,7 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const backLink = document.querySelector('[data-back-link]');
   const inlineCodeClass = 'editor-inline-code-font';
   const zeroWidthSpace = '\u200B';
-  const wordLimits = { title: 20, subtitle: 40, body: 3000 };
+  const wordLimits = { title: 20, body: 3000 };
   const maxCharactersPerWordUnit = 30;
   const limitTranslations = {
     en: { words: 'words', bodyOver: 'The post exceeds the 3,000-word limit.' },
@@ -50,6 +55,8 @@ document.addEventListener('DOMContentLoaded', () => {
   let activeBaselineFormat = 'normal';
   let activePreviewDraft = null;
   let previewRenderToken = 0;
+  let pendingLinkDraft = null;
+  let activeLinkElement = null;
   const previewTranslationCache = new Map();
   const previewLanguages = new Set(['original', 'en', 'vi', 'zh']);
   const previewLanguageLabels = {
@@ -161,7 +168,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function updateAllWritingLimits() {
     updateTextLimit(titleInput, titleLimit, wordLimits.title);
-    updateTextLimit(subtitleInput, subtitleLimit, wordLimits.subtitle);
     updateBodyLimit();
   }
 
@@ -742,16 +748,42 @@ document.addEventListener('DOMContentLoaded', () => {
     saveLabel.textContent = isSaved ? txtSaved : txtSave;
   }
 
+  function prepareEditorLink(link) {
+    if (!link || link.nodeType !== Node.ELEMENT_NODE) return null;
+    if (!link.matches('a[href]')) return null;
+
+    link.setAttribute('target', '_blank');
+    link.setAttribute('rel', 'noopener noreferrer');
+    link.setAttribute('contenteditable', 'false');
+    link.dataset.editorLink = 'true';
+    return link;
+  }
+
+  function normalizeEditorLinks(root = editor) {
+    if (!root || !root.querySelectorAll) return;
+    root.querySelectorAll('a[href]').forEach(prepareEditorLink);
+  }
+
+  function getCleanEditorHtml() {
+    const clone = editor.cloneNode(true);
+    clone.querySelectorAll('a[data-editor-link]').forEach(link => {
+      link.removeAttribute('contenteditable');
+      link.removeAttribute('data-editor-link');
+    });
+    return clone.innerHTML;
+  }
+
   function collectDraft() {
     normalizeEditorFontMarkup(editor, { cleanMarkers: true });
+    normalizeEditorLinks(editor);
 
     const categorySelect = document.getElementById('post_category');
 
     return {
       title: titleInput ? titleInput.value : '',
-      subtitle: subtitleInput ? subtitleInput.value : '',
+      subtitle: '',
       authors: getAuthorNames(),
-      body: editor.innerHTML,
+      body: getCleanEditorHtml(),
       editingId: submittedPostId || pageParams.get('edit') || null,
       category: categorySelect ? categorySelect.value : 'technology',
       originalLanguage: originalLanguageSelect ? originalLanguageSelect.value : (localStorage.getItem('preferredLanguage') || 'en'),
@@ -765,7 +797,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const translations = {
       [originalLanguage]: {
         title: post.title,
-        subtitle: post.subtitle,
+        subtitle: '',
         body: post.body,
         content: post.body
       }
@@ -774,14 +806,12 @@ document.addEventListener('DOMContentLoaded', () => {
     await Promise.all(languages.filter(language => language !== originalLanguage).map(async language => {
       const results = await Promise.allSettled([
         post.title ? translateText(post.title, language) : Promise.resolve(''),
-        post.subtitle ? translateText(post.subtitle, language) : Promise.resolve(''),
         post.body ? translateHtml(post.body, language) : Promise.resolve('')
       ]);
       const title = results[0].status === 'fulfilled' ? results[0].value : post.title;
-      const subtitle = results[1].status === 'fulfilled' ? results[1].value : post.subtitle;
-      const body = results[2].status === 'fulfilled' ? results[2].value : post.body;
+      const body = results[1].status === 'fulfilled' ? results[1].value : post.body;
       translations[language] = {
-        title, subtitle, body, content: body,
+        title, subtitle: '', body, content: body,
         translationFailed: results.some(result => result.status === 'rejected')
       };
     }));
@@ -841,7 +871,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const submittedPost = {
         id: submittedPostId || `pending-${Date.now()}`,
         title: post.title.trim() || fallbackTitles[language] || fallbackTitles.en,
-        subtitle: post.subtitle,
+        subtitle: '',
         body: post.body,
         authors: post.authors,
         authorName: currentAuthor?.name || post.authors?.[0] || 'Lingora Author',
@@ -894,7 +924,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const draft = JSON.parse(rawDraft);
       if (titleInput && draft.title) titleInput.value = draft.title;
-      if (subtitleInput && draft.subtitle) subtitleInput.value = draft.subtitle;
       if (Array.isArray(draft.authors)) renderAuthors(draft.authors);
       if (draft.body) {
         editor.innerHTML = draft.body;
@@ -913,6 +942,7 @@ document.addEventListener('DOMContentLoaded', () => {
           }
         });
         normalizeEditorFontMarkup();
+        normalizeEditorLinks();
       }
       const categorySelect = document.getElementById('post_category');
       if (categorySelect && draft.category) categorySelect.value = draft.category;
@@ -1091,11 +1121,6 @@ document.addEventListener('DOMContentLoaded', () => {
       previewTitle.classList.toggle('is-placeholder', Boolean(content.isTitlePlaceholder));
     }
 
-    if (previewSubtitle) {
-      previewSubtitle.textContent = content.subtitle;
-      previewSubtitle.hidden = !content.subtitle;
-    }
-
     if (previewBody) {
       previewBody.innerHTML = content.bodyHtml;
 
@@ -1113,26 +1138,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
   async function buildPreviewContent(draft, lang) {
     const hasTitle = Boolean(draft.title && draft.title.trim());
-    const hasSubtitle = Boolean(draft.subtitle && draft.subtitle.trim());
     const hasBody = Boolean(draft.body && draft.body.trim());
     const emptyBody = `<p>${escapeHtml(getPreviewFallback('empty', lang))}</p>`;
 
     if (lang === 'original') {
       return {
         title: hasTitle ? draft.title : getPreviewFallback('untitled', 'original'),
-        subtitle: draft.subtitle || '',
+        subtitle: '',
         bodyHtml: draft.body || emptyBody,
         isTitlePlaceholder: !hasTitle
       };
     }
 
-    const [title, subtitle, bodyHtml] = await Promise.all([
+    const [title, bodyHtml] = await Promise.all([
       hasTitle ? translateText(draft.title, lang) : Promise.resolve(getPreviewFallback('untitled', lang)),
-      hasSubtitle ? translateText(draft.subtitle, lang) : Promise.resolve(''),
       hasBody ? translateHtml(draft.body, lang) : Promise.resolve(emptyBody)
     ]);
 
-    return { title, subtitle, bodyHtml, isTitlePlaceholder: !hasTitle };
+    return { title, subtitle: '', bodyHtml, isTitlePlaceholder: !hasTitle };
   }
 
   function getInitials(name) {
@@ -1245,10 +1268,375 @@ document.addEventListener('DOMContentLoaded', () => {
     document.body.classList.add('draft-modal-open');
   }
 
+  function normalizeUserUrl(value) {
+    const trimmed = String(value || '').trim();
+    if (!trimmed) return '';
+    if (/^(?:https?:|mailto:|tel:|#|\/|\.\/|\.\.\/)/i.test(trimmed)) return trimmed;
+    return `https://${trimmed}`;
+  }
+
+  function isLikelyUrl(value) {
+    return /^(?:https?:\/\/|www\.|(?:[a-z0-9-]+\.)+[a-z]{2,})(?:[/?#][^\s]*)?$/i.test(String(value || '').trim());
+  }
+
+  function getDeepTextNode(node, direction) {
+    if (!node) return null;
+    if (node.nodeType === Node.TEXT_NODE) return node;
+
+    const children = Array.from(node.childNodes || []);
+    if (direction === 'last') children.reverse();
+
+    for (const child of children) {
+      const textNode = getDeepTextNode(child, direction);
+      if (textNode) return textNode;
+    }
+
+    return null;
+  }
+
+  function getTextNodeNearRange(range) {
+    if (!range) return null;
+    if (range.startContainer.nodeType === Node.TEXT_NODE) {
+      return { node: range.startContainer, offset: range.startOffset };
+    }
+
+    const container = range.startContainer;
+    const childNodes = Array.from(container.childNodes || []);
+    const previousText = range.startOffset > 0 ? getDeepTextNode(childNodes[range.startOffset - 1], 'last') : null;
+    if (previousText) return { node: previousText, offset: previousText.nodeValue.length };
+
+    const nextText = getDeepTextNode(childNodes[range.startOffset], 'first');
+    if (nextText) return { node: nextText, offset: 0 };
+
+    return null;
+  }
+
+  function getUrlRangeNearSelection(selection) {
+    if (!selection || selection.rangeCount === 0 || !selection.isCollapsed) return null;
+
+    const range = selection.getRangeAt(0);
+    const textInfo = getTextNodeNearRange(range);
+    if (!textInfo || !editor.contains(textInfo.node)) return null;
+
+    const text = textInfo.node.nodeValue || '';
+    const urlPattern = /(?:https?:\/\/|www\.|(?:[a-z0-9-]+\.)+[a-z]{2,})(?:[^\s<>"']*)?/gi;
+    let match;
+
+    while ((match = urlPattern.exec(text))) {
+      const rawText = match[0].replace(/[),.;!?]+$/g, '');
+      const start = match.index;
+      const end = start + rawText.length;
+
+      if (rawText && textInfo.offset >= start && textInfo.offset <= end) {
+        const urlRange = document.createRange();
+        urlRange.setStart(textInfo.node, start);
+        urlRange.setEnd(textInfo.node, end);
+        return { range: urlRange, text: rawText };
+      }
+    }
+
+    return null;
+  }
+
+  function clamp(value, min, max) {
+    return Math.min(Math.max(value, min), max);
+  }
+
+  function getRangeAnchorRect(range) {
+    if (!range) return editor.getBoundingClientRect();
+
+    const rects = Array.from(range.getClientRects()).filter(rect => rect.width || rect.height);
+    if (rects.length) return rects[0];
+
+    const rect = range.getBoundingClientRect();
+    if (rect && (rect.width || rect.height)) return rect;
+
+    if (range.collapsed && editor.contains(range.startContainer)) {
+      const marker = document.createElement('span');
+      marker.textContent = zeroWidthSpace;
+      marker.style.display = 'inline-block';
+      marker.style.width = '0';
+      marker.style.overflow = 'hidden';
+
+      const markerRange = range.cloneRange();
+      markerRange.insertNode(marker);
+      const markerRect = marker.getBoundingClientRect();
+      marker.remove();
+
+      if (markerRect && (markerRect.width || markerRect.height)) return markerRect;
+    }
+
+    return editor.getBoundingClientRect();
+  }
+
+  function positionFloatingElement(element, anchorRect, gap = 12) {
+    if (!element || !anchorRect) return;
+
+    const margin = 12;
+    const elementRect = element.getBoundingClientRect();
+    const maxLeft = Math.max(margin, window.innerWidth - elementRect.width - margin);
+    const anchorCenter = anchorRect.left + (anchorRect.width / 2);
+    const preferredLeft = anchorRect.left;
+    const left = clamp(preferredLeft, margin, maxLeft);
+    const arrowLeft = clamp(anchorCenter - left, 18, Math.max(18, elementRect.width - 18));
+    let top = anchorRect.bottom + gap;
+    let isAbove = false;
+
+    if (top + elementRect.height > window.innerHeight - margin && anchorRect.top - elementRect.height - gap > margin) {
+      top = anchorRect.top - elementRect.height - gap;
+      isAbove = true;
+    }
+
+    element.style.left = `${left}px`;
+    element.style.top = `${Math.max(margin, top)}px`;
+    element.style.setProperty('--link-arrow-left', `${arrowLeft}px`);
+    element.classList.toggle('is-above', isAbove);
+  }
+
+  function getEditorLinkFromNode(node) {
+    if (!node) return null;
+    const element = node.nodeType === Node.ELEMENT_NODE ? node : node.parentElement;
+    const link = element ? element.closest('a[href]') : null;
+    return link && editor.contains(link) ? link : null;
+  }
+
+  function getDeepLink(node, direction) {
+    if (!node) return null;
+    const directLink = getEditorLinkFromNode(node);
+    if (directLink) return directLink;
+    if (node.nodeType !== Node.ELEMENT_NODE) return null;
+
+    const children = Array.from(node.childNodes || []);
+    if (direction === 'previous') children.reverse();
+
+    for (const child of children) {
+      const link = getDeepLink(child, direction);
+      if (link) return link;
+    }
+
+    return null;
+  }
+
+  function getAdjacentNode(node, direction) {
+    let current = node;
+
+    while (current && current !== editor) {
+      const sibling = direction === 'previous' ? current.previousSibling : current.nextSibling;
+      if (sibling) return sibling;
+      current = current.parentNode;
+    }
+
+    return null;
+  }
+
+  function getBoundaryLinkFromRange(range, key) {
+    if (!range) return null;
+
+    const currentLink = getEditorLinkFromNode(range.startContainer);
+    if (currentLink) return currentLink;
+
+    const direction = key === 'Backspace' ? 'previous' : 'next';
+    let candidate = null;
+
+    if (range.startContainer.nodeType === Node.ELEMENT_NODE) {
+      const index = key === 'Backspace' ? range.startOffset - 1 : range.startOffset;
+      candidate = range.startContainer.childNodes[index] || null;
+    } else if (range.startContainer.nodeType === Node.TEXT_NODE) {
+      const textLength = (range.startContainer.nodeValue || '').length;
+      const isBoundary = key === 'Backspace' ? range.startOffset === 0 : range.startOffset === textLength;
+      if (isBoundary) candidate = getAdjacentNode(range.startContainer, direction);
+    }
+
+    return getDeepLink(candidate, direction);
+  }
+
+  function setCaretWhereNodeWas(parent, index) {
+    const range = document.createRange();
+
+    if (parent && parent.isConnected && editor.contains(parent)) {
+      range.setStart(parent, Math.min(index, parent.childNodes.length));
+    } else {
+      range.selectNodeContents(editor);
+      range.collapse(false);
+    }
+
+    range.collapse(true);
+
+    const selection = window.getSelection();
+    selection.removeAllRanges();
+    selection.addRange(range);
+    savedRange = range.cloneRange();
+  }
+
+  function removeEditorLink(link) {
+    if (!link || !link.parentNode) return;
+
+    const parent = link.parentNode;
+    const index = Array.prototype.indexOf.call(parent.childNodes, link);
+    link.remove();
+    closeLinkBubble();
+    closeLinkModal();
+
+    if (!editor.textContent.trim() && !editor.querySelector('img, video, audio, hr, .editor-code-block')) {
+      editor.innerHTML = '<p><br></p>';
+      placeCaretAtEnd();
+    } else {
+      if (
+        parent
+        && parent.nodeType === Node.ELEMENT_NODE
+        && parent !== editor
+        && parent.isConnected
+        && !parent.childNodes.length
+      ) {
+        parent.appendChild(document.createElement('br'));
+      }
+      setCaretWhereNodeWas(parent, index);
+    }
+
+    updateBodyLimit();
+    setSaveState(false);
+  }
+
+  function placeCaretAfterNode(node) {
+    const range = document.createRange();
+    range.setStartAfter(node);
+    range.collapse(true);
+
+    const selection = window.getSelection();
+    selection.removeAllRanges();
+    selection.addRange(range);
+    savedRange = range.cloneRange();
+  }
+
+  function applyLinkToRange(range, url, displayText = null) {
+    if (!range) return;
+
+    const link = document.createElement('a');
+    link.setAttribute('href', url);
+    prepareEditorLink(link);
+
+    if (displayText !== null) {
+      if (!range.collapsed) range.deleteContents();
+      link.textContent = displayText || url.replace(/^https?:\/\//i, '');
+    } else if (range.collapsed) {
+      link.textContent = url.replace(/^https?:\/\//i, '');
+    } else {
+      const fragment = range.extractContents();
+      link.appendChild(fragment);
+    }
+
+    range.insertNode(link);
+    placeCaretAfterNode(link);
+    updateToolbarState();
+    editor.focus({ preventScroll: true });
+    return link;
+  }
+
+  function closeLinkModal() {
+    if (!linkModal) return;
+    linkModal.hidden = true;
+    linkModal.classList.remove('is-above');
+    linkModal.style.removeProperty('left');
+    linkModal.style.removeProperty('top');
+    linkModal.style.removeProperty('--link-arrow-left');
+    document.body.classList.remove('link-modal-open');
+    pendingLinkDraft = null;
+  }
+
+  function closeLinkBubble() {
+    if (!linkBubble) return;
+    linkBubble.hidden = true;
+    linkBubble.classList.remove('is-above');
+    linkBubble.style.removeProperty('left');
+    linkBubble.style.removeProperty('top');
+    linkBubble.style.removeProperty('--link-arrow-left');
+    activeLinkElement = null;
+  }
+
+  function showLinkBubble(link) {
+    if (!linkBubble || !linkBubbleUrl || !link) return;
+
+    const preparedLink = prepareEditorLink(link);
+    if (!preparedLink) return;
+
+    const href = preparedLink.getAttribute('href') || '#';
+    activeLinkElement = preparedLink;
+    closeLinkModal();
+    linkBubbleUrl.href = href;
+    linkBubbleUrl.textContent = href;
+    linkBubble.hidden = false;
+    positionFloatingElement(linkBubble, preparedLink.getBoundingClientRect(), 12);
+  }
+
+  function openLinkModal(linkDraft) {
+    if (!linkModal || !linkTextInput || !linkUrlInput) return false;
+
+    closeLinkBubble();
+    pendingLinkDraft = linkDraft;
+    linkTextInput.value = linkDraft.text || '';
+    linkUrlInput.value = linkDraft.url || '';
+    linkModal.hidden = false;
+    document.body.classList.add('link-modal-open');
+    positionFloatingElement(
+      linkModal,
+      linkDraft.anchorRect || getRangeAnchorRect(linkDraft.range ? linkDraft.range.cloneRange() : null),
+      12
+    );
+
+    window.setTimeout(() => {
+      (linkTextInput.value ? linkUrlInput : linkTextInput).focus();
+      if (!linkTextInput.value) linkTextInput.select();
+      else linkUrlInput.select();
+    }, 0);
+
+    return true;
+  }
+
+  function createLinkDraftFromSelection() {
+    restoreSelection();
+    const selection = window.getSelection();
+    const selectedText = selection && !selection.isCollapsed ? selection.toString().trim() : '';
+    const detectedUrl = selectedText ? null : getUrlRangeNearSelection(selection);
+    const defaultUrl = detectedUrl
+      ? detectedUrl.text
+      : (isLikelyUrl(selectedText) ? selectedText : '');
+
+    const range = detectedUrl
+      ? detectedUrl.range.cloneRange()
+      : (selection && selection.rangeCount ? selection.getRangeAt(0).cloneRange() : null);
+
+    return {
+      range,
+      text: selectedText || (detectedUrl ? detectedUrl.text : ''),
+      url: defaultUrl,
+      anchorRect: getRangeAnchorRect(range ? range.cloneRange() : null)
+    };
+  }
+
+  function createLinkDraftFromLink(link) {
+    const range = document.createRange();
+    range.selectNode(link);
+
+    return {
+      range,
+      text: (link.textContent || '').trim(),
+      url: link.getAttribute('href') || '',
+      link,
+      anchorRect: link.getBoundingClientRect()
+    };
+  }
+
   function handleLink() {
-    const url = prompt('Enter the link URL:');
-    if (!url) return;
-    runCommand('createLink', url);
+    const linkDraft = createLinkDraftFromSelection();
+    if (!openLinkModal(linkDraft)) {
+      const url = normalizeUserUrl(prompt('Enter the link URL:', linkDraft.url));
+      if (!url) return;
+      const displayText = prompt('Enter link text:', linkDraft.text || url.replace(/^https?:\/\//i, ''));
+      if (!displayText) return;
+      applyLinkToRange(linkDraft.range, url, displayText);
+      saveSelection();
+      setSaveState(false);
+    }
   }
 
   function handleInlineCode() {
@@ -1282,14 +1670,21 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function handleMedia(type) {
-    if (type === 'image' && imageInput) {
+    const inputByType = {
+      image: imageInput,
+      audio: audioInput,
+      video: videoInput
+    };
+    const fileInput = inputByType[type];
+
+    if (fileInput) {
       restoreSelection();
       saveSelection();
-      imageInput.click();
+      fileInput.click();
       return;
     }
 
-    const url = prompt(`Enter ${type} URL:`);
+    const url = normalizeUserUrl(prompt(`Enter ${type} URL:`));
     if (!url) return;
 
     if (type === 'audio') {
@@ -1554,10 +1949,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
       if (target.closest('[data-share-preview]')) {
         const plainBody = previewBody ? previewBody.textContent.trim() : '';
-        const previewSubtitleText = previewSubtitle && !previewSubtitle.hidden ? previewSubtitle.textContent : '';
         const shareText = [
           previewTitle ? previewTitle.textContent : 'Untitled post',
-          previewSubtitleText,
           plainBody
         ]
           .filter(Boolean)
@@ -1577,6 +1970,94 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   }
+
+  if (linkModal) {
+    linkModal.addEventListener('click', (event) => {
+      event.stopPropagation();
+      const target = event.target instanceof Element ? event.target : event.target.parentElement;
+      if (!target) return;
+
+      if (target.closest('[data-link-close]')) {
+        closeLinkModal();
+      }
+    });
+  }
+
+  if (linkForm) {
+    linkForm.addEventListener('submit', (event) => {
+      event.preventDefault();
+      if (!pendingLinkDraft) return;
+
+      const url = normalizeUserUrl(linkUrlInput ? linkUrlInput.value : '');
+      if (!url) {
+        if (linkUrlInput) linkUrlInput.focus();
+        return;
+      }
+
+      if (linkUrlInput && !linkUrlInput.checkValidity()) {
+        linkUrlInput.reportValidity();
+        return;
+      }
+
+      const displayText = String(linkTextInput ? linkTextInput.value : '').trim()
+        || pendingLinkDraft.text
+        || url.replace(/^https?:\/\//i, '');
+      let link = null;
+      if (pendingLinkDraft.link && pendingLinkDraft.link.isConnected) {
+        link = pendingLinkDraft.link;
+        link.setAttribute('href', url);
+        link.textContent = displayText;
+        prepareEditorLink(link);
+      } else {
+        link = applyLinkToRange(pendingLinkDraft.range, url, displayText);
+      }
+      closeLinkModal();
+      if (link) showLinkBubble(link);
+      saveSelection();
+      setSaveState(false);
+    });
+  }
+
+  if (linkBubble) {
+    linkBubble.addEventListener('click', (event) => {
+      event.stopPropagation();
+      const target = event.target instanceof Element ? event.target : event.target.parentElement;
+      if (!target) return;
+
+      if (target.closest('[data-link-change]')) {
+        event.preventDefault();
+        if (activeLinkElement && activeLinkElement.isConnected) {
+          openLinkModal(createLinkDraftFromLink(activeLinkElement));
+        }
+        return;
+      }
+
+      if (target.closest('[data-link-remove]')) {
+        event.preventDefault();
+        if (activeLinkElement && activeLinkElement.isConnected) {
+          removeEditorLink(activeLinkElement);
+        }
+      }
+    });
+  }
+
+  document.addEventListener('click', (event) => {
+    const target = event.target instanceof Element ? event.target : event.target.parentElement;
+    if (!target) return;
+
+    const isInsideLinkModal = Boolean(target.closest('[data-link-modal]'));
+    const isLinkCommand = Boolean(target.closest('[data-command="createLink"]'));
+    const isInsideLinkBubble = Boolean(target.closest('[data-link-bubble]'));
+    const isEditorLink = Boolean(target.closest('.rich-editor a[href]'));
+
+    if (linkModal && !linkModal.hidden && !isInsideLinkModal && !isLinkCommand) {
+      closeLinkModal();
+    }
+
+    if (linkBubble && !linkBubble.hidden && !isInsideLinkBubble && !isEditorLink) {
+      closeLinkBubble();
+    }
+  });
 
   if (publishModal) {
     publishModal.addEventListener('click', (event) => {
@@ -1661,6 +2142,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const target = event.target instanceof Element ? event.target : event.target.parentElement;
     if (!target) return;
 
+    const editorLink = target.closest('a[href]');
+    if (editorLink && editor.contains(editorLink)) {
+      event.preventDefault();
+      showLinkBubble(editorLink);
+      return;
+    }
+
+    closeLinkBubble();
+
     const languageTrigger = target.closest('[data-code-language-trigger]');
     if (languageTrigger) {
       event.preventDefault();
@@ -1723,19 +2213,37 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  if (imageInput) {
-    imageInput.addEventListener('change', () => {
-      const file = imageInput.files && imageInput.files[0];
+  function handleUploadedMedia(input, type) {
+    if (!input) return;
+
+    input.addEventListener('change', () => {
+      const file = input.files && input.files[0];
       if (!file) return;
 
       const reader = new FileReader();
       reader.addEventListener('load', () => {
-        insertMediaWithWrapper(`<img src="${reader.result}" alt="">`);
-        imageInput.value = '';
+        const source = escapeHtml(reader.result);
+        const name = escapeHtml(file.name || '');
+
+        if (type === 'image') {
+          insertMediaWithWrapper(`<img src="${source}" alt="${name}">`);
+        } else if (type === 'audio') {
+          insertMediaWithWrapper(`<audio controls src="${source}" title="${name}"></audio>`);
+        } else if (type === 'video') {
+          insertMediaWithWrapper(`<video controls playsinline src="${source}" title="${name}"></video>`);
+        }
+
+        input.value = '';
+        updateBodyLimit();
+        setSaveState(false);
       });
       reader.readAsDataURL(file);
     });
   }
+
+  handleUploadedMedia(imageInput, 'image');
+  handleUploadedMedia(audioInput, 'audio');
+  handleUploadedMedia(videoInput, 'video');
 
   if (previewLanguageSelect) {
     previewLanguageSelect.addEventListener('change', () => {
@@ -1772,6 +2280,14 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && linkModal && !linkModal.hidden) {
+      closeLinkModal();
+      return;
+    }
+    if (event.key === 'Escape' && linkBubble && !linkBubble.hidden) {
+      closeLinkBubble();
+      return;
+    }
     if (event.key === 'Escape' && previewModal && !previewModal.hidden) {
       closePreview();
       return;
@@ -1798,6 +2314,7 @@ document.addEventListener('DOMContentLoaded', () => {
     updateToolbarState();
   });
   editor.addEventListener('input', () => {
+    normalizeEditorLinks();
     setSaveState(false);
     updateBodyLimit();
   });
@@ -1811,6 +2328,13 @@ document.addEventListener('DOMContentLoaded', () => {
       const range = selection.getRangeAt(0);
       let node = range.startContainer;
       if (node.nodeType === 3) node = node.parentElement;
+
+      const linkToRemove = getBoundaryLinkFromRange(range, event.key);
+      if (linkToRemove) {
+        event.preventDefault();
+        removeEditorLink(linkToRemove);
+        return;
+      }
       
       const block = node.closest('.editor-callout, .editor-pull-quote, .editor-button-block, .editor-widget, .editor-poetry');
       
@@ -1836,20 +2360,16 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  [titleInput, subtitleInput].forEach(input => {
+  [titleInput].forEach(input => {
     if (!input) return;
     input.addEventListener('input', () => {
-      updateTextLimit(
-        input,
-        input === titleInput ? titleLimit : subtitleLimit,
-        input === titleInput ? wordLimits.title : wordLimits.subtitle
-      );
+      updateTextLimit(input, titleLimit, wordLimits.title);
       setSaveState(false);
     });
     input.addEventListener('keydown', event => {
       if (event.key !== 'Enter') return;
       event.preventDefault();
-      (input === titleInput ? subtitleInput : editor)?.focus();
+      editor?.focus();
     });
   });
 
@@ -1899,11 +2419,11 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
       }
       if (titleInput) titleInput.value = submittedPost.title || '';
-      if (subtitleInput) subtitleInput.value = submittedPost.subtitle || '';
       if (Array.isArray(submittedPost.authors)) renderAuthors(submittedPost.authors);
       if (submittedPost.body) {
         editor.innerHTML = submittedPost.body;
         normalizeEditorFontMarkup();
+        normalizeEditorLinks();
       }
       const categorySelect = document.getElementById('post_category');
       if (categorySelect && submittedPost.category) categorySelect.value = submittedPost.category;
@@ -1935,14 +2455,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const mockPosts = {
       '1': {
         title: 'Building AI-assisted multilingual workflows',
-        subtitle: 'A deep dive into integrating AI translation into modern CMS architecture.',
         authors: ['Hồ Quốc Tuấn'],
         originalLanguage: 'en',
         body: '<p>Integrating AI into translation workflows completely transforms how we handle multilingual content. The traditional approach requires extensive manual effort, but with large language models, we can automate the bulk of this process while maintaining high quality.</p>'
       },
       '2': {
         title: 'Product notes for Lingora profiles',
-        subtitle: 'Key design decisions and rationale behind the new profile experience.',
         authors: ['Trần Thị Mai'],
         originalLanguage: 'en',
         body: '<p>When designing the new profile pages, our primary goal was to give creators a space that feels uniquely theirs. We introduced customizable headers, accent colors, and a clean typography scale that puts the content first.</p>'
@@ -1952,11 +2470,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const postData = mockPosts[editId];
     if (postData) {
       if (titleInput) titleInput.value = postData.title;
-      if (subtitleInput) subtitleInput.value = postData.subtitle;
       if (Array.isArray(postData.authors)) renderAuthors(postData.authors);
       if (postData.body) {
         editor.innerHTML = postData.body;
         normalizeEditorFontMarkup();
+        normalizeEditorLinks();
       }
       postOriginalLanguageOverride = postData.originalLanguage || localStorage.getItem('preferredLanguage') || 'en' || null;
       syncOriginalLanguageWithSystem();
