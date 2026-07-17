@@ -54,6 +54,17 @@
       border-color: var(--primary-color) !important;
       transform: translateY(-2px);
     }
+
+    .stat-card-link {
+      color: inherit;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .stat-card-link:focus-visible {
+      outline: 2px solid var(--primary-color);
+      outline-offset: 3px;
+    }
     
     .chart-box {
       height: 250px;
@@ -458,7 +469,7 @@
           <!-- STATISTICS CARDS GRID -->
           <div class="row g-4 mb-4">
             <div class="col-md-3 col-sm-6">
-              <div class="admin-card d-flex align-items-center gap-3">
+              <a href="manage-users.html" class="admin-card stat-card-link d-flex align-items-center gap-3">
                 <div class="stat-icon">
                   <i class="bi bi-people-fill"></i>
                 </div>
@@ -466,11 +477,11 @@
                   <div class="text-muted small" data-i18n="total_users">Total Users</div>
                   <div class="fs-4 fw-bold text-main mt-0.5">6</div>
                 </div>
-              </div>
+              </a>
             </div>
 
             <div class="col-md-3 col-sm-6">
-              <div class="admin-card d-flex align-items-center gap-3">
+              <a href="manage-posts.html" class="admin-card stat-card-link d-flex align-items-center gap-3">
                 <div class="stat-icon">
                   <i class="bi bi-journal-text"></i>
                 </div>
@@ -478,7 +489,7 @@
                   <div class="text-muted small" data-i18n="total_articles">Total Articles</div>
                   <div class="fs-4 fw-bold text-main mt-0.5">5</div>
                 </div>
-              </div>
+              </a>
             </div>
 
             <div class="col-md-3 col-sm-6">

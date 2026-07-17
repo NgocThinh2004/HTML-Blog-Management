@@ -112,13 +112,12 @@
     .admin-container { max-width: 1280px; }
     .language-table-wrap { overflow: hidden; border: 1px solid var(--border-color); border-radius: 12px; background: var(--bg-panel); }
     .language-directory { width: 100%; table-layout: fixed; margin: 0; }
-    .language-directory th:nth-child(1) { width: 22%; }
-    .language-directory th:nth-child(2) { width: 8%; }
-    .language-directory th:nth-child(3) { width: 20%; }
+    .language-directory th:nth-child(1) { width: 24%; }
+    .language-directory th:nth-child(2) { width: 9%; }
+    .language-directory th:nth-child(3) { width: 27%; }
     .language-directory th:nth-child(4) { width: 14%; }
-    .language-directory th:nth-child(5) { width: 14%; }
-    .language-directory th:nth-child(6) { width: 14%; }
-    .language-directory th:nth-child(7) { width: 8%; }
+    .language-directory th:nth-child(5) { width: 16%; }
+    .language-directory th:nth-child(6) { width: 10%; }
     .language-directory thead th { padding: .85rem 1rem; color: var(--text-muted); background: var(--border-light); border-bottom: 1px solid var(--border-color); font-size: .78rem; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; white-space: nowrap; }
     .language-directory tbody td { padding: 1rem; color: var(--text-main); border-bottom-color: var(--border-color); vertical-align: middle; }
     .language-directory tbody tr { transition: background-color .15s ease; }
@@ -139,6 +138,9 @@
     .language-status-pill.inactive { color: #b42318; background: #fef3f2; }
     [data-bs-theme="dark"] .language-status-pill.active { color: #75e0a7; background: #123525; }
     [data-bs-theme="dark"] .language-status-pill.inactive { color: #fda29b; background: #3b1717; }
+    .language-status-control { padding: 0; border: 0; color: inherit; background: transparent; }
+    .language-status-control:focus-visible { outline: 2px solid var(--primary-color); outline-offset: 3px; border-radius: 999px; }
+    .language-status-control:disabled { cursor: not-allowed; opacity: .78; }
     .primary-pill { display: inline-flex; align-items: center; gap: .35rem; padding: .3rem .65rem; color: #b54708; background: #fff7ed; border: 1px solid #fed7aa; border-radius: 999px; font-size: .78rem; font-weight: 600; white-space: nowrap; }
     [data-bs-theme="dark"] .primary-pill { color: #fdba74; background: #431407; border-color: #7c2d12; }
     .language-actions { display: flex; justify-content: center; gap: .25rem; }
@@ -306,7 +308,6 @@
                 <tr>
                   <th scope="col" data-lang-key="language">Language</th>
                   <th scope="col" data-i18n="col_code">Code</th>
-                  <th scope="col" data-lang-key="translation_progress">Translation progress</th>
                   <th scope="col" data-lang-key="translated_posts">Translated posts</th>
                   <th scope="col" data-i18n="status">Status</th>
                   <th scope="col" data-lang-key="default_language">Default</th>
@@ -830,6 +831,9 @@
       Object.assign(text.en, { native_name: 'Native name', native_name_help: "The language's own name is kept for identification." });
       Object.assign(text.vi, { native_name: 'Tên bản ngữ', native_name_help: 'Tên do chính người bản ngữ sử dụng, được giữ cố định để nhận diện ngôn ngữ.' });
       Object.assign(text.zh, { native_name: '本族语名称', native_name_help: '保留该语言自身使用的名称，以便准确识别。' });
+      Object.assign(text.en, { translated_progress_value: 'Translated {translated}/{total}' });
+      Object.assign(text.vi, { translated_progress_value: 'Đã dịch {translated}/{total}' });
+      Object.assign(text.zh, { translated_progress_value: '已翻译 {translated}/{total}' });
 
       let languages;
       try { languages = JSON.parse(localStorage.getItem(storageKey)) || seedLanguages; } catch (_) { languages = seedLanguages; }
@@ -884,11 +888,10 @@
           return `<tr class="language-table-row" tabindex="0" data-language-id="${escapeHtml(language.id)}" aria-label="${escapeHtml(t('open_edit', { name: language.name }))}">
             <td data-label="${escapeHtml(labels[0])}"><div class="language-cell"><img class="language-flag" src="https://flagcdn.com/w40/${escapeHtml(language.flag)}.png" alt=""><div><div class="language-name">${escapeHtml(language.name)}</div><div class="language-native" title="${escapeHtml(t('native_name'))}">${escapeHtml(language.nativeName || '')}</div></div></div></td>
             <td data-label="${escapeHtml(labels[1])}"><span class="language-code">${escapeHtml(language.code)}</span></td>
-            <td data-label="${escapeHtml(labels[2])}"><div class="coverage-cell"><div class="d-flex justify-content-between small mb-1"><span>${t('coverage', { percent })}</span><strong>${percent}%</strong></div><div class="coverage-track"><div class="coverage-fill" style="width:${percent}%"></div></div></div></td>
-            <td data-label="${escapeHtml(labels[3])}" class="fw-semibold text-nowrap">${t('translated_value', { translated: language.translated, total: language.total })}</td>
-            <td data-label="${escapeHtml(labels[4])}"><label class="language-status-control d-inline-flex align-items-center gap-2 mb-0"><input class="form-check-input language-status-toggle mt-0" type="checkbox" ${language.active ? 'checked' : ''} ${language.isDefault ? 'disabled' : ''} data-language-id="${escapeHtml(language.id)}"><span class="language-status-pill ${language.active ? 'active' : 'inactive'}"><i class="bi bi-circle-fill" style="font-size:.42rem"></i>${t(language.active ? 'active' : 'inactive')}</span></label></td>
-            <td data-label="${escapeHtml(labels[5])}">${language.isDefault ? `<span class="primary-pill"><i class="bi bi-star-fill"></i>${t('primary')}</span>` : `<button class="btn btn-sm btn-outline-primary rounded-pill set-default-btn" type="button" data-language-id="${escapeHtml(language.id)}">${t('set_default')}</button>`}</td>
-            <td data-label="${escapeHtml(labels[6])}"><div class="language-actions"><button class="btn btn-sm btn-light border language-action-btn edit-language-btn" type="button" data-language-id="${escapeHtml(language.id)}" title="${t('edit')}"><i class="bi bi-pencil"></i></button><button class="btn btn-sm btn-outline-danger language-action-btn delete-language-btn" type="button" data-language-id="${escapeHtml(language.id)}" title="${t('delete')}" ${language.isDefault ? 'disabled' : ''}><i class="bi bi-trash"></i></button></div></td>
+            <td data-label="${escapeHtml(labels[2])}"><div class="coverage-cell"><div class="d-flex justify-content-between small mb-1"><span>${t('translated_progress_value', { translated: language.translated, total: language.total })}</span><strong>${percent}%</strong></div><div class="coverage-track"><div class="coverage-fill" style="width:${percent}%"></div></div></div></td>
+            <td data-label="${escapeHtml(labels[3])}"><button class="language-status-control d-inline-flex align-items-center" type="button" data-language-id="${escapeHtml(language.id)}" aria-label="${escapeHtml(t('open_edit', { name: language.name }))}"><span class="language-status-pill ${language.active ? 'active' : 'inactive'}"><i class="bi bi-circle-fill" style="font-size:.42rem"></i>${t(language.active ? 'active' : 'inactive')}</span></button></td>
+            <td data-label="${escapeHtml(labels[4])}">${language.isDefault ? `<span class="primary-pill"><i class="bi bi-star-fill"></i>${t('default_language')}</span>` : `<button class="btn btn-sm btn-outline-primary rounded-pill set-default-btn" type="button" data-language-id="${escapeHtml(language.id)}">${t('set_default')}</button>`}</td>
+            <td data-label="${escapeHtml(labels[5])}"><div class="language-actions"><button class="btn btn-sm btn-light border language-action-btn edit-language-btn" type="button" data-language-id="${escapeHtml(language.id)}" title="${t('edit')}"><i class="bi bi-pencil"></i></button><button class="btn btn-sm btn-outline-danger language-action-btn delete-language-btn" type="button" data-language-id="${escapeHtml(language.id)}" title="${t('delete')}" ${language.isDefault ? 'disabled' : ''}><i class="bi bi-trash"></i></button></div></td>
           </tr>`;
         }).join('');
       }
@@ -914,14 +917,6 @@
         document.getElementById('editStatusHelp').textContent = t(language.isDefault ? 'default_status_help' : 'status_help');
         editForm.classList.remove('was-validated');
         editModal.show();
-      }
-
-      function setDefault(id) {
-        const language = languages.find(item => item.id === id);
-        if (!language) return;
-        languages.forEach(item => { item.isDefault = item.id === id; });
-        language.active = true;
-        persist(); renderTable(); showToast(t('default_changed', { name: escapeHtml(language.name) }));
       }
 
       async function requestDelete(id) {
@@ -965,19 +960,11 @@
         const actionArea = event.target.closest('.language-actions');
         if (editButton) { event.stopPropagation(); openEditor(editButton.dataset.languageId); return; }
         if (deleteButton) { event.stopPropagation(); requestDelete(deleteButton.dataset.languageId); return; }
-        if (defaultButton) { event.stopPropagation(); setDefault(defaultButton.dataset.languageId); return; }
-        if (statusControl) { event.stopPropagation(); return; }
+        if (defaultButton) { event.stopPropagation(); openEditor(defaultButton.dataset.languageId); return; }
+        if (statusControl) { event.stopPropagation(); openEditor(statusControl.dataset.languageId); return; }
         if (actionArea) { event.stopPropagation(); return; }
         const row = event.target.closest('.language-table-row');
         if (row) openEditor(row.dataset.languageId);
-      });
-      tableBody.addEventListener('change', event => {
-        const toggle = event.target.closest('.language-status-toggle');
-        if (!toggle) return;
-        const language = languages.find(item => item.id === toggle.dataset.languageId);
-        if (!language || language.isDefault) return;
-        language.active = toggle.checked;
-        persist(); renderTable(); showToast(t('status_changed', { name: escapeHtml(language.name), status: t(language.active ? 'active' : 'inactive').toLowerCase() }));
       });
       tableBody.addEventListener('keydown', event => {
         if ((event.key === 'Enter' || event.key === ' ') && event.target.matches('.language-table-row')) { event.preventDefault(); openEditor(event.target.dataset.languageId); }

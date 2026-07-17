@@ -91,12 +91,12 @@
     .admin-container { max-width: 1280px; }
     .category-table-wrap { overflow: hidden; border: 1px solid var(--border-color); border-radius: 12px; background: var(--bg-panel); }
     .category-directory { width: 100%; table-layout: fixed; margin: 0; }
-    .category-directory th:nth-child(1) { width: 32%; }
-    .category-directory th:nth-child(2) { width: 17%; }
-    .category-directory th:nth-child(3) { width: 16%; }
-    .category-directory th:nth-child(4) { width: 15%; }
-    .category-directory th:nth-child(5) { width: 13%; }
-    .category-directory th:nth-child(6) { width: 7%; }
+    .category-directory th:nth-child(1) { width: 29%; }
+    .category-directory th:nth-child(2) { width: 16%; }
+    .category-directory th:nth-child(3) { width: 14%; }
+    .category-directory th:nth-child(4) { width: 14%; }
+    .category-directory th:nth-child(5) { width: 14%; }
+    .category-directory th:nth-child(6) { width: 13%; }
     .category-directory thead th { padding: .85rem 1rem; color: var(--text-muted); background: var(--border-light); border-bottom: 1px solid var(--border-color); font-size: .78rem; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; white-space: nowrap; }
     .category-directory tbody td { padding: 1rem; color: var(--text-main); border-bottom-color: var(--border-color); vertical-align: middle; }
     .category-directory tbody tr { transition: background-color .15s ease; }
@@ -115,6 +115,8 @@
     .category-status.inactive { color: #b42318; background: #fef3f2; }
     [data-bs-theme="dark"] .category-status.active { color: #75e0a7; background: #123525; }
     [data-bs-theme="dark"] .category-status.inactive { color: #fda29b; background: #3b1717; }
+    .category-status-control { padding: 0; border: 0; color: inherit; background: transparent; }
+    .category-status-control:focus-visible { outline: 2px solid var(--primary-color); outline-offset: 3px; border-radius: 999px; }
     .category-actions { display: flex; align-items: center; justify-content: center; gap: .25rem; }
     .category-action-btn { width: 34px; height: 34px; display: inline-flex; align-items: center; justify-content: center; border-radius: 8px; }
     .category-results { color: var(--text-muted); font-size: .85rem; }
@@ -561,7 +563,7 @@
         </div>
         <form id="editCategoryForm" novalidate>
           <div class="modal-body">
-            <p class="small text-muted mb-3" data-cat-key="all_translations_help">Edit all translations together. Structural changes apply to the whole category.</p>
+            <p class="small text-muted mb-3" data-cat-key="edit_translations_help">Existing translations remain required. New language translations can be left blank and added later.</p>
             <div id="editCategoryTranslations"></div>
             <div class="mt-3 d-flex align-items-center justify-content-between rounded-3 border p-3">
               <div>
@@ -650,6 +652,7 @@
     <div class="offcanvas-body p-0">
       <div class="p-3 border-bottom d-flex justify-content-between align-items-center">
         <span class="fw-medium text-muted small" data-i18n="post_list">Danh sách bài viết</span>
+        <span class="badge rounded-pill text-bg-light border" id="ocCategoryPostsMeta"></span>
       </div>
       <div class="list-group list-group-flush" id="ocCategoryPostsList">
         <!-- JS Mockup data -->
@@ -1281,6 +1284,15 @@
       Object.assign(copy.en, { missing_translation: 'Missing translation' });
       Object.assign(copy.vi, { missing_translation: 'Chưa có bản dịch' });
       Object.assign(copy.zh, { missing_translation: '缺少翻译' });
+      Object.assign(copy.en, { latest_posts_summary: '{shown} latest of {total}' });
+      Object.assign(copy.vi, { latest_posts_summary: '{shown} bài gần nhất / {total}' });
+      Object.assign(copy.zh, { latest_posts_summary: '最新 {shown} / {total} 篇' });
+      Object.assign(copy.en, { update_status: 'Update status' });
+      Object.assign(copy.vi, { update_status: 'Cập nhật trạng thái' });
+      Object.assign(copy.zh, { update_status: '更新状态' });
+      Object.assign(copy.en, { edit_translations_help: 'Existing translations remain required. New language translations can be left blank and added later.' });
+      Object.assign(copy.vi, { edit_translations_help: 'Các bản dịch đã có vẫn là bắt buộc. Ngôn ngữ mới có thể để trống và bổ sung bản dịch sau.' });
+      Object.assign(copy.zh, { edit_translations_help: '现有翻译仍为必填项。新语言可以暂时留空，稍后再补充翻译。' });
       const defaultLanguages = [
         { code: 'en', name: 'English', flag: 'gb', active: true },
         { code: 'vi', name: 'Tiếng Việt', flag: 'vn', active: true },
@@ -1364,7 +1376,7 @@
       const translationFieldsMarkup = mode => languages.map(language => `<section class="category-translation-card" data-translation-language="${esc(language.code)}">
         <div class="category-translation-heading"><img src="https://flagcdn.com/w40/${esc(language.flag)}.png" alt=""><span>${esc(language.name)}</span><span class="badge text-bg-light border ms-auto">${esc(language.code.toUpperCase())}</span></div>
         <div class="row g-3">
-          <div class="col-md-6"><label class="form-label fw-semibold" for="${mode}CategoryName-${esc(language.code)}">${t('name')}</label><input class="form-control translation-name" id="${mode}CategoryName-${esc(language.code)}" data-language="${esc(language.code)}" required autocomplete="off"><div class="invalid-feedback">${t('name_required')}</div></div>
+          <div class="col-md-6"><label class="form-label fw-semibold" for="${mode}CategoryName-${esc(language.code)}">${t('name')}</label><input class="form-control translation-name" id="${mode}CategoryName-${esc(language.code)}" data-language="${esc(language.code)}" ${mode === 'add' ? 'required' : ''} autocomplete="off"><div class="invalid-feedback">${t('name_required')}</div></div>
           <div class="col-md-6"><label class="form-label fw-semibold" for="${mode}CategorySlug-${esc(language.code)}">${t('slug')}</label><input class="form-control bg-body-secondary translation-slug" id="${mode}CategorySlug-${esc(language.code)}" data-language="${esc(language.code)}" readonly></div>
           <div class="col-12"><label class="form-label fw-semibold" for="${mode}CategoryDescription-${esc(language.code)}">${t('description')}</label><textarea class="form-control translation-description" id="${mode}CategoryDescription-${esc(language.code)}" data-language="${esc(language.code)}" rows="2" maxlength="180"></textarea></div>
         </div>
@@ -1374,23 +1386,37 @@
         document.getElementById('editCategoryTranslations').innerHTML = translationFieldsMarkup('edit');
         [addForm, editForm].forEach(form => form.querySelectorAll('.translation-name').forEach(input => input.addEventListener('input', () => {
           const slug = form.querySelector(`.translation-slug[data-language="${input.dataset.language}"]`);
-          slug.value = uniqueSlug(generateSlug(input.value), input.dataset.language, form === editForm ? editingId : null);
+          slug.value = input.value.trim() ? uniqueSlug(generateSlug(input.value), input.dataset.language, form === editForm ? editingId : null) : '';
         })));
+        editForm.querySelectorAll('.translation-name, .translation-description').forEach(input => input.addEventListener('input', () => {
+          syncEditTranslationRequirements(categories.find(category => category.id === editingId));
+        }));
       };
-      const valuesFromForm = form => Object.fromEntries(languages.map(language => {
-        const name = form.querySelector(`.translation-name[data-language="${language.code}"]`).value.trim();
-        return [language.code, {
-          name,
-          slug: uniqueSlug(generateSlug(name), language.code, form === editForm ? editingId : null),
-          description: form.querySelector(`.translation-description[data-language="${language.code}"]`).value.trim(),
-          active: form === editForm ? document.getElementById('editCategoryStatus').checked : true
-        }];
-      }));
+      const valuesFromForm = form => {
+        const editingCategory = form === editForm ? categories.find(category => category.id === editingId) : null;
+        const values = editingCategory ? { ...(editingCategory.translations || {}) } : {};
+        languages.forEach(language => {
+          const name = form.querySelector(`.translation-name[data-language="${language.code}"]`).value.trim();
+          if (!name) return;
+          values[language.code] = {
+            name,
+            slug: uniqueSlug(generateSlug(name), language.code, form === editForm ? editingId : null),
+            description: form.querySelector(`.translation-description[data-language="${language.code}"]`).value.trim(),
+            active: editingCategory ? editingCategory.active !== false : true
+          };
+        });
+        return values;
+      };
       const fillForm = (form, category = null) => languages.forEach(language => {
         const translation = category?.translations?.[language.code] || { name: '', slug: '', description: '' };
         form.querySelector(`.translation-name[data-language="${language.code}"]`).value = translation.name || '';
         form.querySelector(`.translation-slug[data-language="${language.code}"]`).value = translation.slug || '';
         form.querySelector(`.translation-description[data-language="${language.code}"]`).value = translation.description || '';
+      });
+      const syncEditTranslationRequirements = category => languages.forEach(language => {
+        const nameInput = editForm.querySelector(`.translation-name[data-language="${language.code}"]`);
+        const alreadyExists = Boolean(category?.translations?.[language.code]?.name);
+        nameInput.required = alreadyExists;
       });
       const hasPublishedPostTranslation = post => {
         const supported = String(post.supported_langs || '').split(',').map(code => code.trim()).filter(Boolean);
@@ -1427,22 +1453,22 @@
         }
         tableBody.innerHTML = pageItems.map(category => {
           const translation = translationFor(category);
-          const visibleLanguages = languages.slice(0, 3);
+          const visibleLanguages = languages.slice(0, 1);
           const chips = visibleLanguages.map(language => {
             const exactTranslation = category.translations?.[language.code];
             return `<span class="translation-summary-chip${exactTranslation ? '' : ' is-missing'}" title="${esc(exactTranslation?.name || t('missing_translation'))}"><img src="https://flagcdn.com/w20/${esc(language.flag)}.png" alt="">${esc(language.code.toUpperCase())}</span>`;
           }).join('');
           const hiddenLanguages = languages.slice(visibleLanguages.length);
           const remaining = hiddenLanguages.length;
-          const hiddenTranslated = hiddenLanguages.filter(language => category.translations?.[language.code]?.name).length;
           const hiddenSummary = hiddenLanguages.map(language => `${language.name}: ${category.translations?.[language.code]?.name || t('missing_translation')}`).join(' · ');
-          const moreChip = remaining > 0 ? `<span class="translation-summary-more ${hiddenTranslated === remaining ? 'is-complete' : 'has-missing'}" title="${esc(hiddenSummary)}">+${remaining} · ${hiddenTranslated}/${remaining}</span>` : '';
+          const hasMissingTranslation = hiddenLanguages.some(language => !category.translations?.[language.code]?.name);
+          const moreChip = remaining > 0 ? `<span class="translation-summary-more ${hasMissingTranslation ? 'has-missing' : 'is-complete'}" title="${esc(hiddenSummary)}">+${remaining}</span>` : '';
           return `<tr class="category-table-row" tabindex="0" data-category-id="${esc(category.id)}" aria-label="${esc(t('open_edit', { name: translation.name }))}">
             <td data-label="${t('category')}"><div class="category-name-cell"><span class="category-icon"><i class="bi bi-tag"></i></span><div class="min-w-0"><div class="category-title">${esc(translation.name)}</div><div class="category-description">${esc(translation.description || '')}</div><div class="translation-summary">${chips}${moreChip}</div></div></div></td>
             <td data-label="${t('slug')}"><code class="slug-code">/${esc(translation.slug)}</code></td>
             <td data-label="${t('created')}" class="text-muted text-nowrap">${formatDate(category.created)}</td>
             <td data-label="${t('posts')}"><button class="btn btn-sm rounded-pill post-count-btn category-posts-btn" type="button" data-category-id="${esc(category.id)}"><span class="badge rounded-pill text-bg-warning">${postCount(category)}</span>${t('posts')}<i class="bi bi-chevron-right"></i></button></td>
-            <td data-label="${t('status')}"><label class="category-status-control d-inline-flex align-items-center gap-2 mb-0"><input class="form-check-input category-status-toggle mt-0" type="checkbox" ${category.active ? 'checked' : ''} data-category-id="${esc(category.id)}"><span class="category-status ${category.active ? 'active' : 'inactive'}"><i class="bi bi-circle-fill" style="font-size:.42rem"></i>${t(category.active ? 'active' : 'inactive')}</span></label></td>
+            <td data-label="${t('status')}"><button class="category-status-control d-inline-flex align-items-center" type="button" data-category-id="${esc(category.id)}" aria-label="${esc(`${t('update_status')}: ${translation.name}`)}"><span class="category-status ${category.active ? 'active' : 'inactive'}"><i class="bi bi-circle-fill" style="font-size:.42rem"></i>${t(category.active ? 'active' : 'inactive')}</span></button></td>
             <td data-label="${t('actions')}"><div class="category-actions"><button class="btn btn-sm btn-light border category-action-btn category-edit-btn" type="button" data-category-id="${esc(category.id)}" title="${t('edit')}"><i class="bi bi-pencil"></i></button><button class="btn btn-sm btn-outline-danger category-action-btn category-delete-btn" type="button" data-category-id="${esc(category.id)}" title="${t('delete')}"><i class="bi bi-trash"></i></button></div></td>
           </tr>`;
         }).join('');
@@ -1452,6 +1478,7 @@
         if (!category) return;
         editingId = id;
         fillForm(editForm, category);
+        syncEditTranslationRequirements(category);
         document.getElementById('editCategoryStatus').checked = category.active;
         editForm.classList.remove('was-validated');
         editModal.show();
@@ -1462,7 +1489,23 @@
         const translation = translationFor(category);
         document.getElementById('ocCategoryName').textContent = translation.name;
         const matching = postsForCategory(category);
-        document.getElementById('ocCategoryPostsList').innerHTML = matching.length ? matching.map(([postId, post]) => `<a href="../post-detail.html?id=${encodeURIComponent(postId)}&lang=${encodeURIComponent(currentLang)}" class="list-group-item list-group-item-action p-4 border-bottom"><h6 class="fw-bold mb-2 text-main">${esc(post[`title_${currentLang}`] || post.title_en || '')}</h6><div class="text-muted small"><i class="bi bi-person me-1"></i>${esc(post.author_name || '')}</div></a>`).join('') : `<div class="p-4 text-center text-muted">${t('no_posts')}</div>`;
+        const relativeUnits = { minute: 60000, hour: 3600000, day: 86400000, week: 604800000, month: 2592000000, year: 31536000000 };
+        const recencyValue = (post, index) => {
+          const value = post.publishedAt || post.updatedAt || post.createdAt || post.timestamp || '';
+          const parsed = Date.parse(value);
+          if (Number.isFinite(parsed)) return parsed;
+          const normalized = String(value).trim().toLowerCase();
+          if (normalized === 'just now') return Date.now();
+          if (normalized === 'yesterday') return Date.now() - relativeUnits.day;
+          const relative = normalized.match(/^(\d+)\s+(minute|hour|day|week|month|year)s?\s+ago$/);
+          return relative ? Date.now() - Number(relative[1]) * relativeUnits[relative[2]] : -index;
+        };
+        const latest = matching.map((entry, index) => ({ entry, index, recency: recencyValue(entry[1], index) }))
+          .sort((left, right) => right.recency - left.recency || left.index - right.index)
+          .slice(0, 10)
+          .map(item => item.entry);
+        document.getElementById('ocCategoryPostsMeta').textContent = t('latest_posts_summary', { shown: latest.length, total: matching.length });
+        document.getElementById('ocCategoryPostsList').innerHTML = latest.length ? latest.map(([postId, post]) => `<a href="../post-detail.html?id=${encodeURIComponent(postId)}&lang=${encodeURIComponent(currentLang)}" class="list-group-item list-group-item-action p-4 border-bottom"><h6 class="fw-bold mb-2 text-main">${esc(post[`title_${currentLang}`] || post.title_en || '')}</h6><div class="d-flex flex-wrap align-items-center gap-3 text-muted small"><span><i class="bi bi-person me-1"></i>${esc(post.author_name || '')}</span>${post.timestamp ? `<span><i class="bi bi-clock me-1"></i>${esc(post.timestamp)}</span>` : ''}</div></a>`).join('') : `<div class="p-4 text-center text-muted">${t('no_posts')}</div>`;
         postsPanel.show();
       }
       mountTranslationFields();
@@ -1479,7 +1522,9 @@
       editForm.addEventListener('submit', event => {
         event.preventDefault();
         const category = categories.find(item => item.id === editingId);
-        if (!category || !editForm.checkValidity()) { editForm.classList.add('was-validated'); editForm.querySelector(':invalid')?.focus(); return; }
+        if (!category) return;
+        syncEditTranslationRequirements(category);
+        if (!editForm.checkValidity()) { editForm.classList.add('was-validated'); editForm.querySelector(':invalid')?.focus(); return; }
         category.translations = valuesFromForm(editForm);
         category.active = document.getElementById('editCategoryStatus').checked;
         Object.values(category.translations).forEach(translation => { translation.active = category.active; });
@@ -1488,9 +1533,11 @@
       });
       tableBody.addEventListener('click', async event => {
         const postsButton = event.target.closest('.category-posts-btn');
+        const statusButton = event.target.closest('.category-status-control');
         const editButton = event.target.closest('.category-edit-btn');
         const deleteButton = event.target.closest('.category-delete-btn');
         if (postsButton) { event.stopPropagation(); showCategoryPosts(postsButton.dataset.categoryId); return; }
+        if (statusButton) { event.stopPropagation(); openEditor(statusButton.dataset.categoryId); return; }
         if (editButton) { event.stopPropagation(); openEditor(editButton.dataset.categoryId); return; }
         if (deleteButton) {
           event.stopPropagation();
@@ -1502,18 +1549,8 @@
           }
           return;
         }
-        if (event.target.closest('.category-status-control')) { event.stopPropagation(); return; }
         const row = event.target.closest('.category-table-row');
         if (row) openEditor(row.dataset.categoryId);
-      });
-      tableBody.addEventListener('change', event => {
-        const toggle = event.target.closest('.category-status-toggle');
-        if (!toggle) return;
-        const category = categories.find(item => item.id === toggle.dataset.categoryId);
-        if (!category) return;
-        category.active = toggle.checked;
-        Object.values(category.translations || {}).forEach(translation => { translation.active = category.active; });
-        persist(); renderTable(); showToast(t('status_msg', { name: esc(translationFor(category).name), status: t(category.active ? 'active' : 'inactive').toLowerCase() }));
       });
       tableBody.addEventListener('keydown', event => { if ((event.key === 'Enter' || event.key === ' ') && event.target.matches('.category-table-row')) { event.preventDefault(); openEditor(event.target.dataset.categoryId); } });
       [searchInput, statusFilter, postFilter, sortFilter].forEach(control => control.addEventListener(control === searchInput ? 'input' : 'change', () => { currentPage = 1; renderTable(); }));
